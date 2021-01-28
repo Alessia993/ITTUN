@@ -1,0 +1,15 @@
+#file
+.classpath
+.project
+ittun.properties
+ITTUN.war
+.tern-project
+
+#directory
+.externalToolBuilders/*
+.settings/*
+
+WebContent/WEB-INF/build/**/*
+WebContent/WEB-INF/build/*
+WEB-INF/classes/**/*
+WEB-INF/classes/*
