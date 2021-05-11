@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ListFormsBase.xhtml">
+	<ui:param name="heading" value="#{msg.closingOfAccountsListPageName}" />
+	<ui:param name="requireValidation" value="false" />
+		<ui:define name="common">
+		<a4j:outputPanel ajaxRendered="true">
+			<h:inputHidden id="maximumSeverity"
+				value="#{facesContext.maximumSeverity.ordinal}" />
+		</a4j:outputPanel>
+	</ui:define>
+
+	<ui:define name="list_body">
+		<a4j:outputPanel ajaxRendered="false" id="FormPanel">
+
+			<div class="table_container">
+				<t:dataTable style="margin:0 auto; width: 100%;" id="table" var="ds"
+					value="#{closingOfAccountsListBean.list}"
+					styleClass="form_table"
+					rows="#{closingOfAccountsListBean.itemsPerPage}"
+					rowClasses="row_table_n,row_table_g">
+
+					<f:facet name="header">
+						<t:column>
+							<sec:ifAnyGranted  roles="ROLE_ACUM_W, ROLE_ACUM_R, ROLE_ACU_W, ROLE_ACU_R">
+								<a4j:commandLink styleClass="headerPanelLink" rendered="true"
+									action="#{closingOfAccountsListBean.pageEdit}">#{msg.closingOfAccountsListAddNew}
+							</a4j:commandLink>
+							</sec:ifAnyGranted>
+							<h:outputText value="#{msg.closingOfAccountsListTableName}" />
+						</t:column>
+					</f:facet>
+
+
+
+					<!-- <f:facet name="footer">
+						<a4j:htmlCommandLink action="#{expenditureDeclarationListBean.export}"
+							styleClass="footerPanelExport">
+							<h:graphicImage alt="#{msg.exportXls}" value="/images/xls.png" />
+						</a4j:htmlCommandLink>
+					</f:facet> -->
+
+
+					<!-- Show column -->
+
+					<!-- <sec:ifAnyGranted roles="ROLE_ACUM_R,ROLE_ACUM_W"> -->
+					<!-- <t:column id="send" styleClass="ActionColumn"
+						headerstyleClass="ActionColumn">
+						<a4j:commandLink ajaxSingle="true" id="sendlink"
+							rendered="#{ds.expenditureDeclarationState.code =='submitted' and !ds.deleted and !ds.toBeTrasmitted}"
+							title="#{msg.durCompilationListSend}" 
+							action="#{paymentApplicationListBean.sendItem}"
+							reRender="FormPanel">
+							<h:graphicImage alt="#{msg.delete}" value="/images/status-on.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{ds.id}"
+								target="#{paymentApplicationListBean.entitySendId}" />
+						</a4j:commandLink>
+					</t:column> -->
+
+					<t:column id="edit" styleClass="ActionColumn"
+						rendered="#{!empty closingOfAccountsListBean.list}">
+						<a4j:commandLink ajaxSingle="true" id="editlink"
+							rendered="#{!ds.deleted}" title="#{msg.edit}"
+							action="#{closingOfAccountsListBean.editItem}">
+							<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{ds.id}"
+								target="#{closingOfAccountsListBean.entityEditId}" />
+						</a4j:commandLink>
+					</t:column>
+					<t:column id="show"
+						rendered="#{!empty closingOfAccountsListBean.list}"
+						styleClass="ActionColumn" headerstyleClass="ActionColumn">
+						<a4j:commandLink ajaxSingle="true" id="showlink"
+							rendered="#{!ds.deleted}" title="#{msg.show}"
+							action="#{closingOfAccountsListBean.showItem}">
+							<h:graphicImage alt="#{msg.show}" value="/images/ok.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{ds.id}"
+								target="#{closingOfAccountsListBean.entityEditId}" />
+						</a4j:commandLink>
+					</t:column>
+					<t:column id="deleteED"
+						rendered="#{!empty closingOfAccountsListBean.list}"
+						styleClass="ActionColumn" headerstyleClass="ActionColumn">
+						<a4j:commandLink ajaxSingle="true" id="deletelink"
+							rendered="#{ds.state.code !='submitted' and !ds.deleted}"
+							title="#{msg.delete}"
+							action="#{closingOfAccountsListBean.delete}"
+							reRender="FormPanel">
+							<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{ds.id}"
+								target="#{closingOfAccountsListBean.entityDeleteId}" />
+						</a4j:commandLink>
+					</t:column>
+					<!-- <t:column id="deleteED" styleClass="ActionColumn" style="background-color: #{user.deleted?'#FA7878':''}">
+							<a4j:commandLink ajaxSingle="true" id="deletelink" title="#{msg.delete}"
+								rendered="#{ds.expenditureDeclarationState.code !='submitted'}" 
+								action="{expenditureDeclarationListBean.prova}">
+								<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{ds.id}"
+									target="#{expenditureDeclarationListBean.entityDeleteId}" />
+							</a4j:commandLink>
+						</t:column> -->
+					<!-- </sec:ifAnyGranted> -->
+
+					<!-- Info columns -->
+
+
+					<t:column styleClass="NumberColumn"
+						rendered="#{!empty closingOfAccountsListBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.closingOfAccountsListNumber}" />
+						</f:facet>
+						<t:outputText value="#{ds.id}" rendered="#{!ds.deleted}" />
+					</t:column>
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty closingOfAccountsListBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.closingOfAccountsListDescription}"></t:outputText>
+						</f:facet>
+						<t:outputText 
+							value="#{ds.description}" rendered="#{!ds.deleted}"></t:outputText>
+					</t:column>
+					<t:column styleClass="DateColumn"
+						rendered="#{!empty closingOfAccountsListBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.closingOfAccountsListClosingReferenceDate}" />
+						</f:facet>
+						<t:outputText converter="dateTimeConverter"
+							value="#{ds.referencePeriod}" rendered="#{!ds.deleted}" />
+					</t:column>
+					<t:column styleClass="DateColumn"
+						rendered="#{!empty closingOfAccountsListBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.closingOfAccountsListCompilationDate}" />
+						</f:facet>
+						<t:outputText converter="dateTimeConverter"
+							value="#{ds.compilationDate}" rendered="#{!ds.deleted}" />
+					</t:column>
+					<t:column styleClass="NumberColumn"
+						rendered="#{!empty closingOfAccountsListBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.closingOfAccountsListTotalAmountOfPublicExpenditure}" />
+						</f:facet>
+						<t:outputText value="#{ds.totalAmountOfPublicExpenditure}"
+						converter="moneyConverter"
+							rendered="#{!ds.deleted}" />
+					</t:column>
+					<t:column styleClass="NumberColumn"
+						rendered="#{!empty closingOfAccountsListBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.closingOfAccountsListTotalAmountOfEligibleExpenses}" />
+						</f:facet>
+						<t:outputText value="#{ds.totalAmountOfEligibleExpenses}"
+						converter="moneyConverter"
+							rendered="#{!ds.deleted}" />
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty closingOfAccountsListBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.closingOfAccountsListState}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{ds.state.value}"
+							rendered="#{!ds.deleted}"></t:outputText>
+					</t:column>
+
+				</t:dataTable>
+			</div>
+			<a4j:outputPanel styleClass="scrollerPanel">
+				<t:dataScroller id="scroll_1"
+					binding="#{closingOfAccountsListBean.scroller}"
+					styleClass="scroller" for="table" fastStep="10"
+					pageCountVar="pageCount" pageIndexVar="pageIndex" paginator="true"
+					paginatorMaxPages="5" paginatorColumnClass="page"
+					paginatorActiveColumnClass="page_active" immediate="true"
+					rendered="#{closingOfAccountsListBean.showScroll}">
+					<f:facet name="first">
+						<t:graphicImage alt="#{msg.first}" url="../images/back_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="last">
+						<t:graphicImage alt="#{msg.last}" url="../images/forward_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="previous">
+						<t:graphicImage alt="#{msg.previous}" url="../images/back.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="next">
+						<t:graphicImage alt="#{msg.next}" url="../images/forward.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="fastforward">
+						<t:graphicImage alt="#{msg.fastforward}"
+							url="../images/all_forward.gif" border="1" />
+					</f:facet>
+					<f:facet name="fastrewind">
+						<t:graphicImage alt="#{msg.fastrewind}"
+							url="../images/all_back.gif" border="1" />
+					</f:facet>
+				</t:dataScroller>
+			</a4j:outputPanel>
+
+		</a4j:outputPanel>
+	</ui:define>
+
+
+</ui:composition>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/EditBase.xhtml">
+	<ui:param name="heading" value="#{msg.expirationDate}" />
+	<ui:param name="heading_top" value="#{msg.expirationDate}" />
+	<ui:define name="edit_body">
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+			<table class="forms" border="0" cellpadding="1" cellspacing="1">
+				<tr>
+					<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.expirationDate}:" /></td>
+						<td class="ControlCell" style="width: 25%;"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+								id="createFrom" inputClass="editbox_form2"
+								value="#{expirationDateController.expirationDate}"
+								datePattern="dd/MM/yyyy HH:mm">
+							</rich:calendar></td>
+				</tr>
+				<tr style="display: #{expirationDateController.showErrorMessage}">
+					<td colspan="2" style="text-align: center;"><span
+						class="RequiredFieldMarker">#{msg.expirationDateError}</span>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" class="btn_line"><a4j:commandButton
+						immediate="false"
+						action="#{expirationDateController.Page_Save}"
+						styleClass="button2" value="#{msg.save}" id="save" rendered="#{Session.STCW}"/> <a4j:commandButton
+						value="#{msg.cancel}" styleClass="button2" immediate="true"
+						action="#{expirationDateController.GoBack}" /></td>
+				</tr>
+			</table>
+		</a4j:outputPanel>
+	</ui:define>
+</ui:composition>

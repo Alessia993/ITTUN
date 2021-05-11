@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ListBase.xhtml">
+	<ui:param name="heading" value="#{msg.userList}" />
+
+	<ui:define name="script_body">
+		<a4j:form>
+			<a4j:jsFunction name="updateProcesses" reRender="FormPanel"
+				eventsQueue="queueSurnames" requestDelay="2000"
+				oncomplete="SetFocus()">
+				<a4j:actionparam name="param1"
+					assignTo="#{userListController.filtredSurname}" />
+			</a4j:jsFunction>
+		</a4j:form>
+
+		<script type="text/javascript">
+		function SetFocus()
+		{
+			var field = document.getElementById('FormList:table:searchInput');
+			field.focus();
+			var val = field.value; 
+			field.value = ''; 
+			field.value = val;
+		}
+	</script>
+
+	</ui:define>
+	<ui:define name="list_body">
+		<a4j:outputPanel ajaxRendered="false" id="FormPanel">
+
+			<div class="table_container">
+				<t:dataTable width="80%" style="margin:0 auto;"
+					rows="#{userListController.itemsPerPage}" id="table" var="user"
+					value="#{userListController.list}" styleClass="form_table"
+					rowClasses="row_table_n,row_table_g">
+					<f:facet name="header">
+						<t:column>
+							<sec:ifAnyGranted roles="ROLE_APU_W">
+								<a4j:commandLink styleClass="headerPanelLink"
+									action="#{userListController.addUser}">#{msg.addUser}</a4j:commandLink>
+							</sec:ifAnyGranted>
+							<h:outputText style="text-align: center" value="#{msg.users}" />
+							<h:selectOneMenu id="itemPP" styleClass="headerPanelSelect"
+								value="#{userListController.itemsPerPage}">
+								<f:selectItems value="#{userListController.itemsPerPageList}" />
+								<a4j:support event="onchange" reRender="FormPanel"
+									action="#{userListController.changePagesCount}" />
+							</h:selectOneMenu>
+						</t:column>
+					</f:facet>
+					<sec:ifAnyGranted roles="ROLE_APU_W">
+						<t:column id="edit" styleClass="ActionColumn" style="background-color: #{user.deleted?'#FA7878':''}">
+							<a4j:commandLink ajaxSingle="true" id="editlink"
+								rendered="#{!user.admin and !user.deleted}" title="#{msg.edit}"
+								action="#{userListController.editUser}">
+								<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{user.id}"
+									target="#{userListController.entityEditId}" />
+							</a4j:commandLink>
+						</t:column>
+						<t:column id="delete" styleClass="ActionColumn" style="background-color: #{user.deleted?'#FA7878':''}">
+							<a4j:commandLink id="deletelink" title="#{msg.delete}"
+								rendered="#{!user.admin and !user.deleted}" reRender="deleteMessage"
+								oncomplete="#{rich:component('deletePanel')}.show()">
+								<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{user.id}"
+									target="#{userListController.entityDeleteId}" />
+							</a4j:commandLink>
+						</t:column>
+					</sec:ifAnyGranted>
+					<t:column styleClass="StringColumn" style="background-color: #{user.deleted?'#FA7878':''}">
+
+						<f:facet name="header">
+							<t:outputText value="#{msg.name}" />
+						</f:facet>
+						<t:outputText value="#{user.name}" />
+					</t:column>
+					<t:column styleClass="StringColumn" style="background-color: #{user.deleted?'#FA7878':''}">
+						<f:facet name="header">
+							<a4j:outputPanel ajaxRendered="false">
+								<t:outputText value="#{msg.surname}" />
+								<br />
+								<h:inputText id="searchInput"
+									value="#{userListController.filtredSurname}"
+									onkeyup="updateProcesses(this.value)" />
+							</a4j:outputPanel>
+						</f:facet>
+						<t:outputText value="#{user.surname}" />
+					</t:column>
+					<t:column styleClass="StringColumn" style="background-color: #{user.deleted?'#FA7878':''}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.fiscalCode}" />
+						</f:facet>
+						<t:outputText value="#{user.fiscalCode}" />
+					</t:column>
+					<t:column styleClass="StringColumn" style="background-color: #{user.deleted?'#FA7878':''}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.email}" />
+						</f:facet>
+						<t:outputText value="#{user.mail}" />
+					</t:column>
+				</t:dataTable>
+			</div>
+			<a4j:outputPanel styleClass="scrollerPanel">
+				<t:dataScroller id="scroll" styleClass="scroller" for="table"
+					fastStep="10" pageCountVar="pageCount" pageIndexVar="pageIndex"
+					paginator="true" paginatorMaxPages="5" paginatorColumnClass="page"
+					paginatorActiveColumnClass="page_active" immediate="true"
+					binding="#{userListController.scroller}"
+					rendered="#{userListController.showScroll}">
+
+					<f:facet name="first">
+						<t:graphicImage alt="#{msg.first}" url="../images/back_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="last">
+						<t:graphicImage alt="#{msg.last}" url="../images/forward_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="previous">
+						<t:graphicImage alt="#{msg.previous}" url="../images/back.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="next">
+						<t:graphicImage alt="#{msg.next}" url="../images/forward.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="fastforward">
+						<t:graphicImage alt="#{msg.fastforward}"
+							url="../images/all_forward.gif" border="1" />
+					</f:facet>
+					<f:facet name="fastrewind">
+						<t:graphicImage alt="#{msg.fastrewind}"
+							url="../images/all_back.gif" border="1" />
+					</f:facet>
+				</t:dataScroller>
+			</a4j:outputPanel>
+		</a4j:outputPanel>
+
+	</ui:define>
+
+	<ui:define name="delete_panels">
+		<rich:modalPanel id="deletePanel" autosized="true" width="200">
+			<f:facet name="header">
+				<h:outputText value="#{userListController.deleteMessage}?"
+					id="deleteMessage" style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+
+			</f:facet>
+			<h:form>
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.yes}" ajaxSingle="true" styleClass="button"
+									action="#{userListController.deleteUser}"
+									oncomplete="#{rich:component('deletePanel')}.hide();"
+									reRender="FormPanel" /></td>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.cancel}" styleClass="button"
+									onclick="#{rich:component('deletePanel')}.hide();return false;" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</h:form>
+		</rich:modalPanel>
+	</ui:define>
+</ui:composition>
+
+</html>

@@ -1,0 +1,16 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="https://ajax4jsf.dev.java.net/ajax"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/Main.xhtml">
+	<ui:define name="body">
+		<div>
+			<h:form id="form">
+				<h:inputHidden id="hidden" value="#{indexPageBean.val}"></h:inputHidden>
+			</h:form>
+			<br />
+		</div>
+	</ui:define>
+</ui:composition>

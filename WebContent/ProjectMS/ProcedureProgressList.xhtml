@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ListBase.xhtml">
+	<ui:param name="heading" value="#{msg.procedureProgressListTableName}" />
+	<ui:define name="script_body">
+	</ui:define>
+	<ui:define name="list_body">
+		<a4j:outputPanel ajaxRendered="false" id="FormPanel">
+			<div class="table_container"><t:dataTable
+				style="margin:0 auto; width: 80%;"
+				rows="#{procedureProgressListBean.itemsPerPage}" id="table"
+				var="procedureProgress" value="#{procedureProgressListBean.list}"
+				styleClass="form_table" rowClasses="row_table_n,row_table_g">
+				<f:facet name="header">
+					<t:column>
+						<h:outputText value="#{msg.procedureProgressListTableName}" />
+						<h:selectOneMenu id="itemPP" styleClass="headerPanelSelect"
+							rendered="#{!empty procedureProgressListBean.list}"
+							value="#{procedureProgressListBean.itemsPerPage}">
+							<f:selectItems
+								value="#{procedureProgressListBean.itemsPerPageList}" />
+							<a4j:support event="onchange" reRender="FormPanel" />
+						</h:selectOneMenu>
+					</t:column>
+				</f:facet>
+
+				<!-- Action columns -->
+
+				<sec:ifAnyGranted roles="ROLE_AGU_W,ROLE_BP_W">
+					<t:column id="edit" styleClass="ActionColumn"
+						rendered="#{!empty procedureProgressListBean.list and !Session.isAguRead and procedureProgressListBean.editable and !Session.projectLock}">
+						<a4j:commandLink ajaxSingle="true" id="editlink"
+							title="#{msg.edit}"
+							action="#{procedureProgressListBean.editEntity}">
+							<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{procedureProgress.id}"
+								target="#{procedureProgressListBean.entityEditId}" />
+						</a4j:commandLink>
+					</t:column>
+				</sec:ifAnyGranted>
+
+				<!-- Info columns -->
+
+				<t:column styleClass="NumberColumn"
+					rendered="#{!empty procedureProgressListBean.list}">
+					<f:facet name="header">
+						<h:outputText value="#{msg.procedureProgressColumnStep}" />
+					</f:facet>
+					<t:outputText value="#{procedureProgress.step}" />
+				</t:column>
+
+				<t:column styleClass="StringColumn"
+					rendered="#{!empty procedureProgressListBean.list}">
+					<f:facet name="header">
+						<h:outputText value="#{msg.procedureProgressColumnDescription}" />
+					</f:facet>
+					<t:outputText value="#{procedureProgress.description}" />
+				</t:column>
+
+				<t:column styleClass="StringColumn"
+					rendered="#{!empty procedureProgressListBean.list}">
+					<f:facet name="header">
+						<h:outputText
+							value="#{msg.procedureProgressColumnPartnerResponsible}" />
+					</f:facet>
+					<t:outputText value="#{procedureProgress.partnerResponsible}" />
+				</t:column>
+
+				<t:column styleClass="StringColumn"
+					rendered="#{!empty procedureProgressListBean.list}">
+					<f:facet name="header">
+						<h:outputText
+							value="#{msg.procedureProgressColumnExpectedStartDate}" />
+					</f:facet>
+					<t:outputText converter="dateTimeConverter"
+						value="#{procedureProgress.expectedStartDate}" />
+				</t:column>
+				
+				<t:column styleClass="StringColumn"
+					rendered="#{!empty procedureProgressListBean.list}">
+					<f:facet name="header">
+						<h:outputText
+							value="#{msg.procedureProgressColumnEffectiveStartDate}" />
+					</f:facet>
+					<t:outputText converter="dateTimeConverter"
+						value="#{procedureProgress.effectiveStartDate}" />
+				</t:column>
+
+				<t:column styleClass="StringColumn"
+					rendered="#{!empty procedureProgressListBean.list}">
+					<f:facet name="header">
+						<h:outputText value="#{msg.procedureProgressColumnExpectedEndDate}" />
+					</f:facet>
+					<t:outputText converter="dateTimeConverter"
+						value="#{procedureProgress.plannedEndDate}" />
+				</t:column>
+				
+				<t:column styleClass="StringColumn"
+					rendered="#{!empty procedureProgressListBean.list}">
+					<f:facet name="header">
+						<h:outputText value="#{msg.procedureProgressColumnEffectiveEndDate}" />
+					</f:facet>
+					<t:outputText converter="dateTimeConverter"
+						value="#{procedureProgress.effectiveEndDate}" />
+				</t:column>
+				
+				<t:column id="notePresent" styleClass="ActionColumn"
+					headerstyleClass="ActionColumn"
+					rendered="#{!empty procedureProgressListBean.list}">
+					<f:facet name="header">
+						<h:outputText value="#{msg.notesExist}" />
+					</f:facet>
+
+					<h:graphicImage alt="#{msg.notesExist}"
+						value="/images/check.png" style="border:0"
+						rendered="#{procedureProgress.hasNotes}" />
+				</t:column>
+				<t:column id="notes"
+					rendered="#{!empty procedureProgressListBean.list and !Session.projectLock}"
+					styleClass="ActionColumn" headerstyleClass="ActionColumn">
+					<f:facet name="header">
+						<h:outputText value="#{msg.notes}" />
+					</f:facet>
+					<a4j:commandLink ajaxSingle="true" id="editnoteslink"
+						title="#{msg.edit}" action="#{procedureProgressListBean.editNotes}">
+						<h:graphicImage alt="#{msg.procedureProgressEditNotes}"
+							value="/images/file-add.png" style="border:0" />
+						<f:setPropertyActionListener value="#{procedureProgress.id}"
+							target="#{procedureProgressListBean.entityEditId}" />
+					</a4j:commandLink>
+				</t:column>
+
+				<t:column styleClass="StringColumn"
+					rendered="#{empty procedureProgressListBean.list}">
+					<f:facet name="header">
+						<h:outputText value="#{msg.noData}" />
+					</f:facet>
+				</t:column>
+			</t:dataTable></div>
+			<a4j:outputPanel styleClass="scrollerPanel">
+				<t:dataScroller id="scroll" styleClass="scroller" for="table"
+					rendered="#{procedureProgressListBean.showScroll}" paginator="true"
+					paginatorMaxPages="5" fastStep="5" paginatorColumnClass="page"
+					paginatorActiveColumnClass="page_active" immediate="true">
+					<f:facet name="first">
+						<t:graphicImage alt="#{msg.first}" url="../images/back_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="last">
+						<t:graphicImage alt="#{msg.last}" url="../images/forward_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="previous">
+						<t:graphicImage alt="#{msg.previous}" url="../images/back.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="next">
+						<t:graphicImage alt="#{msg.next}" url="../images/forward.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="fastforward">
+						<t:graphicImage alt="#{msg.fastforward}"
+							url="../images/all_forward.gif" border="1" />
+					</f:facet>
+					<f:facet name="fastrewind">
+						<t:graphicImage alt="#{msg.fastrewind}"
+							url="../images/all_back.gif" border="1" />
+					</f:facet>
+				</t:dataScroller>
+			</a4j:outputPanel>
+		</a4j:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

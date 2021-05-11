@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:security="http://www.springframework.org/security/tags">
+<head>
+<title><h:outputText value="#{msg.paaMangmentSystem}" /></title>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<meta content="" name="Description" />
+<meta content="" name="Keywords" />
+<meta content="3 days" name="revisit-after" />
+<meta content="paamns" name="author" />
+<meta content="Global" name="distribution" />
+<meta content="General" name="rating" />
+<meta content="2011 copyright" name="Copyright" />
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"/>
+<link
+	href="#{facesContext.externalContext.requestContextPath}/styles/style.css"
+	media="all" rel="styleSheet" type="text/css" />
+<link rel="icon" href="#{facesContext.externalContext.requestContextPath}/favicon.ico" type="image/x-icon" />
+<!--[if IE]>
+<link href="#{facesContext.externalContext.requestContextPath}/styles/ie.css" rel="stylesheet" media="all" type="text/css" />
+<![endif]-->
+<script
+	src="#{facesContext.externalContext.requestContextPath}/JavaScript/selectFix.js"
+	type="text/javascript"></script>
+<script
+	src="#{facesContext.externalContext.requestContextPath}/JavaScript/MenuManager.js"
+	type="text/javascript"></script>
+<script
+	src="#{facesContext.externalContext.requestContextPath}/JavaScript/field-formatters.js"
+	type="text/javascript"></script>
+
+<script
+	src="#{facesContext.externalContext.requestContextPath}/JavaScript/Cookie.js"
+	type="text/javascript"></script>
+		
+</head>
+<body>
+<f:view locale="#{LocalizeBean.currentLocale}">
+	<div class="main"><ui:include
+		src="/Templates/Include/Header.xhtml" />
+	<div class="contentplacer" style="background: none;">
+	<div class="leftpacer" style="margin-left: 0px;">
+	<div class="product_box"><sec:ifAnyGranted roles="ROLE_USER">
+		<div class="page_menu_left"><a4j:outputPanel ajaxRendered="true"
+			id="MenuPanel">
+			<ui:include src="/Templates/Include/Menu.xhtml" />
+		</a4j:outputPanel></div>
+	</sec:ifAnyGranted>
+	<div align="justify" class="page_content_back"><a4j:outputPanel
+		ajaxRendered="false" id="ContentPanel">
+		<ui:insert name="body">Body</ui:insert>
+	</a4j:outputPanel></div>
+	</div>
+	</div>
+	</div>
+	<ui:include src="/Templates/Include/Footer.xhtml" /></div>
+	<script type="text/javascript" >
+		function addTooltips()
+		{
+			var options = document.body.getElementsByTagName("option");
+			for(var i=0;options.length>i;i++)
+			{
+				options[i].title = options[i].label;
+			}
+		}
+		addTooltips();
+		if(!String.prototype.trim) {
+			  String.prototype.trim = function () {
+			    return this.replace(/^\s+|\s+$/g,'');
+			  };
+			}
+	</script>
+</f:view>
+</body>
+
+</html>

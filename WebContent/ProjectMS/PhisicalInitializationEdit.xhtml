@@ -1,0 +1,522 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	template="/Templates/EditTabBase.xhtml">
+
+	<ui:param name="heading" value="#{msg.indicators}" />
+	<ui:param name="heading_top" value="#{msg.indicators}" />
+	<ui:define name="edit_body">
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+			<t:panelTabbedPane serverSideTabSwitch="false" selectedIndex="#{phisicalInitializationEditBean.selectedIndex}">
+				
+				<ui:remove>
+				<t:panelTab id="tab5" label="#{msg.indicatorsQSN}" style="#{phisicalInitializationEditBean.qsnStyle}">
+					<div class="table_container"><t:dataTable width="100%"
+						style="margin:0 auto;" id="table" var="data"
+						value="#{qsnIndicatorsListBean.allList}" styleClass="form_table"
+						rowClasses="row_table_n,row_table_g">
+						<f:facet name="header">
+							<h:outputText style="text-align: center"
+								value="#{msg.indicatorsQSN}" />
+						</f:facet>
+						<t:column styleClass="ActionColumn"
+							enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W">
+							<t:selectOneRow groupName="selection33"
+								value="#{phisicalInitializationEditBean.selectedRowIndexQSN}"
+								immediate="true" />
+						</t:column>
+						<t:column styleClass="CodeColumn"
+							rendered="#{!empty qsnIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.priorityCode}" />
+							</f:facet>
+							<t:outputText value="#{data.indicator.priorityCode}" />
+						</t:column>
+						<t:column styleClass="StringColumn" 
+							rendered="#{!empty qsnIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.descriptionPriorirty}" />
+							</f:facet>
+							<t:outputText value="#{data.indicator.descriptionPriorirty}" />
+						</t:column>
+						<t:column styleClass="StringColumn" 
+							rendered="#{!empty qsnIndicatorsListBean.allList}" >
+							<f:facet name="header">
+								<t:outputText value="#{msg.descriptionPriorirtyResult}" />
+							</f:facet>
+							<h:outputText value="#{data.indicator.descriptionResult}" />
+						</t:column>
+						<t:column 
+							rendered="#{!empty qsnIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.code}" />
+							</f:facet>
+							<h:outputText value="#{data.indicator.qsnResalto}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{empty qsnIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+					</t:dataTable></div>
+
+				</t:panelTab>
+
+				<t:panelTab id="tab10" label="#{msg.coreIndicators}" style="#{phisicalInitializationEditBean.coreStyle}">
+					<div class="table_container"><t:dataTable width="100%"
+						style="margin:0 auto;" id="table" var="data"
+						value="#{coreIndicatorsListBean.allList}" styleClass="form_table"
+						rowClasses="row_table_n,row_table_g">
+						<f:facet name="header">
+							<h:outputText style="text-align: center"
+								value="#{msg.coreIndicators}" />
+						</f:facet>
+						<sec:ifAnyGranted roles="ROLE_STC_W,ROLE_AGU_W">
+							<t:column styleClass="ActionColumn"
+								rendered="#{!empty coreIndicatorsListBean.allList}">
+								<t:selectOneRow groupName="selection1"
+									value="#{phisicalInitializationEditBean.selectedRowIndexCore}"
+									immediate="true" />
+							</t:column>
+						</sec:ifAnyGranted>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty coreIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.indicartorDescription}" />
+							</f:facet>
+							<t:outputText value="#{data.indicator.descriptionOfIndicator}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty coreIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.descriptionUnitsMeasure}" />
+							</f:facet>
+							<t:outputText value="#{data.indicator.descriptionUnitsMeasure}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty coreIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.programmedValue}" />
+							</f:facet>
+							<t:inputText onkeypress="return decimalonly(this, event)"
+								converter="floatConverter" validator="#{validator.isFloat92}"
+								onkeyup="checkdecimal(this)" value="#{data.programmedValues}"
+								maxlength="12" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{empty coreIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+					</t:dataTable></div>
+
+				</t:panelTab>
+				<t:panelTab id="tab4" label="#{msg.employmentIndicators}" style="#{phisicalInitializationEditBean.employmentStyle}">
+					<div class="table_container"><t:dataTable width="100%"
+						style="margin:0 auto;" id="table" var="data"
+						value="#{employmentIndicatorsListBean.allList}"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g">
+						<f:facet name="header">
+							<h:outputText style="text-align: center"
+								value="#{msg.employmentIndicators}" />
+						</f:facet>
+						<sec:ifAnyGranted roles="ROLE_STC_W,ROLE_AGU_W">
+							<t:column styleClass="ActionColumn"
+								enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+								rendered="#{!empty employmentIndicatorsListBean.allList}">
+								<t:selectOneRow groupName="selection2"
+									value="#{phisicalInitializationEditBean.selectedRowIndexEmployment}"
+									immediate="true" />
+							</t:column>
+						</sec:ifAnyGranted>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty employmentIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.description}" />
+							</f:facet>
+							<t:outputText value="#{data.indicator.description}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty employmentIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.measurementUnits}" />
+							</f:facet>
+							<t:outputText value="#{data.indicator.measurementUnits}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty employmentIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.programmedValue}" />
+							</f:facet>
+							<t:inputText value="#{data.programmedValues}"
+								converter="floatConverter" validator="#{validator.isFloat92}"
+								onkeypress="return decimalonly(this, event)"
+								onkeyup="checkdecimal(this)" maxlength="12" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{empty employmentIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+					</t:dataTable></div>
+				</t:panelTab>
+				</ui:remove>
+
+				<t:panelTab id="tab6" label="#{msg.resultIndicators}" style="#{phisicalInitializationEditBean.resultStyle}">
+					<div class="table_container"><t:dataTable width="100%"
+						style="margin:0 auto;" id="table" var="data"
+						value="#{programResultIndicatorsListBean.allList}"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g">
+						
+						<ui:remove>
+						<sec:ifAnyGranted roles="ROLE_STC_W,ROLE_AGU_W">
+							<t:column styleClass="ActionColumn"
+								rendered="#{!empty programResultIndicatorsListBean.allList}">
+								<t:selectOneRow groupName="selection3"
+									value="#{phisicalInitializationEditBean.selectedRowIndexResult}"
+									immediate="true" />
+							</t:column>
+						</sec:ifAnyGranted>
+						</ui:remove>
+						
+						<sec:ifAnyGranted roles="ROLE_STC_W,ROLE_AGU_W">
+						<t:column styleClass="ActionColumn"
+							rendered="#{!empty programResultIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<t:outputText value="" />
+							</f:facet>
+							<t:selectBooleanCheckbox value="#{data.selected}"
+								visibleOnUserRole="ROLE_STC_W,ROLE_AGU_W" />
+						</t:column>
+						</sec:ifAnyGranted>
+						
+						<f:facet name="header">
+							<h:outputText style="text-align: center"
+								value="#{msg.resultIndicators}" />
+						</f:facet>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty programResultIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.resultIndicatorsASSE}" />
+							</f:facet>
+							<t:outputText value="#{data.indicator.asse}" />
+						</t:column>
+						<t:column styleClass="StringColumn" style="width: 25%"
+							rendered="#{!empty programResultIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.indicatorsDescription}" />
+							</f:facet>
+							<t:outputText value="#{data.indicator.specificObjective}" />
+						</t:column>
+						<t:column 
+							rendered="#{!empty programResultIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.measurementUnits}" />
+							</f:facet>
+							<h:outputText value="#{data.indicator.units}" />
+						</t:column>
+						
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty  programResultIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.projectIndicatorsTarget}" />
+							</f:facet>
+							<t:inputText value="#{data.targetValue}"/>
+						</t:column>
+						
+						<ui:remove>
+						<t:column 
+							rendered="#{!empty programResultIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.target}" />
+							</f:facet>
+							<h:outputText value="#{data.indicator.target}" />
+						</t:column>
+						<t:column 
+							rendered="#{!empty programResultIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.baseLine}" />
+							</f:facet>
+							<h:outputText value="#{data.indicator.baseLine}" />
+						</t:column>
+						<t:column 
+							rendered="#{!empty programResultIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.source}" />
+							</f:facet>
+							<h:outputText value="#{data.indicator.source}" />
+						</t:column>
+						<t:column 
+							rendered="#{!empty programResultIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.survey}" />
+							</f:facet>
+							<h:outputText value="#{data.indicator.survey}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{empty programResultIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+						</ui:remove>
+						
+					</t:dataTable></div>
+				</t:panelTab>
+				
+				<ui:remove>
+				<t:panelTab id="tab7" label="#{msg.communicationIndicators}" style="#{phisicalInitializationEditBean.resultStyle}">
+					<div class="table_container"><t:dataTable width="100%"
+						style="margin:0 auto;" id="table" var="data"
+						value="#{communicationIndicatorsListBean.allList}"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g">
+						
+
+						
+						<f:facet name="header">
+							<h:outputText style="text-align: center"
+								value="#{msg.communicationIndicators}" />
+						</f:facet>
+						
+						<sec:ifAnyGranted roles="ROLE_STC_W,ROLE_AGU_W">
+						<t:column styleClass="ActionColumn"
+							rendered="#{!empty communicationIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<t:outputText value="" />
+							</f:facet>
+							<t:selectBooleanCheckbox value="#{data.selected}"
+								visibleOnUserRole="ROLE_STC_W,ROLE_AGU_W" />
+						</t:column>
+						</sec:ifAnyGranted>
+						
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty communicationIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.communicationIndicators}" />
+							</f:facet>
+							<t:outputText value="#{data.indicator.specificObjective}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty  communicationIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.measurementUnits}" />
+							</f:facet>
+							<t:inputText value="#{data.unitValue}"/>
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty  communicationIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.projectIndicatorsTarget}" />
+							</f:facet>
+							<t:inputText value="#{data.targetValue}"/>
+						</t:column>
+					</t:dataTable></div>
+				</t:panelTab>
+				</ui:remove>
+
+
+				<ui:remove>
+				<t:panelTab id="tab8" label="#{msg.progIndicators}"
+					style="#{phisicalInitializationEditBean.resultStyle}">
+					<div class="table_container">
+						<t:dataTable width="100%" style="margin:0 auto;" id="table"
+							var="data" value="#{progIndicatorsListBean.allList}"
+							styleClass="form_table" rowClasses="row_table_n,row_table_g">
+
+
+
+							<f:facet name="header">
+								<h:outputText style="text-align: center"
+									value="#{msg.progIndicators}" />
+							</f:facet>
+
+							<sec:ifAnyGranted roles="ROLE_STC_W,ROLE_AGU_W">
+								<t:column styleClass="ActionColumn"
+									rendered="#{!empty progIndicatorsListBean.allList}">
+									<f:facet name="header">
+										<t:outputText value="" />
+									</f:facet>
+									<t:selectBooleanCheckbox value="#{data.selected}"
+										visibleOnUserRole="ROLE_STC_W,ROLE_AGU_W" />
+								</t:column>
+							</sec:ifAnyGranted>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty progIndicatorsListBean.allList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.progIndicators}" />
+								</f:facet>
+								<t:outputText value="#{data.indicator.specificObjective}" />
+							</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty  progIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.measurementUnits}" />
+							</f:facet>
+							<t:inputText value="#{data.unitValue}"/>
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty  progIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.projectIndicatorsTarget}" />
+							</f:facet>
+							<t:inputText value="#{data.targetValue}"/>
+						</t:column>
+						</t:dataTable>
+					</div>
+				</t:panelTab>
+				</ui:remove>
+
+				<ui:remove>
+				<t:panelTab id="tab7" label="#{msg.implementationIndicators}" 
+				style="#{phisicalInitializationEditBean.implementationStyle}">
+					<div class="table_container"><t:dataTable width="100%"
+						style="margin:0 auto;" id="table" var="data"
+						value="#{programRealizationIndicatorsListBean.allList}"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g">
+						
+						<f:facet name="header">
+							<h:outputText style="text-align: center"
+								value="#{msg.implementationIndicators}" />
+						</f:facet>
+						<t:column styleClass="ActionColumn"
+							rendered="#{!empty programRealizationIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<t:outputText value="" />
+							</f:facet>
+							<t:selectBooleanCheckbox value="#{data.selected}"
+								visibleOnUserRole="ROLE_STC_W,ROLE_AGU_W" />
+						</t:column>
+						<t:column styleClass="NumberColumn"
+							rendered="#{!empty programRealizationIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.asse}" />
+							</f:facet>
+							<t:outputText value="#{data.indicator.asse}" />
+						</t:column>
+						<t:column styleClass="StringColumn" 
+							rendered="#{!empty programRealizationIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.specificGoal}" />
+							</f:facet>
+							<t:outputText value="#{data.indicator.specificObjective}" />
+						</t:column>
+						<t:column 
+							rendered="#{!empty programRealizationIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.measurementUnits}" />
+							</f:facet>
+							<h:outputText value="#{data.indicator.units}" />
+						</t:column>
+						
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty programRealizationIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.programmedValue}" />
+							</f:facet>
+							<t:inputText value="#{data.programmedValues}"
+								converter="floatConverter" validator="#{validator.isFloat92}"
+								onkeypress="return decimalonly(this, event)"
+								onkeyup="checkdecimal(this)" maxlength="12" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{empty programRealizationIndicatorsListBean.allList}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+						<ui:remove>
+												<f:facet name="header">
+							<h:outputText style="text-align: center"
+								value="#{msg.implementationIndicators}" />
+						</f:facet>
+								<t:column styleClass="StringColumn"
+							rendered="#{!empty programRealizationIndicatorViewController.list}">
+							<f:facet name="header">
+								<t:outputText style="text-align: center"
+								value="#{msg.resultIndicatorsASSE}" />
+							</f:facet>
+							<t:outputText value="#{data.asse}" />
+						</t:column>
+						<t:column styleClass="StringColumn" style="width: 45%" 
+							rendered="#{!empty programRealizationIndicatorViewController.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.indicatorsDescription}" />
+							</f:facet>
+							<t:outputText value="#{data.specificObjective}" />
+						</t:column>
+						<t:column 
+							rendered="#{!empty programRealizationIndicatorViewController.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.measurementUnits}" />
+							</f:facet>
+							<h:outputText value="#{data.units}" />
+						</t:column>
+						<t:column 
+							rendered="#{!empty programRealizationIndicatorViewController.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.target}" />
+							</f:facet>
+							<h:outputText value="#{data.target}" />
+						</t:column>
+						<t:column 
+							rendered="#{!empty programRealizationIndicatorViewController.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.source}" />
+							</f:facet>
+							<h:outputText value="#{data.source}" />
+						</t:column>
+						<t:column 
+							rendered="#{!empty programRealizationIndicatorViewController.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.survey}" />
+							</f:facet>
+							<h:outputText value="#{data.survey}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{empty programRealizationIndicatorViewController.list}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+						</ui:remove>
+					</t:dataTable></div>
+				</t:panelTab>
+				</ui:remove>
+				<table width="100%">
+					<tr>
+						<td align="center"><t:outputText
+							value="#{phisicalInitializationEditBean.qsnError}"
+							styleClass="RequiredFieldMarker" /> <t:outputText
+							value="#{phisicalInitializationEditBean.coreError}"
+							styleClass="RequiredFieldMarker" /> <t:outputText
+							value="#{phisicalInitializationEditBean.resultError}"
+							styleClass="RequiredFieldMarker" /></td>
+					</tr>
+				</table>
+
+				<table width="100%">
+					<tr>
+						<td colspan="2" class="btn_line"><a4j:commandButton
+							immediate="false" reRender="pagePanel"
+							action="#{phisicalInitializationEditBean.Page_Save}"
+							styleClass="button2" value="#{msg.save}" id="save" /> <a4j:commandButton
+							value="#{msg.cancel}" styleClass="button2" immediate="true"
+							action="#{phisicalInitializationEditBean.GoBack}" /></td>
+					</tr>
+				</table>
+			</t:panelTabbedPane>
+		</a4j:outputPanel>
+	</ui:define>
+</ui:composition>
+
+

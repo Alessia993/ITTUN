@@ -1,0 +1,404 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ListBase.xhtml">
+	<ui:param name="heading" value="#{msg.localChecks}" />
+	<ui:define name="list_body">
+		<a4j:outputPanel ajaxRendered="false" id="FormPanel">
+			<ui:remove>
+
+				<fieldset style="margin: 10px; width: auto;">
+					<table style="margin: 10px;">
+						<tr>
+							<td><t:selectOneRadio style="margin:5px;"
+									value="#{localCheckListBean.filterValue}">
+									<f:selectItem itemValue="all" itemLabel="#{msg.all}" />
+									<f:selectItem itemValue="open"
+										itemLabel="#{msg.inCourseControl}" />
+									<f:selectItem itemValue="closed"
+										itemLabel="#{msg.closeControl}" />
+									<a4j:support event="onclick" id="filterValuesPA"
+										reRender="FormPanel" />
+								</t:selectOneRadio></td>
+						</tr>
+					</table>
+				</fieldset>
+				<div class="table_container">
+					<t:dataTable width="80%" style="margin:0 auto;"
+						rows="#{localCheckListBean.itemsPerPage}" id="table" var="data"
+						value="#{localCheckListBean.list}" styleClass="form_table"
+						rowClasses="row_table_n,row_table_g">
+						<f:facet name="header">
+							<t:column>
+								<sec:ifAnyGranted roles="ROLE_CIL_W, ROLE_AAU_W, ROLE_DAEC_W">
+									<a4j:commandLink styleClass="headerPanelLink"
+										rendered="#{!Session.projectLock}"
+										action="#{localCheckListBean.addEntity}">#{msg.addLocalCheck}</a4j:commandLink>
+								</sec:ifAnyGranted>
+								<h:outputText style="text-align: center"
+									value="#{msg.localChecks}" />
+								<h:selectOneMenu id="itemPP" styleClass="headerPanelSelect"
+									value="#{localCheckListBean.itemsPerPage}">
+									<f:selectItems value="#{localCheckListBean.itemsPerPageList}" />
+									<a4j:support event="onchange" reRender="FormPanel" />
+								</h:selectOneMenu>
+							</t:column>
+						</f:facet>
+						<t:column id="view" styleClass="ActionColumn"
+							rendered="#{!empty localCheckListBean.list}">
+							<a4j:commandLink ajaxSingle="true" id="viewlink"
+								title="#{msg.show}" action="#{localCheckListBean.viewEntity}">
+								<h:graphicImage alt="#{msg.show}" value="/images/ok.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{data.id}"
+									target="#{localCheckListBean.entityEditId}" />
+							</a4j:commandLink>
+						</t:column>
+						<sec:ifAnyGranted roles="ROLE_CIL_W, ROLE_AAU_W, ROLE_DAEC_W">
+							<t:column id="edit" styleClass="ActionColumn"
+								rendered="#{!empty localCheckListBean.list and !Session.isAguRead}">
+								<a4j:commandLink ajaxSingle="true" id="editlink"
+									title="#{msg.edit}"
+									rendered="#{!data.closedControl and data.canEdit}"
+									action="#{localCheckListBean.editEntity}">
+									<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+										style="border:0" />
+									<f:setPropertyActionListener value="#{data.id}"
+										target="#{localCheckListBean.entityEditId}" />
+								</a4j:commandLink>
+							</t:column>
+							<t:column id="delete" styleClass="ActionColumn"
+								rendered="#{!empty localCheckListBean.list and !Session.isAguRead}">
+								<a4j:commandLink id="deletelink" title="#{msg.delete}"
+									rendered="#{!data.closedControl and data.canEdit}"
+									oncomplete="#{rich:component('deletePanel')}.show()">
+									<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+										style="border:0" />
+									<f:setPropertyActionListener value="#{data.id}"
+										target="#{localCheckListBean.entityDeleteId}" />
+								</a4j:commandLink>
+							</t:column>
+						</sec:ifAnyGranted>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty localCheckListBean.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.localCheckInsertedUser}" />
+							</f:facet>
+							<t:outputText value="#{data.userFullname}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty localCheckListBean.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.localCheckInsertedRole}" />
+							</f:facet>
+							<t:outputText value="#{data.insertedUserRole}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty localCheckListBean.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.localCheckPartner}" />
+							</f:facet>
+							<t:outputText
+								rendered="#{!empty data.partner and !empty data.partner.user}"
+								value="#{data.partner.user.name} #{data.partner.user.surname}" />
+						</t:column>
+						<t:column styleClass="DateColumn"
+							rendered="#{!empty localCheckListBean.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.checkStartDate}" />
+							</f:facet>
+							<t:outputText value="#{data.checkStartDate}"
+								converter="dateTimeConverter" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty localCheckListBean.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.evaluation}" />
+							</f:facet>
+							<t:outputText value="#{data.evaluation}" />
+						</t:column>
+
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty localCheckListBean.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.results}" />
+							</f:facet>
+							<t:outputText value="#{data.results}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty localCheckListBean.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.resume}" />
+							</f:facet>
+							<t:outputText value="#{data.resume}" />
+						</t:column>
+						<t:column styleClass="NumberColumn"
+							rendered="#{!empty localCheckListBean.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.protocolNumberLocalCheck}" />
+							</f:facet>
+							<t:outputText value="#{data.protocolNumber}" />
+						</t:column>
+
+						<t:column styleClass="DateColumn"
+							rendered="#{!empty localCheckListBean.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.checkClosureDate}" />
+							</f:facet>
+							<t:outputText value="#{data.checkClosureDate}"
+								converter="dateTimeConverter" />
+						</t:column>
+
+						<t:column styleClass="StringColumn"
+							rendered="#{empty localCheckListBean.list}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+					</t:dataTable>
+				</div>
+				<a4j:outputPanel styleClass="scrollerPanel">
+					<t:dataScroller id="scroll" styleClass="scroller" for="table"
+						rendered="#{localCheckListBean.showScroll}" paginator="true"
+						paginatorMaxPages="5" fastStep="5" paginatorColumnClass="page"
+						paginatorActiveColumnClass="page_active" immediate="true">
+						<f:facet name="first">
+							<t:graphicImage alt="#{msg.first}" url="../images/back_end.gif"
+								border="1" />
+						</f:facet>
+						<f:facet name="last">
+							<t:graphicImage alt="#{msg.last}" url="../images/forward_end.gif"
+								border="1" />
+						</f:facet>
+						<f:facet name="previous">
+							<t:graphicImage alt="#{msg.previous}" url="../images/back.gif"
+								border="1" />
+						</f:facet>
+						<f:facet name="next">
+							<t:graphicImage alt="#{msg.next}" url="../images/forward.gif"
+								border="1" />
+						</f:facet>
+						<f:facet name="fastforward">
+							<t:graphicImage alt="#{msg.fastforward}"
+								url="../images/all_forward.gif" border="1" />
+						</f:facet>
+						<f:facet name="fastrewind">
+							<t:graphicImage alt="#{msg.fastrewind}"
+								url="../images/all_back.gif" border="1" />
+						</f:facet>
+					</t:dataScroller>
+				</a4j:outputPanel>
+			</ui:remove>
+			<table width="50%" class="forms" border="0" cellpadding="1"
+				cellspacing="1">
+				<th>Selezione del Progetto e del Beneficiario</th>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="Periodo Contabile di Riferimento" /></td>
+					<td><select styleClass="DropDown">
+							<option>- Non selezionato</option>
+							<option>01/07/2018 - 30/06/2019</option>
+					</select></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="Responsabile del controllo" /></td>
+					<td><t:inputText></t:inputText></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="Denominazione del progetto campionato" /></td>
+					<td><t:inputText></t:inputText></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="Nominativo del beneficiario" /></td>
+					<td><t:inputText></t:inputText></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="Domande di pagamento" /></td>
+					<td><input type="checkbox">DDR 1</input>
+<br /> <input
+						type="checkbox">DDR 2</input><br />
+						<input
+						type="checkbox">DDR 21</input><br />
+						<input
+						type="checkbox">DDR 23</input></td>
+				</tr>
+			</table>
+
+			<table width="50%" class="forms" border="0" cellpadding="1"
+				cellspacing="1">
+				<th>Dettaglio singolo controllo campionato</th>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="Denominazione Progetto" /></td>
+					<td><t:inputText></t:inputText></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="Nominativo Beneficiario" /></td>
+					<td><t:inputText></t:inputText></td>
+				</tr>
+
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="Domande di Rimborso" /></td>
+					<td>
+						<table border="1">
+							<tr>
+								<td>Domanda di rimborso</td>
+								<td>Importo di spesa</td>
+								<td>Spesa irregolare</td>
+								<td>Spesa non ammissibile</td>
+							</tr>
+							<tr>
+								<td>DDR 1</td>
+								<td>2000,00</td>
+								<td>0,00</td>
+								<td>0,00</td>
+							</tr>
+							<tr>
+								<td>DDR 23</td>
+								<td>1300,00</td>
+								<td>100,00</td>
+								<td>10,00</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="Data di inizio controllo" /></td>
+					<td><rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+							converter="dateTimeConverter"
+							value=""
+							datePattern="dd/MM/yyyy">
+						</rich:calendar></td>
+				</tr>
+
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="Data di fine controllo" /></td>
+					<td><rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+							converter="dateTimeConverter"
+							value=""
+							datePattern="dd/MM/yyyy">
+						</rich:calendar></td>
+				</tr>
+
+				<tr>
+					<td class="LabelCell"><t:outputText value="Spesa campionata" /></td>
+					<td><t:inputText></t:inputText></td>
+				</tr>
+
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="Importo spesa controllata" /></td>
+					<td><t:inputText></t:inputText></td>
+				</tr>
+
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="Data di rilascio del Rapporto di Audit provvisorio" /></td>
+					<td><rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+							converter="dateTimeConverter"
+							value=""
+							datePattern="dd/MM/yyyy">
+						</rich:calendar></td>
+				</tr>
+
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="Presenza spesa irregolare su spesa campionata controllata" /></td>
+					<td><t:inputText></t:inputText></td>
+				</tr>
+
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="Data di rilascio del Rapporto di Audit provvisorio" /></td>
+					<td><rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+							converter="dateTimeConverter"
+							value=""
+							datePattern="dd/MM/yyyy">
+						</rich:calendar></td>
+				</tr>
+
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="Spesa non ammissibile (taglio effettuato)" /></td>
+					<td><t:inputText></t:inputText></td>
+				</tr>
+
+				<tr>
+					<td class="LabelCell"><t:outputText value="Annotazioni" /></td>
+					<td><h:inputTextarea rows="5"></h:inputTextarea></td>
+				</tr>
+
+			</table>
+
+			<table width="50%" class="forms" border="0" cellpadding="1"
+				cellspacing="1">
+				<th>DOCUMENTI ALLEGATI</th>
+				<tr>
+					<td class="LabelCell"><t:outputText value="Tipo di Documento" /></td>
+					<td><select styleClass="DropDown">
+							<option>- Non selezionato</option>
+							<option>Tipo 1</option>
+							<option>Tipo 2</option>
+							<option>Tipo 3</option>
+					</select></td>
+				</tr>
+
+				<tr>
+					<td class="LabelCell"><t:outputText value="Titolo Documento" /></td>
+					<td><t:inputText></t:inputText></td>
+				</tr>
+
+				<tr>
+					<td class="LabelCell"><t:outputText value="Allegato" /></td>
+					<td><t:inputFileUpload styleClass="fileUploadInput"></t:inputFileUpload>
+					</td>
+				</tr>
+
+			</table>
+		</a4j:outputPanel>
+
+	</ui:define>
+
+	<ui:define name="delete_panels">
+		<rich:modalPanel id="deletePanel" autosized="true" width="200">
+			<f:facet name="header">
+				<h:outputText value="#{msg.delete}?" style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+			</f:facet>
+			<h:form>
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.yes}" ajaxSingle="true" styleClass="button"
+									action="#{localCheckListBean.deleteEntity}"
+									oncomplete="#{rich:component('deletePanel')}.hide();"
+									reRender="FormPanel" /></td>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.cancel}" styleClass="button"
+									onclick="#{rich:component('deletePanel')}.hide();return false;" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</h:form>
+		</rich:modalPanel>
+	</ui:define>
+</ui:composition>
+</html>

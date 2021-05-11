@@ -1,0 +1,624 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/EditTabBase.xhtml">
+	<ui:param name="headWidth" value="900px" />
+	<ui:param name="heading"
+		value="#{msg.paymentApplicationListNameModify}" />
+	<ui:param name="heading_top"
+		value="#{msg.paymentApplicationListNameModify}" />
+	<ui:define name="edit_body">
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+			<t:panelTabbedPane serverSideTabSwitch="false">
+
+				<t:panelTab id="tab1" label="#{msg.paymentApplicationListName}">
+					<div>
+
+						<a4j:outputPanel ajaxRendered="true" id="FormPanelNonValidate">
+							<table class="forms" border="0" cellpadding="1" cellspacing="1">
+								<tr>
+									<td class="LabelCell" style="width: 25%;"><t:outputText
+											value="#{msg.paymentApplicationListNumber}:"
+											rendered="#{paymentApplicationEditBean.rendered}" /></td>
+									<td class="ControlCell" style="width: 25%;"><t:inputText
+											maxlength="8" styleClass="editbox_form"
+											id="paymentApplicationId"
+											value="#{paymentApplicationEditBean.paymentApplicationId}"
+											rendered="#{paymentApplicationEditBean.rendered}"
+											disabled="true" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell" style="width: 25%;"><t:outputText
+											value="#{msg.paymentApplicationListDate}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td><t:inputText maxlength="8" styleClass="editbox_form"
+											id="createFrom"
+											value="#{paymentApplicationEditBean.compilationDate}"
+											rendered="true" disabled="true" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell" style="width: 25%;"><t:outputText
+											value="#{msg.paymentApplicationListSospensPayment}:" /></td>
+									<td class="ControlCell" style="width: 25%;"><rich:calendar
+											locale="#{LocalizeBean.currentLocaleValue}" id="susppaym"
+											inputClass="editbox_form2" converter="dateTimeConverter"
+											value="#{paymentApplicationEditBean.suspPaymentDate}"
+											datePattern="dd/MM/yyyy"
+											disabled="#{paymentApplicationEditBean.edit}">
+										</rich:calendar></td>
+								</tr>
+								<tr>
+									<td class="LabelCell" style="width: 25%;"><t:outputText
+											value="#{msg.paymentApplicationListProtocolN}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td><t:inputText
+											value="#{paymentApplicationEditBean.protocolNumber}"
+											id="protocolNumber" styleClass="editbox_form" maxlength="50"
+											disabled="#{paymentApplicationEditBean.edit}"></t:inputText></td>
+								</tr>
+								<tr>
+									<td class="LabelCell" style="width: 25%;"><t:outputText
+											value="#{msg.paymentApplicationListProtocoNData}:" /></td>
+									<td class="ControlCell" style="width: 25%;"><rich:calendar
+											locale="#{LocalizeBean.currentLocaleValue}" id="createFrom2"
+											inputClass="editbox_form2" converter="dateTimeConverter"
+											value="#{paymentApplicationEditBean.protocolDate}"
+											datePattern="dd/MM/yyyy"
+											disabled="#{paymentApplicationEditBean.edit}">
+										</rich:calendar></td>
+								</tr>
+
+								<tr>
+									<td class="LabelCell" style="width: 25%;"><t:outputText
+											value="#{msg.paymentApplicationEditReferencePeriod}:" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell" style="width: 25%;"><t:outputText
+											value="#{msg.paymentApplicationEditFrom}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td><rich:calendar
+											locale="#{LocalizeBean.currentLocaleValue}" id="dateFrom"
+											inputClass="editbox_form2" converter="dateTimeConverter"
+											value="#{paymentApplicationEditBean.dateFrom}"
+											datePattern="dd/MM/yyyy" disabled="true">
+										</rich:calendar></td>
+								</tr>
+								<tr>
+									<td class="LabelCell" style="width: 25%;"><t:outputText
+											value="#{msg.paymentApplicationEditTo}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td><rich:calendar
+											locale="#{LocalizeBean.currentLocaleValue}" id="dateTo"
+											inputClass="editbox_form2" converter="dateTimeConverter"
+											value="#{paymentApplicationEditBean.dateTo}"
+											datePattern="dd/MM/yyyy" disabled="true">
+										</rich:calendar></td>
+								</tr>
+
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.paymentApplicationTotalAmountOfCertifications}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td class="ControlCell"><h:inputText maxlength="12"
+											rendered="true" converter="floatConverter"
+											styleClass="editbox_form2" id="totalAmountOfCertifications"
+											value="#{paymentApplicationEditBean.totalAmountOfCertifications}"
+											disabled="true" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.paymentApplicationEditType}:" /> <span
+										class="RequiredFieldMarker">*</span></td>
+									<td class="ControlCell"><t:selectOneMenu id="type"
+											value="#{paymentApplicationEditBean.type}"
+											styleClass="DropDown"
+											valueChangeListener="#{paymentApplicationEditBean.typeChange}"
+											onchange="submit()"
+											disabled="#{!paymentApplicationEditBean.typeEdit}">
+											<f:selectItems
+												value="#{paymentApplicationEditBean.listTypes}" var="t"
+												selected="#{type eq t.value}" />
+										</t:selectOneMenu></td>
+								</tr>
+								<ui:remove>
+									<tr>
+										<td class="LabelCell"><t:outputText
+												value="#{msg.paymentApplicationListAmountStateAidInPaymentApplication}:" /><span
+											class="RequiredFieldMarker">*</span></td>
+										<td class="ControlCell"><h:inputText maxlength="12"
+												rendered="true" converter="floatConverter"
+												styleClass="editbox_form2"
+												id="amountStateAidInPaymentApplicatione"
+												onkeypress="return decimalonly(this, event)"
+												onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+												value="#{paymentApplicationEditBean.amountStateAidInPaymentApplication}"
+												validator="#{validator.checkEmpty}" disabled="true" /></td>
+									</tr>
+								</ui:remove>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.paymentApplicationAmountEligibleExpenses}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td class="ControlCell"><h:inputText maxlength="12"
+											rendered="true" converter="floatConverter"
+											styleClass="editbox_form2" id="amountEligibleExpenses"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+											value="#{paymentApplicationEditBean.amountEligibleExpenses}"
+											validator="#{validator.checkEmpty}" disabled="true" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.paymentApplicationTotalAmountOfPublicExpenditure}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td class="ControlCell"><h:inputText maxlength="12"
+											rendered="true" converter="floatConverter"
+											styleClass="editbox_form2" id="totalExpenditure"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+											value="#{paymentApplicationEditBean.totalAmountOfPublicExpenditure}"
+											validator="#{validator.checkEmpty}" disabled="true" /></td>
+								</tr>
+								
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.paymentApplicationTotalCofinancing}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td class="ControlCell"><h:inputText maxlength="12"
+											rendered="true" converter="floatConverter"
+											styleClass="editbox_form2" id="totalCofinancing"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+											value="#{paymentApplicationEditBean.totalAmountCofinancing}"
+											validator="#{validator.checkEmpty}" disabled="true" /></td>
+								</tr>
+								
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.paymentApplicationAttachment}:" />
+									</td>
+									<td class="ControlCell"><a4j:htmlCommandLink id="picDocLink"
+											action="#{paymentApplicationEditBean.getPicDoc}"
+											style="text-decoration: underline; float:left;"
+											immediate="true"
+											value="#{paymentApplicationEditBean.picDocTitle}" />
+										<a4j:commandLink
+											rendered="#{!empty paymentApplicationEditBean.picDocTitle}"
+											id="doc1deletelink" immediate="true" reRender="FormPanel"
+											action="#{paymentApplicationEditBean.deletePicDoc}">
+											<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+												style="border:0; padding-left: 20px;" />
+										</a4j:commandLink> <a4j:commandLink
+											rendered="#{empty paymentApplicationEditBean.picDocTitle}"
+											id="doc1link" immediate="true"
+											oncomplete="#{rich:component('documentPanel1')}.show()">
+											<h:graphicImage alt="#{msg.delete}" value="/images/plus.png"
+												style="border:0;" />
+											<span>#{msg.uploadFile}</span>
+										</a4j:commandLink></td>
+								</tr>
+							</table>
+
+						</a4j:outputPanel>
+						<a4j:outputPanel ajaxRendered="false" id="FormPanel">
+
+							<div>
+								<t:dataTable style="margin:0 auto; width: 100%;" id="table"
+									var="item" value="#{paymentApplicationEditBean.list}"
+									styleClass="form_table"
+									rows="#{paymentApplicationEditBean.itemsPerPage}"
+									rowClasses="row_table_n,row_table_g">
+
+									<f:facet name="header">
+										<t:column>
+											<h:outputText value="#{msg.costCertificationTableName}" />
+										</t:column>
+									</f:facet>
+
+
+
+									<f:facet name="footer">
+										<a4j:htmlCommandLink
+											action="#{paymentApplicationEditBean.export}"
+											styleClass="footerPanelExport">
+											<h:graphicImage alt="#{msg.exportXls}"
+												value="/images/xls.png" />
+										</a4j:htmlCommandLink>
+									</f:facet>
+
+
+
+
+									<!-- Action columns -->
+
+									<!-- Check box column -->
+
+
+
+
+									<t:column id="select" styleClass="ActionColumn"
+										rendered="#{!empty paymentApplicationEditBean.list}">
+										<ui:remove>
+											<f:facet name="header">
+												<t:selectBooleanCheckbox immediate="true" disabled="false"
+													value="#{paymentApplicationEditBean.selectAll}"
+													rendered="#{not paymentApplicationEditBean.showButton}">
+													<a4j:support event="onclick" id="selectAll"
+														reRender="FormPanel,FormPanelValidate"
+														action="#{paymentApplicationEditBean.selectAll}"
+														rendered="#{not paymentApplicationEditBean.showButton}" />
+												</t:selectBooleanCheckbox>
+											</f:facet>
+										</ui:remove>
+										<ui:remove>
+											<t:selectBooleanCheckbox value="#{item.selected}"
+												immediate="true" disabled="#{!item.canCreatePaymentRequest}"
+												rendered="#{not paymentApplicationEditBean.showButton}">
+												<a4j:support event="onclick" id="selectItem"
+													reRender="FormPanel,FormPanelValidate"
+													action="#{paymentApplicationEditBean.selectItem}" />
+											</t:selectBooleanCheckbox>
+										</ui:remove>
+										<t:selectBooleanCheckbox value="#{item.selected}"
+											immediate="true"
+											rendered="#{not paymentApplicationEditBean.showButton}">
+											<a4j:support event="onclick" id="selectItem"
+												reRender="FormPanel,FormPanelValidate"
+												action="#{paymentApplicationEditBean.selectItem}" />
+										</t:selectBooleanCheckbox>
+									</t:column>
+
+									<t:column id="show"
+										rendered="#{!empty paymentApplicationEditBean.list}"
+										styleClass="ActionColumn" headerstyleClass="ActionColumn">
+										<a4j:commandLink ajaxSingle="true" id="showlink"
+											title="#{msg.show}"
+											action="#{paymentApplicationEditBean.showItem}">
+											<h:graphicImage alt="#{msg.show}" value="/images/ok.png"
+												style="border:0" />
+											<f:setPropertyActionListener value="#{item.id}"
+												target="#{paymentApplicationEditBean.entityEditId}" />
+										</a4j:commandLink>
+									</t:column>
+
+
+
+									<!-- Info columns -->
+
+									<t:column styleClass="DateColumn"
+										rendered="#{!empty paymentApplicationEditBean.list}">
+										<f:facet name="header">
+											<t:outputText
+												value="#{msg.durCompilationListHeaderCompilationDate}" />
+										</f:facet>
+										<t:outputText converter="dateTimeConverter"
+											value="#{item.certificationDate}" />
+									</t:column>
+									<t:column styleClass="NumberColumn"
+										rendered="#{!empty paymentApplicationEditBean.list}">
+										<f:facet name="header">
+											<t:outputText
+												value="#{msg.durCompilationListHeaderProtocolN}" />
+										</f:facet>
+										<t:outputText value="#{item.protocolNumber}" />
+									</t:column>
+									<t:column styleClass="NumberColumn"
+										rendered="#{!empty paymentApplicationEditBean.list}">
+										<f:facet name="header">
+											<t:outputText
+												value="#{msg.durCompilationListHeaderRowNumber}" />
+										</f:facet>
+										<t:outputText value="#{item.rowNumber}" />
+									</t:column>
+									<t:column styleClass="StringColumn"
+										rendered="#{!empty paymentApplicationEditBean.list}">
+										<f:facet name="header">
+											<t:outputText
+												value="#{msg.durCompilationListHeaderSumAmount}"></t:outputText>
+										</f:facet>
+										<t:outputText converter="moneyConverter"
+											value="#{item.sumAmoutCertification}"></t:outputText>
+									</t:column>
+
+									<t:column styleClass="StringColumn"
+										rendered="#{!empty paymentApplicationEditBean.list}">
+										<f:facet name="header">
+											<t:outputText value="#{msg.costCertificationProjectName}"></t:outputText>
+										</f:facet>
+										<t:outputText value="#{item.project.code}"></t:outputText>
+									</t:column>
+
+									<t:column styleClass="StringColumn"
+										rendered="#{!empty paymentApplicationEditBean.list}">
+										<f:facet name="header">
+											<t:outputText value="#{msg.durCompilationListHeaderState}"></t:outputText>
+										</f:facet>
+										<t:outputText style="color: #{item.color}"
+											value="#{item.state}"></t:outputText>
+									</t:column>
+
+									<t:column styleClass="StringColumn"
+										rendered="#{empty paymentApplicationEditBean.list}">
+										<f:facet name="header">
+											<t:outputText value="#{msg.noData}"></t:outputText>
+										</f:facet>
+									</t:column>
+
+								</t:dataTable>
+							</div>
+
+							<a4j:outputPanel styleClass="scrollerPanel">
+								<t:dataScroller id="scroll_1" styleClass="scroller" for="table"
+									fastStep="10" pageCountVar="pageCount" pageIndexVar="pageIndex"
+									paginator="true" paginatorMaxPages="5"
+									paginatorColumnClass="page"
+									paginatorActiveColumnClass="page_active" immediate="false"
+									rendered="#{paymentApplicationEditBean.showScroll}">
+									<f:facet name="first">
+										<t:graphicImage alt="#{msg.first}"
+											url="../images/back_end.gif" border="1" />
+									</f:facet>
+									<f:facet name="last">
+										<t:graphicImage alt="#{msg.last}"
+											url="../images/forward_end.gif" border="1" />
+									</f:facet>
+									<f:facet name="previous">
+										<t:graphicImage alt="#{msg.previous}" url="../images/back.gif"
+											border="1" />
+									</f:facet>
+									<f:facet name="next">
+										<t:graphicImage alt="#{msg.next}" url="../images/forward.gif"
+											border="1" />
+									</f:facet>
+									<f:facet name="fastforward">
+										<t:graphicImage alt="#{msg.fastforward}"
+											url="../images/all_forward.gif" border="1" />
+									</f:facet>
+									<f:facet name="fastrewind">
+										<t:graphicImage alt="#{msg.fastrewind}"
+											url="../images/all_back.gif" border="1" />
+									</f:facet>
+								</t:dataScroller>
+							</a4j:outputPanel>
+
+						</a4j:outputPanel>
+
+
+
+
+					</div>
+			
+				</t:panelTab>
+				
+				<ui:remove>
+				<t:panelTab id="tab2"
+					label="#{msg.paymentApplicationListAdvancesPaidUnderStateaidAndIncludedInPaymentApplications}">
+
+					<t:dataTable style="margin:0 auto; width: 100%;" id="table"
+						var="adv" value="#{paymentApplicationEditBean.listAdvances}"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g">
+
+						<f:facet name="header">
+							<t:column>
+								<h:outputText
+									value="#{msg.paymentApplicationListAdvancesPaidUnderStateaidAndIncludedInPaymentApplications}" />
+							</t:column>
+						</f:facet>
+
+
+						<!-- Info columns -->
+
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty paymentApplicationEditBean.listAdvances}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.paymentApplicationEditAxis}"></t:outputText>
+							</f:facet>
+							<t:outputText value="#{adv.asse}"></t:outputText>
+						</t:column>
+						<t:column styleClass="NumberColumn"
+							rendered="#{!empty paymentApplicationEditBean.listAdvances}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.paymentApplicationEditTotalAmountPaidAsAdvanceFromOperationalProgram}" />
+							</f:facet>
+							<t:inputText value="#{adv.amountPaid}" id="totalAmountPaid"
+								styleClass="editbox_form" maxlength="50"
+								onkeypress="return decimalonly(this, event)"
+								onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+								disabled="true"></t:inputText>
+						</t:column>
+						<t:column styleClass="NumberColumn"
+							rendered="#{!empty paymentApplicationEditBean.listAdvances}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.paymentApplicationEditAmounThatHasBeenCovered}" />
+							</f:facet>
+							<t:inputText value="#{adv.amountCovered}" id="amountCovered"
+								styleClass="editbox_form" maxlength="50"
+								onkeypress="return decimalonly(this, event)"
+								onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+								disabled="true"></t:inputText>
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty paymentApplicationEditBean.listAdvances}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.paymentApplicationEditAmountNotBeenCovered}"></t:outputText>
+							</f:facet>
+							<t:inputText value="#{adv.amountNotCovered}"
+								id="amountNotCovered" styleClass="editbox_form" maxlength="50"
+								onkeypress="return decimalonly(this, event)"
+								onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+								disabled="true"></t:inputText>
+						</t:column>
+					</t:dataTable>
+				</t:panelTab>
+				</ui:remove>
+				
+
+				<t:panelTab id="tab3"
+					label="#{msg.paymentApplicationEditExpenditureDivideByAxis}">
+
+					<t:dataTable style="margin:0 auto; width: 100%;" id="table"
+						var="ex" value="#{paymentApplicationEditBean.expenditures}"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g">
+
+						<f:facet name="header">
+							<t:column>
+								<h:outputText
+									value="#{msg.paymentApplicationEditExpenditureDivideByAxis}" />
+							</t:column>
+						</f:facet>
+						
+						<f:facet name="footer">
+								<a4j:htmlCommandLink
+									action="#{paymentApplicationEditBean.exportExpenditures}"
+									styleClass="footerPanelExport">
+									<h:graphicImage alt="#{msg.exportXls}" value="/images/xls.png" />
+								</a4j:htmlCommandLink>
+							</f:facet>
+
+
+						<!-- Info columns -->
+
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty paymentApplicationEditBean.expenditures}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.paymentApplicationEditAxis}"></t:outputText>
+							</f:facet>
+							<t:outputText value="#{ex.asse}"></t:outputText>
+						</t:column>
+						<t:column styleClass="NumberColumn"
+							rendered="#{!empty paymentApplicationEditBean.expenditures}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.paymentApplicationEditTotalAmountEligibleOfBeneficiaries}" />
+							</f:facet>
+							<t:outputText value="#{ex.totalAmountEligibleExpenditure}" 
+								id="totalAmountEligible"
+								 converter="moneyConverter"></t:outputText>
+						</t:column>
+						<t:column styleClass="NumberColumn"
+							rendered="#{!empty paymentApplicationEditBean.expenditures}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.paymentApplicationEditTotalAmountPublicOfBeneficiaries}" />
+							</f:facet>
+							<t:outputText value="#{ex.totalAmountPublicExpenditure}"
+								 converter="moneyConverter"
+								id="totalAmountPublicExpenditure"></t:outputText>
+						</t:column>
+					</t:dataTable>
+				</t:panelTab>
+
+
+			</t:panelTabbedPane>
+			<table width="100%">
+				<tr>
+					<td class="btn_line" colspan="3"><a4j:commandButton
+							immediate="false"
+							action="#{paymentApplicationEditBean.temporarySave}"
+							reRender="pagePanel" styleClass="button3"
+							value="#{msg.saveIntermediateStep}" id="data_save"
+							rendered="#{not paymentApplicationEditBean.showButton}" /> <sec:ifAnyGranted
+							roles="ROLE_ACUM_W">
+							<a4j:commandButton immediate="false"
+								visibleOnUserRole="ROLE_ACUM_W" enabledOnUserRole="ROLE_ACUM_W"
+								action="#{paymentApplicationEditBean.definitiveSave}"
+								reRender="pagePanel" styleClass="button2" value="#{msg.save}"
+								id="save"
+								rendered="#{not paymentApplicationEditBean.showButton}" />
+						</sec:ifAnyGranted> <a4j:commandButton value="#{msg.cancel}" styleClass="button2"
+							immediate="true" action="#{paymentApplicationEditBean.GoBack}" /></td>
+				</tr>
+			</table>
+			<table width="100%">
+				<tr>
+					<td align="center"><t:outputText
+							value="#{phisicalClassificationPriorityThemaController.errorMessage}"
+							styleClass="RequiredFieldMarker" /></td>
+				</tr>
+			</table>
+		</a4j:outputPanel>
+	</ui:define>
+	
+	<ui:define name="document_body">
+		<rich:modalPanel id="documentPanel1" autosized="true" width="300">
+			<f:facet name="header">
+				<h:outputText value="#{msg.document}" style="padding-right:15px;" />
+			</f:facet>
+
+			<table>
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.date}:" /></td>
+					<td class="CalendarCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" disabled="false"
+							styleClass="editbox_form2" converter="dateTimeConverter"
+							value="#{paymentApplicationEditBean.picDocument.documentDate}"
+							datePattern="dd/MM/yyyy">
+						</rich:calendar></td>
+				</tr>
+								<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentDescription}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							style="width:216px;" maxlength="50"
+							value="#{paymentApplicationEditBean.picDocument.title}" /></td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.protocolNumber}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form" maxlength="50"
+							value="#{paymentApplicationEditBean.picDocument.protocolNumber}" /></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentPublic}:" /></td>
+					<td class="ControlCell"><t:selectBooleanCheckbox
+							value="#{paymentApplicationEditBean.picDocument.isPublic}"
+							enabledOnUserRole="ROLE_BP_W,ROLE_AGU_W,ROLE_STC_W">
+						</t:selectBooleanCheckbox></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.uploadFile}:" /></td>
+					<td class="ControlCell"><t:inputFileUpload id="fileupload2"
+							value="#{paymentApplicationEditBean.picDocumentUpFile}"
+							storage="file" styleClass="fileUploadInput" maxlength="200000" /></td>
+				</tr>
+				<tr>
+					<td align="center" colspan="2">#{msg.fileSize}</td>
+				</tr>
+				
+				<ui:remove>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentNote}:" /></td>
+					<td class="ControlCell"><t:inputTextarea maxlength="255"
+							rows="6" cols="40"
+							value="#{paymentApplicationEditBean.picDocument.note}"
+							onkeypress="return textArea(this, 255)"
+							styleClass="editbox_form2" id="note" /></td>
+				</tr>
+				</ui:remove>
+				
+				<tr>
+					<td colspan="2" style="text-align: center;"><h:commandButton
+							value="#{msg.uploadFile}" styleClass="button3"
+							action="#{paymentApplicationEditBean.SavePicDocument}"
+							reRender="FormPanel"
+							onclick="#{rich:component('documentPanel1')}.hide();" /> <a4j:commandButton
+							value="#{msg.cancel}" styleClass="button" immediate="false"
+							onclick="#{rich:component('documentPanel1')}.hide();return false;" /></td>
+				</tr>
+			</table>
+		</rich:modalPanel>
+		
+	</ui:define>
+</ui:composition>
+</html>

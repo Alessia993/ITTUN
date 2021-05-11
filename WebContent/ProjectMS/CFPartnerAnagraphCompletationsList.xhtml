@@ -1,0 +1,308 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+	<ui:composition template="/Templates/ListBase.xhtml">
+		<ui:param name="heading" value="#{msg.CFPartnerAnagraphCompletationsList}"/>
+		<ui:define name="script_body">
+    	</ui:define>    	
+		<ui:define name="list_body">
+			<a4j:outputPanel ajaxRendered="false" id="FormPanel">
+				<div class="table_container">
+
+			<t:dataTable style="margin:0 auto; width: 100%;" visibleOnUserRole="ROLE_AGU_R,ROLE_AGU_W,ROLE_BP_R,ROLE_BP_W,ROLE_AAU_R,ROLE_AAU_W,ROLE_B_W,ROLE_B_R, ROLE_STC_W, ROLE_STC_R"
+					id="table" var="cfAnagraph" rendered="#{Session.CF or Session.AGU or Session.AAU or Session.ACU or Session.STC}"
+					value="#{cFPartnerAnagraphCompletationsListBean.listCFAnagraph}" styleClass="form_table" rowClasses="row_table_n,row_table_g">
+					<f:facet name="header">
+                           <h:outputText value="#{msg.cfPartnerListCFAnagraphsTableName}" />
+					</f:facet>
+
+					<!-- Action columns -->
+					<t:column id="view" styleClass="ActionColumn" rendered="#{!empty cFPartnerAnagraphCompletationsListBean.listCFAnagraph}"
+					style="background-color: #{cfAnagraph.removedFromProject?'#C0C0C0':''}">
+						<a4j:commandLink ajaxSingle="true" id="viewlink"
+							rendered="#{!cfAnagraph.removedFromProject}"
+							title="#{msg.show}" action="#{cFPartnerAnagraphCompletationsListBean.viewCFAnagraphItem}">
+							<h:graphicImage alt="#{msg.show}" value="/images/ok.png"
+								style="border:0" />
+								<f:setPropertyActionListener value="#{cfAnagraph.id}"
+								target="#{cFPartnerAnagraphCompletationsListBean.entityEditId}" />
+						</a4j:commandLink>
+					</t:column>
+					<sec:ifAnyGranted roles="ROLE_STC_W,ROLE_AGU_W,ROLE_BP_W,ROLE_B_W">
+					<t:column id="edit" styleClass="ActionColumn" rendered="#{!empty cFPartnerAnagraphCompletationsListBean.listCFAnagraph and !Session.isAguRead}"
+						style="background-color: #{cfAnagraph.removedFromProject?'#C0C0C0':''}">
+						<a4j:commandLink ajaxSingle="true" id="editlink"
+							rendered="#{!cfAnagraph.removedFromProject}"
+							title="#{msg.edit}" action="#{cFPartnerAnagraphCompletationsListBean.editCFAnagraphItem}">
+							<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+								style="border:0" />
+								<f:setPropertyActionListener value="#{cfAnagraph.id}"
+								target="#{cFPartnerAnagraphCompletationsListBean.entityEditId}" />
+						</a4j:commandLink>
+					</t:column>
+					</sec:ifAnyGranted>
+
+					<!-- Info columns -->
+
+					<t:column styleClass="StringColumn" 
+						rendered="#{!empty cFPartnerAnagraphCompletationsListBean.listCFAnagraph}"
+						style="background-color: #{cfAnagraph.removedFromProject?'#C0C0C0':''}">
+						<f:facet name="header">
+                        	<h:outputText value="#{msg.cfPartnerId}" />
+						</f:facet>
+						<t:outputText value="#{cfAnagraph.progressiveId}" />						
+					</t:column>
+					<t:column styleClass="StringColumn" rendered="#{!empty cFPartnerAnagraphCompletationsListBean.listCFAnagraph}"
+						style="background-color: #{cfAnagraph.removedFromProject?'#C0C0C0':''}">
+						<f:facet name="header">
+                                    <h:outputText value="#{msg.cfPartnerListTableCountry}" />
+						</f:facet>
+						<t:outputText value="#{cfAnagraph.country}" />
+					</t:column>
+					<t:column styleClass="StringColumn" rendered="#{!empty cFPartnerAnagraphCompletationsListBean.listCFAnagraph}"
+						style="background-color: #{cfAnagraph.removedFromProject?'#C0C0C0':''}">
+						<f:facet name="header">
+                                    <h:outputText value="#{msg.cfPartnerListTableName}" />
+						</f:facet>
+						<t:outputText value="#{cfAnagraph.name}" />
+					</t:column>
+					<t:column styleClass="StringColumn" rendered="#{!empty cFPartnerAnagraphCompletationsListBean.listCFAnagraph}"
+						style="background-color: #{cfAnagraph.removedFromProject?'#C0C0C0':''}">
+						<f:facet name="header">
+                                    <h:outputText value="#{msg.cfPartnerListTablePartita}" />
+						</f:facet>
+						<t:outputText value="#{cfAnagraph.partita}" />
+					</t:column>
+					<t:column styleClass="StringColumn" rendered="#{!empty cFPartnerAnagraphCompletationsListBean.listCFAnagraph}"
+						style="background-color: #{cfAnagraph.removedFromProject?'#C0C0C0':''}">
+						<f:facet name="header">
+                                    <h:outputText value="#{msg.cfPartnerListTableCIL}" />
+						</f:facet>
+						<t:outputText value="${cfAnagraph.cil.user.name} ${cfAnagraph.cil.user.surname}" />
+					</t:column>
+					<ui:remove>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty cFPartnerAnagraphCompletationsListBean.listCFAnagraph}"
+							style="background-color: #{cfAnagraph.removedFromProject?'#C0C0C0':''}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.cfPartnerListTableDAEC}" />
+							</f:facet>
+							<t:outputText
+								value="${cfAnagraph.daec.user.name} ${cfAnagraph.daec.user.surname}" />
+						</t:column>
+					</ui:remove>
+					<t:column styleClass="StringColumn" rendered="#{!empty cFPartnerAnagraphCompletationsListBean.listCFAnagraph}"
+						style="background-color: #{cfAnagraph.removedFromProject?'#C0C0C0':''}">
+						<f:facet name="header">
+                                    <h:outputText value="#{msg.cfPartnerListTableOperatorName}" />
+						</f:facet>
+						<t:outputText value="${cfAnagraph.user.name}" />
+					</t:column>
+					<t:column styleClass="StringColumn" rendered="#{!empty cFPartnerAnagraphCompletationsListBean.listCFAnagraph}"
+						style="background-color: #{cfAnagraph.removedFromProject?'#C0C0C0':''}">
+						<f:facet name="header">
+                                    <h:outputText value="#{msg.cfPartnerListTableOperatorSurname}" />
+						</f:facet>
+						<t:outputText value="${cfAnagraph.user.surname}" />
+					</t:column>
+					<t:column styleClass="StringColumn" rendered="#{!empty cFPartnerAnagraphCompletationsListBean.listCFAnagraph}"
+						style="background-color: #{cfAnagraph.removedFromProject?'#C0C0C0':''}">
+						<f:facet name="header">
+                                    <h:outputText value="#{msg.cfPartnerListTableOperatorCFRef}" />
+						</f:facet>
+						<t:outputText value="#{cfAnagraph.user.fiscalCode}" />
+					</t:column>
+					<t:column styleClass="StringColumn" rendered="#{!empty cFPartnerAnagraphCompletationsListBean.listCFAnagraph}"
+						style="background-color: #{cfAnagraph.removedFromProject?'#C0C0C0':''}">
+						<f:facet name="header">
+                                    <h:outputText value="#{msg.cfPartnerListTableOperatorEmailRef}" />
+						</f:facet>
+						<t:outputText value="#{cfAnagraph.user.mail}" />
+					</t:column>
+					<t:column styleClass="StringColumn"
+					rendered="#{empty cFPartnerAnagraphCompletationsListBean.listCFAnagraph}">
+					<f:facet name="header">
+						<h:outputText value="#{msg.noData}" />
+					</f:facet>
+				</t:column>
+
+					<!-- End of info columns -->
+
+			</t:dataTable>
+
+			<br/>
+			<br/>
+
+			<!-- CF Partners datatable -->
+
+			<t:dataTable style="margin:0 auto; width: 100%;" rendered="#{cFPartnerAnagraphCompletationsListBean.asse!='4'}"
+					rows="#{cFPartnerAnagraphCompletationsListBean.itemsPerPage}" id="table_partners" var="cfPartnerAnagraph" visibleOnUserRole="ROLE_AGU_R,ROLE_AGU_W,ROLE_BP_R,ROLE_BP_W, ROLE_B_R, ROLE_B_W,ROLE_AAU_R,ROLE_AAU_W,ROLE_ACU_R, ROLE_ACU_W, ROLE_STC_W, ROLE_STC_R"
+					value="#{cFPartnerAnagraphCompletationsListBean.listCFPartnerAnagraphs}" styleClass="form_table" rowClasses="row_table_n,row_table_g">
+
+					<f:facet name="header"><t:column>		
+                                                <h:outputText value="#{msg.cfPartnerListPartnerAnagraphsTableName}" />
+                                                <h:selectOneMenu id="itemPP" styleClass="headerPanelSelect"
+							value="#{cFPartnerAnagraphCompletationsListBean.itemsPerPage}">
+							<f:selectItems value="#{cFPartnerAnagraphCompletationsListBean.itemsPerPageList}" />
+							<a4j:support event="onchange" reRender="FormPanel" />
+						</h:selectOneMenu></t:column>
+					</f:facet>
+
+					<!-- Action columns -->
+					<t:column id="view" styleClass="ActionColumn" 
+						style="background-color: #{cfPartnerAnagraph.removedFromProject?'#C0C0C0':''}"
+						rendered="#{!empty cFPartnerAnagraphCompletationsListBean.listCFPartnerAnagraphs}">
+						<a4j:commandLink ajaxSingle="true" id="viewlink" rendered="#{!cfPartnerAnagraph.removedFromProject}"
+							title="#{msg.show}" action="#{cFPartnerAnagraphCompletationsListBean.viewCFPartnerAnagraphItem}">
+							<h:graphicImage alt="#{msg.show}" value="/images/ok.png"
+								style="border:0" />
+								<f:setPropertyActionListener value="#{cfPartnerAnagraph.id}"
+								target="#{cFPartnerAnagraphCompletationsListBean.entityPartnerEditId}" />
+						</a4j:commandLink>
+					</t:column>
+					<sec:ifAnyGranted roles="ROLE_AGU_W,ROLE_STC_W,ROLE_B_W,ROLE_BP_W">
+					<t:column id="edit" styleClass="ActionColumn" 
+						style="background-color: #{cfPartnerAnagraph.removedFromProject?'#C0C0C0':''}"
+						rendered="#{!empty cFPartnerAnagraphCompletationsListBean.listCFPartnerAnagraphs and !Session.isAguRead and !Session.projectLock}">
+						<a4j:commandLink ajaxSingle="true" id="editlink" rendered="#{!cfPartnerAnagraph.removedFromProject}"
+							title="#{msg.edit}" action="#{cFPartnerAnagraphCompletationsListBean.editCFPartnerAnagraphItem}">
+							<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+								style="border:0" />
+								<f:setPropertyActionListener value="#{cfPartnerAnagraph.id}"
+								target="#{cFPartnerAnagraphCompletationsListBean.entityPartnerEditId}" />
+						</a4j:commandLink>
+					</t:column>					
+					</sec:ifAnyGranted>
+
+					<!-- Info columns -->
+
+					<t:column styleClass="StringColumn"
+						style="background-color: #{cfPartnerAnagraph.removedFromProject?'#C0C0C0':''}"
+						rendered="#{!empty cFPartnerAnagraphCompletationsListBean.listCFPartnerAnagraphs}">
+						<f:facet name="header">
+                        	<h:outputText value="#{msg.cfPartnerId}" />
+						</f:facet>
+						<t:outputText value="#{cfPartnerAnagraph.progressiveId}" />						
+					</t:column>
+					<t:column styleClass="StringColumn" 
+						style="background-color: #{cfPartnerAnagraph.removedFromProject?'#C0C0C0':''}"
+						rendered="#{!empty cFPartnerAnagraphCompletationsListBean.listCFPartnerAnagraphs}">
+						<f:facet name="header">
+                                    <h:outputText value="#{msg.cfPartnerListTableCountry}" />
+						</f:facet>
+						<t:outputText value="#{cfPartnerAnagraph.country}" />
+					</t:column>
+					<t:column styleClass="StringColumn" 
+						style="background-color: #{cfPartnerAnagraph.removedFromProject?'#C0C0C0':''}"
+						rendered="#{!empty cFPartnerAnagraphCompletationsListBean.listCFPartnerAnagraphs}">
+						<f:facet name="header">
+                                    <h:outputText value="#{msg.cfPartnerListTableName}" />
+						</f:facet>
+						<t:outputText value="#{cfPartnerAnagraph.name}" />
+					</t:column>
+					<t:column styleClass="StringColumn" 
+						style="background-color: #{cfPartnerAnagraph.removedFromProject?'#C0C0C0':''}"
+						rendered="#{!empty cFPartnerAnagraphCompletationsListBean.listCFPartnerAnagraphs}">
+						<f:facet name="header">
+                                    <h:outputText value="#{msg.cfPartnerListTablePartita}" />
+						</f:facet>
+						<t:outputText value="#{cfPartnerAnagraph.partita}" />
+					</t:column>
+					<t:column styleClass="StringColumn" 
+						style="background-color: #{cfPartnerAnagraph.removedFromProject?'#C0C0C0':''}"
+						rendered="#{!empty cFPartnerAnagraphCompletationsListBean.listCFPartnerAnagraphs}">
+						<f:facet name="header">
+                                    <h:outputText value="#{msg.cfPartnerListTableCIL}" />
+						</f:facet>
+						<t:outputText value="${cfPartnerAnagraph.cil.user.name} ${cfPartnerAnagraph.cil.user.surname}" />
+					</t:column>
+					<ui:remove>
+						<t:column styleClass="StringColumn"
+							style="background-color: #{cfPartnerAnagraph.removedFromProject?'#C0C0C0':''}"
+							rendered="#{!empty cFPartnerAnagraphCompletationsListBean.listCFPartnerAnagraphs}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.cfPartnerListTableDAEC}" />
+							</f:facet>
+							<t:outputText
+								value="${cfPartnerAnagraph.daec.user.name} ${cfPartnerAnagraph.daec.user.surname}" />
+						</t:column>
+					</ui:remove>
+					<t:column styleClass="StringColumn" 
+						style="background-color: #{cfPartnerAnagraph.removedFromProject?'#C0C0C0':''}"
+						rendered="#{!empty cFPartnerAnagraphCompletationsListBean.listCFPartnerAnagraphs}">
+						<f:facet name="header">
+                                    <h:outputText value="#{msg.cfPartnerListTableOperatorName}" />
+						</f:facet>
+						<t:outputText value="#{cfPartnerAnagraph.user.name}" />
+					</t:column>
+					<t:column styleClass="StringColumn" 
+						style="background-color: #{cfPartnerAnagraph.removedFromProject?'#C0C0C0':''}"
+						rendered="#{!empty cFPartnerAnagraphCompletationsListBean.listCFPartnerAnagraphs}">
+						<f:facet name="header">
+                                    <h:outputText value="#{msg.cfPartnerListTableOperatorSurname}" />
+						</f:facet>
+						<t:outputText value="#{cfPartnerAnagraph.user.surname}" />
+					</t:column>
+					<t:column styleClass="StringColumn" 
+						style="background-color: #{cfPartnerAnagraph.removedFromProject?'#C0C0C0':''}"
+						rendered="#{!empty cFPartnerAnagraphCompletationsListBean.listCFPartnerAnagraphs}">
+						<f:facet name="header">
+                                    <h:outputText value="#{msg.cfPartnerListTableOperatorCFRef}" />
+						</f:facet>
+						<t:outputText value="#{cfPartnerAnagraph.user.fiscalCode}" />
+					</t:column>
+					<t:column styleClass="StringColumn" 
+						style="background-color: #{cfPartnerAnagraph.removedFromProject?'#C0C0C0':''}"
+						rendered="#{!empty cFPartnerAnagraphCompletationsListBean.listCFPartnerAnagraphs}">
+						<f:facet name="header">
+                                    <h:outputText value="#{msg.cfPartnerListTableOperatorEmailRef}" />
+						</f:facet>
+						<t:outputText value="#{cfPartnerAnagraph.user.mail}" />
+					</t:column>
+					
+					<t:column styleClass="StringColumn"
+						rendered="#{empty cFPartnerAnagraphCompletationsListBean.listCFPartnerAnagraphs}">
+						<f:facet name="header">
+							<h:outputText value="#{msg.noData}" />
+						</f:facet>
+					</t:column>
+
+					<!-- End of info columns -->
+
+			</t:dataTable></div>
+			<a4j:outputPanel styleClass="scrollerPanel">
+				<t:dataScroller id="scroll" styleClass="scroller" for="table_partners"
+					rendered="#{cFPartnerAnagraphCompletationsListBean.showScroll}" paginator="true"
+					paginatorMaxPages="5" fastStep="5" paginatorColumnClass="page"
+					paginatorActiveColumnClass="page_active" immediate="true">
+					<f:facet name="first">
+						<t:graphicImage alt="#{msg.first}" url="../images/back_end.gif"  border="1" />
+					</f:facet>
+					<f:facet name="last">
+						<t:graphicImage alt="#{msg.last}" url="../images/forward_end.gif" border="1" />
+					</f:facet>
+					<f:facet name="previous">
+						<t:graphicImage alt="#{msg.previous}" url="../images/back.gif" border="1" />
+					</f:facet>
+					<f:facet name="next">
+						<t:graphicImage alt="#{msg.next}" url="../images/forward.gif" border="1" />
+					</f:facet>
+					<f:facet name="fastforward">
+						<t:graphicImage alt="#{msg.fastforward}" url="../images/all_forward.gif" border="1" />
+					</f:facet>
+					<f:facet name="fastrewind">
+						<t:graphicImage alt="#{msg.fastrewind}" url="../images/all_back.gif" border="1" />
+					</f:facet>
+				</t:dataScroller>
+				</a4j:outputPanel>
+			
+			</a4j:outputPanel>
+		</ui:define>
+	</ui:composition>
+</html>

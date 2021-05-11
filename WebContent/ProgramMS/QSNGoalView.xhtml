@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ViewBase.xhtml">
+	<ui:param name="heading" value="#{msg.qsnGoal}" />
+	<ui:define name="view_body">
+		<div class="table_container"><t:dataTable width="90%"
+			style="margin:0 auto;" id="table" var="data"
+			value="#{qsnGoalViewController.list}"
+			styleClass="form_table" rowClasses="row_table_n,row_table_g">
+			<f:facet name="header">
+				<h:outputText style="text-align: center"
+					value="#{msg.qsnGoal}" />
+			</f:facet>
+			<t:column styleClass="CodeColumn"
+				rendered="#{!empty qsnGoalViewController.list}">
+				<f:facet name="header">
+					<t:outputText value="#{msg.priorityCode}" />
+				</f:facet>
+				<t:outputText value="#{data.priorityCode}" />
+			</t:column>
+			<t:column styleClass="StringColumn"
+				rendered="#{!empty qsnGoalViewController.list}">
+				<f:facet name="header">
+					<t:outputText value="#{msg.priorityDescription}" />
+				</f:facet>
+				<t:outputText value="#{data.priorityDescription}" />
+			</t:column>
+			<t:column styleClass="CodeColumn"
+				rendered="#{!empty qsnGoalViewController.list}">
+				<f:facet name="header">
+					<t:outputText value="#{msg.generalPurposeCode}" />
+				</f:facet>
+				<t:outputText value="#{data.generalPurposeCode}" />
+			</t:column>
+			<t:column styleClass="StringColumn"
+				rendered="#{!empty qsnGoalViewController.list}">
+				<f:facet name="header">
+					<t:outputText value="#{msg.descriptionDeneralPurpose}" />
+				</f:facet>
+				<t:outputText value="#{data.descriptionDeneralPurpose}" />
+			</t:column>
+			<t:column styleClass="CodeColumn"
+				rendered="#{!empty qsnGoalViewController.list}">
+				<f:facet name="header">
+					<t:outputText value="#{msg.codeSpecificObjective}" />
+				</f:facet>
+				<t:outputText value="#{data.codeSpecificObjective}" />
+			</t:column>
+			<t:column styleClass="StringColumn"
+				rendered="#{!empty qsnGoalViewController.list}">
+				<f:facet name="header">
+					<t:outputText value="#{msg.specificObjectiveDescription}" />
+				</f:facet>
+				<t:outputText value="#{data.specificObjectiveDescription}" />
+			</t:column>
+			<t:column styleClass="StringColumn"
+				rendered="#{empty qsnGoalViewController.list}">
+				<f:facet name="header">
+					<h:outputText value="#{msg.noData}" />
+				</f:facet>
+			</t:column>
+		</t:dataTable></div>
+	</ui:define>
+</ui:composition>
+</html>

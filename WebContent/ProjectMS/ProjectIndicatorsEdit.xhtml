@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/EditTabBase.xhtml" >	
+	<ui:param name="heading" value="#{projectIndicatorsEditBean.titlePage}" />
+	<ui:param name="heading_top" value="#{msg.projectIndicatorsEditPageName}" />
+	
+	<ui:define name="edit_body">	
+	<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+
+
+
+			<table width="50%" class="forms" border="0" cellpadding="1"
+				cellspacing="1">
+				<t:div rendered="#{projectIndicatorsEditBean.editProject}">
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.projectIndicatorsPhase}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:selectOneMenu id="phase"
+							onmousedown="collapse(this);" onblur="expand(this);"
+							value="#{projectIndicatorsEditBean.phase}"  required="true"
+							styleClass="DropDown" onchange="submit()">
+							<f:selectItems value="#{projectIndicatorsEditBean.listPhases}" />
+						</t:selectOneMenu></td>
+				</tr>
+				</t:div>
+			
+				<t:div rendered="#{projectIndicatorsEditBean.editResult}">
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.resultIndicatorsName}:" />
+					<span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:selectOneMenu id="listResultNames"
+							onmousedown="collapse(this);" onblur="expand(this);"
+							value="#{projectIndicatorsEditBean.programId}"  required="true"
+							styleClass="DropDown" onchange="submit()">
+							<f:selectItems value="#{projectIndicatorsEditBean.listResultNames}" />
+						</t:selectOneMenu></td>
+				</tr>
+				</t:div>
+				<!-- <t:div rendered="#{projectIndicatorsEditBean.editCommunication or projectIndicatorsEditBean.editResult}"> -->
+				<t:div rendered="#{projectIndicatorsEditBean.editResult}">
+				<tr>
+					<td class="LabelCell">
+					<t:outputText rendered="#{projectIndicatorsEditBean.editCommunication}" value="#{msg.communicationIndicatorsCom}:" />
+					<t:outputText rendered="#{projectIndicatorsEditBean.editResult}" value="#{msg.resultIndicatorsCom}:" />
+					<span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText maxlength="200"
+							autocomplete="off" validator="#{validator.checkEmpty}"
+							styleClass="editbox_form" id="communicationObjective"  required="true"
+							value="#{projectIndicatorsEditBean.communicationObjective}" /></td>
+				</tr>
+				</t:div>
+				<t:div rendered="#{projectIndicatorsEditBean.editProject}">
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.projectIndicatorsCom}:" />
+					<span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:selectOneMenu id="listComObjectives"
+							onmousedown="collapse(this);" onblur="expand(this);"
+							value="#{projectIndicatorsEditBean.communicationObjectiveId}"  required="true"
+							styleClass="DropDown" onchange="submit()">
+							<f:selectItems value="#{projectIndicatorsEditBean.listComObjectives}" />
+						</t:selectOneMenu></td>
+				</tr>
+				</t:div>
+				<t:div rendered="#{projectIndicatorsEditBean.editProject}">
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.projectIndicatorsTargetGroup}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText maxlength="200"
+							autocomplete="off" validator="#{validator.checkEmpty}"
+							styleClass="editbox_form" id="projectTargetGroup" required="true"
+							value="#{projectIndicatorsEditBean.targetGroup}" /></td>
+				</tr>
+				</t:div>
+				<t:div rendered="#{projectIndicatorsEditBean.editCommunication or projectIndicatorsEditBean.editProgram}">
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.communicationIndicatorsProductCode}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText maxlength="200"
+							autocomplete="off" validator="#{validator.checkEmpty}"
+							styleClass="editbox_form" id="productCode"  required="true"
+							value="#{projectIndicatorsEditBean.productCode}" /></td>
+				</tr>
+				</t:div>
+				<t:div rendered="#{projectIndicatorsEditBean.editCommunication or projectIndicatorsEditBean.editProgram or projectIndicatorsEditBean.editProject}">
+				<tr>
+					<td class="LabelCell">
+					<t:outputText rendered="#{projectIndicatorsEditBean.editCommunication}" value="#{msg.communicationIndicatorsDescription}:" />
+					<t:outputText rendered="#{projectIndicatorsEditBean.editProgram}" value="#{msg.programIndicatorsDescription}:" />
+					<t:outputText rendered="#{projectIndicatorsEditBean.editProject}" value="#{msg.projectIndicatorsName}:" />
+					<span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputTextarea maxlength="750" cols="75" rows="10"
+							autocomplete="off" styleClass="editbox_form" required="true" style="resize: none"
+							id="name" validator="#{validator.checkEmpty}"
+							value="#{projectIndicatorsEditBean.name}" /></td>
+				</tr>
+				</t:div>
+				<t:div rendered="#{projectIndicatorsEditBean.editProject or projectIndicatorsEditBean.editResult}">
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.projectIndicatorsMeasureUnit}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText maxlength="200"
+							autocomplete="off" validator="#{validator.checkEmpty}"
+							styleClass="editbox_form" id="measureUnit" required="true"
+							value="#{projectIndicatorsEditBean.measureUnit}" /></td>
+				</tr>
+				</t:div>
+				<t:div>
+				<tr>
+					<td class="LabelCell">
+					<t:outputText rendered="#{projectIndicatorsEditBean.editCommunication}" value="#{msg.communicationIndicatorsTargetValue}:" />
+					<t:outputText rendered="#{projectIndicatorsEditBean.editProgram}" value="#{msg.programIndicatorsTargetValue}:" />
+					<t:outputText rendered="#{projectIndicatorsEditBean.editResult}" value="#{msg.resultIndicatorsTargetValue}:" />
+					<t:outputText rendered="#{projectIndicatorsEditBean.editProject}" value="#{msg.projectIndicatorsTarget}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText maxlength="200"
+							autocomplete="off" validator="#{validator.checkEmpty}"
+							styleClass="editbox_form" id="target" required="true"
+							value="#{projectIndicatorsEditBean.target}" /></td>
+				</tr>
+				</t:div>
+				
+				
+				
+			</table>
+
+			<div class="btn_line">
+				<table>
+					<tr>
+						<td colspan="2" class="btn_line">
+							<a4j:commandButton immediate="false"
+								action="#{projectIndicatorsEditBean.Page_Save}"
+								reRender="pagePanel"
+								rendered="true"
+								styleClass="button2" value="#{msg.save}" id="save" />
+						
+							<a4j:commandButton value="#{msg.cancel}"
+								styleClass="button2" immediate="true"
+								action="#{projectIndicatorsEditBean.GoBack}" />
+						</td>
+					</tr>
+				</table>
+				</div>
+			
+	</a4j:outputPanel>
+	</ui:define>
+		
+</ui:composition>
+

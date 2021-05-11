@@ -1,0 +1,266 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ListBase.xhtml">
+	<ui:param name="heading" value="#{msg.potentialProjectsList}" />
+	<ui:define name="script_body">
+		<a4j:form>
+			<a4j:jsFunction name="updateProcessesProjectAcronym" reRender="FormPanel"
+				eventsQueue="queueProjectAcronym" requestDelay="2000" oncomplete="SetFocusProjectAcronym()">
+				<a4j:actionparam name="param1"
+					assignTo="#{potentialProjectsListBean.searchProjectAcronym}" />
+			</a4j:jsFunction>
+			<a4j:jsFunction name="updateProcessesProjectTitle" reRender="FormPanel"
+				eventsQueue="queueProjectTitle" requestDelay="2000" oncomplete="SetFocusProjectTitle()">
+				<a4j:actionparam name="param2"
+					assignTo="#{potentialProjectsListBean.searchProjectTitle}" />
+			</a4j:jsFunction>
+			<a4j:jsFunction name="updateProcessesLeadNameOrganization" reRender="FormPanel"
+				eventsQueue="queueLeadNameOrganization" requestDelay="2000" oncomplete="SetFocusLeadNameOrganization()">
+				<a4j:actionparam name="param3"
+					assignTo="#{potentialProjectsListBean.searchLeadNameOrganization}" />
+			</a4j:jsFunction>
+			<a4j:jsFunction name="updateProcessesProgramPriority" reRender="FormPanel"
+				eventsQueue="queueProgramPriority" requestDelay="2000" oncomplete="SetFocusProgramPriority()">
+				<a4j:actionparam name="param4"
+					assignTo="#{potentialProjectsListBean.searchProgramPriority}" />
+			</a4j:jsFunction>
+		</a4j:form>
+		<script type="text/javascript">
+			function SetFocusProjectAcronym()
+			{
+				var field = document.getElementById('FormList:table:searchProjectAcronymInput');
+				field.focus();
+				var val = field.value; 
+				field.value = ''; 
+				field.value = val;
+			}
+			function SetFocusProjectTitle()
+			{
+				var field = document.getElementById('FormList:table:searchProjectTitleInput');
+				field.focus();
+				var val = field.value; 
+				field.value = ''; 
+				field.value = val;
+			}
+			function SetFocusLeadNameOrganization()
+			{
+				var field = document.getElementById('FormList:table:searchLeadNameOrganizationInput');
+				field.focus();
+				var val = field.value; 
+				field.value = ''; 
+				field.value = val;
+			}
+			function SetFocusProgramPriority()
+			{
+				var field = document.getElementById('FormList:table:searchProgramPriorityInput');
+				field.focus();
+				var val = field.value; 
+				field.value = ''; 
+				field.value = val;
+			}
+		</script>
+	</ui:define>
+	<ui:define name="list_body">
+		<a4j:outputPanel styleClass="form_100" ajaxRendered="true"
+			id="FormPanel">
+			<div class="table_container">
+				<t:dataTable width="99%" style="margin:0 auto;"
+					rows="#{potentialProjectsListBean.itemsPerPage}"
+					id="table" var="data"
+					value="#{potentialProjectsListBean.potentialProjectsList}" styleClass="form_table"
+					rowClasses="row_table_n,row_table_g">
+					
+					<f:facet name="header">
+						<t:column rendered="#{!potentialProjectsListBean.dateOver and (Session.CFPW or Session.STCW)}">
+							<a class="headerPanelLink" id="addnew"
+								href="#{potentialProjectsListBean.editPage}">#{msg.potentialProjectsListAdd}									
+							</a>
+						</t:column>
+					</f:facet>		
+					
+					<f:facet name="footer">
+						<a4j:htmlCommandLink action="#{potentialProjectsListBean.exportToExcel}"
+							styleClass="footerPanelExport">
+							<h:graphicImage alt="#{msg.exportXls}" value="/images/xls.png" />
+						</a4j:htmlCommandLink>
+					</f:facet>
+						
+					<t:column id="view" styleClass="ActionColumn"
+							rendered="#{!empty potentialProjectsListBean.potentialProjectsList}">
+								<a title="#{msg.show}"
+									href="PotentialProjectEdit.jsf?view=#{data.id}">	
+									<h:graphicImage alt="#{msg.view}" value="/images/ok.png"
+								style="border:0" />						
+								</a>
+					</t:column>
+					<t:column id="edit" styleClass="ActionColumn"
+							rendered="#{!empty potentialProjectsListBean.potentialProjectsList and !potentialProjectsListBean.dateOver and (Session.CFPW or Session.STCW)}">
+							<ui:fragment rendered="#{data.fromApproveStatus or Session.STCW}">
+								<a title="#{msg.edit}"
+									href="#{potentialProjectsListBean.editPage}?edit=#{data.id}">
+									<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+										style="border:0" />
+								</a>
+							</ui:fragment>
+					</t:column>
+					<t:column id="delete" styleClass="ActionColumn"
+							rendered="#{!empty potentialProjectsListBean.potentialProjectsList and !potentialProjectsListBean.dateOver and Session.CFPW}">
+							<a4j:commandLink id="deletelink" title="#{msg.delete}"		
+								oncomplete="#{rich:component('deletePanel')}.show()" rendered="#{data.fromApproveStatus}">
+								<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{data.id}"
+									target="#{potentialProjectsListBean.entityDeleteId}" />
+							</a4j:commandLink>
+					</t:column>	
+					<t:column id="print" styleClass="ActionColumn"
+							rendered="#{!empty potentialProjectsListBean.potentialProjectsList}">				
+							<a4j:htmlCommandLink action="#{potentialProjectsListBean.exportToPdf}"
+									styleClass="footerPanelExport">
+							<h:graphicImage alt="#{msg.exportXls}" value="/images/print.png" />
+							<f:setPropertyActionListener value="#{data.id}"
+									target="#{potentialProjectsListBean.selectedEntityId}" />
+						</a4j:htmlCommandLink>
+					</t:column>				
+					<t:column styleClass="StringColumn">
+						<f:facet name="header">
+							<a4j:outputPanel ajaxRendered="false">
+								<t:outputText value="#{msg.potentialProjectsProjectAcronym}" />
+								<br />
+								<h:inputText id="searchProjectAcronymInput"
+									value="#{potentialProjectsListBean.searchProjectAcronym}"
+									onkeyup="updateProcessesProjectAcronym(this.value)" />
+							</a4j:outputPanel>
+						</f:facet>
+						<b><t:outputText value="#{data.projectAcronym}" /></b>
+					</t:column>
+					<t:column styleClass="StringColumn">
+						<f:facet name="header">
+							<a4j:outputPanel ajaxRendered="false">
+								<t:outputText value="#{msg.potentialProjectsProjectTitle}" />
+								<br />
+								<h:inputText id="searchProjectTitleInput"
+									value="#{potentialProjectsListBean.searchProjectTitle}"
+									onkeyup="updateProcessesProjectTitle(this.value)" />
+							</a4j:outputPanel>
+						</f:facet>
+						<b><t:outputText value="#{data.projectTitle}" /></b>
+					</t:column>
+					<t:column styleClass="StringColumn">
+						<f:facet name="header">
+							<a4j:outputPanel ajaxRendered="false">
+								<t:outputText value="#{msg.potentialProjectsLeadNameOrganization}" />
+								<br />
+								<h:inputText id="searchLeadNameOrganizationInput"
+									value="#{potentialProjectsListBean.searchLeadNameOrganization}"
+									onkeyup="updateProcessesLeadNameOrganization(this.value)" />
+							</a4j:outputPanel>
+						</f:facet>
+						<b><t:outputText value="#{data.leadNameOrganization}" /></b>
+					</t:column>
+					<t:column styleClass="StringColumn">
+						<f:facet name="header">
+							<a4j:outputPanel ajaxRendered="false">
+								<t:outputText value="#{msg.potentialProjectsProgramPriority}" />
+								<br />
+								<h:inputText id="searchProgramPriorityInput"
+									value="#{potentialProjectsListBean.searchProgramPriority}"
+									onkeyup="updateProcessesProgramPriority(this.value)" />
+							</a4j:outputPanel>
+						</f:facet>
+						<b><t:outputText value="#{data.programPriority}" /></b>
+					</t:column>
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty potentialProjectsListBean.potentialProjectsList}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.potentialProjectsProgramPriorityInvestment}" />
+						</f:facet>
+						<b><t:outputText value="#{data.programPriorityInvestment}" /></b>
+					</t:column>
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty potentialProjectsListBean.potentialProjectsList}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.potentialProjectsDepartment}" />
+						</f:facet>
+						<b><t:outputText value="#{data.department}" /></b>
+					</t:column>
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty potentialProjectsListBean.potentialProjectsList and !Session.CFP}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.potentialProjectsStatus}" />
+						</f:facet>
+						<b><t:outputText value="#{data.status}" /></b>
+					</t:column>
+				</t:dataTable>
+			</div>
+			<a4j:outputPanel styleClass="scrollerPanel">
+				<t:dataScroller id="scroll" styleClass="scroller" for="table"
+					fastStep="10" pageCountVar="pageCount" pageIndexVar="pageIndex"
+					paginator="true" paginatorMaxPages="5" paginatorColumnClass="page"
+					paginatorActiveColumnClass="page_active" immediate="true"
+					binding="#{potentialProjectsListBean.scroller}">
+					<f:facet name="first">
+						<t:graphicImage alt="#{msg.first}" url="../images/back_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="last">
+						<t:graphicImage alt="#{msg.last}" url="../images/forward_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="previous">
+						<t:graphicImage alt="#{msg.previous}" url="../images/back.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="next">
+						<t:graphicImage alt="#{msg.next}" url="../images/forward.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="fastforward">
+						<t:graphicImage alt="#{msg.fastforward}"
+							url="../images/all_forward.gif" border="1" />
+					</f:facet>
+					<f:facet name="fastrewind">
+						<t:graphicImage alt="#{msg.fastrewind}"
+							url="../images/all_back.gif" border="1" />
+					</f:facet>
+				</t:dataScroller>
+			</a4j:outputPanel>
+		</a4j:outputPanel>
+	</ui:define>
+	<ui:define name="delete_panels">
+		<rich:modalPanel id="deletePanel" autosized="true" width="200">
+			<f:facet name="header">
+				<h:outputText value="#{msg.delete}?" style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+
+			</f:facet>
+			<h:form>
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.yes}" ajaxSingle="true" styleClass="button"
+									action="#{potentialProjectsListBean.deleteEntity}"
+									oncomplete="#{rich:component('deletePanel')}.hide();"
+									reRender="FormPanel" /></td>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.cancel}" styleClass="button"
+									onclick="#{rich:component('deletePanel')}.hide();return false;" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</h:form>
+		</rich:modalPanel>
+	</ui:define>
+</ui:composition>
+</html>

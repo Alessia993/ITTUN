@@ -1,0 +1,1112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ListBase.xhtml">
+	<ui:param name="heading" value="#{msg.suspensionManagementListName}" />
+
+	<ui:define name="list_body">
+
+
+		<a4j:outputPanel ajaxRendered="false" id="FormPanel">
+
+			<div class="table_container">
+				<sec:ifAnyGranted
+					roles="ROLE_AAU_W,ROLE_STC_W,ROLE_AGU_W,ROLE_ACU_W,ROLE_ACUM_W,ROLE_SUPER_ADMIN_W">
+					<t:dataTable style="margin:0 auto; width: 100%;"
+						rows="#{suspensionManagementListBean.itemsPerPage}" id="table"
+						var="item" value="#{suspensionManagementListBean.list}"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g">
+						<f:facet name="header">
+							<t:column>
+								<h:outputText style="text-align: center"
+									value="#{msg.suspensionManagementListName}" />
+								<h:selectOneMenu id="itemPP" styleClass="headerPanelSelect"
+									value="#{suspensionManagementListBean.itemsPerPage}">
+									<f:selectItems
+										value="#{suspensionManagementListBean.itemsPerPageList}" />
+									<a4j:support event="onchange" reRender="FormPanel" />
+								</h:selectOneMenu>
+							</t:column>
+						</f:facet>
+						
+					
+
+						<t:column id="edit"
+							styleClass="ActionColumn" headerstyleClass="ActionColumn">
+							<a4j:commandLink ajaxSingle="true" id="editlink"
+								title="#{msg.edit}"
+								action="#{suspensionManagementListBean.editEntity}" rendered="#{item.canSuspend}">
+								<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{item.id}"
+									target="#{suspensionManagementListBean.entityEditId}" />
+							</a4j:commandLink>
+						</t:column>
+
+						<t:column id="select" styleClass="ActionColumn"
+							rendered="#{!empty suspensionManagementListBean.list and !Session.projectLock}">
+							<f:facet name="header">
+								<t:selectBooleanCheckbox
+									value="#{suspensionManagementListBean.selectAll}">
+									<a4j:support event="onclick" id="selectAll"
+										onclick="Richfaces.showModalPanel('waitPopup')"
+										oncomplete="Richfaces.hideModalPanel('waitPopup')"
+										reRender="FormPanel"
+										action="#{suspensionManagementListBean.doSelectAll}" />
+								</t:selectBooleanCheckbox>
+							</f:facet>
+							<t:selectBooleanCheckbox value="#{item.selected}"
+								disabled="#{not item.canSuspend}">
+								<a4j:support event="onclick" reRender="FormPanel"
+									onclick="Richfaces.showModalPanel('waitPopup')"
+									oncomplete="Richfaces.hideModalPanel('waitPopup')"
+									id="doSelectItem"
+									action="#{suspensionManagementListBean.doSelectItem}" />
+							</t:selectBooleanCheckbox>
+						</t:column>
+
+						<t:column id="projectDescription"
+							rendered="#{!empty suspensionManagementListBean.list}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.suspensionManagementListProjectDescription}" />
+							</f:facet>
+							<t:outputText value="#{item.project.title}" />
+						</t:column>
+
+						<t:column id="createUser"
+							rendered="#{!empty suspensionManagementListBean.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.suspensionManagementListCreateUser}" />
+							</f:facet>
+							<t:outputText value="#{item.user.fullName}" />
+						</t:column>
+
+						<t:column id="durNumber"
+							rendered="#{!empty suspensionManagementListBean.list}"
+							styleClass="ActionColumn" headerstyleClass="ActionColumn">
+							<f:facet name="header">
+								<t:outputText value="#{msg.suspensionManagementListDurNumber}" />
+							</f:facet>
+							<table>
+								<tr>
+									<td><t:outputText value="#{item.durNumberTransient}" /></td>
+								</tr>
+							</table>
+						</t:column>
+						<t:column id="costDefId"
+							rendered="#{!empty suspensionManagementListBean.list}"
+							styleClass="ActionColumn" headerstyleClass="ActionColumn">
+							<f:facet name="header">
+								<t:outputText value="#{msg.suspensionManagementListIDCostDef}" />
+							</f:facet>
+							<table>
+								<tr>
+									<td><t:outputText value="#{item.progressiveId}" /></td>
+								</tr>
+							</table>
+						</t:column>
+						<t:column id="costItem"
+							rendered="#{!empty suspensionManagementListBean.list}"
+							styleClass="ActionColumn" headerstyleClass="ActionColumn">
+							<f:facet name="header">
+								<t:outputText value="#{msg.suspensionManagementListCostItem}" />
+							</f:facet>
+							<table>
+								<tr>
+									<td><t:outputText value="#{item.costItem}" /></td>
+								</tr>
+							</table>
+						</t:column>
+						<t:column id="lastAmount"
+							rendered="#{!empty suspensionManagementListBean.list}"
+							styleClass="ActionColumn" headerstyleClass="ActionColumn">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.suspensionManagementListLastAmountSertified}" />
+							</f:facet>
+							<table>
+								<tr>
+									<td><t:outputText
+											rendered="#{item.suspendedByACU or item.rectifiedByACU}"
+											converter="moneyConverter" value="#{item.aguCertification}" /></td>
+								</tr>
+							</table>
+						</t:column>
+
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty suspensionManagementListBean.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.suspensionManagementListIssueNumberRecovery}"></t:outputText>
+							</f:facet>
+							<t:outputText value="#{item.suspendActNumber} / #{item.retreatActNumber}"></t:outputText>
+						</t:column>
+						
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty suspensionManagementListBean.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.suspensionManagementListActRecovery}"></t:outputText>
+							</f:facet>
+							<t:outputText value="#{item.suspendActDate}" converter="dateTimeConverter"></t:outputText>
+							<t:outputText value=" - "></t:outputText>
+							<t:outputText value="#{item.retreatActDate}" converter="dateTimeConverter"></t:outputText>
+						</t:column>
+						
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty suspensionManagementListBean.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.suspensionManagementEditTotAmountEliglExpRetired}"></t:outputText>
+							</f:facet>
+							<t:outputText converter="moneyConverter" value="#{item.totAmountEliglExpRetired}"></t:outputText>
+						</t:column>
+						
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty suspensionManagementListBean.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.suspensionManagementEditTotAmountPublExpRetired}"></t:outputText>
+							</f:facet>
+							<t:outputText converter="moneyConverter" value="#{item.totAmountPublExpRetired}"></t:outputText>
+						</t:column>
+						
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty suspensionManagementListBean.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.suspensionManagementEditTotAmountEligExpSuspended}"></t:outputText>
+							</f:facet>
+							<t:outputText converter="moneyConverter" value="#{item.totAmountEligExpSuspended}"></t:outputText>
+						</t:column>
+						
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty suspensionManagementListBean.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.suspensionManagementEditTotAmountPublExpSuspended}"></t:outputText>
+							</f:facet>
+							<t:outputText converter="moneyConverter" value="#{item.totAmountPublExpSuspended}"></t:outputText>
+						</t:column>
+						
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty suspensionManagementListBean.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.recoveryManagementTotAmountEligExpToBeWithdrawn}"></t:outputText>
+							</f:facet>
+							<t:outputText converter="moneyConverter" value="#{item.totAmountEligExpToBeWithdrawn}"></t:outputText>
+						</t:column>
+						
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty suspensionManagementListBean.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.recoveryManagementTotAmountPublExpToBeWithdrawn}"></t:outputText>
+							</f:facet>
+							<t:outputText converter="moneyConverter" value="#{item.totAmountPublExpToBeWithdrawn}"></t:outputText>
+						</t:column>
+
+						<!-- <t:column id="amountSuspended"
+							rendered="#{!empty suspensionManagementListBean.list}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.suspensionManagementListAmountSuspended}" />
+							</f:facet>
+							<table>
+
+								<tr>
+									<td><t:outputText
+											value="#{msg.suspensionManagementListACU}" /></td>
+									<td><t:outputText value="#{item.valueSuspendACU}"
+											converter="moneyConverter" /></td>
+								</tr>
+							</table>
+						</t:column>
+
+						<t:column id="amountRetreat"
+							rendered="#{!empty suspensionManagementListBean.list}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.suspensionManagementListAmountRetreat}" />
+							</f:facet>
+							<table>
+
+								<tr>
+									<td><t:outputText
+											value="#{msg.suspensionManagementListACU}" /></td>
+									<td><t:outputText value="#{item.amountRetreat}"
+											converter="moneyConverter" /></td>
+								</tr>
+							</table>
+						</t:column> -->
+
+						<t:column id="suspDate"
+							rendered="#{!empty suspensionManagementListBean.list}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.suspensionManagementListDateSuspension}" />
+							</f:facet>
+							<table>
+								<tr>
+									<td><t:outputText value="#{item.dateSuspendACU}"
+											converter="dateTimeConverter" /><br /></td>
+								</tr>
+							</table>
+						</t:column>
+
+						<t:column id="retreatDate"
+							rendered="#{!empty suspensionManagementListBean.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.suspensionManagementListDateRetreat}" />
+							</f:facet>
+							<table>
+								<tr>
+									<td><t:outputText value="#{item.retreatDate}"
+											converter="dateTimeConverter" /><br /></td>
+								</tr>
+							</table>
+						</t:column>
+
+						<t:column id="suspendPercent"
+							rendered="#{!empty suspensionManagementListBean.list}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.suspensionManagementListSuspendPercent}" />
+							</f:facet>
+							<t:outputText value="#{item.suspendPercent}" />
+						</t:column>
+
+						<t:column id="retreatPercent"
+							rendered="#{!empty suspensionManagementListBean.list}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.suspensionManagementListRetreatPercent}" />
+							</f:facet>
+							<t:outputText value="#{item.suspendRetreat}" />
+						</t:column>
+
+						<t:column id="suspStatus"
+							rendered="#{!empty suspensionManagementListBean.list}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.suspensionManagementListSuspendStatus}" />
+							</f:facet>
+							<t:outputText value="#{item.suspendStatusDescription}" />
+						</t:column>
+
+						<t:column styleClass="StringColumn"
+							rendered="#{empty suspensionManagementListBean.list}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+
+					</t:dataTable>
+
+
+				</sec:ifAnyGranted>
+
+			</div>
+			<a4j:outputPanel styleClass="scrollerPanel">
+				<sec:ifAnyGranted
+					roles="ROLE_AAU_W, ROLE_AAU_R, ROLE_STC_W, ROLE_AGU_W, ROLE_ACU_W, ROLE_ACU_R, ROLE_ACUM_W,ROLE_SUPER_ADMIN_W">
+					<t:dataScroller id="scroll_1" styleClass="scroller" for="table"
+						fastStep="10" pageCountVar="pageCount" pageIndexVar="pageIndex"
+						paginator="true" paginatorMaxPages="5" paginatorColumnClass="page"
+						paginatorActiveColumnClass="page_active" immediate="true"
+						rendered="#{suspensionManagementListBean.showScroll}"
+						binding="#{suspensionManagementListBean.scroller}">
+						<f:facet name="first">
+							<t:graphicImage alt="#{msg.first}" url="../images/back_end.gif"
+								border="1" />
+						</f:facet>
+						<f:facet name="last">
+							<t:graphicImage alt="#{msg.last}" url="../images/forward_end.gif"
+								border="1" />
+						</f:facet>
+						<f:facet name="previous">
+							<t:graphicImage alt="#{msg.previous}" url="../images/back.gif"
+								border="1" />
+						</f:facet>
+						<f:facet name="next">
+							<t:graphicImage alt="#{msg.next}" url="../images/forward.gif"
+								border="1" />
+						</f:facet>
+						<f:facet name="fastforward">
+							<t:graphicImage alt="#{msg.fastforward}"
+								url="../images/all_forward.gif" border="1" />
+						</f:facet>
+						<f:facet name="fastrewind">
+							<t:graphicImage alt="#{msg.fastrewind}"
+								url="../images/all_back.gif" border="1" />
+						</f:facet>
+					</t:dataScroller>
+				</sec:ifAnyGranted>
+			</a4j:outputPanel>
+
+			<sec:ifAnyGranted roles="ROLE_ACU_W,ROLE_ACUM_W,ROLE_SUPER_ADMIN_W">
+				<div class="btn_line">
+					<table>
+						<tr>
+							<td colspan="2" style="text-align: center;"><t:outputText
+									rendered="#{suspensionManagementListBean.errorAmount}"
+									styleClass="RequiredFieldMarker"
+									value="#{msg.suspensionManagementListAmountError}"></t:outputText>
+							</td>
+
+						</tr>
+						<tr>
+							<td colspan="2" style="text-align: center;"><t:outputText
+									rendered="#{suspensionManagementListBean.errorFinalAction}"
+									styleClass="RequiredFieldMarker"
+									value="#{msg.suspensionManagementListFinalActionError}"></t:outputText>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" style="text-align: center;"><t:outputText
+									rendered="#{suspensionManagementListBean.refuseError}"
+									styleClass="RequiredFieldMarker"
+									value="#{msg.suspensionManagementListRefuseError}"></t:outputText>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" style="text-align: center;"><t:outputText
+									rendered="#{suspensionManagementListBean.annulError}"
+									styleClass="RequiredFieldMarker"
+									value="#{msg.suspensionManagementListAnnulError}"></t:outputText>
+							</td>
+						</tr>
+					</table>
+					<table>
+
+						<tr>
+							<h:panelGroup rendered="#{!Session.projectLock}">
+								<td><a4j:commandButton immediate="false"
+										oncomplete="Richfaces.showModalPanel('cancelSuspendDlg');$('suspendDocumentTable').hide();$('DocForm:saveWithSusDoc').hide();$('DocForm:saveWithoutSusDoc').show();"
+										rendered="#{!empty suspensionManagementListBean.list}"
+										styleClass="button4"
+										value="#{msg.suspensionManagementListCancelSuspendBtn}" /></td>
+								<td><a4j:commandButton immediate="false"
+										oncomplete="Richfaces.showModalPanel('retreatDlg');$('retreatDocumentTable').hide();$('DocForm:saveRetreatWithSusDoc').hide();$('DocForm:saveRetreatWithoutSusDoc').show();"
+										rendered="#{!empty suspensionManagementListBean.list}"
+										styleClass="button4"
+										value="#{msg.suspensionManagementListRetreatBtn}" /></td>
+							</h:panelGroup>
+						</tr>
+					</table>
+				</div>
+			</sec:ifAnyGranted>
+
+			<rich:modalPanel id="finalActionPopup" autosized="true" width="400"
+				resizeable="false">
+				<f:facet name="header">
+					<h:outputText value="#{msg.suspensionManagementStartFlow2}"
+						style="padding-right:15px;" />
+				</f:facet>
+				<a4j:outputPanel>
+					<center>
+						<table>
+							<tr>
+								<td><t:outputText
+										value="#{msg.suspensionManagementFinalActionDate}:" /></td>
+								<td><rich:calendar
+										locale="#{LocalizeBean.currentLocaleValue}"
+										inputClass="editbox_form2" id="finalActionDate"
+										converter="dateTimeConverter"
+										value="#{suspensionManagementListBean.finalActionDate}"
+										datePattern="dd/MM/yyyy">
+									</rich:calendar></td>
+							</tr>
+						</table>
+					</center>
+
+					<div class="btn_line">
+						<table>
+							<tr>
+								<td><h:commandButton
+										onclick="Richfaces.hideModalPanel('finalActionPopup');"
+										reRender="FormPanel"
+										action="#{suspensionManagementListBean.finalAction}"
+										rendered="#{!empty suspensionManagementListBean.list}"
+										styleClass="button"
+										value="#{msg.suspensionManagementListSendBtn}" id="sendBtn4" />
+								</td>
+								<td><a4j:commandButton value="#{msg.cancel}"
+										styleClass="button"
+										onclick="#{rich:component('finalActionPopup')}.hide();" /></td>
+							</tr>
+						</table>
+					</div>
+				</a4j:outputPanel>
+			</rich:modalPanel>
+
+			<rich:modalPanel id="resendFlow1Popup" autosized="true" width="400"
+				resizeable="false">
+				<f:facet name="header">
+					<h:outputText
+						value="#{msg.suspensionManagementSuspensionDateFlow1}"
+						style="padding-right:15px;" />
+				</f:facet>
+				<a4j:outputPanel>
+					<center>
+						<table>
+							<tr>
+								<td><t:outputText
+										value="#{msg.suspensionManagementSuspensionDateFlow1}:" /></td>
+								<td><rich:calendar
+										locale="#{LocalizeBean.currentLocaleValue}"
+										inputClass="editbox_form2" id="resendDate"
+										converter="dateTimeConverter"
+										value="#{suspensionManagementListBean.resendDate}"
+										datePattern="dd/MM/yyyy">
+									</rich:calendar></td>
+							</tr>
+						</table>
+					</center>
+
+					<div class="btn_line">
+						<table>
+							<tr>
+								<td><h:commandButton
+										onclick="Richfaces.hideModalPanel('resendFlow1Popup');"
+										reRender="FormPanel"
+										action="#{suspensionManagementListBean.sendRefusedItems}"
+										rendered="#{!empty suspensionManagementListBean.list}"
+										styleClass="button"
+										value="#{msg.suspensionManagementListSendBtn}"
+										id="sendBtnRefused" /></td>
+								<td><a4j:commandButton value="#{msg.cancel}"
+										styleClass="button"
+										onclick="#{rich:component('resendFlow1Popup')}.hide();" /></td>
+							</tr>
+						</table>
+					</div>
+				</a4j:outputPanel>
+			</rich:modalPanel>
+
+		</a4j:outputPanel>
+	</ui:define>
+
+	<ui:define name="document_body">
+		<rich:modalPanel id="retreatDlg" autosized="true" width="400"
+			resizeable="false">
+			<f:facet name="header">
+				<h:outputText value="#{msg.suspensionManagementListRetreatDlg}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<a4j:outputPanel>
+				<center>
+					<table>
+						<tr>
+							<td><t:outputText
+									value="#{msg.suspensionManagementListRDlgDate}:" /> <t:outputText
+									styleClass="RequiredFieldMarker" value="*" /></td>
+							<td><rich:calendar
+									locale="#{LocalizeBean.currentLocaleValue}"
+									inputClass="editbox_form2" id="retreatDate"
+									converter="dateTimeConverter"
+									value="#{suspensionManagementListBean.retreatDate}"
+									datePattern="dd/MM/yyyy">
+								</rich:calendar></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.suspensionManagementListRDlgActNumber}:" /> <t:outputText
+									styleClass="RequiredFieldMarker" value="*" /></td>
+							<td class="ControlCell"><t:inputText
+									value="#{suspensionManagementListBean.retreatActNumber}"
+									id="retreatActNumber" /></td>
+						</tr>
+						<tr>
+							<td><t:outputText
+									value="#{msg.suspensionManagementListRDlgActDate}:" /> <t:outputText
+									styleClass="RequiredFieldMarker" value="*" /></td>
+							<td><rich:calendar
+									locale="#{LocalizeBean.currentLocaleValue}"
+									inputClass="editbox_form2" id="retreatActDate"
+									converter="dateTimeConverter"
+									value="#{suspensionManagementListBean.retreatActDate}"
+									datePattern="dd/MM/yyyy">
+								</rich:calendar></td>
+						</tr>
+
+						<tr>
+							<td class="LabelCell"><t:outputText
+									rendered="#{suspensionManagementListBean.retreatAmount}"
+									value="#{msg.suspensionManagementListRDlgAmount}:" /> <t:outputText
+									styleClass="RequiredFieldMarker"
+									rendered="#{suspensionManagementListBean.retreatAmount}"
+									value="*" /></td>
+							<td class="ControlCell"><t:inputText
+									validator="#{validator.isFloat92}" converter="floatConverter"
+									maxlength="12"
+									rendered="#{suspensionManagementListBean.retreatAmount}"
+									value="#{suspensionManagementListBean.retreatAmount}"
+									onkeypress="return decimalonly(this, event)"
+									onkeyup="checkdecimal(this)" id="retreatAmount" /></td>
+						</tr>
+
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.suspensionManagementListRDlgReason}:" /> <t:outputText
+									styleClass="RequiredFieldMarker" value="*" /></td>
+							<td style="width: 25%;"><t:selectOneMenu
+									styleClass="DropDown" id="retreatReason"
+									value="#{suspensionManagementListBean.selctedRetreatReason}">
+									<f:selectItems
+										value="#{suspensionManagementListBean.allReasonTypes}" />
+								</t:selectOneMenu></td>
+						</tr>
+
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.suspensionManagementListRDlgNote}:" /></td>
+							<td class="ControlCell"><t:inputText
+									value="#{suspensionManagementListBean.retreatNote}"
+									id="retreatNote" /></td>
+						</tr>
+
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.suspensionManagementListRDlgDocument}:" /></td>
+							<td class="ControlCell"><a4j:commandLink id="docRetreatlink"
+									immediate="false" reRender="retreatDocumentTable"
+									oncomplete="$('retreatDocumentTable').show();$('DocForm:saveRetreatWithoutSusDoc').hide();$('DocForm:saveRetreatWithSusDoc').show();">
+									<h:graphicImage alt="#{msg.uploadFile}"
+										value="/images/plus.png" style="border:0;" />
+									<span>#{msg.uploadFile}</span>
+								</a4j:commandLink>
+
+
+								<table id="retreatDocumentTable">
+									<tr>
+										<td class="LabelCell"><t:outputText value="#{msg.date}:" /></td>
+										<td class="CalendarCell"><rich:calendar
+												locale="#{LocalizeBean.currentLocaleValue}"
+												styleClass="editbox_form2" disabled="false"
+												converter="dateTimeConverter"
+												value="#{suspensionManagementListBean.retreatDocument.documentDate}"
+												datePattern="dd/MM/yyyy">
+											</rich:calendar></td>
+									</tr>
+
+									<tr>
+										<td class="LabelCell"><t:outputText
+												value="#{msg.documentDescription}:" /></td>
+										<td class="ControlCell"><t:inputText
+												styleClass="editbox_form" style="width:216px;"
+												maxlength="50"
+												value="#{suspensionManagementListBean.retreatDocument.description}" /></td>
+									</tr>
+
+									<tr>
+										<td class="LabelCell"><t:outputText
+												value="#{msg.protocolNumber}:" /></td>
+										<td class="ControlCell"><t:inputText
+												styleClass="editbox_form" maxlength="50"
+												value="#{suspensionManagementListBean.retreatDocument.protocolNumber}" /></td>
+									</tr>
+									<tr>
+										<td class="LabelCell"><t:outputText
+												value="#{msg.documentPublic}:" /></td>
+										<td class="ControlCell"><t:selectBooleanCheckbox
+												value="#{suspensionManagementListBean.retreatDocument.isPublic}">
+											</t:selectBooleanCheckbox></td>
+									</tr>
+									<tr>
+										<td class="LabelCell"><t:outputText
+												value="#{msg.documentUploadRole}:" /></td>
+										<td class="ControlCell"><t:selectOneMenu
+												onmousedown="collapse(this);" onchange="expand(this);"
+												onblur="expand(this);"
+												value="#{suspensionManagementListBean.retreatRole}"
+												required="false" styleClass="DropDown">
+												<f:selectItems
+													value="#{suspensionManagementListBean.listSelectRoles}" />
+											</t:selectOneMenu></td>
+									</tr>
+									<tr>
+										<td class="LabelCell"><t:outputText
+												value="#{msg.documentForPartner}:" /></td>
+										<td class="ControlCell"><t:selectOneMenu
+												onmousedown="collapse(this);" onchange="expand(this);"
+												onblur="expand(this);"
+												value="#{suspensionManagementListBean.selectedRetreatPartner}"
+												required="false" styleClass="DropDown">
+												<f:selectItems
+													value="#{suspensionManagementListBean.listPartners}" />
+											</t:selectOneMenu></td>
+									</tr>
+									<tr class="tempDisplay">
+										<td class="LabelCell"><t:outputText
+												value="#{msg.documentCategory}:" /></td>
+										<td class="ControlCell"><t:selectOneMenu
+												onmousedown="collapse(this);" onchange="expand(this);"
+												onblur="expand(this);"
+												value="#{suspensionManagementListBean.selectedCategory}"
+												required="false" styleClass="DropDown">
+												<f:selectItems
+													value="#{suspensionManagementListBean.categories}" />
+											</t:selectOneMenu></td>
+									</tr>
+
+
+									<tr>
+										<td class="LabelCell"><t:outputText
+												value="#{msg.uploadFile}:" /></td>
+										<td class="ControlCell"><t:inputFileUpload
+												id="fileupload7"
+												value="#{suspensionManagementListBean.retreatDocumentUpFile}"
+												storage="file" styleClass="fileUploadInput"
+												maxlength="200000" /></td>
+									</tr>
+									<tr>
+										<td align="center" colspan="2">#{msg.fileSize}</td>
+									</tr>
+
+									<tr>
+										<td><a4j:commandButton
+												value="#{msg.suspensionManagementListCDlgCancelAttach}"
+												styleClass="button" immediate="false"
+												onclick="$('retreatDocumentTable').hide();$('DocForm:saveRetreatWithSusDoc').hide();$('DocForm:saveRetreatWithoutSusDoc').show();" /></td>
+									</tr>
+								</table></td>
+
+						</tr>
+
+					</table>
+				</center>
+				<table style="width: 100%;">
+					<tr>
+						<td align="center" width="50%"><h:commandButton
+								id="saveRetreatWithoutSusDoc" value="#{msg.save}"
+								styleClass="button3"
+								action="#{suspensionManagementListBean.retreatItem}"
+								reRender="FormPanel" immediate="false"
+								onclick="if(hideRetreatDialog()){Richfaces.hideModalPanel('retreatDlg');}">
+
+							</h:commandButton> <h:commandButton id="saveRetreatWithSusDoc" value="#{msg.save}"
+								styleClass="button3"
+								action="#{suspensionManagementListBean.retreatItemWithDocument}"
+								reRender="FormPanel" immediate="false"
+								onclick="if(hideRetreatDialog()){Richfaces.hideModalPanel('retreatDlg');}">
+
+							</h:commandButton></td>
+						<td><a4j:commandButton value="#{msg.cancel}"
+								styleClass="button"
+								onclick="#{rich:component('retreatDlg')}.hide();" /></td>
+					</tr>
+				</table>
+			</a4j:outputPanel>
+		</rich:modalPanel>
+
+		<rich:modalPanel id="cancelSuspendDlg" autosized="true" width="400"
+			resizeable="false">
+			<f:facet name="header">
+				<h:outputText
+					value="#{msg.suspensionManagementListCancelSuspendDlg}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<a4j:outputPanel>
+				<center>
+					<table>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.suspensionManagementListCDlgActNumber}:" /> <t:outputText
+									styleClass="RequiredFieldMarker" value="*" /></td>
+							<td class="ControlCell"><t:inputText
+									value="#{suspensionManagementListBean.cancelActNumber}"
+									id="cancelActNumber" /></td>
+						</tr>
+
+						<tr>
+							<td><t:outputText
+									value="#{msg.suspensionManagementListCDlgDate}:" /> <t:outputText
+									styleClass="RequiredFieldMarker" value="*" /></td>
+							<td><rich:calendar
+									locale="#{LocalizeBean.currentLocaleValue}"
+									inputClass="editbox_form2" id="cancelDate"
+									converter="dateTimeConverter"
+									value="#{suspensionManagementListBean.cancelDate}"
+									datePattern="dd/MM/yyyy">
+								</rich:calendar></td>
+						</tr>
+
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.suspensionManagementListCDlgReason}:" /> <t:outputText
+									styleClass="RequiredFieldMarker" value="*" /></td>
+							<td class="ControlCell"><t:inputText
+									value="#{suspensionManagementListBean.cancelReason}"
+									id="cancelReason" /></td>
+						</tr>
+
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.suspensionManagementListCDlgNote}:" /></td>
+							<td class="ControlCell"><t:inputText
+									value="#{suspensionManagementListBean.cancelNote}"
+									id="cancelNote" /></td>
+						</tr>
+
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.suspensionManagementListCDlgDocument}:" /></td>
+							<td class="ControlCell"><a4j:commandLink id="docSuspendlink"
+									immediate="false" reRender="suspendDocumentTable"
+									oncomplete="$('suspendDocumentTable').show();$('DocForm:saveWithoutSusDoc').hide();$('DocForm:saveWithSusDoc').show();">
+									<h:graphicImage alt="#{msg.uploadFile}"
+										value="/images/plus.png" style="border:0;" />
+									<span>#{msg.uploadFile}</span>
+								</a4j:commandLink>
+
+
+								<table id="suspendDocumentTable">
+									<tr>
+										<td class="LabelCell"><t:outputText value="#{msg.date}:" /></td>
+										<td class="CalendarCell"><rich:calendar
+												locale="#{LocalizeBean.currentLocaleValue}"
+												styleClass="editbox_form2" disabled="false"
+												converter="dateTimeConverter"
+												value="#{suspensionManagementListBean.cancelSuspendDocument.documentDate}"
+												datePattern="dd/MM/yyyy">
+											</rich:calendar></td>
+									</tr>
+
+									<tr>
+										<td class="LabelCell"><t:outputText
+												value="#{msg.documentDescription}:" /></td>
+										<td class="ControlCell"><t:inputText
+												styleClass="editbox_form" style="width:216px;"
+												maxlength="50"
+												value="#{suspensionManagementListBean.cancelSuspendDocument.description}" /></td>
+									</tr>
+
+									<tr>
+										<td class="LabelCell"><t:outputText
+												value="#{msg.protocolNumber}:" /></td>
+										<td class="ControlCell"><t:inputText
+												styleClass="editbox_form" maxlength="50"
+												value="#{suspensionManagementListBean.cancelSuspendDocument.protocolNumber}" /></td>
+									</tr>
+									<tr>
+										<td class="LabelCell"><t:outputText
+												value="#{msg.documentPublic}:" /></td>
+										<td class="ControlCell"><t:selectBooleanCheckbox
+												value="#{suspensionManagementListBean.cancelSuspendDocument.isPublic}">
+											</t:selectBooleanCheckbox></td>
+									</tr>
+									<tr>
+										<td class="LabelCell"><t:outputText
+												value="#{msg.documentUploadRole}:" /></td>
+										<td class="ControlCell"><t:selectOneMenu
+												onmousedown="collapse(this);" onchange="expand(this);"
+												onblur="expand(this);"
+												value="#{suspensionManagementListBean.suspendRole}"
+												required="false" styleClass="DropDown">
+												<f:selectItems
+													value="#{suspensionManagementListBean.listSelectRoles}" />
+											</t:selectOneMenu></td>
+									</tr>
+									<tr>
+										<td class="LabelCell"><t:outputText
+												value="#{msg.documentForPartner}:" /></td>
+										<td class="ControlCell"><t:selectOneMenu
+												onmousedown="collapse(this);" onchange="expand(this);"
+												onblur="expand(this);"
+												value="#{suspensionManagementListBean.selectedSuspendPartner}"
+												required="false" styleClass="DropDown">
+												<f:selectItems
+													value="#{suspensionManagementListBean.listPartners}" />
+											</t:selectOneMenu></td>
+									</tr>
+									<tr class="tempDisplay">
+										<td class="LabelCell"><t:outputText
+												value="#{msg.documentCategory}:" /></td>
+										<td class="ControlCell"><t:selectOneMenu
+												onmousedown="collapse(this);" onchange="expand(this);"
+												onblur="expand(this);"
+												value="#{suspensionManagementListBean.selectedCategory}"
+												required="false" styleClass="DropDown">
+												<f:selectItems
+													value="#{suspensionManagementListBean.categories}" />
+											</t:selectOneMenu></td>
+									</tr>
+
+
+									<tr>
+										<td class="LabelCell"><t:outputText
+												value="#{msg.uploadFile}:" /></td>
+										<td class="ControlCell"><t:inputFileUpload
+												id="fileupload6"
+												value="#{suspensionManagementListBean.suspendDocumentUpFile}"
+												storage="file" styleClass="fileUploadInput"
+												maxlength="200000" /></td>
+									</tr>
+									<tr>
+										<td align="center" colspan="2">#{msg.fileSize}</td>
+									</tr>
+
+									<tr>
+										<td><a4j:commandButton
+												value="#{msg.suspensionManagementListCDlgCancelAttach}"
+												styleClass="button" immediate="false"
+												onclick="$('suspendDocumentTable').hide();$('DocForm:saveWithSusDoc').hide();$('DocForm:saveWithoutSusDoc').show();" /></td>
+									</tr>
+								</table></td>
+
+						</tr>
+					</table>
+				</center>
+
+				<table style="width: 100%;">
+					<tr>
+						<td align="center" width="50%"><h:commandButton
+								id="saveWithoutSusDoc" value="#{msg.save}" styleClass="button3"
+								action="#{suspensionManagementListBean.suspendItem}"
+								reRender="FormPanel" immediate="false"
+								onclick="if(hideCancelSuspDialog()){Richfaces.hideModalPanel('cancelSuspendDlg');}">
+
+							</h:commandButton> <h:commandButton id="saveWithSusDoc" value="#{msg.save}"
+								styleClass="button3"
+								action="#{suspensionManagementListBean.suspendItemWithDocument}"
+								reRender="FormPanel" immediate="false"
+								onclick="if(hideCancelSuspDialog()){Richfaces.hideModalPanel('cancelSuspendDlg');}">
+
+							</h:commandButton></td>
+						<td><a4j:commandButton value="#{msg.cancel}"
+								styleClass="button"
+								onclick="#{rich:component('cancelSuspendDlg')}.hide();" /></td>
+					</tr>
+				</table>
+			</a4j:outputPanel>
+		</rich:modalPanel>
+
+		<rich:modalPanel id="waitPopup" autosized="true" width="300"
+			resizeable="false">
+			<center>#{msg.suspensionManagementWaiting}</center>
+
+		</rich:modalPanel>
+
+		<rich:modalPanel id="dateConfirmPopup" autosized="true" width="400"
+			resizeable="false">
+			<f:facet name="header">
+				<h:outputText value="#{msg.suspensionManagementACUConfirmHeader}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<a4j:outputPanel>
+				<center>
+					<table>
+						<tr>
+							<td><t:outputText
+									value="#{msg.suspensionManagementListConfirmationACUManager}:" />
+							</td>
+							<td><rich:calendar
+									locale="#{LocalizeBean.currentLocaleValue}"
+									inputClass="editbox_form2" id="confirmDate"
+									converter="dateTimeConverter"
+									value="#{suspensionManagementListBean.confirmDate}"
+									datePattern="dd/MM/yyyy">
+								</rich:calendar></td>
+						</tr>
+					</table>
+				</center>
+				<div class="btn_line">
+					<table>
+						<tr>
+							<td><h:commandButton
+									onclick="Richfaces.hideModalPanel('dateConfirmPopup');"
+									reRender="FormPanel"
+									action="#{suspensionManagementListBean.send}"
+									rendered="#{!empty suspensionManagementListBean.list}"
+									styleClass="button"
+									value="#{msg.suspensionManagementListSendBtn}" id="sendBtn3" />
+							</td>
+							<td><a4j:commandButton value="#{msg.cancel}"
+									styleClass="button"
+									onclick="#{rich:component('dateConfirmPopup')}.hide();" /></td>
+						</tr>
+					</table>
+				</div>
+			</a4j:outputPanel>
+		</rich:modalPanel>
+
+
+
+
+	</ui:define>
+
+	<ui:define name="delete_panels">
+
+		<rich:modalPanel id="updateMotivationDialog" autosized="true"
+			width="300" resizeable="false">
+			<f:facet name="header">
+				<h:outputText value="#{msg.validationFlowViewEnterMotivation}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<h:form id="updateForm" enctype="multipart/form-data">
+				<h:panelGrid columns="1">
+					<ui:fragment>
+						<h:outputText value="#{msg.motivation}" />
+						<h:panelGroup style="color:red;">*</h:panelGroup>
+					</ui:fragment>
+					<t:inputTextarea
+						value="#{suspensionManagementListBean.actionMotivation}"
+						id="updateMotivation"
+						onkeypress="return textArea(this, 255, event)"
+						style="width: 350px; height: 130px; resize: none;" />
+				</h:panelGrid>
+				<center>
+					<h:commandButton id="butMotSA" value="#{msg.yes}"
+						action="#{suspensionManagementListBean.updateSelectedBySuperAdmin}"
+						onclick="return validateUpdateMotivation();" />
+					<a4j:commandButton value="#{msg.no}"
+						actionListener="#{suspensionManagementListBean.clearMotivation}"
+						oncomplete="#{rich:component('updateMotivationDialog')}.hide();"
+						reRender="updateMotivation" />
+				</center>
+				<script language="JavaScript" type="text/javascript">
+                    function validateUpdateMotivation() {                	
+                	
+                        var textArea = document.getElementById('updateForm:updateMotivation');
+                        if (textArea != null) {
+                            if (textArea.value.trim().length > 0) {
+                                return true;
+                            } else {
+                                textArea.style.borderColor = 'red';
+                                return false;
+                            }
+                        }
+                        return false;
+                    }
+                    
+                    function unDisableButMotSA() {
+                	    document.getElementById('updateForm:butMotSA').disabled = false;
+                	}
+                </script>
+			</h:form>
+		</rich:modalPanel>
+	</ui:define>
+
+	<ui:define name="script_body">
+		<script type="text/javascript">
+			function chickIsACUUser(value) {
+				var myBool = Boolean(value);
+				return myBool;
+			}
+			
+			function hideRetreatDialog() {
+				var dateValue = document.getElementById('DocForm:retreatDateInputDate').value;
+				
+				var result = true;
+				
+				if(dateValue == null || dateValue.length == 0)
+				{
+					document.getElementById('DocForm:retreatDateInputDate').style.backgroundColor = "rgb(255, 229, 229)";
+					result =  false;
+				}
+				else
+				{
+					document.getElementById('DocForm:retreatDateInputDate').style.backgroundColor = "";					
+				}
+				
+				var actNumber = document.getElementById('DocForm:retreatActNumber').value;
+				
+				if(actNumber == null || actNumber.length == 0)
+				{
+					document.getElementById('DocForm:retreatActNumber').style.backgroundColor = "rgb(255, 229, 229)";
+					result =  false;
+				}
+				else
+				{
+					document.getElementById('DocForm:retreatActNumber').style.backgroundColor = "";					
+				}
+				
+				var actDate = document.getElementById('DocForm:retreatActDateInputDate').value;
+				
+				if(actDate == null || actDate.length == 0)
+				{
+					document.getElementById('DocForm:retreatActDateInputDate').style.backgroundColor = "rgb(255, 229, 229)";
+					result =  false;
+				}
+				else
+				{
+					document.getElementById('DocForm:retreatActDateInputDate').style.backgroundColor = "";					
+				}
+				
+				if(document.getElementById('DocForm:retreatAmount'))
+				{
+					var amount = document.getElementById('DocForm:retreatAmount').value;
+					
+					if(amount == null || amount.length == 0)
+					{
+						document.getElementById('DocForm:retreatAmount').style.backgroundColor = "rgb(255, 229, 229)";
+						result =  false;
+					}
+					else
+					{
+						document.getElementById('DocForm:retreatAmount').style.backgroundColor = "";					
+					}
+				}
+				
+				var reason = document.getElementById('DocForm:retreatReason').value;
+				
+				if(reason == null || reason.length == 0 || reason == '0')
+				{
+					document.getElementById('DocForm:retreatReason').style.backgroundColor = "rgb(255, 229, 229)";
+					result =  false;
+				}
+				else
+				{
+					document.getElementById('DocForm:retreatReason').style.backgroundColor = "";					
+				}
+				
+				return result;
+			}
+			
+			function hideCancelSuspDialog() {
+				var dateValue = document.getElementById('DocForm:cancelDateInputDate').value;
+				
+				var result = true;
+				
+				if(dateValue == null || dateValue.length == 0)
+				{
+					document.getElementById('DocForm:cancelDateInputDate').style.backgroundColor = "rgb(255, 229, 229)";
+					result =  false;
+				}
+				else
+				{
+					document.getElementById('DocForm:cancelDateInputDate').style.backgroundColor = "";					
+				}
+				
+				var actNumber = document.getElementById('DocForm:cancelActNumber').value;
+				
+				if(actNumber == null || actNumber.length == 0)
+				{
+					document.getElementById('DocForm:cancelActNumber').style.backgroundColor = "rgb(255, 229, 229)";
+					result =  false;
+				}
+				else
+				{
+					document.getElementById('DocForm:cancelActNumber').style.backgroundColor = "";					
+				}
+				
+				var reason = document.getElementById('DocForm:cancelReason').value;
+				
+				if(reason == null || reason.length == 0)
+				{
+					document.getElementById('DocForm:cancelReason').style.backgroundColor = "rgb(255, 229, 229)";
+					result =  false;
+				}
+				else
+				{
+					document.getElementById('DocForm:cancelReason').style.backgroundColor = "";					
+				}
+				
+				return result;
+			}
+		</script>
+	</ui:define>
+
+</ui:composition>
+</html>

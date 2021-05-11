@@ -1,0 +1,922 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/EditTabBase.xhtml" >	
+	<ui:param name="heading" value="#{msg.progressValidationFlowEditHeading}" />
+	<ui:param name="heading_top" value="#{msg.progressValidationFlowEditPageName}" />
+	
+	<ui:define name="edit_body">	
+	<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+			
+			<t:panelTabbedPane serverSideTabSwitch="false" selectedIndex="#{progressValidationFlowEditBean.selectTab}">
+				
+				<!-- Financial progress items -->
+				<t:panelTab id="tabSet1" label="#{msg.progressValidationFlowEditTab1}" >
+				
+					<div class="table_container">
+						<t:dataTable style="margin:0 auto; width: 80%;" rowIndexId="row"
+							id="table" var="annualProfile"
+							value="#{progressValidationFlowEditBean.listFinancial}" styleClass="form_table" rowClasses="row_table_n,row_table_g">
+							<f:facet name="header">										
+							<t:column>																
+							<h:outputText value="#{msg.financialProgress}" />
+							
+							</t:column>										
+						</f:facet>
+						
+						<!-- Info columns -->						
+						<t:column id="edit" styleClass="ActionColumn" 
+						 rendered="#{!empty progressValidationFlowEditBean.listFinancial and !Session.isAguRead and progressValidationFlowEditBean.canEditPhysical and progressValidationFlowEditBean.editMode}" 
+						headerstyleClass="ActionColumn">
+						<a4j:commandLink ajaxSingle="true" id="editlink"
+							title="#{msg.edit}" action="#{progressValidationFlowEditBean.editEntityFinancialProgress}">
+							<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{annualProfile.id}"
+								target="#{progressValidationFlowEditBean.editFinancial}" />
+						</a4j:commandLink>
+						</t:column>	
+					
+						<t:column styleClass="StringColumn" rendered="#{!empty progressValidationFlowEditBean.listFinancial}">
+							<f:facet name="header" >
+								<t:outputText value="#{msg.annualProfileYear}" />
+							</f:facet>
+							<t:outputText value="#{annualProfile.string}" />						
+						</t:column>
+						
+						<t:column styleClass="NumberColumn" rendered="#{!empty progressValidationFlowEditBean.listFinancial}">
+							<f:facet name="header" >
+								<t:outputText value="#{msg.annualProfileExpectedAmount}" />
+							</f:facet>
+							<t:outputText value="#{annualProfile.amountExpected}" converter="moneyConverter"/>						
+						</t:column>
+						
+						<t:column styleClass="NumberColumn" rendered="#{!empty progressValidationFlowEditBean.listFinancial}">
+							<f:facet name="header" >
+								<t:outputText value="#{msg.annualProfileRealAmount}" />
+							</f:facet>
+							<t:outputText value="#{annualProfile.amountRealized}" converter="moneyConverter"/>						
+						</t:column>
+						
+						<t:column styleClass="NumberColumn" rendered="#{!empty progressValidationFlowEditBean.listFinancial}">
+							<f:facet name="header" >
+								<t:outputText value="#{msg.annualProfileAmountToAchive}" />
+							</f:facet>
+							<t:outputText value="#{annualProfile.amountToAchieve}" converter="moneyConverter"/>						
+						</t:column>
+						
+						<t:column styleClass="StringColumn" rendered="#{!empty progressValidationFlowEditBean.listFinancial}">
+							<f:facet name="header" >
+								<t:outputText value="#{msg.annualProfileNote}" />
+							</f:facet>
+							<t:outputText value="#{annualProfile.note}" />						
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{empty progressValidationFlowEditBean.listFinancial}">
+						<f:facet name="header">
+							<h:outputText value="#{msg.noData}" />
+						</f:facet>
+					</t:column>
+						</t:dataTable>
+					</div>
+				</t:panelTab>
+				
+				<!-- Physical progress items -->
+				<t:panelTab id="tabSet2" label="#{msg.progressValidationFlowEditTab2}">
+					
+					<t:panelTabbedPane serverSideTabSwitch="false" 
+					selectedIndex="#{progressValidationFlowEditBean.selectedIndex}">
+					<t:panelTab id="tab10" label="#{msg.indicatorsQSN}">
+					<div class="table_container"><t:dataTable width="100%"
+						style="margin:0 auto;" id="qsnTable" var="data"
+						value="#{progressValidationFlowEditBean.listQsn}" styleClass="form_table"
+						rowClasses="row_table_n,row_table_g">
+						<f:facet name="header">
+							<t:column>
+								<h:outputText style="text-align: center"
+									value="#{msg.indicatorsQSN}" />
+							</t:column>
+						</f:facet>
+						<t:column styleClass="CodeColumn"
+							rendered="#{!empty progressValidationFlowEditBean.listQsn}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.priorityCode}" />
+							</f:facet>
+							<t:outputText value="#{data.indicator.priorityCode}" />
+						</t:column>
+						<t:column styleClass="StringColumn" 
+							rendered="#{!empty progressValidationFlowEditBean.listQsn}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.descriptionPriorirty}" />
+							</f:facet>
+							<t:outputText value="#{data.indicator.descriptionPriorirty}" />
+						</t:column>
+						<t:column styleClass="StringColumn" 
+							rendered="#{!empty progressValidationFlowEditBean.listQsn}" >
+							<f:facet name="header">
+								<t:outputText value="#{msg.descriptionPriorirty}" />
+							</f:facet>
+							<h:outputText value="#{data.indicator.descriptionResult}" />
+						</t:column>
+						<t:column 
+							rendered="#{!empty progressValidationFlowEditBean.listQsn}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.code}" />
+							</f:facet>
+							<h:outputText value="#{data.indicator.measurementUnits}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{empty progressValidationFlowEditBean.listQsn}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+					</t:dataTable></div>
+				</t:panelTab>
+				<t:panelTab id="tab2" label="#{msg.coreIndicators}">
+					<div class="table_container"><t:dataTable width="100%"
+						style="margin:0 auto;" id="coreTable" var="data"
+						value="#{progressValidationFlowEditBean.listCoreIndicators}"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g">
+						<f:facet name="header">
+							<h:outputText style="text-align: center"
+								value="#{msg.coreIndicators}" />
+						</f:facet>
+						<t:column id="edit" styleClass="ActionColumn"
+							rendered="#{!empty progressValidationFlowEditBean.listCoreIndicators and !Session.isAguRead and progressValidationFlowEditBean.canEditPhysical and progressValidationFlowEditBean.editMode}">
+							<a4j:commandLink ajaxSingle="true" id="editlink"
+								title="#{msg.edit}"
+								rendered="#{progressValidationFlowEditBean.entityCoreEditId != data.id}"
+								action="#{progressValidationFlowEditBean.editCore}">
+								<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{data.id}"
+									target="#{progressValidationFlowEditBean.entityCoreEditId}" />
+							</a4j:commandLink>
+							<a4j:commandLink id="savelink"
+								rendered="#{progressValidationFlowEditBean.entityCoreEditId == data.id}"
+								title="#{msg.save}" immediate="false"
+								action="#{progressValidationFlowEditBean.saveCore}">
+								<h:graphicImage alt="#{msg.save}"
+									value="/images/SaveAllFiles.png" style="border:0" />
+							</a4j:commandLink>
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty progressValidationFlowEditBean.listCoreIndicators}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.indicartorDescription}" />
+							</f:facet>
+							<t:outputText value="#{data.indicator.descriptionOfIndicator}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty progressValidationFlowEditBean.listCoreIndicators}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.descriptionUnitsMeasure}" />
+							</f:facet>
+							<t:outputText value="#{data.indicator.descriptionUnitsMeasure}" />
+						</t:column>
+						<t:column styleClass="StrignColumn" style="width:300px;"
+							rendered="#{!empty progressValidationFlowEditBean.listCoreIndicators}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.additionalValues}" />
+							</f:facet>
+							<table class="forms" border="0" cellpadding="1" cellspacing="1">
+								<tr>
+									<td><t:outputText value="#{msg.programmedValue}:" /></td>
+									<td><b><t:outputText value="#{data.programmedValues}" converter="floatConverter"/></b></td>
+								</tr>
+								<tr>
+									<td><t:outputText value="#{msg.engageValue}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td><b><t:outputText value="#{data.engageValue}"
+										converter="floatConverter"
+										rendered="#{progressValidationFlowEditBean.entityCoreEditId != data.id}" /></b>
+									<t:inputText value="#{data.engageValue}" style="#{progressValidationFlowEditBean.engageStyle}"
+										styleClass="editbox_form2" maxlength="12"
+										converter="floatConverter" validator="#{validator.isFloat92}"
+										onkeypress="return decimalonly(this, event)"
+										onkeyup="checkdecimal(this)"
+										rendered="#{progressValidationFlowEditBean.entityCoreEditId == data.id}" /></td>
+								</tr>
+								<tr>
+									<td><t:outputText value="#{msg.gotValue}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td><b><t:outputText value="#{data.gotValue}"
+										converter="floatConverter"
+										rendered="#{progressValidationFlowEditBean.entityCoreEditId != data.id}" /></b>
+									<t:inputText value="#{data.gotValue}" style="#{progressValidationFlowEditBean.gotStyle}"
+										styleClass="editbox_form2" maxlength="12"
+										converter="floatConverter" validator="#{validator.isFloat92}"
+										onkeypress="return decimalonly(this, event)"
+										onkeyup="checkdecimal(this)"
+										rendered="#{progressValidationFlowEditBean.entityCoreEditId == data.id}" /></td>
+								</tr>
+								<tr>
+									<td><t:outputText value="#{msg.closureValue}:" /></td>
+									<td><b><t:outputText value="#{data.closureValue}"
+										converter="floatConverter"
+										rendered="#{progressValidationFlowEditBean.entityCoreEditId != data.id}" /></b>
+									<t:inputText value="#{data.closureValue}"
+										styleClass="editbox_form2" maxlength="12"
+										onkeypress="return decimalonly(this, event)"
+										onkeyup="checkdecimal(this)" converter="floatConverter"
+										validator="#{validator.isFloat92}"
+										rendered="#{progressValidationFlowEditBean.entityCoreEditId == data.id}" /></td>
+								</tr>
+								<tr>
+									<td><t:outputText value="#{msg.programmedValueUpdate}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td><b><t:outputText
+										value="#{data.programmedValueUpdate}"
+										converter="floatConverter"
+										rendered="#{progressValidationFlowEditBean.entityCoreEditId != data.id}" /></b>
+									<t:inputText value="#{data.programmedValueUpdate}" 
+										style="#{progressValidationFlowEditBean.programmedUpdateStyle}"
+										styleClass="editbox_form2" maxlength="12"
+										onkeypress="return decimalonly(this, event)"
+										onkeyup="checkdecimal(this)" converter="floatConverter"
+										validator="#{validator.isFloat92}"
+										rendered="#{progressValidationFlowEditBean.entityCoreEditId == data.id}" /></td>
+								</tr>
+							</table>
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{empty progressValidationFlowEditBean.listCoreIndicators}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+					</t:dataTable></div>
+				</t:panelTab>
+				<t:panelTab id="tab4" label="#{msg.employmentIndicators}">
+					<div class="table_container"><t:dataTable width="100%"
+						style="margin:0 auto;" id="employmentTable" var="data"
+						value="#{progressValidationFlowEditBean.listEmploymentIndicators}"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g">
+						<f:facet name="header">
+							<h:outputText style="text-align: center"
+								value="#{msg.employmentIndicators}" />
+						</f:facet>
+						<t:column id="edit" styleClass="ActionColumn"
+							rendered="#{!empty progressValidationFlowEditBean.listEmploymentIndicators and !Session.isAguRead and progressValidationFlowEditBean.canEditPhysical and progressValidationFlowEditBean.editMode}">
+							<a4j:commandLink ajaxSingle="true" id="editlink"
+								rendered="#{progressValidationFlowEditBean.entityEmpEditId != data.id}"
+								title="#{msg.edit}" action="#{progressValidationFlowEditBean.editEmp}">
+								<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{data.id}"
+									target="#{progressValidationFlowEditBean.entityEmpEditId}" />
+							</a4j:commandLink>
+							<a4j:commandLink id="savelink"
+								rendered="#{progressValidationFlowEditBean.entityEmpEditId == data.id}"
+								title="#{msg.save}" immediate="false"
+								action="#{progressValidationFlowEditBean.saveEmp}">
+								<h:graphicImage alt="#{msg.save}"
+									value="/images/SaveAllFiles.png" style="border:0" />
+							</a4j:commandLink>
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty progressValidationFlowEditBean.listEmploymentIndicators}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.description}" />
+							</f:facet>
+							<t:outputText value="#{data.indicator.description}" />
+						</t:column>
+						<t:column styleClass="NumberColumn"
+							rendered="#{!empty progressValidationFlowEditBean.listEmploymentIndicators}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.measurementUnits}" />
+							</f:facet>
+							<t:outputText value="#{data.indicator.measurementUnits}" />
+						</t:column>
+						<t:column styleClass="StrignColumn" style="width:300px;"
+							rendered="#{!empty progressValidationFlowEditBean.listCoreIndicators}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.additionalValues}" />
+							</f:facet>
+							<table class="forms" border="0" cellpadding="1" cellspacing="1">
+								<tr>
+									<td><t:outputText value="#{msg.programmedValue}:" /></td>
+									<td><b><t:outputText value="#{data.programmedValues}" converter="floatConverter"/></b></td>
+								</tr>
+								<tr>
+									<td><t:outputText value="#{msg.engageValue}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td><b><t:outputText value="#{data.engageValue}"
+										converter="floatConverter"
+										rendered="#{progressValidationFlowEditBean.entityEmpEditId != data.id}" /></b>
+									<t:inputText value="#{data.engageValue}" style="#{progressValidationFlowEditBean.engageStyle}"
+										styleClass="editbox_form2" maxlength="12"
+										converter="floatConverter" validator="#{validator.isFloat92}"
+										onkeypress="return decimalonly(this, event)"
+										onkeyup="checkdecimal(this)"
+										rendered="#{progressValidationFlowEditBean.entityEmpEditId == data.id}" /></td>
+								</tr>
+								<tr>
+									<td><t:outputText value="#{msg.gotValue}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td><b><t:outputText value="#{data.gotValue}"
+										converter="floatConverter"
+										rendered="#{progressValidationFlowEditBean.entityEmpEditId != data.id}" /></b>
+									<t:inputText value="#{data.gotValue}"
+										styleClass="editbox_form2" maxlength="12" style="#{progressValidationFlowEditBean.gotStyle}"
+										converter="floatConverter" validator="#{validator.isFloat92}"
+										onkeypress="return decimalonly(this, event)"
+										onkeyup="checkdecimal(this)"
+										rendered="#{progressValidationFlowEditBean.entityEmpEditId == data.id}" /></td>
+								</tr>
+								<tr>
+									<td><t:outputText value="#{msg.closureValue}:" /></td>
+									<td><b><t:outputText value="#{data.closureValue}"
+										converter="floatConverter"
+										rendered="#{progressValidationFlowEditBean.entityEmpEditId != data.id}" /></b>
+									<t:inputText value="#{data.closureValue}"
+										styleClass="editbox_form2" maxlength="12"
+										onkeypress="return decimalonly(this, event)" ajaxSingle="true"
+										onkeyup="checkdecimal(this)" converter="floatConverter"
+										validator="#{validator.isFloat92}"
+										rendered="#{progressValidationFlowEditBean.entityEmpEditId == data.id}" /></td>
+								</tr>
+								<tr>
+									<td><t:outputText value="#{msg.programmedValueUpdate}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td><b><t:outputText
+										value="#{data.programmedValueUpdate}"
+										converter="floatConverter"
+										rendered="#{progressValidationFlowEditBean.entityEmpEditId != data.id}" /></b>
+									<t:inputText value="#{data.programmedValueUpdate}"
+										styleClass="editbox_form2" maxlength="12"
+										onkeypress="return decimalonly(this, event)" style="#{progressValidationFlowEditBean.programmedUpdateStyle}"
+										onkeyup="checkdecimal(this)" converter="floatConverter"
+										validator="#{validator.isFloat92}"
+										rendered="#{progressValidationFlowEditBean.entityEmpEditId == data.id}" /></td>
+								</tr>
+							</table>
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{empty progressValidationFlowEditBean.listEmploymentIndicators}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+					</t:dataTable></div>
+				</t:panelTab>
+				<t:panelTab id="tab3" label="#{msg.resultIndicators}">
+					<div class="table_container"><t:dataTable width="100%"
+						style="margin:0 auto;" id="resultTable" var="data"
+						value="#{progressValidationFlowEditBean.listResults}"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g">
+						<f:facet name="header">
+							<h:outputText style="text-align: center"
+								value="#{msg.resultIndicators}" />
+						</f:facet>
+						<t:column styleClass="CodeColumn"
+							rendered="#{!empty progressValidationFlowEditBean.listResults}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.asse}" />
+							</f:facet>
+							<t:outputText value="#{data.programIndicator.asse}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty progressValidationFlowEditBean.listResults}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.specificGoal}" />
+							</f:facet>
+							<t:outputText value="#{data.programIndicator.specificObjective}" />
+						</t:column>
+						<t:column styleClass="StringColumn" 
+							rendered="#{!empty progressValidationFlowEditBean.listResults}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.description}" />
+							</f:facet>
+							<h:outputText value="#{data.programIndicator.description}" />
+						</t:column>
+						<t:column 
+							rendered="#{!empty progressValidationFlowEditBean.listResults}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.measurementUnits}" />
+							</f:facet>
+							<h:outputText value="#{data.programIndicator.units}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{empty progressValidationFlowEditBean.listResults}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+					</t:dataTable></div>
+				</t:panelTab>
+				<t:panelTab id="tab5" label="#{msg.implementationIndicators}">
+					<div class="table_container"><t:dataTable width="100%"
+						style="margin:0 auto;" id="implementationTable" var="data"
+						value="#{progressValidationFlowEditBean.listRealization}" rowIndexVar="row"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g">
+						<f:facet name="header">
+							<h:outputText style="text-align: center"
+								value="#{msg.implementationIndicators}" />
+						</f:facet>
+						<t:column id="edit" styleClass="ActionColumn"
+							rendered="#{!empty progressValidationFlowEditBean.listRealization and !Session.isAguRead and progressValidationFlowEditBean.canEditPhysical and progressValidationFlowEditBean.editMode}">
+							<a4j:commandLink ajaxSingle="true" id="editlink"
+								title="#{msg.edit}"
+								rendered="#{progressValidationFlowEditBean.entityRealEditId != data.id}"
+								action="#{progressValidationFlowEditBean.editReal}">
+								<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{data.id}"
+									target="#{progressValidationFlowEditBean.entityRealEditId}" />
+							</a4j:commandLink>
+							<a4j:commandLink id="savelink"
+								rendered="#{progressValidationFlowEditBean.entityRealEditId == data.id}"
+								title="#{msg.save}" immediate="false"
+								action="#{progressValidationFlowEditBean.saveReal}">
+								<h:graphicImage alt="#{msg.save}"
+									value="/images/SaveAllFiles.png" style="border:0" />
+							</a4j:commandLink>
+						</t:column>
+						<t:column styleClass="NumberColumn"
+							rendered="#{!empty progressValidationFlowEditBean.listRealization}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.asse}" />
+							</f:facet>
+							<t:outputText value="#{data.programIndicator.asse}" />
+						</t:column>
+						<t:column styleClass="StringColumn" 
+							rendered="#{!empty progressValidationFlowEditBean.listRealization}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.specificGoal}" />
+							</f:facet>
+							<t:outputText value="#{data.programIndicator.specificObjective}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty progressValidationFlowEditBean.listRealization}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.description}" />
+							</f:facet>
+							<t:outputText value="#{data.programIndicator.description}" />
+						</t:column>
+						<t:column 
+							rendered="#{!empty progressValidationFlowEditBean.listRealization}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.measurementUnits}" />
+							</f:facet>
+							<h:outputText value="#{data.programIndicator.units}" />
+						</t:column>
+						<t:column 
+							rendered="#{!empty progressValidationFlowEditBean.listRealization}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.target}" />
+							</f:facet>
+							<h:outputText value="#{data.programIndicator.target}" />
+						</t:column>
+						<t:column 
+							rendered="#{!empty progressValidationFlowEditBean.listRealization}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.baseLine}" />
+							</f:facet>
+							<h:outputText value="#{data.programIndicator.baseLine}" />
+						</t:column>
+						<t:column styleClass="StrignColumn" style="width:300px;"
+							rendered="#{!empty progressValidationFlowEditBean.listCoreIndicators}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.additionalValues}" />
+							</f:facet>
+							<table class="forms" border="0" cellpadding="1" cellspacing="1">
+								<tr>
+									<td><t:outputText value="#{msg.programmedValue}:" /></td>
+									<td><b><t:outputText value="#{data.programmedValues}" converter="floatConverter"/></b></td>
+								</tr>
+								<tr>
+									<td><t:outputText value="#{msg.engageValue}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td><b><t:outputText value="#{data.engageValue}"
+										converter="floatConverter"
+										rendered="#{progressValidationFlowEditBean.entityRealEditId != data.id}" /></b>
+									<t:inputText value="#{data.engageValue}" style="#{progressValidationFlowEditBean.engageStyle}"
+										styleClass="editbox_form2" maxlength="12"
+										converter="floatConverter" validator="#{validator.isFloat92}"
+										id="ttt" onkeypress="return decimalonly(this, event)"
+										onkeyup="checkdecimal(this)"
+										rendered="#{progressValidationFlowEditBean.entityRealEditId == data.id}" /></td>
+								</tr>
+								<tr>
+									<td><t:outputText value="#{msg.gotValue}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td><b><t:outputText value="#{data.gotValue}"
+										converter="floatConverter"
+										rendered="#{progressValidationFlowEditBean.entityRealEditId != data.id}" /></b>
+									<t:inputText value="#{data.gotValue}" style="#{progressValidationFlowEditBean.gotStyle}"
+										styleClass="editbox_form2" maxlength="12"
+										converter="floatConverter" validator="#{validator.isFloat92}"
+										onkeypress="return decimalonly(this, event)"
+										onkeyup="checkdecimal(this)"
+										rendered="#{progressValidationFlowEditBean.entityRealEditId == data.id}" /></td>
+								</tr>
+								<tr>
+									<td><t:outputText value="#{msg.closureValue}:" /></td>
+									<td><b><t:outputText value="#{data.closureValue}"
+										converter="floatConverter"
+										rendered="#{progressValidationFlowEditBean.entityRealEditId != data.id}" /></b>
+									<t:inputText value="#{data.closureValue}"
+										styleClass="editbox_form2" maxlength="12"
+										onkeypress="return decimalonly(this, event)"
+										onkeyup="checkdecimal(this)" converter="floatConverter"
+										validator="#{validator.isFloat92}"
+										rendered="#{progressValidationFlowEditBean.entityRealEditId == data.id}" /></td>
+								</tr>
+								<tr>
+									<td><t:outputText value="#{msg.programmedValueUpdate}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td><b><t:outputText
+										value="#{data.programmedValueUpdate}"
+										converter="floatConverter"
+										rendered="#{progressValidationFlowEditBean.entityRealEditId != data.id}" /></b>
+									<t:inputText value="#{data.programmedValueUpdate}" style="#{progressValidationFlowEditBean.programmedUpdateStyle}"
+										styleClass="editbox_form2" maxlength="12"
+										onkeypress="return decimalonly(this, event)"
+										onkeyup="checkdecimal(this)" converter="floatConverter"
+										validator="#{validator.isFloat92}"
+										rendered="#{progressValidationFlowEditBean.entityRealEditId == data.id}" /></td>
+								</tr>
+							</table>
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{empty progressValidationFlowEditBean.listRealization}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+					</t:dataTable></div>
+				</t:panelTab>
+				<table width="100%">
+					<tr>
+						<td align="center"><t:outputText
+							value="#{progressValidationFlowEditBean.errorMessage}"
+							styleClass="RequiredFieldMarker" /></td>
+					</tr>
+				</table>
+			</t:panelTabbedPane>
+				
+				</t:panelTab>				
+				
+				<!-- Procedure progress items -->
+				<t:panelTab id="tabSet3" label="#{msg.progressValidationFlowEditTab3}">
+				
+				<div class="table_container">
+					<t:dataTable
+					style="margin:0 auto; width: 80%;"
+					rows="#{progressValidationFlowEditBean.itemsPerPageProcs}" id="table_procs"
+					var="procedureProgress" value="#{progressValidationFlowEditBean.listProcedures}"
+					styleClass="form_table" rowClasses="row_table_n,row_table_g">
+				<f:facet name="header">
+					<t:column>
+						<h:outputText value="#{msg.procedureProgressListTableName}" />
+						<h:selectOneMenu id="itemPPProcs" styleClass="headerPanelSelect"
+							rendered="#{!empty progressValidationFlowEditBean.listProcedures}"
+							value="#{progressValidationFlowEditBean.itemsPerPageProcs}">
+							<f:selectItems
+								value="#{progressValidationFlowEditBean.itemsPerPageList}" />
+							<a4j:support event="onchange" reRender="pagePanel" />
+						</h:selectOneMenu>
+					</t:column>
+				</f:facet>
+
+				<!-- Info columns -->
+				
+				<t:column id="edit" styleClass="ActionColumn" 
+						 rendered="#{!empty progressValidationFlowEditBean.listProcedures and !Session.isAguRead and progressValidationFlowEditBean.canEditPhysical and progressValidationFlowEditBean.editMode}" 
+						headerstyleClass="ActionColumn">
+						<a4j:commandLink ajaxSingle="true" id="editlink"
+							title="#{msg.edit}" action="#{progressValidationFlowEditBean.editEntityProcedureProgress}">
+							<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{procedureProgress.id}"
+								target="#{progressValidationFlowEditBean.editProcedure}" />
+						</a4j:commandLink>
+						</t:column>	
+
+				<t:column styleClass="NumberColumn"
+					rendered="#{!empty progressValidationFlowEditBean.listProcedures}">
+					<f:facet name="header">
+						<h:outputText value="#{msg.procedureProgressColumnStep}" />
+					</f:facet>
+					<t:outputText value="#{procedureProgress.step}" />
+				</t:column>
+
+				<t:column styleClass="StringColumn"
+					rendered="#{!empty progressValidationFlowEditBean.listProcedures}">
+					<f:facet name="header">
+						<h:outputText value="#{msg.procedureProgressColumnDescription}" />
+					</f:facet>
+					<t:outputText value="#{procedureProgress.description}" />
+				</t:column>
+
+				<t:column styleClass="StringColumn"
+					rendered="#{!empty progressValidationFlowEditBean.listProcedures}">
+					<f:facet name="header">
+						<h:outputText
+							value="#{msg.procedureProgressColumnPartnerResponsible}" />
+					</f:facet>
+					<t:outputText value="#{procedureProgress.partnerResponsible}" />
+				</t:column>
+
+				<t:column styleClass="StringColumn"
+					rendered="#{!empty progressValidationFlowEditBean.listProcedures}">
+					<f:facet name="header">
+						<h:outputText
+							value="#{msg.procedureProgressColumnExpectedStartDate}" />
+					</f:facet>
+					<t:outputText converter="dateTimeConverter"
+						value="#{procedureProgress.expectedStartDate}" />
+				</t:column>
+				
+				<t:column styleClass="StringColumn"
+					rendered="#{!empty progressValidationFlowEditBean.listProcedures}">
+					<f:facet name="header">
+						<h:outputText
+							value="#{msg.procedureProgressColumnEffectiveStartDate}" />
+					</f:facet>
+					<t:outputText converter="dateTimeConverter"
+						value="#{procedureProgress.effectiveStartDate}" />
+				</t:column>
+
+				<t:column styleClass="StringColumn"
+					rendered="#{!empty progressValidationFlowEditBean.listProcedures}">
+					<f:facet name="header">
+						<h:outputText value="#{msg.procedureProgressColumnExpectedEndDate}" />
+					</f:facet>
+					<t:outputText converter="dateTimeConverter"
+						value="#{procedureProgress.plannedEndDate}" />
+				</t:column>
+				
+				<t:column styleClass="StringColumn"
+					rendered="#{!empty progressValidationFlowEditBean.listProcedures}">
+					<f:facet name="header">
+						<h:outputText value="#{msg.procedureProgressColumnEffectiveEndDate}" />
+					</f:facet>
+					<t:outputText converter="dateTimeConverter"
+						value="#{procedureProgress.effectiveEndDate}" />
+				</t:column>
+
+				<t:column styleClass="StringColumn"
+					rendered="#{empty progressValidationFlowEditBean.listProcedures}">
+					<f:facet name="header">
+						<h:outputText value="#{msg.noData}" />
+					</f:facet>
+				</t:column>
+				</t:dataTable>
+				</div>
+				
+				<a4j:outputPanel styleClass="scrollerPanelProcs">
+				<t:dataScroller id="scroll" styleClass="scroller" for="table_procs"
+					rendered="#{progressValidationFlowEditBean.showScrollProcs}" 
+					paginator="true"
+					paginatorMaxPages="5" fastStep="5" paginatorColumnClass="page"
+					paginatorActiveColumnClass="page_active" immediate="true">
+					<f:facet name="first">
+						<t:graphicImage alt="#{msg.first}" url="../images/back_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="last">
+						<t:graphicImage alt="#{msg.last}" url="../images/forward_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="previous">
+						<t:graphicImage alt="#{msg.previous}" url="../images/back.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="next">
+						<t:graphicImage alt="#{msg.next}" url="../images/forward.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="fastforward">
+						<t:graphicImage alt="#{msg.fastforward}"
+							url="../images/all_forward.gif" border="1" />
+					</f:facet>
+					<f:facet name="fastrewind">
+						<t:graphicImage alt="#{msg.fastrewind}"
+							url="../images/all_back.gif" border="1" />
+					</f:facet>
+				</t:dataScroller>
+				</a4j:outputPanel>
+				
+				</t:panelTab>
+				
+				<t:panelTab id="tabDocuments" label="#{msg.progressValidationFlowEditTab4}" >
+				
+					<div class="table_container">
+					<t:dataTable width="80%"
+						style="margin:0 auto;" id="table" var="data" rowIndexVar="row"
+						value="#{progressValidationFlowEditBean.listDocuments}" styleClass="form_table"
+						rowClasses="row_table_n,row_table_g">
+						<f:facet name="header">
+							<t:column>
+									<a4j:commandLink styleClass="headerPanelLink"
+										rendered="#{progressValidationFlowEditBean.editMode}"
+										oncomplete="#{rich:component('documentPanel')}.show()">#{msg.uploadFile}
+									</a4j:commandLink>
+								
+								<h:outputText style="text-align: center"
+									value="#{msg.documents}" />
+							</t:column>
+						</f:facet>
+						<t:column id="download" styleClass="ActionColumn"
+							rendered="#{!empty progressValidationFlowEditBean.listDocuments}">
+							<a4j:htmlCommandLink id="downloadLink" title="#{msg.download}"
+								ajaxSingle="true" immediate="true"
+								action="#{progressValidationFlowEditBean.downloadDocFromList}">
+								<h:graphicImage alt="#{msg.download}"
+									value="/images/file-down.png" style="border:0" />
+								<f:setPropertyActionListener value="#{row}"
+									target="#{progressValidationFlowEditBean.entityDownloadId}" />
+							</a4j:htmlCommandLink>
+						</t:column>
+						
+						<t:column id="delete" styleClass="ActionColumn"
+							rendered="#{!empty progressValidationFlowEditBean.listDocuments and progressValidationFlowEditBean.editMode}">
+							<a4j:commandLink id="deletelink" title="#{msg.delete}"
+								ajaxSingle="true"
+								action="#{progressValidationFlowEditBean.deleteDocFromList}">
+								<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{row}"
+									target="#{progressValidationFlowEditBean.entityDeleteId}" />
+							</a4j:commandLink>
+						</t:column>
+						
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty progressValidationFlowEditBean.listDocuments}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.documentTitle}" />
+							</f:facet>
+							<t:outputText value="#{data.document.title}" converter="longNameConverter"/>
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty progressValidationFlowEditBean.listDocuments}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.protocolNumber}" />
+							</f:facet>
+							<t:outputText value="#{data.document.protocolNumber}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty progressValidationFlowEditBean.listDocuments}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.documentDate}" />
+							</f:facet>
+							<t:outputText value="#{data.document.documentDate}"
+								converter="dateTimeConverter" />
+						</t:column>
+
+						<t:column styleClass="StringColumn"
+							rendered="#{empty progressValidationFlowEditBean.listDocuments}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+					</t:dataTable></div>
+				
+				</t:panelTab>
+				
+			</t:panelTabbedPane>
+			
+			<div class="btn_line">
+				<table>
+					<tr style="display: #{progressValidationFlowEditBean.monitoringDateRowVisibility}">
+						<td class="LabelCell">
+						<t:div enabledOnUserRole="ROLE_AGU_W" rendered="#{(progressValidationFlowEditBean.editMode and progressValidationFlowEditBean.canFillMonitoringDate)}">
+							<t:outputText value="#{msg.progressValidationFlowApprovalDate}:" />
+							<span class="RequiredFieldMarker">*</span></t:div>		
+						</td>
+						<td class="ControlCell">
+							<t:div enabledOnUserRole="ROLE_AGU_W" rendered="#{(progressValidationFlowEditBean.editMode and progressValidationFlowEditBean.canFillMonitoringDate)}">
+								<rich:calendar locale="#{LocalizeBean.currentLocaleValue}" id="compilationDate"
+									required="true" inputClass="editbox_form2"										
+									converter="dateTimeConverter"
+									value="#{progressValidationFlowEditBean.progressValidationObject.approvalDate}"
+									datePattern="dd/MM/yyyy">
+								</rich:calendar>
+							</t:div>			
+							<t:outputText 
+									value="#{progressValidationFlowEditBean.progressValidationObject.approvalDate}" 
+									rendered="#{!(progressValidationFlowEditBean.editMode and progressValidationFlowEditBean.canFillMonitoringDate)}" 
+									converter="dateTimeConverter">
+								</t:outputText>												
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" class="btn_line">
+							<a4j:commandButton immediate="false"
+								action="#{progressValidationFlowEditBean.Page_Save}"
+								reRender="pagePanel"
+								rendered="#{progressValidationFlowEditBean.editMode}"
+								styleClass="button2" value="#{msg.save}" id="save" />
+						
+							<a4j:commandButton value="#{msg.cancel}"
+								styleClass="button2" immediate="true"
+								action="#{progressValidationFlowEditBean.GoBack}" />
+						</td>
+					</tr>
+				</table>
+				</div>
+			
+	</a4j:outputPanel>
+	</ui:define>
+	
+	<ui:define name="document_body">
+	
+		<rich:modalPanel id="documentPanel" autosized="true" width="300">
+			<f:facet name="header">
+				<h:outputText value="#{msg.document}" style="padding-right:15px;" />
+			</f:facet>
+
+			<table>
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.date}:" /></td>
+					<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+						inputClass="editbox_form2" converter="dateTimeConverter"
+						value="#{progressValidationFlowEditBean.newDocument.document.documentDate}"
+						datePattern="dd/MM/yyyy">
+					</rich:calendar></td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentDescription}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							style="width:216px;" maxlength="50"
+							value="#{progressValidationFlowEditBean.newDocument.document.description}" /></td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+						value="#{msg.protocolNumber}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+						maxlength="50" style="width:216px;"
+						value="#{progressValidationFlowEditBean.newDocument.document.protocolNumber}" /></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+						value="#{msg.documentPublic}:" /></td>
+					<td class="ControlCell"><t:selectBooleanCheckbox
+						value="#{progressValidationFlowEditBean.newDocument.document.isPublic}">
+					</t:selectBooleanCheckbox></td>
+				</tr>
+				<tr style="display:#{Session.AGU ?'':'none'}">
+					<td class="LabelCell"><t:outputText
+						value="#{msg.documentUploadRole}:" /></td>
+					<td class="ControlCell"><t:selectOneMenu
+						onmousedown="collapse(this);" onchange="expand(this);"
+						onblur="expand(this);"
+						value="#{progressValidationFlowEditBean.role}" required="false"
+						styleClass="DropDown">
+						<f:selectItems
+							value="#{progressValidationFlowEditBean.listSelectRoles}" />
+					</t:selectOneMenu></td>
+				</tr>
+				<tr class="tempDisplay">
+					<td class="LabelCell"><t:outputText
+						value="#{msg.documentCategory}:" /></td>
+					<td class="ControlCell"><t:selectOneMenu
+						onmousedown="collapse(this);" onchange="expand(this);"
+						onblur="expand(this);"
+						value="#{progressValidationFlowEditBean.selectedCategory}" 
+						required="false"
+						styleClass="DropDown">
+						<f:selectItems
+							value="#{progressValidationFlowEditBean.categories}" />
+					</t:selectOneMenu></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.uploadFile}:" /></td>
+					<td class="ControlCell"><t:inputFileUpload id="fileupload3"
+						value="#{progressValidationFlowEditBean.newDocumentUpFile}" storage="file"
+						styleClass="fileUploadInput" maxlength="200000" /></td>
+				</tr>
+				<tr>
+					<td align="center" colspan="2">#{msg.fileSize}</td>
+				</tr>
+				<tr>
+					<td colspan="2" style="text-align: center;">
+						<h:commandButton
+						value="#{msg.uploadFile}" styleClass="button3"
+						action="#{progressValidationFlowEditBean.addNewDocument}"
+						reRender="pagePanel"
+						onclick="#{rich:component('documentPanel')}.hide();" />
+						<a4j:commandButton
+						value="#{msg.cancel}" styleClass="button" immediate="false"
+						onclick="#{rich:component('documentPanel')}.hide();return false;" />
+					</td>
+				</tr>
+			</table>
+		</rich:modalPanel>
+	
+	</ui:define>
+		
+</ui:composition>
+

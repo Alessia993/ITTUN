@@ -1,0 +1,631 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/EditTabBase.xhtml">
+	<ui:param name="heading" value="#{msg.potentialProjectsList}" />
+	<ui:define name="edit_body">
+		<a4j:outputPanel ajaxRendered="true" id="FormPanel"
+			selectedIndex="#{potentialProjectEditBean.selectedTab}">
+			<t:panelTabbedPane serverSideTabSwitch="false" id="editTabs">
+				<t:panelTab id="tab1" label="#{msg.potentialProjectsEditTab1}">
+					<table width="50%" class="forms" border="0" cellpadding="1"
+						cellspacing="1">
+						<!--  new acagnoni 2019/03/18 -->
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsCallSerialNumber}:" /></td>
+							<td class="ControlCell"><h:inputText maxlength="200"
+									styleClass="editbox_form" id="callSerialNumber"
+									value="#{potentialProjectEditBean.callSerialNumber}"
+									rendered="#{!potentialProjectEditBean.view}" /> <b><t:outputText
+										value="#{potentialProjectEditBean.callSerialNumber}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+						<!--  new acagnoni 2019/03/18 -->
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsUnivocalIdentification}:" /></td>
+							<td class="ControlCell"><h:inputText maxlength="200"
+									styleClass="editbox_form" id="univocalIdentification"
+									value="#{potentialProjectEditBean.univocalIdentification}"
+									rendered="#{!potentialProjectEditBean.view}" /> <b><t:outputText
+										value="#{potentialProjectEditBean.univocalIdentification}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsProjectAcronym}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><h:inputText maxlength="200"
+									styleClass="editbox_form" id="projectAcronym"
+									value="#{potentialProjectEditBean.projectAcronym}"
+									rendered="#{!potentialProjectEditBean.view}" /> <b><t:outputText
+										value="#{potentialProjectEditBean.projectAcronym}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+						
+						<!--  new acagnoni 2019/03/18 -->
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsProjectNameEnglish}:" /></td>
+							<td class="ControlCell"><h:inputText maxlength="200"
+									styleClass="editbox_form" id="projectNameEnglish"
+									value="#{potentialProjectEditBean.projectNameEnglish}"
+									rendered="#{!potentialProjectEditBean.view}" /> <b><t:outputText
+										value="#{potentialProjectEditBean.projectNameEnglish}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsProjectTitle}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><h:inputText maxlength="200"
+									styleClass="editbox_form" id="projectTitle"
+									value="#{potentialProjectEditBean.projectTitle}"
+									rendered="#{!potentialProjectEditBean.view}" /> <b><t:outputText
+										value="#{potentialProjectEditBean.projectTitle}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+						<tr>
+
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsDate}" /></td>
+							<td style="width: 25%;"><rich:calendar
+									locale="#{LocalizeBean.currentLocaleValue}"
+									id="presentationDate" inputClass="editbox_form2"
+									converter="dateTimeConverter"
+									value="#{potentialProjectEditBean.presentationDate}"
+									datePattern="dd/MM/yyyy"
+									rendered="#{!potentialProjectEditBean.view}">
+								</rich:calendar><b> <t:outputText
+										rendered="#{potentialProjectEditBean.view}"
+										value="#{potentialProjectEditBean.presentationDate}"
+										converter="dateTimeConverter" />
+							</b></td>
+						</tr>
+						
+						<!--  new acagnoni 2019/03/18 -->
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsUnivocalIdLeadPartners}:" /></td>
+							<td class="ControlCell"><h:inputText maxlength="200"
+									styleClass="editbox_form" id="univocalIdLeadPartners"
+									value="#{potentialProjectEditBean.univocalIdLeadPartners}"
+									rendered="#{!potentialProjectEditBean.view}" /> <b><t:outputText
+										value="#{potentialProjectEditBean.univocalIdLeadPartners}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+						
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsLeadNameOrganization}:" /></td>
+							<td class="ControlCell"><h:inputText maxlength="200"
+									styleClass="editbox_form" id="leadNameOrganization"
+									value="#{potentialProjectEditBean.leadNameOrganization}"
+									rendered="#{!potentialProjectEditBean.view}" /> <b><t:outputText
+										value="#{potentialProjectEditBean.leadNameOrganization}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+
+						<!--  new acagnoni 2019/03/18 -->
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsOrganizationNameEnglish}:" /></td>
+							<td class="ControlCell"><h:inputText maxlength="200"
+									styleClass="editbox_form" id="organizationNameEnglish"
+									value="#{potentialProjectEditBean.organizationNameEnglish}"
+									rendered="#{!potentialProjectEditBean.view}" /> <b><t:outputText
+										value="#{potentialProjectEditBean.organizationNameEnglish}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsProgramPriority}:" /></td>
+							<td class="ControlCell"><t:selectOneMenu
+									id="programPriority"
+									value="#{potentialProjectEditBean.programPriority}"
+									styleClass="DropDown"
+									rendered="#{!potentialProjectEditBean.view}">
+									<f:selectItems
+										value="#{potentialProjectEditBean.programPriorities}" />
+								</t:selectOneMenu> <b><t:outputText
+										value="#{potentialProjectEditBean.programPriority}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsProgramPriorityInvestment}:" /></td>
+							<td class="ControlCell"><t:selectOneMenu
+									id="programPriorityInvestment"
+									value="#{potentialProjectEditBean.programPriorityInvestment}"
+									styleClass="DropDown"
+									rendered="#{!potentialProjectEditBean.view}">
+									<f:selectItems
+										value="#{potentialProjectEditBean.programPriorityInvestments}" />
+								</t:selectOneMenu> <b><t:outputText
+										value="#{potentialProjectEditBean.programPriorityInvestment}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsSpecificObjective}:" /></td>
+							<td class="ControlCell"><t:selectOneMenu
+									id="specificObjective"
+									value="#{potentialProjectEditBean.specificObjective}"
+									styleClass="DropDown"
+									rendered="#{!potentialProjectEditBean.view}">
+									<f:selectItems
+										value="#{potentialProjectEditBean.specificObjectives}" />
+								</t:selectOneMenu> <b><t:outputText
+										value="#{potentialProjectEditBean.specificObjective}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsLeadPartnerAcronym}:" /></td>
+							<td class="ControlCell"><h:inputText maxlength="200"
+									styleClass="editbox_form" id="leadPartnerAcronym"
+									value="#{potentialProjectEditBean.leadPartnerAcronym}"
+									rendered="#{!potentialProjectEditBean.view}" /> <b><t:outputText
+										value="#{potentialProjectEditBean.leadPartnerAcronym}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsRegisteredOfficeAddress}:" /></td>
+							<td class="ControlCell"><h:inputText maxlength="200"
+									styleClass="editbox_form" id="registeredOfficeAddress"
+									value="#{potentialProjectEditBean.registeredOfficeAddress}"
+									rendered="#{!potentialProjectEditBean.view}" /> <b><t:outputText
+										value="#{potentialProjectEditBean.registeredOfficeAddress}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsDepartment}:" /></td>
+							<td class="ControlCell"><h:inputText maxlength="200"
+									styleClass="editbox_form" id="department"
+									value="#{potentialProjectEditBean.department}"
+									rendered="#{!potentialProjectEditBean.view}" /> <b><t:outputText
+										value="#{potentialProjectEditBean.department}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsHeadOfficeAddress}:" /></td>
+							<td class="ControlCell"><h:inputText maxlength="200"
+									styleClass="editbox_form" id="headOfficeAddress"
+									value="#{potentialProjectEditBean.headOfficeAddress}"
+									rendered="#{!potentialProjectEditBean.view}" /> <b><t:outputText
+										value="#{potentialProjectEditBean.headOfficeAddress}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsProvinceDepartment}:" /></td>
+							<td class="ControlCell"><t:selectOneMenu
+									id="provinceDepartment"
+									value="#{potentialProjectEditBean.provinceDepartment}"
+									styleClass="DropDown"
+									rendered="#{!potentialProjectEditBean.view}">
+									<f:selectItems
+										value="#{potentialProjectEditBean.provinceDepartments}" />
+								</t:selectOneMenu> <b><t:outputText
+										value="#{potentialProjectEditBean.provinceDepartment}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsCountry}:" /></td>
+							<td class="ControlCell"><t:selectOneMenu id="country"
+									value="#{potentialProjectEditBean.country}"
+									styleClass="DropDown"
+									rendered="#{!potentialProjectEditBean.view}">
+									<f:selectItems value="#{potentialProjectEditBean.countries}" />
+								</t:selectOneMenu> <b><t:outputText
+										value="#{potentialProjectEditBean.country}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsOutsideAreaCooperation}:" /></td>
+							<td class="ControlCell"><t:selectOneMenu
+									id="outsideAreaCooperation"
+									value="#{potentialProjectEditBean.outsideAreaCooperation}"
+									styleClass="DropDown"
+									rendered="#{!potentialProjectEditBean.view}">
+									<f:selectItems
+										value="#{potentialProjectEditBean.outsideAreaCooperations}" />
+								</t:selectOneMenu> <b><t:outputText
+										value="#{potentialProjectEditBean.outsideAreaCooperation ? msg.yes : msg.no}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsNameOfRepresentative}:" /></td>
+							<td class="ControlCell"><h:inputText maxlength="200"
+									styleClass="editbox_form" id="nameOfRepresentative"
+									value="#{potentialProjectEditBean.nameOfRepresentative}"
+									rendered="#{!potentialProjectEditBean.view}" /> <b><t:outputText
+										value="#{potentialProjectEditBean.nameOfRepresentative}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+
+						<!--  new acagnoni 2019/03/18 -->
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsContactPersonFirstName}:" /></td>
+							<td class="ControlCell"><h:inputText maxlength="200"
+									styleClass="editbox_form" id="contactPersonFirstName"
+									value="#{potentialProjectEditBean.contactPersonFirstName}"
+									rendered="#{!potentialProjectEditBean.view}" /> <b><t:outputText
+										value="#{potentialProjectEditBean.contactPersonFirstName}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+
+						<!--  new acagnoni 2019/03/18 -->
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsContactPersonLastName}:" /></td>
+							<td class="ControlCell"><h:inputText maxlength="200"
+									styleClass="editbox_form" id="contactPersonLastName"
+									value="#{potentialProjectEditBean.contactPersonLastName}"
+									rendered="#{!potentialProjectEditBean.view}" /> <b><t:outputText
+										value="#{potentialProjectEditBean.contactPersonLastName}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+
+						<!--  new acagnoni 2019/03/18 -->
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsOrganizationURL}:" /></td>
+							<td class="ControlCell"><h:inputText maxlength="200"
+									styleClass="editbox_form" id="organizationURL"
+									value="#{potentialProjectEditBean.organizationURL}"
+									rendered="#{!potentialProjectEditBean.view}" /> <b><t:outputText
+										value="#{potentialProjectEditBean.organizationURL}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+
+						<!--  new acagnoni 2019/03/18 -->
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsOrganizationType}:" /></td>
+							<td class="ControlCell"><t:selectOneMenu
+									id="organizationType"
+									value="#{potentialProjectEditBean.organizationType}"
+									styleClass="DropDown"
+									rendered="#{!potentialProjectEditBean.view}">
+									<f:selectItems
+										value="#{potentialProjectEditBean.organizationTypes}" />
+								</t:selectOneMenu> <b><t:outputText
+										value="#{potentialProjectEditBean.organizationType}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsPhone}:" /></td>
+							<td class="ControlCell"><h:inputText maxlength="200"
+									validator="#{validator.isNumber}" styleClass="editbox_form"
+									id="phone" value="#{potentialProjectEditBean.phone}"
+									rendered="#{!potentialProjectEditBean.view}" /> <b><t:outputText
+										value="#{potentialProjectEditBean.phone}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsFax}:" /></td>
+							<td class="ControlCell"><h:inputText maxlength="200"
+									validator="#{validator.isNumber}" styleClass="editbox_form"
+									id="fax" value="#{potentialProjectEditBean.fax}"
+									rendered="#{!potentialProjectEditBean.view}" /> <b><t:outputText
+										value="#{potentialProjectEditBean.fax}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsEmail}:" /></td>
+							<td class="ControlCell"><h:inputText maxlength="200"
+									styleClass="editbox_form" id="email"
+									value="#{potentialProjectEditBean.email}"
+									rendered="#{!potentialProjectEditBean.view}" /> <b><t:outputText
+										value="#{potentialProjectEditBean.email}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsPartnerType}:" /></td>
+							<td class="ControlCell"><t:selectOneMenu id="partnerType"
+									value="#{potentialProjectEditBean.partnerType}"
+									styleClass="DropDown"
+									rendered="#{!potentialProjectEditBean.view}">
+									<f:selectItems value="#{potentialProjectEditBean.partnerTypes}" />
+								</t:selectOneMenu> <b><t:outputText
+										value="#{potentialProjectEditBean.partnerType}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsTaxCode}:" /></td>
+							<td class="ControlCell"><h:inputText maxlength="200"
+									validator="#{validator.isAlphaNumerical}"
+									styleClass="editbox_form" id="taxCode"
+									value="#{potentialProjectEditBean.taxCode}"
+									rendered="#{!potentialProjectEditBean.view}" /> <b><t:outputText
+										value="#{potentialProjectEditBean.taxCode}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+						
+						<!--  new acagnoni 2019/03/18 -->
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsProposalTotalBudget}:" /></td>
+							<td class="ControlCell"><h:inputText maxlength="200"
+									validator="#{validator.isNumber}" styleClass="editbox_form"
+									id="proposalTotalBudget" value="#{potentialProjectEditBean.proposalTotalBudget}"
+									rendered="#{!potentialProjectEditBean.view}" /> <b><t:outputText
+										value="#{potentialProjectEditBean.proposalTotalBudget}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+						
+						<!--  new acagnoni 2019/03/18 -->
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsTotalEUFundingRequested}:" /></td>
+							<td class="ControlCell"><h:inputText maxlength="200"
+									validator="#{validator.isNumber}" styleClass="editbox_form"
+									id="totalEUFundingRequested" value="#{potentialProjectEditBean.totalEUFundingRequested}"
+									rendered="#{!potentialProjectEditBean.view}" /> <b><t:outputText
+										value="#{potentialProjectEditBean.totalEUFundingRequested}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+						
+						<!--  new acagnoni 2019/03/18 -->
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsDecisionByJMC}:" /></td>
+							<td class="ControlCell"><t:selectOneMenu
+									id="decisionByJMC"
+									value="#{potentialProjectEditBean.decisionJMC}"
+									styleClass="DropDown"
+									rendered="#{!potentialProjectEditBean.view}">
+									<f:selectItems
+										value="#{potentialProjectEditBean.decisionsJmc}" />
+								</t:selectOneMenu> <b><t:outputText
+										value="#{potentialProjectEditBean.decisionJMC}"
+										rendered="#{potentialProjectEditBean.view}" /></b></td>
+						</tr>
+						
+						<!--  new acagnoni 2019/03/18 -->
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsDateDecisionJMC}" /></td>
+							<td style="width: 25%;"><rich:calendar
+									locale="#{LocalizeBean.currentLocaleValue}"
+									id="dateDecisionJMC" inputClass="editbox_form2"
+									converter="dateTimeConverter"
+									value="#{potentialProjectEditBean.dateDecisionJMC}"
+									datePattern="dd/MM/yyyy"
+									rendered="#{!potentialProjectEditBean.view}">
+								</rich:calendar><b> <t:outputText
+										rendered="#{potentialProjectEditBean.view}"
+										value="#{potentialProjectEditBean.dateDecisionJMC}"
+										converter="dateTimeConverter" />
+							</b></td>
+						</tr>
+						
+						<!--  new acagnoni 2019/03/18 -->
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.potentialProjectsDateAppeal}" /></td>
+							<td style="width: 25%;"><rich:calendar
+									locale="#{LocalizeBean.currentLocaleValue}"
+									id="dateAppeal" inputClass="editbox_form2"
+									converter="dateTimeConverter"
+									value="#{potentialProjectEditBean.dateAppeal}"
+									datePattern="dd/MM/yyyy"
+									rendered="#{!potentialProjectEditBean.view}">
+								</rich:calendar><b> <t:outputText
+										rendered="#{potentialProjectEditBean.view}"
+										value="#{potentialProjectEditBean.dateAppeal}"
+										converter="dateTimeConverter" />
+							</b></td>
+						</tr>
+						
+						<ui:fragment rendered="#{Session.STCW}">
+							<tr>
+								<td class="LabelCell"><t:outputText
+										value="#{msg.potentialProjectsStatus}:" /></td>
+								<td class="ControlCell"><t:selectOneMenu id="status"
+										value="#{potentialProjectEditBean.status}"
+										styleClass="DropDown"
+										rendered="#{!potentialProjectEditBean.view}">
+										<f:selectItems value="#{potentialProjectEditBean.statuses}" />
+									</t:selectOneMenu> <b><t:outputText
+											value="#{potentialProjectEditBean.status}"
+											rendered="#{potentialProjectEditBean.view}" /></b></td>
+							</tr>
+						</ui:fragment>
+					</table>
+				</t:panelTab>
+				<t:panelTab id="tab2" label="#{msg.potentialProjectsEditTab2}">
+					<div class="table_container">
+						<t:dataTable width="80%" style="margin:0 auto;" id="table"
+							var="data" rowIndexVar="row"
+							value="#{potentialProjectEditBean.docList}"
+							styleClass="form_table" rowClasses="row_table_n,row_table_g">
+							<f:facet name="header">
+								<t:column rendered="#{!potentialProjectEditBean.view}">
+									<a4j:commandLink styleClass="headerPanelLink"
+										action="#{potentialProjectEditBean.addDoc}"
+										reRender="documentPanel"
+										oncomplete="#{rich:component('documentPanel')}.show()">#{msg.documentListAdd}</a4j:commandLink>
+									<h:outputText style="text-align: center"
+										value="#{msg.documents}" />
+								</t:column>
+							</f:facet>
+							<t:column id="download" styleClass="ActionColumn"
+								rendered="#{!empty potentialProjectEditBean.docList}">
+								<a4j:htmlCommandLink id="downloadLink" title="#{msg.download}"
+									ajaxSingle="true" immediate="true"
+									action="#{potentialProjectEditBean.downloadDocFromList}">
+									<h:graphicImage alt="#{msg.download}"
+										value="/images/file-down.png" style="border:0" />
+									<f:setPropertyActionListener value="#{row}"
+										target="#{potentialProjectEditBean.entityDownloadId}" />
+								</a4j:htmlCommandLink>
+							</t:column>
+							<t:column id="show" styleClass="ActionColumn"
+								rendered="#{!empty potentialProjectEditBean.docList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.view}" />
+								</f:facet>
+								<a4j:commandLink id="showLink" title="#{msg.show}"
+									action="#{potentialProjectEditBean.showDocFromList}"
+									reRender="documentPanel"
+									oncomplete="#{rich:component('documentPanel')}.show()">
+									<h:graphicImage alt="#{msg.edit}" value="/images/ok.png"
+										style="border:0" />
+									<f:setPropertyActionListener value="#{row}"
+										target="#{potentialProjectEditBean.entityEditId}" />
+								</a4j:commandLink>
+							</t:column>
+							<t:column id="edit" styleClass="ActionColumn"
+								rendered="#{!empty potentialProjectEditBean.docList and !potentialProjectEditBean.view}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.edit}" />
+								</f:facet>
+								<a4j:commandLink id="editLink" title="#{msg.edit}"
+									action="#{potentialProjectEditBean.editDocFromList}"
+									reRender="documentPanel"
+									oncomplete="#{rich:component('documentPanel')}.show()">
+									<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+										style="border:0" />
+									<f:setPropertyActionListener value="#{row}"
+										target="#{potentialProjectEditBean.entityEditId}" />
+								</a4j:commandLink>
+							</t:column>
+							<t:column id="delete" styleClass="ActionColumn"
+								rendered="#{!empty potentialProjectEditBean.docList and !potentialProjectEditBean.view}">
+								<a4j:commandLink id="deletelink" title="#{msg.delete}"
+									action="#{potentialProjectEditBean.deleteDocFromList}">
+									<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+										style="border:0" />
+									<f:setPropertyActionListener value="#{row}"
+										target="#{potentialProjectEditBean.entityDeleteId}" />
+								</a4j:commandLink>
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty potentialProjectEditBean.docList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.documentDescriptionShort}" />
+								</f:facet>
+								<t:outputText value="#{data.description}"
+									converter="longNameConverter" />
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty potentialProjectEditBean.docList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.date}" />
+								</f:facet>
+								<t:outputText value="#{data.documentDate}"
+									converter="dateTimeConverter" />
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty potentialProjectEditBean.docList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.documentListDocReleaseFrom}" />
+								</f:facet>
+								<t:outputText
+									value="#{data.user != null ? data.user.fullName : ''}"
+									converter="longNameConverter" />
+							</t:column>
+						</t:dataTable>
+					</div>
+				</t:panelTab>
+			</t:panelTabbedPane>
+			<table width="100%">
+				<tr style="display: #{potentialProjectEditBean.showErrorMessage}">
+					<td colspan="2" style="text-align: center;"><span
+						class="RequiredFieldMarker">#{msg.potentialProjectSaveTimeOut}</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="btn_line" colspan="3"><a4j:commandButton
+							rendered="#{!potentialProjectEditBean.view}" immediate="false"
+							action="#{potentialProjectEditBean.Page_Save}"
+							styleClass="button2" value="#{msg.save}" id="save" /> <a4j:commandButton
+							value="#{msg.cancel}" styleClass="button2" immediate="true"
+							action="#{potentialProjectEditBean.GoBack}" /></td>
+				</tr>
+			</table>
+		</a4j:outputPanel>
+	</ui:define>
+	<ui:define name="document_body">
+		<rich:modalPanel id="documentPanel" autosized="true" width="300">
+			<f:facet name="header">
+				<h:outputText value="#{msg.document}" style="padding-right:15px;" />
+			</f:facet>
+			<table>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentDescriptionShort}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							style="width:216px;" maxlength="50"
+							value="#{potentialProjectEditBean.documentDescription}"
+							rendered="#{!potentialProjectEditBean.showDoc}" /> <b><t:outputText
+								value="#{potentialProjectEditBean.documentDescription}"
+								rendered="#{potentialProjectEditBean.showDoc}" /></b></td>
+				</tr>
+				<ui:fragment
+					rendered="#{potentialProjectEditBean.entityEditId != null}">
+					<tr>
+						<td class="LabelCell"><t:outputText
+								value="#{msg.documentEditFile}:" /></td>
+						<td colspan="2"><a4j:htmlCommandLink id="downloadLinkFromDlg"
+								value="#{potentialProjectEditBean.editDocTitle}"
+								style="text-decoration: underline;"
+								action="#{potentialProjectEditBean.downloadDocFromList}">
+								<f:setPropertyActionListener
+									value="#{potentialProjectEditBean.entityEditId}"
+									target="#{potentialProjectEditBean.entityDownloadId}" />
+							</a4j:htmlCommandLink></td>
+					</tr>
+				</ui:fragment>
+				<ui:fragment rendered="#{!potentialProjectEditBean.showDoc}">
+					<tr>
+						<td class="LabelCell"><t:outputText
+								value="#{msg.uploadFile}:" /></td>
+						<td class="ControlCell"><t:inputFileUpload id="fileupload"
+								value="#{potentialProjectEditBean.newDocumentUpFile}"
+								storage="file" styleClass="fileUploadInput" maxlength="200000"
+								label="qwe1" title="qwe2" /></td>
+					</tr>
+					<tr>
+						<td align="center" colspan="2">#{msg.fileSize}</td>
+					</tr>
+				</ui:fragment>
+				<tr>
+					<td colspan="2" style="text-align: center;"><h:commandButton
+							value="#{potentialProjectEditBean.entityEditId != null ? msg.save : msg.uploadFile}"
+							styleClass="button3"
+							action="#{potentialProjectEditBean.addNewDocument}"
+							reRender="pagePanel"
+							rendered="#{!potentialProjectEditBean.showDoc}"
+							onclick="#{rich:component('documentPanel')}.hide();" /> <a4j:commandButton
+							value="#{msg.cancel}" styleClass="button" immediate="false"
+							onclick="#{rich:component('documentPanel')}.hide();return false;" /></td>
+				</tr>
+			</table>
+		</rich:modalPanel>
+	</ui:define>
+
+</ui:composition>
+</html>

@@ -1,0 +1,1670 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/EditTabBase.xhtml">
+	<ui:param name="headWidth" value="900px" />
+	<ui:param name="heading"
+		value="#{msg.expenditureDeclarationListNameModify}" />
+	<ui:param name="heading_top"
+		value="#{msg.expenditureDeclarationListNameModify}" />
+	<ui:define name="edit_body">
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+			<t:panelTabbedPane serverSideTabSwitch="false"
+				rendered="#{!expenditureDeclarationEditBean.showDetails}">
+
+				<t:panelTab id="tab1" label="#{msg.expenditureDeclarationListName}">
+					<div>
+
+						<a4j:outputPanel ajaxRendered="true" id="FormPanelNonValidate">
+							<table class="forms" border="0" cellpadding="1" cellspacing="1">
+								<tr>
+									<td class="LabelCell" style="width: 25%;"><t:outputText
+											value="#{msg.expenditureDeclarationListNumber}:"
+											rendered="#{expenditureDeclarationEditBean.rendered}" /></td>
+									<td class="ControlCell" style="width: 25%;"><t:inputText
+											maxlength="8" styleClass="editbox_form"
+											id="expenditureDeclarationId"
+											value="#{expenditureDeclarationEditBean.expenditureDeclarationId}"
+											rendered="#{expenditureDeclarationEditBean.rendered}"
+											disabled="true" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell" style="width: 25%;"><t:outputText
+											value="#{msg.expenditureDeclarationEditData}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td><t:inputText maxlength="8" styleClass="editbox_form"
+											id="createFrom"
+											value="#{expenditureDeclarationEditBean.compilationDate}"
+											rendered="true" disabled="true" /></td>
+								</tr>
+
+
+
+
+
+								<tr>
+									<td class="LabelCell" style="width: 25%;"><t:outputText
+											value="#{msg.expenditureDeclarationListProtocolN}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td><t:inputText
+											value="#{expenditureDeclarationEditBean.protocolNumber}"
+											id="protocolNumber" styleClass="editbox_form" maxlength="50"
+											disabled="#{expenditureDeclarationEditBean.edit}"></t:inputText></td>
+								</tr>
+								<tr>
+									<td class="LabelCell" style="width: 25%;"><t:outputText
+											value="#{msg.expenditureDeclarationEditProtocoNData}:" /></td>
+									<td class="ControlCell" style="width: 25%;"><rich:calendar
+											locale="#{LocalizeBean.currentLocaleValue}" id="createFrom2"
+											inputClass="editbox_form2" converter="dateTimeConverter"
+											value="#{expenditureDeclarationEditBean.protocolDate}"
+											datePattern="dd/MM/yyyy"
+											disabled="#{expenditureDeclarationEditBean.edit}">
+										</rich:calendar></td>
+								</tr>
+
+								<tr>
+									<td class="LabelCell" style="width: 25%;"><t:outputText
+											value="#{msg.expenditureDeclarationEditReferencePeriod}:" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell" style="width: 25%;"><t:outputText
+											value="#{msg.expenditureDeclarationEditFrom}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td><rich:calendar
+											locale="#{LocalizeBean.currentLocaleValue}" id="dateFrom"
+											inputClass="editbox_form2" converter="dateTimeConverter"
+											value="#{expenditureDeclarationEditBean.dateFrom}"
+											datePattern="dd/MM/yyyy" disabled="true">
+										</rich:calendar></td>
+								</tr>
+								<tr>
+									<td class="LabelCell" style="width: 25%;"><t:outputText
+											value="#{msg.expenditureDeclarationEditTo}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td><rich:calendar
+											locale="#{LocalizeBean.currentLocaleValue}" id="dateTo"
+											inputClass="editbox_form2" converter="dateTimeConverter"
+											value="#{expenditureDeclarationEditBean.dateTo}"
+											datePattern="dd/MM/yyyy" disabled="true">
+										</rich:calendar></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.expenditureDeclarationEditType}:" /> <span
+										class="RequiredFieldMarker">*</span></td>
+									<td class="ControlCell"><t:selectOneMenu id="type"
+											value="#{expenditureDeclarationEditBean.type}"
+											enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+											styleClass="DropDown"
+											disabled="#{expenditureDeclarationEditBean.edit}">
+											<f:selectItems
+												value="#{expenditureDeclarationEditBean.listType}" var="t"
+												selected="#{type eq t.value}" />
+										</t:selectOneMenu></td>
+								</tr>
+
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.expenditureDeclarationTotAmountEligibleExpenditure}:" /></td>
+									<td class="ControlCell"><h:inputText maxlength="12"
+											rendered="true" converter="floatConverter"
+											styleClass="editbox_form2" id="totAmountEligibleExpenditure"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+											value="#{expenditureDeclarationEditBean.totAmountEligibleExpenditure}"
+											disabled="true" /></td>
+								</tr>
+
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.expenditureDeclarationTotAmountPublicExpenditure}:" /></td>
+									<td class="ControlCell"><h:inputText maxlength="12"
+											rendered="true" converter="floatConverter"
+											styleClass="editbox_form2" id="totAmountPublicExpenditure"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+											value="#{expenditureDeclarationEditBean.totAmountPublicExpenditure}"
+											disabled="true" /></td>
+								</tr>
+								
+								<ui:remove>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.expenditureDeclarationTotAmountPrivateExpenditure}:" /></td>
+									<td class="ControlCell"><h:inputText maxlength="12"
+											rendered="true" converter="floatConverter"
+											styleClass="editbox_form2" id="totAmountPrivateExpenditure"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+											value="#{expenditureDeclarationEditBean.totAmountPrivateExpenditure}"
+											disabled="true" /></td>
+								</tr>
+								</ui:remove>
+
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.expenditureDeclarationTotAmountStateAid}:" /></td>
+									<td class="ControlCell"><h:inputText maxlength="12"
+											rendered="true" converter="floatConverter"
+											styleClass="editbox_form2" id="totAmountStateAid"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+											value="#{expenditureDeclarationEditBean.totAmountStateAid}"
+											disabled="true" /></td>
+								</tr>
+
+								<ui:remove>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.expenditureDeclarationTotAmountCoverageAdvanceAid}:" /></td>
+									<td class="ControlCell"><h:inputText maxlength="12"
+											rendered="true" converter="floatConverter"
+											styleClass="editbox_form2" id="totAmountCoverageAdvanceAid"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+											value="#{expenditureDeclarationEditBean.totAmountCoverageAdvanceAid}"
+											disabled="true" /></td>
+								</tr>
+								</ui:remove>
+
+								<ui:remove>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.expenditureDeclarationTotContributionInKindPubShare}:" /></td>
+									<td class="ControlCell"><h:inputText maxlength="12"
+											rendered="true" converter="floatConverter"
+											styleClass="editbox_form2" id="totContributionInKindPubShare"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+											value="#{expenditureDeclarationEditBean.totContributionInKindPubShare}"
+											disabled="true" /></td>
+								</tr>
+								</ui:remove>
+
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.expenditureDeclarationEditTotal1}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td class="ControlCell"><h:inputText maxlength="12"
+											rendered="true" converter="floatConverter"
+											styleClass="editbox_form2" id="totalExpenditure"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+											value="#{expenditureDeclarationEditBean.totalExpenditure}"
+											validator="#{validator.checkEmpty}" disabled="true" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.expenditureDeclarationEditDetails}:" /></td>
+									<td class="ControlCell"><a4j:commandLink immediate="false"
+											action="#{expenditureDeclarationEditBean.showDetailsFunction}"
+											reRender="pagePanel, pagePanel2"
+											value="#{msg.expenditureDeclarationEditViewAndDownload}"
+											id="details" /></td>
+
+								</tr>
+
+							</table>
+
+						</a4j:outputPanel>
+						<a4j:outputPanel ajaxRendered="false" id="FormPanel">
+
+							<div class="table_container">
+								<t:dataTable style="margin:0 auto; width: 100%;" id="table"
+									var="item" value="#{expenditureDeclarationEditBean.list}"
+									styleClass="form_table"
+									rows="#{expenditureDeclarationEditBean.itemsPerPage}"
+									rowClasses="row_table_n,row_table_g">
+
+									<f:facet name="header">
+										<t:column>
+											<h:outputText value="#{msg.costCertificationTableName}" />
+										</t:column>
+									</f:facet>
+
+
+
+									<f:facet name="footer">
+										<a4j:htmlCommandLink
+											action="#{expenditureDeclarationEditBean.export}"
+											styleClass="footerPanelExport">
+											<h:graphicImage alt="#{msg.exportXls}"
+												value="/images/xls.png" />
+										</a4j:htmlCommandLink>
+									</f:facet>
+
+
+
+
+									<!-- Action columns -->
+
+									<!-- Check box column -->
+
+
+
+
+									<t:column id="select" styleClass="ActionColumn"
+										rendered="#{!empty expenditureDeclarationEditBean.list}">
+										<f:facet name="header">
+											<t:selectBooleanCheckbox immediate="true" disabled="false"
+												value="#{expenditureDeclarationEditBean.selectAll}"
+												rendered="#{not expenditureDeclarationEditBean.showButton}">
+												<a4j:support event="onclick" id="selectAll"
+													reRender="FormPanel,FormPanelValidate"
+													action="#{expenditureDeclarationEditBean.selectAll}"
+													rendered="#{not expenditureDeclarationEditBean.showButton}" />
+											</t:selectBooleanCheckbox>
+										</f:facet>
+										<t:selectBooleanCheckbox value="#{item.selected}"
+											immediate="true" disabled="#{!item.canCreatePaymentRequest}"
+											rendered="#{not expenditureDeclarationEditBean.showButton}">
+											<a4j:support event="onclick" id="selectItem"
+												reRender="FormPanel,FormPanelValidate"
+												action="#{expenditureDeclarationEditBean.selectItem}" />
+										</t:selectBooleanCheckbox>
+									</t:column>
+
+									<t:column id="show"
+										rendered="#{!empty expenditureDeclarationEditBean.list}"
+										styleClass="ActionColumn" headerstyleClass="ActionColumn">
+										<a4j:commandLink ajaxSingle="true" id="showlink"
+											title="#{msg.show}"
+											action="#{expenditureDeclarationEditBean.showItem}">
+											<h:graphicImage alt="#{msg.show}" value="/images/ok.png"
+												style="border:0" />
+											<f:setPropertyActionListener value="#{item.id}"
+												target="#{expenditureDeclarationEditBean.entityEditId}" />
+										</a4j:commandLink>
+									</t:column>
+
+
+
+									<!-- Info columns -->
+
+									<t:column styleClass="DateColumn"
+										rendered="#{!empty expenditureDeclarationEditBean.list}">
+										<f:facet name="header">
+											<t:outputText
+												value="#{msg.durCompilationListHeaderCompilationDate}" />
+										</f:facet>
+										<t:outputText converter="dateTimeConverter"
+											value="#{item.certificationDate}" />
+									</t:column>
+									<t:column styleClass="NumberColumn"
+										rendered="#{!empty expenditureDeclarationEditBean.list}">
+										<f:facet name="header">
+											<t:outputText
+												value="#{msg.durCompilationListHeaderProtocolN}" />
+										</f:facet>
+										<t:outputText value="#{item.protocolNumber}" />
+									</t:column>
+									<t:column styleClass="NumberColumn"
+										rendered="#{!empty expenditureDeclarationEditBean.list}">
+										<f:facet name="header">
+											<t:outputText
+												value="#{msg.durCompilationListHeaderRowNumber}" />
+										</f:facet>
+										<t:outputText value="#{item.rowNumber}" />
+									</t:column>
+									<t:column styleClass="StringColumn"
+										rendered="#{!empty expenditureDeclarationEditBean.list}">
+										<f:facet name="header">
+											<t:outputText
+												value="#{msg.durCompilationListHeaderSumAmount}"></t:outputText>
+										</f:facet>
+										<t:outputText converter="moneyConverter"
+											value="#{item.sumAmoutCertification}"></t:outputText>
+									</t:column>
+
+									<t:column styleClass="StringColumn"
+										rendered="#{!empty expenditureDeclarationEditBean.list}">
+										<f:facet name="header">
+											<t:outputText value="#{msg.costCertificationProjectName}"></t:outputText>
+										</f:facet>
+										<t:outputText value="#{item.project.code}"></t:outputText>
+									</t:column>
+
+									<t:column styleClass="StringColumn"
+										rendered="#{!empty expenditureDeclarationEditBean.list}">
+										<f:facet name="header">
+											<t:outputText value="#{msg.durCompilationListHeaderState}"></t:outputText>
+										</f:facet>
+										<t:outputText style="color: #{item.color}"
+											value="#{item.state}"></t:outputText>
+									</t:column>
+
+									<t:column styleClass="StringColumn"
+										rendered="#{empty expenditureDeclarationEditBean.list}">
+										<f:facet name="header">
+											<t:outputText value="#{msg.noData}"></t:outputText>
+										</f:facet>
+									</t:column>
+
+								</t:dataTable>
+							</div>
+
+							<a4j:outputPanel styleClass="scrollerPanel">
+								<t:dataScroller id="scroll_1" styleClass="scroller" for="table"
+									fastStep="10" pageCountVar="pageCount" pageIndexVar="pageIndex"
+									paginator="true" paginatorMaxPages="5"
+									paginatorColumnClass="page"
+									paginatorActiveColumnClass="page_active" immediate="false"
+									rendered="#{expenditureDeclarationEditBean.showScroll}">
+									<f:facet name="first">
+										<t:graphicImage alt="#{msg.first}"
+											url="../images/back_end.gif" border="1" />
+									</f:facet>
+									<f:facet name="last">
+										<t:graphicImage alt="#{msg.last}"
+											url="../images/forward_end.gif" border="1" />
+									</f:facet>
+									<f:facet name="previous">
+										<t:graphicImage alt="#{msg.previous}" url="../images/back.gif"
+											border="1" />
+									</f:facet>
+									<f:facet name="next">
+										<t:graphicImage alt="#{msg.next}" url="../images/forward.gif"
+											border="1" />
+									</f:facet>
+									<f:facet name="fastforward">
+										<t:graphicImage alt="#{msg.fastforward}"
+											url="../images/all_forward.gif" border="1" />
+									</f:facet>
+									<f:facet name="fastrewind">
+										<t:graphicImage alt="#{msg.fastrewind}"
+											url="../images/all_back.gif" border="1" />
+									</f:facet>
+								</t:dataScroller>
+							</a4j:outputPanel>
+
+						</a4j:outputPanel>
+
+
+
+
+					</div>
+
+				</t:panelTab>
+				<t:panelTab id="tab2"
+					label="#{msg.expenditureDeclarationListName} 2">
+
+					<t:dataTable style="margin:0 auto; width: 100%;" id="table"
+						var="data"
+						value="#{expenditureDeclarationEditBean.listExpDeclWrapper}"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g">
+
+						<!-- <f:facet name="header">
+										<t:column>
+											<h:outputText value="#{msg.paymentApplicationListAdvancesPaidUnderStateaidAndIncludedInPaymentApplications}" />
+										</t:column>
+									</f:facet> -->
+
+
+						<!-- Info columns -->
+
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty expenditureDeclarationEditBean.listExpDeclWrapper}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.asse}"></t:outputText>
+							</f:facet>
+							<t:outputText value="#{data.axis}"></t:outputText>
+						</t:column>
+
+						<ui:remove>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty expenditureDeclarationEditBean.listExpDeclWrapper}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.expenditureDeclarationEditObjectiveSpecific}"></t:outputText>
+							</f:facet>
+							<t:outputText value="#{data.specificObjective}"></t:outputText>
+						</t:column>
+						</ui:remove>
+
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty expenditureDeclarationEditBean.listExpDeclWrapper}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.expenditureDeclarationEditAmountOfPastExDecl}"></t:outputText>
+							</f:facet>
+							<t:outputText value="#{data.amountOfPastExDecl}"></t:outputText>
+						</t:column>
+
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty expenditureDeclarationEditBean.listExpDeclWrapper}">
+							<f:facet name="header">
+								<t:outputText converter="dateTimeConverter"
+									value="#{msg.expenditureDeclarationEditAmountOfExDeclForAccountingPeriod} #{msg.expenditureDeclarationEditDateFrom} #{expenditureDeclarationEditBean.dateFromString} #{msg.expenditureDeclarationEditDateTo} #{expenditureDeclarationEditBean.dateToString}"></t:outputText>
+							</f:facet>
+							<t:outputText value="#{data.amountOfExDeclForAccountingPeriod}"></t:outputText>
+						</t:column>
+
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty expenditureDeclarationEditBean.listExpDeclWrapper}">
+							<f:facet name="header">
+								<t:outputText converter="dateTimeConverter"
+									value="#{msg.expenditureDeclarationEditAmountOfWithdrawalsAccountingPeriod} #{msg.expenditureDeclarationEditDateFrom} #{expenditureDeclarationEditBean.dateFromString} #{msg.expenditureDeclarationEditDateTo} #{expenditureDeclarationEditBean.dateToString}"></t:outputText>
+							</f:facet>
+							<t:outputText value="#{data.amountOfWithdrawalsAccountingPeriod}"></t:outputText>
+						</t:column>
+
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty expenditureDeclarationEditBean.listExpDeclWrapper}">
+							<f:facet name="header">
+								<t:outputText converter="dateTimeConverter"
+									value="#{msg.expenditureDeclarationEditAmountOfWithdrawalsAccountingPeriod} #{msg.expenditureDeclarationEditDateFrom} #{expenditureDeclarationEditBean.dateFromString} #{msg.expenditureDeclarationEditDateTo} #{expenditureDeclarationEditBean.dateToString}"></t:outputText>
+							</f:facet>
+							<t:outputText value="#{data.suspensionAmount}"></t:outputText>
+						</t:column>
+
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty expenditureDeclarationEditBean.listExpDeclWrapper}">
+							<f:facet name="header">
+								<t:outputText converter="dateTimeConverter"
+									value="#{msg.expenditureDeclarationEditCumulativeAmount}"></t:outputText>
+							</f:facet>
+							<t:outputText value="#{data.cumulativeAmount}"></t:outputText>
+						</t:column>
+
+					</t:dataTable>
+				</t:panelTab>
+			</t:panelTabbedPane>
+			<!-- <div class="btn_line"> -->
+			<table width="100%">
+				<tr>
+
+					<td class="btn_line" colspan="3"><a4j:commandButton
+							immediate="false"
+							action="#{expenditureDeclarationEditBean.temporarySave}"
+							reRender="pagePanel" styleClass="button3"
+							value="#{msg.saveIntermediateStep}" id="data_save"
+							rendered="#{not expenditureDeclarationEditBean.showButton and not expenditureDeclarationEditBean.showDetails}" />
+						<sec:ifAnyGranted roles="ROLE_AGU_W">
+							<a4j:commandButton immediate="false"
+								action="#{expenditureDeclarationEditBean.definitiveSave}"
+								reRender="pagePanel" styleClass="button2" value="#{msg.save}"
+								id="save"
+								rendered="#{not expenditureDeclarationEditBean.showButton  and not expenditureDeclarationEditBean.showDetails}" />
+						</sec:ifAnyGranted> <a4j:commandButton value="#{msg.cancel}" styleClass="button2"
+							immediate="true"
+							action="#{expenditureDeclarationEditBean.GoBack}"
+							rendered="#{not expenditureDeclarationEditBean.showDetails}" /></td>
+				</tr>
+			</table>
+			<table width="100%">
+				<tr>
+					<td align="center"><t:outputText
+							styleClass="RequiredFieldMarker"
+							value="#{expenditureDeclarationEditBean.error}" /></td>
+				</tr>
+			</table>
+
+
+			<!--  <a4j:outputPanel ajaxRendered="true" id="pagePanel2" rendered="#{expenditureDeclarationEditBean.showDetails}">-->
+			<div
+				style="display: #{expenditureDeclarationEditBean.showDetails?'':'none'}">
+				<table class="forms" border="0" cellpadding="1" cellspacing="1">
+					<tr>
+						<td class="LabelCell"><t:outputText
+								value="#{msg.expenditureDeclarationEditAnnex}:" /></td>
+						<td class="ControlCell"><t:selectOneMenu id="annex"
+								value="#{expenditureDeclarationEditBean.annex}"
+								styleClass="DropDown">
+								<f:selectItems
+									value="#{expenditureDeclarationEditBean.annexList}" />
+								<a4j:support event="onchange" reRender="EditForm:pagePanel2"
+									action="#{expenditureDeclarationEditBean.annexChange}" />
+							</t:selectOneMenu></td>
+					</tr>
+				</table>
+				<!-- <div
+					style="display: #{expenditureDeclarationEditBean.showExports?'':'none'}"> -->
+					<table width="100%">
+						<tr>
+							<td align="center"><t:outputText
+									value="#{expenditureDeclarationEditBean.message}" rendered="#{(expenditureDeclarationEditBean.annex eq 1 and !empty expenditureDeclarationEditBean.listExpDeclWrapper)
+									or (expenditureDeclarationEditBean.annex eq 2)
+									 or (expenditureDeclarationEditBean.annex eq 3 and !empty expenditureDeclarationEditBean.listOfAnnex1c)
+									 or (expenditureDeclarationEditBean.annex eq 4 and !empty expenditureDeclarationEditBean.listOfAnnex1d)
+									 or (expenditureDeclarationEditBean.annex eq 5 and !empty expenditureDeclarationEditBean.listOfAnnex1e)
+									 or (expenditureDeclarationEditBean.annex eq 6 and !empty expenditureDeclarationEditBean.listOfAnnex1f)
+									 or (expenditureDeclarationEditBean.annex eq 7 and !empty expenditureDeclarationEditBean.listOfAnnex1g)
+									 or (expenditureDeclarationEditBean.annex eq 10 and !empty expenditureDeclarationEditBean.listOfAnnex1l)
+									 or (expenditureDeclarationEditBean.annex eq 11 and !empty expenditureDeclarationEditBean.listOfAnnex1m)
+									 or (expenditureDeclarationEditBean.annex eq 12)
+									 }"/>
+								<!-- </td> --> <!-- <td> -->
+								<a4j:htmlCommandLink
+									action="#{expenditureDeclarationEditBean.exportXls}"
+									styleClass="headerPanelExport"
+									rendered="#{!empty expenditureDeclarationEditBean.message 
+									and ((expenditureDeclarationEditBean.annex eq 1 and !empty expenditureDeclarationEditBean.listExpDeclWrapper)
+									or (expenditureDeclarationEditBean.annex eq 2)
+									 or (expenditureDeclarationEditBean.annex eq 3 and !empty expenditureDeclarationEditBean.listOfAnnex1c)
+									 or (expenditureDeclarationEditBean.annex eq 4 and !empty expenditureDeclarationEditBean.listOfAnnex1d)
+									 or (expenditureDeclarationEditBean.annex eq 5 and !empty expenditureDeclarationEditBean.listOfAnnex1e)
+									 or (expenditureDeclarationEditBean.annex eq 6 and !empty expenditureDeclarationEditBean.listOfAnnex1f)
+									 or (expenditureDeclarationEditBean.annex eq 7 and !empty expenditureDeclarationEditBean.listOfAnnex1g)
+									 or (expenditureDeclarationEditBean.annex eq 10 and !empty expenditureDeclarationEditBean.listOfAnnex1l)
+									 or (expenditureDeclarationEditBean.annex eq 11 and !empty expenditureDeclarationEditBean.listOfAnnex1m)
+									 or (expenditureDeclarationEditBean.annex eq 12))}">
+									<h:graphicImage alt="#{msg.exportXls}" value="/images/xls.png" />
+								</a4j:htmlCommandLink> <a4j:htmlCommandLink
+									action="#{expenditureDeclarationEditBean.exportPdf}"
+									styleClass="headerPanelExport"
+									rendered="#{!empty expenditureDeclarationEditBean.message 
+									and ((expenditureDeclarationEditBean.annex eq 1 and !empty expenditureDeclarationEditBean.listExpDeclWrapper)
+									or (expenditureDeclarationEditBean.annex eq 2)
+									 or (expenditureDeclarationEditBean.annex eq 3 and !empty expenditureDeclarationEditBean.listOfAnnex1c)
+									 or (expenditureDeclarationEditBean.annex eq 4 and !empty expenditureDeclarationEditBean.listOfAnnex1d)
+									 or (expenditureDeclarationEditBean.annex eq 5 and !empty expenditureDeclarationEditBean.listOfAnnex1e)
+									 or (expenditureDeclarationEditBean.annex eq 6 and !empty expenditureDeclarationEditBean.listOfAnnex1f)
+									 or (expenditureDeclarationEditBean.annex eq 7 and !empty expenditureDeclarationEditBean.listOfAnnex1g)
+									 or (expenditureDeclarationEditBean.annex eq 10 and !empty expenditureDeclarationEditBean.listOfAnnex1l)
+									 or (expenditureDeclarationEditBean.annex eq 11 and !empty expenditureDeclarationEditBean.listOfAnnex1m)
+									 or (expenditureDeclarationEditBean.annex eq 12))}">
+									<h:graphicImage alt="#{msg.exportPdf}" value="/images/pdf.png" />
+								</a4j:htmlCommandLink></td>
+						</tr>
+					</table>
+				<!-- </div> -->
+				<t:dataTable style="margin:0 auto; width: 100%;" id="table"
+					var="data"
+					value="#{expenditureDeclarationEditBean.listExpDeclWrapper}"
+					styleClass="form_table" rowClasses="row_table_n,row_table_g"
+					rendered="#{expenditureDeclarationEditBean.annex eq 1}">
+
+					<!-- <f:facet name="header">
+										<t:column>
+											<h:outputText value="#{msg.paymentApplicationListAdvancesPaidUnderStateaidAndIncludedInPaymentApplications}" />
+										</t:column>
+									</f:facet> -->
+
+
+					<!-- Info columns -->
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listExpDeclWrapper}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.asse}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.axis}"></t:outputText>
+					</t:column>
+
+					<ui:remove>
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listExpDeclWrapper}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditObjectiveSpecific}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.specificObjective}"></t:outputText>
+					</t:column>
+					</ui:remove>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listExpDeclWrapper}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditAmountOfPastExDecl}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.amountOfPastExDecl}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listExpDeclWrapper}">
+						<f:facet name="header">
+							<t:outputText converter="dateTimeConverter"
+								value="#{msg.expenditureDeclarationEditAmountOfExDeclForAccountingPeriod} #{msg.expenditureDeclarationEditDateFrom} #{expenditureDeclarationEditBean.dateFromString} #{msg.expenditureDeclarationEditDateTo} #{expenditureDeclarationEditBean.dateToString}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.amountOfExDeclForAccountingPeriod}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listExpDeclWrapper}">
+						<f:facet name="header">
+							<t:outputText converter="dateTimeConverter"
+								value="#{msg.expenditureDeclarationEditAmountOfWithdrawalsAccountingPeriod} #{msg.expenditureDeclarationEditDateFrom} #{expenditureDeclarationEditBean.dateFromString} #{msg.expenditureDeclarationEditDateTo} #{expenditureDeclarationEditBean.dateToString}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.amountOfWithdrawalsAccountingPeriod}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listExpDeclWrapper}">
+						<f:facet name="header">
+							<t:outputText converter="dateTimeConverter"
+								value="#{msg.expenditureDeclarationEditSuspensionAmount} #{msg.expenditureDeclarationEditDateFrom} #{expenditureDeclarationEditBean.dateFromString} #{msg.expenditureDeclarationEditDateTo} #{expenditureDeclarationEditBean.dateToString}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.suspensionAmount}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listExpDeclWrapper}">
+						<f:facet name="header">
+							<t:outputText converter="dateTimeConverter"
+								value="#{msg.expenditureDeclarationEditCumulativeAmount}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.cumulativeAmount}"></t:outputText>
+					</t:column>
+
+				</t:dataTable>
+
+				<t:dataTable style="margin:0 auto; width: 100%;" id="table2"
+					var="data" value="#{expenditureDeclarationEditBean.listOfAnnex1c}"
+					styleClass="form_table" rowClasses="row_table_n,row_table_g"
+					rendered="#{expenditureDeclarationEditBean.annex eq 3}">
+
+					<!-- <f:facet name="header">
+										<t:column>
+											<h:outputText value="#{msg.paymentApplicationListAdvancesPaidUnderStateaidAndIncludedInPaymentApplications}" />
+										</t:column>
+									</f:facet> -->
+
+
+					<!-- Info columns -->
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1c}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.asse}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.axis}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1c}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditObjectiveSpecific}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.specificObjective}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1c}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.expenditureDeclarationEditCUP}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.cup}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1c}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.expenditureDeclarationEditLocalCode}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.localCode}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1c}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.expenditureDeclarationEditSystemCode}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.systemCode}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1c}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditOperationTitle}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.title}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1c}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditPreviousStatementOfExpenditure}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.lastExpenditureDeclaration}"
+							converter="moneyConverter"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1c}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditStatementOfExpenditure}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.expenditureDeclaration}"
+							converter="moneyConverter"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1c}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditAdvancement}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.advancement}"
+							converter="moneyConverter"></t:outputText>
+					</t:column>
+
+				</t:dataTable>
+
+
+				<t:dataTable style="margin:0 auto; width: 100%;" id="table3"
+					var="data" value="#{expenditureDeclarationEditBean.listOfAnnex1d}"
+					styleClass="form_table" rowClasses="row_table_n,row_table_g"
+					rendered="#{expenditureDeclarationEditBean.annex eq 4}">
+
+					<!-- <f:facet name="header">
+										<t:column>
+											<h:outputText value="#{msg.paymentApplicationListAdvancesPaidUnderStateaidAndIncludedInPaymentApplications}" />
+										</t:column>
+									</f:facet> -->
+
+
+					<!-- Info columns -->
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1d}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.asse}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.axis}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1d}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditObjectiveSpecific}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.specificObjective}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1d}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.expenditureDeclarationEditCUP}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.cup}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1d}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.expenditureDeclarationEditLocalCode}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.localCode}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1d}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.expenditureDeclarationEditSystemCode}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.systemCode}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1d}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditOperationTitle}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.title}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1d}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditDocumentType}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.documentType}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1d}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditPaymentNumber}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.paymentNumber}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1d}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditPaymentDate}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.paymentDate}"
+							converter="dateTimeConverter" datePattern="dd/MM/yyyy"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1d}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditPaymentAmount}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.paymentAmount}"
+							converter="moneyConverter"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1d}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.xpenditureDeclarationEditRetiredAmount}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.retiredAmount}"
+							converter="moneyConverter"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1d}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditRetreatActExtreme}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.retreatActExtreme}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1d}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditRetiredDate}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.retiredDate}"
+							converter="dateTimeConverter" datePattern="dd/MM/yyyy"></t:outputText>
+					</t:column>
+
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1d}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.expenditureDeclarationEditMotivation}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.motivation}"></t:outputText>
+					</t:column>
+
+				</t:dataTable>
+
+				<t:dataTable style="margin:0 auto; width: 100%;" id="table4"
+					var="data" value="#{expenditureDeclarationEditBean.listOfAnnex1e}"
+					styleClass="form_table" rowClasses="row_table_n,row_table_g"
+					rendered="#{expenditureDeclarationEditBean.annex eq 5}">
+
+					<!-- <f:facet name="header">
+										<t:column>
+											<h:outputText value="#{msg.paymentApplicationListAdvancesPaidUnderStateaidAndIncludedInPaymentApplications}" />
+										</t:column>
+									</f:facet> -->
+
+
+					<!-- Info columns -->
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1e}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.asse}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.axis}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1e}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditObjectiveSpecific}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.specificObjective}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1e}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.expenditureDeclarationEditCUP}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.cup}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1e}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.expenditureDeclarationEditLocalCode}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.localCode}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1e}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.expenditureDeclarationEditSystemCode}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.systemCode}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1e}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditOperationTitle}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.title}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1e}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditDocumentType}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.documentType}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1e}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditPaymentNumber}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.paymentNumber}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1e}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditPaymentDate}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.paymentDate}"
+							converter="dateTimeConverter" datePattern="dd/MM/yyyy"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1e}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditPaymentAmount}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.paymentAmount}"
+							converter="moneyConverter"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1e}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditTemporaryRetiredAmount}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.retiredAmount}"
+							converter="moneyConverter"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1e}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditRetreatActExtreme}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.suspensionActExtreme}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1e}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditRetiredDate}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.suspendActDate}"
+							converter="dateTimeConverter" datePattern="dd/MM/yyyy"></t:outputText>
+					</t:column>
+
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1e}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.expenditureDeclarationEditMotivation}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.motivation}"></t:outputText>
+					</t:column>
+
+				</t:dataTable>
+
+				<t:dataTable style="margin:0 auto; width: 100%;" id="table5"
+					var="data" value="#{expenditureDeclarationEditBean.listOfAnnex1f}"
+					styleClass="form_table" rowClasses="row_table_n,row_table_g"
+					rendered="#{expenditureDeclarationEditBean.annex eq 6}">
+
+					<!-- <f:facet name="header">
+										<t:column>
+											<h:outputText value="#{msg.paymentApplicationListAdvancesPaidUnderStateaidAndIncludedInPaymentApplications}" />
+										</t:column>
+									</f:facet> -->
+
+
+					<!-- Info columns -->
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1f}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.asse}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.axis}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1f}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditObjectiveSpecific}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.specificObjective}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1f}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.expenditureDeclarationEditCUP}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.cup}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1f}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.expenditureDeclarationEditLocalCode}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.localCode}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1f}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.expenditureDeclarationEditSystemCode}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.systemCode}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1f}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditOperationTitle}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.title}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1f}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditDocumentType}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.documentType}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1f}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditPaymentNumber}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.paymentNumber}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1f}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditPaymentDate}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.paymentDate}"
+							converter="dateTimeConverter" datePattern="dd/MM/yyyy"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1f}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditPaymentAmount}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.paymentAmount}"
+							converter="moneyConverter"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1f}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditRecoveryAmount}"></t:outputText>
+						</f:facet>
+						<t:outputText
+							value="#{data.durTotEligibleExpensesPublicSupportReimbursed}"
+							converter="moneyConverter"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1f}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditRecoveredActExtreme}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.recoveredActExtreme}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1f}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditRecoveredDate}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.durNotRegularActDate}"
+							converter="dateTimeConverter" datePattern="dd/MM/yyyy"></t:outputText>
+					</t:column>
+
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1f}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditRevocationMotivation}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.motivation}"></t:outputText>
+					</t:column>
+
+				</t:dataTable>
+
+				<t:dataTable style="margin:0 auto; width: 100%;" id="table6"
+					var="data" value="#{expenditureDeclarationEditBean.listOfAnnex1g}"
+					styleClass="form_table" rowClasses="row_table_n,row_table_g"
+					rendered="#{expenditureDeclarationEditBean.annex eq 7}">
+
+					<!-- <f:facet name="header">
+										<t:column>
+											<h:outputText value="#{msg.paymentApplicationListAdvancesPaidUnderStateaidAndIncludedInPaymentApplications}" />
+										</t:column>
+									</f:facet> -->
+
+
+					<!-- Info columns -->
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1g}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.asse}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.axis}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1g}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditObjectiveSpecific}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.specificObjective}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1g}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.expenditureDeclarationEditCUP}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.cup}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1g}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.expenditureDeclarationEditLocalCode}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.localCode}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1g}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.expenditureDeclarationEditSystemCode}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.systemCode}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1g}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditOperationTitle}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.title}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1g}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditDocumentType}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.documentType}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1g}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditPaymentNumber}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.paymentNumber}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1g}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditPaymentDate}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.paymentDate}"
+							converter="dateTimeConverter" datePattern="dd/MM/yyyy"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1g}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditPaymentAmount}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.paymentAmount}"
+							converter="moneyConverter"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1g}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditRecoveryAmountPending}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.costRecovery}"
+							converter="moneyConverter"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1g}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditRecoveredActExtreme}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.recoveredActExtreme}"></t:outputText>
+					</t:column>
+
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1g}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditRevocationMotivation}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.motivation}"></t:outputText>
+					</t:column>
+
+				</t:dataTable>
+
+				<t:dataTable style="margin:0 auto; width: 100%;" id="table7"
+					var="data" value="#{expenditureDeclarationEditBean.listOfAnnex1h}"
+					styleClass="form_table" rowClasses="row_table_n,row_table_g"
+					rendered="#{expenditureDeclarationEditBean.annex eq 8}">
+
+					<!-- <f:facet name="header">
+										<t:column>
+											<h:outputText value="#{msg.paymentApplicationListAdvancesPaidUnderStateaidAndIncludedInPaymentApplications}" />
+										</t:column>
+									</f:facet> -->
+
+
+					<!-- Info columns -->
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1h}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.asse}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.axis}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1h}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditObjectiveSpecific}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.specificObjective}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1h}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.expenditureDeclarationEditCUP}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.cup}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1h}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.expenditureDeclarationEditLocalCode}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.localCode}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1h}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.expenditureDeclarationEditSystemCode}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.systemCode}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1h}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditOperationTitle}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.title}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1h}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditDocumentType}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.documentType}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1h}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditPaymentNumber}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.paymentNumber}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1h}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditPaymentDate}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.paymentDate}"
+							converter="dateTimeConverter" datePattern="dd/MM/yyyy"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1h}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditPaymentAmount}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.paymentAmount}"
+							converter="moneyConverter"></t:outputText>
+					</t:column>
+					<!--  -->
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1h}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditAmountDeemedIrrecoverable}"></t:outputText>
+						</f:facet>
+						<t:outputText
+							value="#{data.totEligibleExpensesPublicSupportNonRecoverable}"
+							converter="moneyConverter"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1h}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditRecoveredActExtreme}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.recoveredActExtreme}"></t:outputText>
+					</t:column>
+
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1h}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditIrrecoverabilityMotivation}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.motivation}"></t:outputText>
+					</t:column>
+
+				</t:dataTable>
+
+
+				<t:dataTable style="margin:0 auto; width: 100%;" id="table8"
+					var="data" value="#{expenditureDeclarationEditBean.listOfAnnex1l}"
+					styleClass="form_table" rowClasses="row_table_n,row_table_g"
+					rendered="#{expenditureDeclarationEditBean.annex eq 10}">
+
+					<!-- <f:facet name="header">
+										<t:column>
+											<h:outputText value="#{msg.paymentApplicationListAdvancesPaidUnderStateaidAndIncludedInPaymentApplications}" />
+										</t:column>
+									</f:facet> -->
+
+
+					<!-- Info columns -->
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1l}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.asse}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.axis}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1l}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditObjectiveSpecific}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.specificObjective}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1l}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.expenditureDeclarationEditCUP}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.cup}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1l}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.expenditureDeclarationEditLocalCode}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.localCode}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1l}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.expenditureDeclarationEditSystemCode}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.systemCode}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1l}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditOperationTitle}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.title}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1l}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditDocumentType}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.documentType}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1l}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditPaymentNumber}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.paymentNumber}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1l}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditPaymentDate}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.paymentDate}"
+							converter="dateTimeConverter" datePattern="dd/MM/yyyy"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1l}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditPaymentAmountStateAid}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.amountToCoverAdvanceStateAid}"
+							converter="moneyConverter"></t:outputText>
+					</t:column>
+					<!--  -->
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1l}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditLastAmountToCoverAdvanceStateAid}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.lastAmountToCoverAdvanceStateAid}"
+							converter="moneyConverter"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1l}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditAmountNotCoverAdvanceStateAid}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.amountNotCoverAdvanceStateAid}"></t:outputText>
+					</t:column>
+
+
+				</t:dataTable>
+
+
+				<t:dataTable style="margin:0 auto; width: 100%;" id="table9"
+					var="data" value="#{expenditureDeclarationEditBean.listOfAnnex1m}"
+					styleClass="form_table" rowClasses="row_table_n,row_table_g"
+					rendered="#{expenditureDeclarationEditBean.annex eq 11}">
+
+					<!-- <f:facet name="header">
+										<t:column>
+											<h:outputText value="#{msg.paymentApplicationListAdvancesPaidUnderStateaidAndIncludedInPaymentApplications}" />
+										</t:column>
+									</f:facet> -->
+
+
+					<!-- Info columns -->
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1m}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.asse}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.axis}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1m}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditObjectiveSpecific}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.specificObjective}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1m}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.expenditureDeclarationEditCUP}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.cup}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1m}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.expenditureDeclarationEditLocalCode}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.localCode}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1m}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.expenditureDeclarationEditSystemCode}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.systemCode}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1m}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditOperationTitle}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.title}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty expenditureDeclarationEditBean.listOfAnnex1m}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.expenditureDeclarationEditAmountTransferred}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{data.amountTransferred}"></t:outputText>
+					</t:column>
+
+				</t:dataTable>
+
+				<div class="btn_line">
+					<table>
+						<tr>
+							<td><a4j:commandButton immediate="false"
+									action="#{expenditureDeclarationEditBean.avoid}"
+									reRender="pagePanel" styleClass="button3" value="#{msg.avoid}"
+									id="avoid" /></td>
+							<td><a4j:commandButton value="#{msg.cancel}"
+									styleClass="button2" immediate="true"
+									action="#{expenditureDeclarationEditBean.GoBack}" /></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+		</a4j:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

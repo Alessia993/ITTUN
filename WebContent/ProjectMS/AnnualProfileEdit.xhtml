@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/ListBase.xhtml">
+	<ui:param name="heading" value="#{msg.annualProfileEdit}" />
+	<ui:param name="heading_top" value="#{msg.annualProfileEdit}" />
+	<ui:define name="list_body">
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+			<div class="table_container"><t:dataTable
+				style="margin:0 auto; width: 60%;" rowIndexId="row" id="table"
+				var="annualProfile" value="#{annualProfileEditBean.list}"
+				styleClass="form_table" rowClasses="row_table_n,row_table_g">
+				<f:facet name="header">
+					<t:column>
+						<h:outputText value="#{msg.annualProfileEdit}" />
+					</t:column>
+				</f:facet>
+				<t:column styleClass="StringColumn"
+					rendered="#{!empty annualProfileEditBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.annualProfileYear}" />
+					</f:facet>
+					<t:outputText value="#{annualProfile.string}" />
+				</t:column>
+				<t:column styleClass="NumberColumn"
+					rendered="#{!empty annualProfileEditBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.annualProfileExpectedAmount}" />
+					</f:facet>
+					<t:outputText value="#{annualProfile.amountExpected}"
+						converter="moneyConverter" />
+				</t:column>
+				<t:column styleClass="NumberColumn" style="width: 83px;"
+					rendered="#{!empty annualProfileEditBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.annualProfileRealAmount}" />
+					</f:facet>
+					<t:outputText value="#{annualProfile.amountRealized}"
+						id="amountRealized_text" converter="moneyConverter" />
+				</t:column>
+				<t:column styleClass="NumberColumn" style="width: 83px;"
+					rendered="#{!empty annualProfileEditBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.annualProfileAmountToAchive}" />
+					</f:facet>
+					<t:inputText onkeypress="return decimalonly(this, event)"
+						rendered="#{annualProfile.string != msg.total}"
+						onkeyup="checkdecimal(this);ReCulcTotal();" maxlength="12"
+						converter="floatConverter" styleClass="editbox_form2"
+						validator="#{validator.isFloat92}" id="amountToAchieve"
+						value="#{annualProfile.amountToAchieve}" />
+					<t:outputText value="#{annualProfile.amountToAchieve}"
+						id="amountToAchieve_text"
+						rendered="#{annualProfile.string == msg.total}"
+						converter="moneyConverter" />
+				</t:column>
+				<t:column styleClass="StringColumn"
+					rendered="#{!empty annualProfileEditBean.list}" style="width: 250px;">
+					<f:facet name="header">
+						<t:outputText value="#{msg.annualProfileNote}" />
+					</f:facet>
+					<t:inputText value="#{annualProfile.note}" maxlength="255" styleClass="editbox_form" rendered="#{annualProfile.string != msg.total}"/>
+				</t:column>
+				<t:column styleClass="StringColumn"
+					rendered="#{empty annualProfileEditBean.list}">
+					<f:facet name="header">
+						<h:outputText value="#{msg.noData}" />
+					</f:facet>
+				</t:column>
+			</t:dataTable></div>
+
+			<div class="btn_line">
+			<table>
+				<tr>
+					<td colspan="2"><t:outputText
+						value="#{annualProfileEditBean.errorMesage}"
+						styleClass="RequiredFieldMarker" /></td>
+				</tr>
+				<tr>
+					<td><a4j:commandButton immediate="false"
+						action="#{annualProfileEditBean.Page_Save}" reRender="pagePanel"
+						styleClass="button2" value="#{msg.save}" id="save" /></td>
+					<td><a4j:commandButton value="#{msg.cancel}"
+						styleClass="button2" immediate="true"
+						action="#{annualProfileEditBean.GoBack}" /></td>
+				</tr>
+			</table>
+			</div>
+		</a4j:outputPanel>
+
+	</ui:define>
+
+</ui:composition>

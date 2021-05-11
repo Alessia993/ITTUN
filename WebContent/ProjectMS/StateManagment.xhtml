@@ -1,0 +1,246 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/EditBase.xhtml">
+	<ui:param name="headWidth" value="500px" />
+	<ui:param name="heading" value="#{msg.stateManagment}" />
+	<ui:param name="heading_top" value="#{msg.stateManagment}" />
+	<ui:define name="edit_body">
+
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+
+			<table class="forms" border="0" cellpadding="1" cellspacing="1"
+				width="90%">
+				<tr>
+					<td class="LabelCell">
+						<t:outputText value="#{msg.projectState}:" />
+					</td>
+					<td class="ControlCell">
+					<t:selectOneMenu id="state" 
+						value="#{stateManagmentBean.state}" styleClass="DropDown"
+							valueChangeListener="#{stateManagmentBean.stateChanged}">
+						<f:selectItems value="#{stateManagmentBean.states}" />	
+						<a4j:support event="onchange" reRender="pagePanel" ajaxSingle="false"></a4j:support>					
+					</t:selectOneMenu></td>
+				</tr>
+				<tr style="display: #{stateManagmentBean.showAdditionalInfo}">
+						<td class="LabelCell">
+							<t:outputText value="#{msg.changereason}:" />
+							<span class="RequiredFieldMarker">*</span>
+						</td>
+						<td class="ControlCell">
+						<t:inputTextarea maxlength="255"
+							rendered="#{stateManagmentBean.showAdditionalInfo==''}"
+							required="true"
+							styleClass="editbox_form" id="note" rows="6" cols="40"
+							onkeypress="return textArea(this, 255)"
+							value="#{stateManagmentBean.changeReason}" />
+						</td>
+				</tr>
+				<tr style="display: #{stateManagmentBean.showAdditionalInfo}">
+					<td class="LabelCell">
+						<t:outputText value="#{msg.changeDocNumber}"></t:outputText>
+						<span class="RequiredFieldMarker">*</span>
+					</td>
+					<td>
+						<t:inputText styleClass="editbox_form" id="docNumber"
+							rendered="#{stateManagmentBean.showAdditionalInfo==''}"
+							required="true"
+							maxlength="255"
+							validator="#{validator.isNumber}" 
+							value="#{stateManagmentBean.documentNumber}">
+						</t:inputText>
+					</td>
+				</tr>
+				<tr style="display: #{stateManagmentBean.showAdditionalInfo}">
+					<td class="LabelCell">
+						<t:outputText value="#{msg.changeDocument}:" />
+					</td>
+					<td class="ControlCell">
+						<a4j:htmlCommandLink
+							id="docLink" action="#{stateManagmentBean.getDoc}"
+							style="text-decoration: underline; float:left;"
+							value="#{stateManagmentBean.documentTitle}" />
+						<a4j:commandLink									
+							rendered="#{!empty stateManagmentBean.documentTitle}"
+							id="docdeletelink" immediate="true" reRender="pagePanel"
+							action="#{stateManagmentBean.deleteDoc}">
+							<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+								style="border:0; float:right;" />
+						</a4j:commandLink> 
+						<a4j:commandLink
+							rendered="#{empty stateManagmentBean.documentTitle}"
+							id="doclink"
+							oncomplete="#{rich:component('documentPanel')}.show()">
+							<h:graphicImage alt="#{msg.delete}" value="/images/plus.png"
+								style="border:0;" />
+								<span>#{msg.uploadFile}</span>
+						</a4j:commandLink>
+					</td>
+				</tr>
+			</table>
+			<table class="forms" border="0" cellpadding="1" cellspacing="1"
+				width="90%">
+				<tr>	
+					<td align="center">
+						<t:outputText style="display:block;font-weight:bold;text-align:center;" value="#{msg.requermentsForStateChange}" rendered="#{!empty stateManagmentBean.prerequests}" ></t:outputText>
+					</td>
+				</tr>
+				<tr>
+					<td>
+					
+						<t:selectManyCheckbox layout="pageDirection" value="#{stateManagmentBean.prerequestsValue}" id="prerequests" disabled="true"> 
+							<f:selectItems value="#{stateManagmentBean.prerequests}" />	
+						</t:selectManyCheckbox>
+					</td>
+				</tr>
+			</table>
+			<div class="btn_line">
+			<table>
+				<tr>
+					<td>
+					<t:div rendered="#{stateManagmentBean.showSaveButton}">
+					<a4j:commandButton immediate="false"
+						action="#{stateManagmentBean.PreSave}" reRender="pagePanel prerequests"						
+						oncomplete="if (#{stateManagmentBean.showConfirmation}) {document.getElementById('validatePanel').component.show();}"
+						styleClass="button2" value="#{msg.save}" id="save" />
+					</t:div>
+					</td>
+					<td>
+					<a4j:commandButton value="#{msg.cancel}"
+						styleClass="button2" immediate="true"
+						action="#{stateManagmentBean.GoBack}" /></td>
+				</tr>
+			</table>
+			</div>
+
+		</a4j:outputPanel>
+	</ui:define> 
+	
+	<ui:define name="document_body">
+		
+		<rich:modalPanel id="documentPanel" autosized="true" width="300">
+			<f:facet name="header">
+				<h:outputText value="Document" style="padding-right:15px;" />
+			</f:facet>			
+			<table>
+				<tr>
+					<td class="LabelCell">
+						<t:outputText value="#{msg.date}:" />
+					</td>
+					<td class="CalendarCell">
+						<rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+							inputClass="editbox_form2"							
+							converter="dateTimeConverter"
+							value="#{stateManagmentBean.document.documentDate}"
+							datePattern="dd/MM/yyyy">
+						</rich:calendar>
+					</td>
+				</tr>
+				
+												<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentDescription}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							style="width:216px;" maxlength="50"
+							value="#{stateManagmentBean.document.description}" /></td>
+				</tr>
+				<tr>
+					<td class="LabelCell">
+						<t:outputText
+							value="#{msg.protocolNumber}:" />
+					</td>
+					<td class="ControlCell">
+						<t:inputText styleClass="editbox_form"
+							maxlength="50" 
+							value="#{stateManagmentBean.document.protocolNumber}" />
+					</td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+						value="#{msg.documentPublic}:" /></td>
+					<td class="ControlCell"><t:selectBooleanCheckbox
+						value="#{stateManagmentBean.document.isPublic}">
+					</t:selectBooleanCheckbox></td>
+				</tr>
+				<tr class="tempDisplay">
+					<td class="LabelCell"><t:outputText
+						value="#{msg.documentCategory}:" /></td>
+					<td class="ControlCell"><t:selectOneMenu
+						onmousedown="collapse(this);" onchange="expand(this);"
+						onblur="expand(this);"
+						value="#{stateManagmentBean.selectedCategory}" 
+						required="false"
+						styleClass="DropDown">
+						<f:selectItems
+							value="#{stateManagmentBean.categories}" />
+					</t:selectOneMenu></td>
+				</tr>
+				<tr>
+					<td class="LabelCell">
+						<t:outputText value="#{msg.uploadFile}:" />
+					</td>
+					<td class="ControlCell">
+						<t:inputFileUpload id="fileupload1"
+							value="#{stateManagmentBean.documentFile}"
+							storage="file" styleClass="fileUploadInput" maxlength="200000" />
+					</td>
+				</tr>
+				<tr>
+					<td align="center" colspan="2">#{msg.fileSize}</td>
+				</tr>				
+			</table>
+			<table style="width: 100%;">
+				<tr>
+					<td style="width: 50%;" align="center">
+						<h:commandButton value="#{msg.uploadFile}"
+							styleClass="button3"
+							action="#{stateManagmentBean.saveDocument}"
+							reRender="pagePanel"
+							onclick="#{rich:component('documentPanel')}.hide();" />
+					</td>
+					<td>
+						<a4j:commandButton
+							value="#{msg.cancel}" styleClass="button" immediate="false"
+							onclick="#{rich:component('documentPanel')}.hide();return false;" />
+					</td>
+				</tr>
+			</table>
+		</rich:modalPanel>
+		
+	</ui:define>
+	
+	<ui:define name="custom_popup_panels">
+		<rich:modalPanel id="validatePanel" autosized="true" width="300">
+			<f:facet name="header">
+				<h:outputText
+					value="#{msg.changeConfirmation}"
+					align="center" />
+			</f:facet>
+			<h:form>
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td align="center" width="50%"><a4j:commandButton
+								value="#{msg.yes}" ajaxSingle="true" styleClass="button"
+								action="#{stateManagmentBean.Page_Save}" />
+							</td>
+							<td align="center" width="50%"><a4j:commandButton
+								value="#{msg.no}" styleClass="button"
+								oncomplete="#{rich:component('validatePanel')}.hide(); return false;" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</h:form>
+		</rich:modalPanel>
+	</ui:define>
+	
+	
+	
+</ui:composition>

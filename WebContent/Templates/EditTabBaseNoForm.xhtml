@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/Main.xhtml">
+	<ui:define name="body">
+		<div class="page_head">
+		<div class="header_left">
+		<div class="header_right"><span>#{heading_top}</span><a4j:status onstop="addTooltips();">
+			<f:facet name="start">
+	   				<h:panelGroup layout="block" style="top: 0px; left: 0px; position: fixed;  right: 0px; bottom: 0px;  z-index: 100000000;text-align: center;">
+                    	<h:panelGroup layout="block" style="background-color: gray;opacity: 0.4;filter: alpha(opacity=40);height:100%;width:100%;"/>
+                    	<h:panelGroup layout="block" style="background-color: white; position: absolute; top: 35%; left: 47%; padding: 20px;">
+	                    	<h:graphicImage alt="loader"  value="../images/loader.gif"/>
+	                    	<h:outputText value="#{msg.wait}" />
+                    	</h:panelGroup>
+	   				</h:panelGroup>
+			</f:facet>
+		</a4j:status></div>
+		</div>
+		</div>
+		<div class="page_content">
+		<a4j:include viewId="/Templates/Include/Legend.xhtml" />
+		<div class="form_back_big">
+		<div class="form_head_big">
+	<span>#{heading}</span>
+		</div>
+		<ui:insert name="edit_body"></ui:insert>
+		<ui:insert name="script_body"></ui:insert>
+		<h:form name="DocForm" id="DocForm" enctype="multipart/form-data"> 
+		<ui:insert name="document_body"></ui:insert>
+		</h:form>
+		</div>
+		</div>
+		<ui:insert name="delete_panels"></ui:insert>		
+		<div class="bottom">
+		<div class="left_bottom">
+		<div class="right_bottom"></div>
+		</div>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,463 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ListTabBase.xhtml">
+	<ui:param name="headWidth" value="900px" />
+	<ui:param name="heading" value="#{msg.indicators}" />
+	<ui:param name="heading_top" value="#{msg.indicators}" />
+	<ui:define name="list_body">
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+			<t:panelTabbedPane serverSideTabSwitch="false">
+<ui:remove>
+				<t:panelTab id="tab4" label="#{msg.programmaIndicators}">
+					<div class="table_container"><t:dataTable width="100%"
+						style="margin:0 auto;" id="table" var="data"
+						value="#{programIndicatorViewBean.list}"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g">
+						<f:facet name="header">
+							<h:outputText style="text-align: center"
+								value="#{msg.programmaIndicators}" />
+						</f:facet>
+						<t:column styleClass="StringColumn" style="width: 25%"
+							rendered="#{!empty programIndicatorViewBean.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.indicatorsDescription}" />
+							</f:facet>
+							<t:outputText value="#{data.specificObjective}" />
+						</t:column>
+						<t:column 
+							rendered="#{!empty programIndicatorViewBean.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.measurementUnits}" />
+							</f:facet>
+							<h:outputText value="#{data.units}" />
+						</t:column>
+						<t:column 
+							rendered="#{!empty programIndicatorViewBean.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.target}" />
+							</f:facet>
+							<h:outputText value="#{data.target}" />
+						</t:column>
+						<t:column 
+							rendered="#{!empty programIndicatorViewBean.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.source}" />
+							</f:facet>
+							<h:outputText value="#{data.source}" />
+						</t:column>
+						<t:column 
+							rendered="#{!empty programIndicatorViewBean.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.survey}" />
+							</f:facet>
+							<h:outputText value="#{data.survey}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{empty programIndicatorViewBean.list}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+					</t:dataTable></div>
+				</t:panelTab>
+</ui:remove>
+<ui:remove>
+				<t:panelTab id="tab5" label="#{msg.indicatorsQSN}">
+					<div class="table_container"><t:dataTable 
+						var="indicatorsData" value="#{qsnIndicatorViewController.indicatorsData}"
+					 id="table" styleClass="form_table">
+						<f:facet name="header">
+							<h:outputText style="text-align: center"
+								value="#{msg.indicatorsQSN}" />
+						</f:facet>
+						<t:column
+							rendered="#{!empty qsnIndicatorViewController.italyTunisia}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.programIndicatorsItalyTunisia}" />
+							</f:facet>
+								<div class="table_container">
+								<t:dataTable styleClass="form_table" rowClasses="row_table_n,row_table_g" 
+									var="italyTunisia" value="#{indicatorsData.italyTunisia}">
+									<t:column>
+										<table>
+											<tr>
+												<td style="width:100%">#{italyTunisia.specificObjective}</td>
+											</tr>
+										</table>
+									</t:column>	
+								</t:dataTable></div>
+						</t:column>
+						
+						<t:column rendered="#{!empty qsnIndicatorViewController.qsnItaly}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.programIndicatorsQsnItaly}" />
+							</f:facet>
+								<div class="table_container">
+								<t:dataTable styleClass="form_table" rowClasses="row_table_n,row_table_g" 
+									var="qsnItaly" value="#{indicatorsData.qsnItaly}">
+								<t:column>
+									<table>									
+										<tr>
+											<td style="width:100%">#{qsnItaly.specificObjective}</td>
+										</tr>
+									</table>	
+								</t:column>
+							</t:dataTable></div>
+						</t:column>
+	
+						<t:column rendered="#{!empty qsnIndicatorViewController.nsrfTunisia}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.programIndicatorsNsrfTunisia}" />
+							</f:facet>
+							<div class="table_container">
+								<t:dataTable styleClass="form_table" rowClasses="row_table_n,row_table_g" 
+								var="nsrfTunisia" value="#{indicatorsData.nsrfTunisia}">
+								<t:column>
+									<table>
+										<tr>
+											<td style="width:100%;">#{nsrfTunisia.specificObjective}</td>
+										</tr>
+									</table>
+								</t:column>	
+							</t:dataTable></div>
+						</t:column>
+					</t:dataTable></div>
+				</t:panelTab>
+</ui:remove>
+<ui:remove>
+				<t:panelTab id="tab5" label="#{msg.indicatorsQSN}">
+					<div class="table_container"><t:dataTable width="100%"
+						style="margin:0 auto;" id="table" var="data"
+						value="#{qsnIndicatorViewController.list}" styleClass="form_table"
+						rowClasses="row_table_n,row_table_g">
+						<f:facet name="header">
+							<h:outputText style="text-align: center"
+								value="#{msg.indicatorsQSN}" />
+						</f:facet>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty qsnIndicatorViewController.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.indicatoryQsnPriority}" />
+							</f:facet>
+							<t:outputText value="#{data.descriptionPriorirty}" />
+						</t:column>
+						<t:column styleClass="CodeColumn"
+							rendered="#{!empty qsnIndicatorViewController.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.indicatoryQsnCode}" />
+							</f:facet>
+							<t:outputText value="#{data.priorityCode}" />
+						</t:column>
+						<t:column styleClass="StringColumn" 
+							rendered="#{!empty qsnIndicatorViewController.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.indicatoryQsnDescription}" />
+							</f:facet>
+							<h:outputText value="#{data.descriptionResult}" />
+						</t:column>
+						<t:column 
+							rendered="#{!empty qsnIndicatorViewController.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.indicatoryQsnResult}" />
+							</f:facet>
+							<h:outputText value="#{data.qsnResalto}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{empty qsnIndicatorViewController.list}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+					</t:dataTable></div>
+				</t:panelTab>
+</ui:remove>
+				<t:panelTab id="tab6" label="#{msg.resultIndicators}">
+					<div class="table_container"><t:dataTable width="100%"
+						style="margin:0 auto;" id="table" var="data"
+						value="#{programResultIndicatorViewController.list}"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g">
+						<f:facet name="header">
+							<h:outputText style="text-align: center"
+								value="#{msg.resultIndicators}" />
+						</f:facet>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty programResultIndicatorViewController.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.resultIndicatorsASSE}" />
+							</f:facet>
+							<t:outputText value="#{data.asse}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty programResultIndicatorViewController.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.resultIndicatorsOS}" />
+							</f:facet>
+							<t:outputText value="#{data.axisOs}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty programResultIndicatorViewController.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.resultIndicatorsPriority}" />
+							</f:facet>
+							<t:outputText value="#{data.axisPriority}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty programResultIndicatorViewController.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.resultIndicatorsId}" />
+							</f:facet>
+							<t:outputText value="#{data.axisId}" />
+						</t:column>
+						<t:column styleClass="StringColumn" style="width: 25%"
+							rendered="#{!empty programResultIndicatorViewController.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.resultIndicatorsDescription}" />
+							</f:facet>
+							<t:outputText value="#{data.specificObjective}" />
+						</t:column>
+						<ui:remove>
+						<t:column 
+							rendered="#{!empty programResultIndicatorViewController.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.measurementUnits}" />
+							</f:facet>
+							<h:outputText value="#{data.units}" />
+						</t:column>
+						</ui:remove>
+						<t:column 
+							rendered="#{!empty programResultIndicatorViewController.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.resultIndicatorsBaseline}" />
+							</f:facet>
+							<h:outputText value="#{data.baseLine}" />
+						</t:column>
+						<ui:remove>
+						<t:column 
+							rendered="#{!empty programResultIndicatorViewController.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.resultIndicatorsYear}" />
+							</f:facet>
+							<h:outputText value="#{data.year}" />
+						</t:column>
+						</ui:remove>
+						<t:column 
+							rendered="#{!empty programResultIndicatorViewController.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.resultIndicatorsTarget}" />
+							</f:facet>
+							<h:outputText value="#{data.target}" />
+						</t:column>
+											
+						<t:column 
+							rendered="#{!empty programResultIndicatorViewController.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.resultIndicatorsSurvey}" />
+							</f:facet>
+							<h:outputText value="#{data.survey}" />
+						</t:column>
+						
+						<t:column 
+							rendered="#{!empty programResultIndicatorViewController.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.resultIndicatorsSource}" />
+							</f:facet>
+							<h:outputText value="#{data.source}" />
+						</t:column>
+						
+						<ui:remove>
+						<t:column 
+							rendered="#{!empty programResultIndicatorViewController.list}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.indicatorsView2018}"/>
+							</f:facet>
+							<h:outputText value="#{data.avances}" rendered="#{Session.STC}"/>
+							<h:outputText value="#{data.avances}" rendered="#{!Session.STC}"/>
+						</t:column>
+						<t:column 
+							rendered="#{!empty programResultIndicatorViewController.list}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.indicatorsView2019}"/>
+							</f:facet>
+							<h:outputText value="#{data.avances2}" rendered="#{Session.STC}"/>
+							<h:outputText value="#{data.avances2}" rendered="#{!Session.STC}"/>
+						</t:column>
+						<t:column 
+							rendered="#{!empty programResultIndicatorViewController.list}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.indicatorsView2020}"/>
+							</f:facet>
+							<h:outputText value="#{data.avances3}" rendered="#{Session.STC}"/>
+							<h:outputText value="#{data.avances3}" rendered="#{!Session.STC}"/>
+						</t:column>
+						<t:column 
+							rendered="#{!empty programResultIndicatorViewController.list}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.indicatorsView2021}"/>
+							</f:facet>
+							<h:outputText value="#{data.avances4}" rendered="#{Session.STC}"/>
+							<h:outputText value="#{data.avances4}" rendered="#{!Session.STC}"/>
+						</t:column>
+						</ui:remove>
+						<t:column styleClass="StringColumn"
+							rendered="#{empty programResultIndicatorViewController.list}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+						
+					</t:dataTable></div>
+					<div align="center">
+					<ui:remove>
+					<a4j:commandButton  rendered="#{Session.STC}"
+							value="#{msg.save}" styleClass="button3" id="save" action="#{programResultIndicatorViewController.SaveResults}"
+							reRender="PagePanel" /> 
+							</ui:remove>
+							</div>
+				</t:panelTab>
+
+				<t:panelTab id="tab7" label="#{msg.implementationIndicators}">
+					<div class="table_container"><t:dataTable width="100%"
+						style="margin:0 auto;" id="table" var="data"
+						value="#{programRealizationIndicatorViewController.listWrappers}"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g">
+						<f:facet name="header">
+							<h:outputText style="text-align: center"
+								value="#{msg.implementationIndicators}" />
+						</f:facet>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty programRealizationIndicatorViewController.listWrappers}">
+							<f:facet name="header">
+								<t:outputText style="text-align: center"
+								value="#{msg.resultIndicatorsASSE}" />
+							</f:facet>
+							<t:outputText value="#{data.indicator.asse}" /> 
+						</t:column>
+						<ui:remove>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty programRealizationIndicatorViewController.listWrappers}">
+							<f:facet name="header">
+								<t:outputText style="text-align: center"
+								value="#{msg.resultIndicatorsOS}" />
+							</f:facet>
+							<t:outputText value="#{data.indicator.axisOs}" /> 
+						</t:column>
+						</ui:remove>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty programRealizationIndicatorViewController.listWrappers}">
+							<f:facet name="header">
+								<t:outputText style="text-align: center"
+								value="#{msg.resultIndicatorsPriority}" />
+							</f:facet>
+							<t:outputText value="#{data.indicator.axisPriority}" /> 
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty programRealizationIndicatorViewController.listWrappers}">
+							<f:facet name="header">
+								<t:outputText style="text-align: center"
+								value="#{msg.resultIndicatorsId}" />
+							</f:facet>
+							<t:outputText value="#{data.indicator.axisId}" /> 
+						</t:column>
+						<t:column styleClass="StringColumn" style="width: 45%" 
+							rendered="#{!empty programRealizationIndicatorViewController.listWrappers}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.resultViewIndicatorsDescription}" />
+							</f:facet>
+							<t:outputText value="#{data.indicator.specificObjective}" />
+						</t:column>
+						<t:column 
+							rendered="#{!empty programRealizationIndicatorViewController.listWrappers}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.measurementUnits}" />
+							</f:facet>
+							<h:outputText value="#{data.indicator.units}" />
+						</t:column>
+						<t:column 
+							rendered="#{!empty programRealizationIndicatorViewController.listWrappers}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.resultViewIndicatorsTarget}" />
+							</f:facet>
+							<h:outputText value="#{data.indicator.target}" />
+						</t:column>
+						<t:column 
+							rendered="#{!empty programRealizationIndicatorViewController.listWrappers}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.source}" />
+							</f:facet>
+							<h:outputText value="#{data.indicator.source}" />
+						</t:column>
+						<t:column 
+							rendered="#{!empty programRealizationIndicatorViewController.listWrappers}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.survey2}" />
+							</f:facet>
+							<h:outputText value="#{data.indicator.survey}" />
+						</t:column>
+						
+						<t:column 
+							rendered="#{!empty programRealizationIndicatorViewController.listWrappers}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.riValueSpecifiedDate}" />
+							</f:facet>
+<!-- 							<h:outputText value="#{data.indicator.survey}" /> -->
+						</t:column>
+						
+						<!-- <t:column 
+							rendered="#{!empty programRealizationIndicatorViewController.listWrappers}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.projectCount}" />
+							</f:facet>
+							<h:outputText value="#{data.projectCount}" />
+						</t:column> -->
+						
+						<ui:remove>
+						<t:column 
+							rendered="#{!empty programRealizationIndicatorViewController.listWrappers}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.indicatorsView2018}" />
+							</f:facet>
+							<h:outputText value="#{data.indicator.avances}" />
+						</t:column>
+						<t:column 
+							rendered="#{!empty programRealizationIndicatorViewController.listWrappers}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.indicatorsView2019}" />
+							</f:facet>
+							<h:outputText value="#{data.indicator.avances2}" />
+						</t:column>
+						<t:column 
+							rendered="#{!empty programRealizationIndicatorViewController.listWrappers}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.indicatorsView2020}" />
+							</f:facet>
+							<h:outputText value="#{data.indicator.avances3}" />
+						</t:column>
+						<t:column 
+							rendered="#{!empty programRealizationIndicatorViewController.listWrappers}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.indicatorsView2021}" />
+							</f:facet>
+							<h:outputText value="#{data.indicator.avances4}" />
+						</t:column>
+						</ui:remove>
+						
+						<t:column styleClass="StringColumn"
+							rendered="#{empty programRealizationIndicatorViewController.listWrappers}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+					</t:dataTable></div>
+				</t:panelTab>
+			</t:panelTabbedPane>
+		</a4j:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:cjsf="http://corejsf/facelets"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:security="http://www.springframework.org/security/tags">
+<head>
+<title><h:outputText value="#{msg.paaMangmentSystem}" /></title>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<meta content="" name="Description" />
+<meta content="" name="Keywords" />
+<meta content="3 days" name="revisit-after" />
+<meta content="paams" name="author" />
+<meta content="Global" name="distribution" />
+<meta content="General" name="rating" />
+<meta content="2009 copyright" name="Copyright" />
+<link href="#{facesContext.externalContext.requestContextPath}/styles/style.css" media="all" rel="stylesheet"
+	type="text/css" />
+<link rel="icon"
+	href="#{facesContext.externalContext.requestContextPath}/favicon.ico"
+	type="image/x-icon" />
+	
+	<h:inputHidden id="hidden" value="#{facesContext.externalContext.requestContextPath}"></h:inputHidden>
+<script type="text/JavaScript">
+<!--
+setTimeout("location.href = '../Home.jsp'", 3000);
+-->
+</script>
+</head>
+<body>
+<f:view locale="#{LocalizeBean.currentLocale}">
+	<div class="main"><a4j:include
+		viewId="/Templates/Include/Header.xhtml" />
+	<div class="contentplacer" style="background: none;">
+	<div class="leftpacer" style="margin-left: 0px;">
+	<div class="product_box">
+	<div align="justify">
+	<div class="page_head">
+	<div class="header_left">
+	<div class="header_right"></div>
+	</div>
+	</div>
+	<div class="page_content">
+	<div class="form_back" style="width: 600px;">
+	<div class="form_head">
+	<div class="header_left">
+	<div class="header_right"><span><h:outputText value="#{msg.warning}" /></span></div>
+	</div>
+	</div><div class="form_content">
+	<table>
+		<tr>
+			<td>
+				<img style="padding: 10px;" src="../images/warning.png" alt="#{msg.errorPageText}" />
+			</td>
+			<td>
+			<h3><span class="RequiredFieldMarker">#{msg.errorPageText}</span>
+			</h3>
+			<br />
+			<h3><span class="RequiredFieldMarker">#{msg.errorPageRedirectText}</span>
+			</h3>
+			</td>
+		</tr>
+	</table></div>
+
+	<div class="form_bottom">
+	<div class="left_bottom">
+	<div class="right_bottom"></div>
+	</div>
+	</div>
+	</div>
+	</div>
+
+	<div class="bottom">
+	<div class="left_bottom">
+	<div class="right_bottom"></div>
+	</div>
+	</div>
+	</div>
+	</div>
+	</div>
+	</div>
+	<a4j:include viewId="/Templates/Include/Footer.xhtml" /></div>
+</f:view>
+</body>
+
+</html>

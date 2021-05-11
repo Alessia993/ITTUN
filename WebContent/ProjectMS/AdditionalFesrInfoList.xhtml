@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/EditTabBase.xhtml">
+	<ui:param name="headWidth" value="800px" />
+	<ui:param name="heading" value="#{msg.durReimbPageName}" />
+	<ui:param name="heading_top" value="#{msg.durReimbPageTop}" />
+
+	<ui:define name="edit_body">
+		
+		<a4j:commandButton id="buttonChangedPartner" reRender="pagePanel"
+			action="#{additionalFesrInfoListBean.handleChangePartnerFilter}"
+			style="display: none;"
+			></a4j:commandButton>
+		<a4j:commandButton id="buttonChangedTransferType" reRender="pagePanel"
+		
+			action="#{additionalFesrInfoListBean.handleChangeTransferTypeFilter}"
+			style="display: none;"
+			></a4j:commandButton>
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+			
+					<div class="table_container">
+						<t:dataTable style="margin:0 auto; width: 80%;position:relative;"
+							id="table" var="item" value="#{additionalFesrInfoListBean.list}"
+							styleClass="form_table" rowClasses="row_table_n,row_table_g">
+
+							<f:facet name="header">
+								<t:column>
+									<sec:ifAnyGranted roles="ROLE_AGU_W">
+										<a4j:commandLink styleClass="headerPanelLink"
+											rendered="#{additionalFesrInfoListBean.canAdd}"
+											action="#{additionalFesrInfoListBean.addEntity}">#{msg.addFESRInfo}</a4j:commandLink>
+									</sec:ifAnyGranted>
+									<h:outputText value="#{msg.notRegularTableName}" />
+
+								</t:column>
+							</f:facet>
+							<sec:ifAnyGranted roles="ROLE_AGU_W">
+								<t:column id="edit"
+									styleClass="ActionColumn" headerstyleClass="ActionColumn">
+									<a4j:commandLink ajaxSingle="true" id="editlink"
+										title="#{msg.edit}"
+										action="#{additionalFesrInfoListBean.editEntity}">
+										<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+											style="border:0" />
+										<f:setPropertyActionListener value="#{item.id}"
+											target="#{additionalFesrInfoListBean.entityEditId}" />
+									</a4j:commandLink>
+								</t:column>
+							</sec:ifAnyGranted>
+
+							<!-- Info columns -->
+							
+							<t:column styleClass="StringColumn">
+								<f:facet name="header">
+									<t:outputText value="#{msg.durReimbId}" />
+								</f:facet>
+								<t:outputText value="#{item.id}"/>
+							</t:column>
+
+							<t:column styleClass="StringColumn">
+								<f:facet name="header">
+									<a4j:outputPanel ajaxRendered="false">
+										<t:outputText value="#{msg.durReimbBFNumber}" />
+										<br />
+										<t:selectOneMenu id="partners" styleClass="DropDown"
+											value="#{additionalFesrInfoListBean.selectedPartnerId}"
+											onchange="document.getElementById('EditForm:buttonChangedPartner').click();">
+											<f:selectItems
+												value="#{additionalFesrInfoListBean.partnerList}" />
+										</t:selectOneMenu>
+									</a4j:outputPanel>
+								</f:facet>
+								<t:outputText value="#{item.fesrBf.name}" />
+							</t:column>
+
+							<t:column styleClass="StringColumn">
+								<f:facet name="header">
+									<a4j:outputPanel ajaxRendered="false">
+										<t:outputText value="#{msg.addFesrInfoTransferType}" />
+										<br />
+										<t:selectOneMenu id="transferTypes" styleClass="DropDown"
+											value="#{additionalFesrInfoListBean.selectedTransferType}"
+											onchange="document.getElementById('EditForm:buttonChangedTransferType').click();">
+											<f:selectItems
+												value="#{additionalFesrInfoListBean.transferTypes}" />
+										</t:selectOneMenu>
+									</a4j:outputPanel>
+								</f:facet>
+								<t:outputText value="#{item.transferType}"/>
+							</t:column>
+							
+							<t:column styleClass="StringColumn">
+								<f:facet name="header">
+									<t:outputText value="#{msg.addFesrInfoTransferImport}" />
+								</f:facet>
+								<t:outputText value="#{item.transferImport}"/>
+							</t:column>
+							
+							<t:column styleClass="StringColumn">
+								<f:facet name="header">
+									<t:outputText value="#{msg.addFesrInfoTotalTransfer}" />
+								</f:facet>
+								<t:outputText value="#{item.totalTransfer}"/>
+							</t:column>
+							
+							<t:column styleClass="StringColumn">
+								<f:facet name="header">
+									<t:outputText value="#{msg.addFesrInfoTotalAdvances}" />
+								</f:facet>
+								<t:outputText value="#{item.totalAdvances}"/>
+							</t:column>
+							<t:column styleClass="StringColumn">
+								<f:facet name="header">
+									<t:outputText value="#{msg.addFersInfoAdvanceStateAidDeMinimis}" />
+								</f:facet>
+								<t:outputText value="#{item.advanceStateAidDeMinimis}"/>
+							</t:column>
+							<t:column styleClass="StringColumn">
+								<f:facet name="header">
+									<t:outputText value="#{msg.addFersInfoAdvanceStateAidExemptionScheme}" />
+								</f:facet>
+								<t:outputText value="#{item.advanceStateAidExemptionScheme}"/>
+							</t:column>
+							<t:column styleClass="StringColumn">
+								<f:facet name="header">
+									<t:outputText value="#{msg.addFesrInfoTotalRepayments}" />
+								</f:facet>
+								<t:outputText value="#{item.totalRepayments}"/>
+							</t:column>
+							
+							<t:column styleClass="StringColumn">
+								<f:facet name="header">
+									<t:outputText value="#{msg.durReimbNumberSettlementAct}" />
+								</f:facet>
+								<t:outputText value="#{item.numberSettlementAct}" />
+							</t:column>
+							
+							<t:column styleClass="StringColumn">
+								<f:facet name="header">
+									<t:outputText value="#{msg.durReimbPaymentAct}" />
+								</f:facet>
+								<t:outputText value="#{item.fesrPaymentAct}"
+									converter="dateTimeConverter" />
+							</t:column>
+							
+							<t:column styleClass="StringColumn">
+								<f:facet name="header">
+									<t:outputText value="#{msg.durReimbNumberMandatePayment}" />
+								</f:facet>
+								<t:outputText value="#{item.numberMandatePayment}" />
+							</t:column>
+													
+							<t:column styleClass="StringColumn">
+								<f:facet name="header">
+									<t:outputText value="#{msg.durReimbFesrDate}" />
+								</f:facet>
+								<t:outputText value="#{item.fesrDate}"
+									converter="dateTimeConverter" />
+							</t:column>
+
+						</t:dataTable>
+						<!-- End of info columns -->
+					</div>
+		</a4j:outputPanel>
+		
+	</ui:define>
+</ui:composition>

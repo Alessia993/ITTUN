@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/EditBase.xhtml">
+	<ui:param name="heading" value="#{msg.procedureInsertEdit}" />
+	<ui:param name="heading_top" value="#{msg.procedureInsertEdit}" />
+	<ui:define name="edit_body">
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+			<table class="forms" border="0" cellpadding="1" cellspacing="1">
+				<tr>
+					<td class="LabelCell"><t:outputText
+						value="#{msg.procedureInsertColumnPartnerResponsible}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+						enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="false"
+						id="partnerResponsible"
+						disabled="#{procedureInsertEditBean.isActual}"
+						value="#{procedureInsertEditBean.partnerResponsible}"
+						maxlength="250" /></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+						value="#{msg.procedureInsertColumnExpectedStartDate}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+						inputClass="editbox_form2" converter="dateTimeConverter"
+						value="#{procedureInsertEditBean.expectedStartDate}"
+						datePattern="dd/MM/yyyy" required="true">
+					</rich:calendar></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+						value="#{msg.procedureInsertColumnExpectedEndDate}:" />
+						<span class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" required="true"
+						inputClass="editbox_form2" converter="dateTimeConverter"
+						value="#{procedureInsertEditBean.expectedEndDate}"
+						datePattern="dd/MM/yyyy">
+					</rich:calendar></td>
+				</tr>
+				<tr>
+					<td class="LabelCell">
+						<t:outputText value="#{msg.procedureInsertColumnStartDate}:" />
+					</td>
+					<td class="ControlCell">
+						<rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+							inputClass="editbox_form2" converter="dateTimeConverter"
+							value="#{procedureInsertEditBean.effectiveStartDate}"
+							datePattern="dd/MM/yyyy" />
+					</td>
+				</tr>
+				<tr>
+					<td class="LabelCell">
+						<t:outputText value="#{msg.procedureInsertColumnEndDate}:" />
+					</td>
+					<td class="ControlCell">
+						<rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+							inputClass="editbox_form2" converter="dateTimeConverter"
+							value="#{procedureInsertEditBean.effectiveEndDate}"
+							datePattern="dd/MM/yyyy" />
+					</td>
+				</tr>
+			</table>
+			<div class="btn_line">
+			<table>
+				<tr>
+					<td><a4j:commandButton immediate="false"
+						action="#{procedureInsertEditBean.Page_Save}" reRender="pagePanel"
+						styleClass="button2" value="#{msg.save}" id="save" /></td>
+					<td><a4j:commandButton value="#{msg.cancel}"
+						styleClass="button2" immediate="true"
+						action="#{procedureInsertEditBean.GoBack}" /></td>
+				</tr>
+			</table>
+			</div>
+		</a4j:outputPanel>
+	</ui:define>
+</ui:composition>

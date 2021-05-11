@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/EditBase.xhtml">	
+	<ui:param name="heading" value="#{msg.localizationListEdit}" />
+	<ui:param name="heading_top" value="#{msg.localizationListEdit}" />	
+	<ui:define name="edit_body">
+	<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+		<table class="forms" border="0" cellpadding="1" cellspacing="1">
+			<tr>
+				<td class="LabelCell"><t:outputText value="#{msg.localizationListCountry}:" />
+				<span class="RequiredFieldMarker">*</span>
+				</td>
+				<td class="ControlCell">
+					<t:selectOneMenu id="country" 
+							value="#{localizationEditBean.country}" 
+							enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"							
+							required="true" styleClass="DropDown"
+							onchange="submit()"
+							valueChangeListener="#{localizationEditBean.countryChange}" >
+							<f:selectItems value="#{localizationEditBean.listCountries}" />                  		
+            		</t:selectOneMenu>
+				</td>
+			</tr>
+			<tr>
+				<td class="LabelCell"><t:outputText value="#{msg.localizationListRegion}:" />
+				<span class="RequiredFieldMarker">*</span>
+				</td>
+				<td class="ControlCell">
+					<t:selectOneMenu id="region" value="#{localizationEditBean.region}" 
+							enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"							
+							required="true" styleClass="DropDown"
+							onchange="submit()"
+							
+							valueChangeListener="#{localizationEditBean.regionChange}" >
+							<f:selectItems value="#{localizationEditBean.listRegiones}" />                  		
+            			</t:selectOneMenu>
+				</td>
+			</tr>
+								
+			<tr style="display: #{localizationEditBean.isItaly};">
+				<td class="LabelCell"><t:outputText value="#{msg.localizationListProvince}:" />
+				<span class="RequiredFieldMarker">*</span>
+				</td>
+				<td class="ControlCell">
+					<t:selectOneMenu id="province" value="#{localizationEditBean.province}" 
+							enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"							
+							styleClass="DropDown"
+							onchange="submit()"
+							required="#{localizationEditBean.requiredItaly}"
+							
+							valueChangeListener="#{localizationEditBean.provinceChange}" >
+							<f:selectItems value="#{localizationEditBean.listProvinces}" />                  		
+            			</t:selectOneMenu>
+				</td>
+			</tr>
+			
+			
+			<tr style="display: #{localizationEditBean.isFrance};">
+				<td class="LabelCell"><t:outputText value="#{msg.localizationListDepartment}:" />
+				<span class="RequiredFieldMarker">*</span>
+				</td>
+				<td class="ControlCell">
+					<t:selectOneMenu id="department" value="#{localizationEditBean.department}" 
+							enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"							
+							styleClass="DropDown"
+							onchange="submit()"
+							required="#{localizationEditBean.requiredFrance}"
+							
+							valueChangeListener="#{localizationEditBean.departmentChange}" >
+							<f:selectItems value="#{localizationEditBean.listDepartments}" />                  		
+            			</t:selectOneMenu>
+				</td>
+			</tr>
+			
+			<tr style="display: #{localizationEditBean.isItaly};">
+				<td class="LabelCell"><t:outputText value="#{msg.localizationListCity}:" />
+				<span class="RequiredFieldMarker">*</span>
+				</td>
+				<td class="ControlCell">
+					<t:selectOneMenu id="city" value="#{localizationEditBean.city}" 
+							enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"							
+							styleClass="DropDown"
+							required="#{localizationEditBean.requiredItaly}"
+							>
+							<f:selectItems value="#{localizationEditBean.listCities}" />                  		
+            			</t:selectOneMenu>
+				</td>
+			</tr>
+			<ui:remove>
+			<tr style="display: #{localizationEditBean.isFrance};">
+				<td class="LabelCell"><t:outputText value="#{msg.localizationListZone}:" />
+				<span class="RequiredFieldMarker">*</span>
+				</td>
+				<td class="ControlCell">
+					<t:selectOneMenu id="zone" value="#{localizationEditBean.zone}" 
+							enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"							
+							styleClass="DropDown"
+							required="#{localizationEditBean.requiredFrance}"
+							>
+							<f:selectItems value="#{localizationEditBean.listZones}" />                  		
+            			</t:selectOneMenu>
+				</td>
+			</tr>
+			</ui:remove>
+			<tr>
+				<td class="LabelCell">
+					<t:outputText value="#{msg.localizationListCap}:" />				
+				</td>
+				<td class="ControlCell">
+					<t:inputText id="codcap" value="#{localizationEditBean.codCap}"
+						styleClass="editbox_form" enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+						required="false" length="5" />
+				</td>
+			</tr>
+			<tr>
+				<td class="LabelCell"><t:outputText value="#{msg.localizationListAddress}:" />				
+				</td>
+				<td class="ControlCell">
+					<t:inputText styleClass="editbox_form" enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+							required="false" id="address" value="#{localizationEditBean.address}" 
+							maxlength="250" />
+				</td>
+			</tr>
+			<tr>
+				<td class="LabelCell"><t:outputText value="#{msg.localizationListCoordinateX}:" />				
+				</td>
+				<td class="ControlCell">
+					<t:inputText styleClass="editbox_form" enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+							required="false" id="coordinateX" value="#{localizationEditBean.coordinateX}" 
+							maxlength="250" />
+				</td>
+			</tr>
+			<tr>
+				<td class="LabelCell"><t:outputText value="#{msg.localizationListCoordinateY}:" />				
+				</td>
+				<td class="ControlCell">
+					<t:inputText styleClass="editbox_form" enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+							required="false" id="coordinateY" value="#{localizationEditBean.coordinateY}" 
+							maxlength="250" />
+				</td>
+			</tr>
+		</table>
+		<div class="btn_line">
+		<table>
+			<tr>
+				<td>
+					<a4j:commandButton
+						immediate="false" action="#{localizationEditBean.Page_Save}" reRender="pagePanel"
+						styleClass="button2" value="#{msg.save}" id="save" />																
+				</td>								
+				<td>
+					<a4j:commandButton
+						value="#{msg.cancel}" styleClass="button2" immediate="true"
+						action="#{localizationEditBean.GoBack}" />
+				</td>
+			</tr>
+		</table>
+		</div>
+	</a4j:outputPanel>
+	</ui:define>
+</ui:composition>

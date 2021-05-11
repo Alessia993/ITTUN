@@ -1,0 +1,478 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/EditTabFormsBase.xhtml">
+	<ui:param name="heading" value="#{msg.rectificationManagementEditName}" />
+	<ui:param name="heading_top"
+		value="#{msg.rectificationManagementEditName}" />
+
+	<ui:define name="edit_body_non_validate">
+
+	</ui:define>
+
+	<ui:define name="edit_body">
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+
+			<t:panelTabbedPane serverSideTabSwitch="false" id="tabs" 
+				selectedIndex="#{rectificationManagementEditBean.selectedIndex}">
+
+				<t:panelTab id="tabSet1"
+					label="#{msg.rectificationManagementEditTab1}">
+					<table width="60%" class="forms" border="0" cellpadding="1"
+						cellspacing="1">
+
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.rectificationManagementEditDurNumber}:" />
+							</td>
+							<td class="ControlCell"><t:outputText
+									value="#{rectificationManagementEditBean.durNumber}" /></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.rectificationManagementEditCostDefinitionId}:" />
+							</td>
+							<td class="ControlCell"><t:outputText
+									value="#{rectificationManagementEditBean.entity.progressiveId}" />
+							</td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.rectificationManagementEditCostItem}:" />
+							</td>
+							<td class="ControlCell"><t:outputText
+									value="#{rectificationManagementEditBean.entity.costItem}" />
+							</td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.rectificationManagementEditAmountCertificate}:" />
+							</td>
+							<td class="ControlCell"><t:outputText
+									converter="moneyConverter"
+									value="#{rectificationManagementEditBean.amountCertificate}" />
+							</td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.rectificationManagementEditAmountRectified}:" />
+							</td>
+							<td class="ControlCell"><t:outputText
+									converter="moneyConverter"
+									value="#{rectificationManagementEditBean.entity.rectificationAmount}" />
+
+							</td>
+						</tr>
+
+					</table>
+					<div class="btn_line">
+						<table>
+							<tr>
+								<td colspan="2" style="text-align: center;"><t:outputText
+										rendered="#{rectificationManagementEditBean.errorRectifyAmount}"
+										styleClass="RequiredFieldMarker"
+										value="#{msg.rectificationManagementEditErrorRectifyAmount}"></t:outputText>
+								</td>
+							</tr>
+							<tr>
+								<td><a4j:commandButton immediate="false"
+										action="#{rectificationManagementEditBean.SaveEntity}"
+										reRender="pagePanel"
+										rendered="#{rectificationManagementEditBean.editMode}"
+										styleClass="button2" value="#{msg.save}" id="save" />
+								</td>
+							</tr>
+						</table>
+					</div>
+				</t:panelTab>
+
+				<t:panelTab id="tabSet2"
+					label="#{msg.rectificationManagementEditTab2}">
+					<table width="60%" class="forms" border="0" cellpadding="1"
+						cellspacing="1">
+						<tr>
+							<td><t:outputText
+									rendered="#{!empty rectificationManagementEditBean.entity.notRegularType}"
+									value="#{msg.notRegularEditNotRegularType}:"></t:outputText></td>
+							<td><t:outputText
+									rendered="#{!empty rectificationManagementEditBean.entity.notRegularType}"
+									value="#{rectificationManagementEditBean.entity.notRegularType}" />
+							</td>
+						</tr>
+						<tr>
+							<td><t:outputText rendered="#{empty rectificationManagementEditBean.entity.notRegularType or
+									 rectificationManagementEditBean.editMode}"
+									value="#{msg.notRegularEditNotRegularType}:"></t:outputText></td>
+							<td><t:selectOneMenu id="notRegType"
+									disabled="#{!rectificationManagementEditBean.editMode}"
+									rendered="#{empty rectificationManagementEditBean.entity.notRegularType or
+									 rectificationManagementEditBean.editMode}"
+									value="#{rectificationManagementEditBean.notRegularType}"
+									styleClass="DropDown2"
+									valueChangeListener="#{rectificationManagementEditBean.notRegularTypeChanged}">
+									<a4j:support event="onchange" reRender="notRegTypeChild" />
+									<f:selectItems
+										value="#{rectificationManagementEditBean.notRegularTypes}" />
+								</t:selectOneMenu></td>
+						</tr>
+						<tr>
+							<td><t:outputText rendered="#{empty rectificationManagementEditBean.entity.notRegularType or
+									 rectificationManagementEditBean.editMode}"
+									value="#{msg.notRegularEditNotRegularType}:"></t:outputText></td>
+							<td><t:selectOneMenu id="notRegTypeChild"
+									disabled="#{!rectificationManagementEditBean.editMode}"
+									value="#{rectificationManagementEditBean.notRegularChildType}"
+									rendered="#{empty rectificationManagementEditBean.entity.notRegularType or
+									 rectificationManagementEditBean.editMode}"
+									styleClass="DropDown2">
+									<f:selectItems
+										value="#{rectificationManagementEditBean.notRegularChildTypes}" />
+								</t:selectOneMenu></td>
+						</tr>
+						<tr>
+							<td><t:outputText
+									value="#{msg.notRegularEditIrregularAmount}:" /> <t:outputText
+									styleClass="RequiredFieldMarker" value="*"></t:outputText>
+							</td>
+							<td><t:inputText id="amount" styleClass="editbox_form2"
+									disabled="#{!rectificationManagementEditBean.editMode}"
+									onkeypress="return decimalonly(this, event)"
+									onkeyup="checkdecimal(this)" maxlength="12"
+									rendered="#{empty rectificationManagementEditBean.irregularAmount or
+									 rectificationManagementEditBean.editMode}"
+									value="#{rectificationManagementEditBean.irregularAmount}"
+									converter="floatConverter">
+								</t:inputText> <t:outputText
+									rendered="#{!empty rectificationManagementEditBean.irregularAmount and
+									 !rectificationManagementEditBean.editMode}"
+									converter="moneyConverter"
+									value="#{rectificationManagementEditBean.irregularAmount}" />
+							</td>
+						</tr>
+						<tr>
+							<td><t:outputText
+									value="#{msg.notRegularEditReferenceYear}:"></t:outputText></td>
+							<td><t:inputText maxlength="4" styleClass="editbox_form2"
+									onkeypress="return numbersonly(this, event)"
+									onkeyup="checknumber(this)"
+									disabled="#{!rectificationManagementEditBean.editMode}"
+									rendered="#{empty rectificationManagementEditBean.referenceYear
+							 			or rectificationManagementEditBean.editMode}"
+									value="#{rectificationManagementEditBean.referenceYear}">
+								</t:inputText> <t:outputText
+									rendered="#{!empty rectificationManagementEditBean.referenceYear and
+									 !rectificationManagementEditBean.editMode}"
+									value="#{rectificationManagementEditBean.referenceYear}" /></td>
+						</tr>
+						<tr>
+							<td><t:outputText
+									value="#{msg.notRegularEditCertification}:"></t:outputText></td>
+							<td><t:selectBooleanCheckbox
+									disabled="#{!rectificationManagementEditBean.editMode}"
+									value="#{rectificationManagementEditBean.certification}">
+								</t:selectBooleanCheckbox>
+							</td>
+						</tr>
+						<tr>
+							<td><t:outputText value="#{msg.notRegularEditBeRecovered}:"></t:outputText>
+							</td>
+							<td><t:selectBooleanCheckbox
+									disabled="#{!rectificationManagementEditBean.editMode}"
+									value="#{rectificationManagementEditBean.beRecovered}">
+								</t:selectBooleanCheckbox></td>
+						</tr>
+						<tr>
+							<td><t:outputText value="#{msg.notRegularRecoveryDate}:" />
+							</td>
+							<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+									disabled="#{!rectificationManagementEditBean.editMode}"
+									rendered="#{empty rectificationManagementEditBean.recoveryDate
+							 			or rectificationManagementEditBean.editMode}"
+									inputClass="editbox_form2" converter="dateTimeConverter"
+									value="#{rectificationManagementEditBean.recoveryDate}"
+									datePattern="dd/MM/yyyy">
+								</rich:calendar>
+								<t:outputText
+									rendered="#{!empty rectificationManagementEditBean.recoveryDate and
+									 !rectificationManagementEditBean.editMode}"
+									 converter="dateTimeConverter"
+									value="#{rectificationManagementEditBean.recoveryDate}" />
+							</td>
+						</tr>
+						<tr>
+							<td><t:outputText value="#{msg.notRegularAmountRecovery}:" />
+							</td>
+							<td><t:inputText styleClass="editbox_form2"
+									disabled="#{!rectificationManagementEditBean.editMode}"
+									onkeypress="return decimalonly(this, event)"
+									onkeyup="checkdecimal(this)" maxlength="12"
+									rendered="#{empty rectificationManagementEditBean.amountRecovery
+							 			or rectificationManagementEditBean.editMode}"
+									value="#{rectificationManagementEditBean.amountRecovery}"
+									converter="floatConverter">
+								</t:inputText> <t:outputText
+									rendered="#{!empty rectificationManagementEditBean.amountRecovery and
+									 !rectificationManagementEditBean.editMode}"
+									converter="moneyConverter"
+									value="#{rectificationManagementEditBean.amountRecovery}" /></td>
+						</tr>
+						<tr>
+							<td><t:outputText value="#{msg.notRegularRetreatDate}:" />
+							</td>
+							<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+									disabled="#{!rectificationManagementEditBean.editMode}"
+									rendered="#{empty rectificationManagementEditBean.retreatDate
+							 			or rectificationManagementEditBean.editMode}"
+									inputClass="editbox_form2" converter="dateTimeConverter"
+									value="#{rectificationManagementEditBean.retreatDate}"
+									datePattern="dd/MM/yyyy">
+								</rich:calendar>
+								<t:outputText
+									rendered="#{!empty rectificationManagementEditBean.retreatDate and
+									 !rectificationManagementEditBean.editMode}"
+									 converter="dateTimeConverter"
+									value="#{rectificationManagementEditBean.retreatDate}" />
+							</td>
+						</tr>
+						<tr>
+							<td><t:outputText value="#{msg.notRegularAmountRetreat}:" />
+							</td>
+							<td><t:inputText styleClass="editbox_form2"
+									disabled="#{!rectificationManagementEditBean.editMode}"
+									rendered="#{empty rectificationManagementEditBean.amountRetreat
+							 			or rectificationManagementEditBean.editMode}"
+									onkeypress="return decimalonly(this, event)"
+									onkeyup="checkdecimal(this)" maxlength="12"
+									value="#{rectificationManagementEditBean.amountRetreat}"
+									converter="floatConverter">
+								</t:inputText>
+								<t:outputText
+									rendered="#{!empty rectificationManagementEditBean.amountRetreat and
+									 !rectificationManagementEditBean.editMode}"
+									converter="moneyConverter"
+									value="#{rectificationManagementEditBean.amountRetreat}" />
+							</td>
+						</tr>
+
+					</table>
+					<div class="btn_line">
+						<table>
+							<tr>
+								<td><a4j:commandButton immediate="false"
+										action="#{rectificationManagementEditBean.performNotRegular}"
+										reRender="pagePanel"
+										rendered="#{rectificationManagementEditBean.editMode}"
+										styleClass="button2" value="#{msg.save}" id="save" />
+								</td>
+							</tr>
+						</table>
+					</div>
+
+				</t:panelTab>
+
+				<t:panelTab id="tabSet3"
+					label="#{msg.rectificationManagementEditTab3}">
+
+					<div class="table_container">
+						<t:dataTable style="margin:0 auto; width: 80%;" id="table"
+							var="item"
+							value="#{rectificationManagementEditBean.listRecoveries}"
+							styleClass="form_table" rowClasses="row_table_n,row_table_g">
+							<f:facet name="header">
+								<t:column>
+
+									<a4j:commandLink styleClass="headerPanelLink"
+										rendered="#{rectificationManagementEditBean.editMode and rectificationManagementEditBean.entity.rectificationConfirmed}"
+										onclick="showRecoverDialog();">#{msg.rectificationManagementEditAddRecovery}
+							</a4j:commandLink>
+									<h:outputText
+										value="#{msg.rectificationManagementEditListOfRecoveries}" />
+
+								</t:column>
+							</f:facet>
+							<t:column
+								rendered="#{!empty rectificationManagementEditBean.listRecoveries}">
+								<f:facet name="header">
+									<t:outputText
+										value="#{msg.rectificationManagementEditDateAmountRecovered}" />
+								</f:facet>
+								<t:outputText value="#{item.dateAmountRecovered}"
+									converter="dateTimeConverter" />
+							</t:column>
+							<t:column
+								rendered="#{!empty rectificationManagementEditBean.listRecoveries}">
+								<f:facet name="header">
+									<t:outputText
+										value="#{msg.rectificationManagementEditAmountRecovered}" />
+								</f:facet>
+								<t:outputText converter="moneyConverter"
+									value="#{item.amountRecovered}" />
+							</t:column>
+
+							<t:column
+								rendered="#{!empty rectificationManagementEditBean.listRecoveries}">
+								<f:facet name="header">
+									<t:outputText
+										value="#{msg.rectificationManagementEditReasonOfRecovery}" />
+								</f:facet>
+								<t:outputText value="#{item.reasonOfRecovery}" />
+							</t:column>
+
+						</t:dataTable>
+					</div>
+					<div class="btn_line">
+						<table>
+							<tr>
+								<td colspan="2" style="text-align: center;"><t:outputText
+										rendered="#{rectificationManagementEditBean.errorRecoverAmount}"
+										styleClass="RequiredFieldMarker"
+										value="#{msg.rectificationManagementEditErrorRecoverAmount}:"></t:outputText>
+									<t:outputText
+										rendered="#{rectificationManagementEditBean.errorRecoverAmount}"
+										styleClass="RequiredFieldMarker" converter="moneyConverter"
+										value="#{rectificationManagementEditBean.sumRecoveries}"></t:outputText>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</t:panelTab>
+
+			</t:panelTabbedPane>
+
+			<div class="btn_line">
+				<table>
+					<tr>
+						<td><a4j:commandButton immediate="false"
+								action="#{rectificationManagementEditBean.GoBack}"
+								styleClass="button2" value="#{msg.cancel}" id="back" />
+						</td>
+					</tr>
+				</table>
+			</div>
+
+		</a4j:outputPanel>
+
+	</ui:define>
+
+	<ui:define name="document_body">
+
+		<rich:modalPanel id="rectificationPanel" autosized="true" width="400">
+			<f:facet name="header">
+				<h:outputText value="#{msg.rectificationManagementEditAddRecovery}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<table width="90%" class="forms" border="0" cellpadding="1"
+				cellspacing="1">
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.rectificationManagementEditAmountRecovered}:" /> <t:outputText
+							styleClass="RequiredFieldMarker" value="*" /></td>
+					<td class="ControlCell"><t:inputText
+							id="amountRecoveredDialog" styleClass="editbox_form2"
+							onkeypress="return decimalonly(this, event)"
+							onkeyup="checkdecimal(this)" maxlength="12"
+							value="#{rectificationManagementEditBean.amountRecovered}"
+							converter="floatConverter" />
+					</td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.rectificationManagementEditDateAmountRecovered}:" />
+						<t:outputText styleClass="RequiredFieldMarker" value="*" /></td>
+					<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" id="dateRecovered"
+							inputClass="editbox_form2" converter="dateTimeConverter"
+							value="#{rectificationManagementEditBean.dateAmountRecovered}"
+							datePattern="dd/MM/yyyy">
+						</rich:calendar></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.rectificationManagementEditReasonOfRecovery}:" /> <t:outputText
+							styleClass="RequiredFieldMarker" value="*" />
+					</td>
+					<td class="ControlCell"><t:inputTextarea style="width: 180px;"
+							rows="3" cols="30" styleClass="editbox_form2"
+							id="reasonRecoveryField"
+							value="#{rectificationManagementEditBean.reasonOfRecovery}"
+							onkeyup="textAreaCut(this, 254)"
+							onkeypress="return textArea(this, 254, event)" />
+					</td>
+				</tr>
+			</table>
+			<div class="btn_line">
+				<table>
+
+					<tr>
+						<td><h:commandButton
+								onclick="if(checkAddRecoveriesFields()){Richfaces.hideModalPanel('rectificationPanel');}"
+								reRender="FormPanel" styleClass="button"
+								action="#{rectificationManagementEditBean.addRecoveries}"
+								value="#{msg.save}" id="sendBtn4" /></td>
+						<td><a4j:commandButton value="#{msg.cancel}"
+								styleClass="button"
+								onclick="#{rich:component('rectificationPanel')}.hide();" /></td>
+					</tr>
+				</table>
+			</div>
+		</rich:modalPanel>
+	</ui:define>
+
+	<ui:define name="script_body">
+		<script type="text/javascript">
+		
+		function showRecoverDialog()
+		{
+			document.getElementById('DocForm:amountRecoveredDialog').style.backgroundColor = "";
+			document.getElementById('DocForm:dateRecoveredInputDate').style.backgroundColor = "";
+			document.getElementById('DocForm:reasonRecoveryField').style.backgroundColor = "";
+			Richfaces.showModalPanel('rectificationPanel');
+		}
+		
+		function checkAddRecoveriesFields()
+		{
+			var result = true;
+			var amount = document.getElementById('DocForm:amountRecoveredDialog').value;
+			if(amount == null || amount.length==0)
+			{
+				document.getElementById('DocForm:amountRecoveredDialog').style.backgroundColor = "rgb(255, 229, 229)";
+				result = false;
+			}
+			else
+			{
+				document.getElementById('DocForm:amountRecoveredDialog').style.backgroundColor = "";
+			}		
+			
+			var dateValue = document.getElementById('DocForm:dateRecoveredInputDate').value;
+			if(dateValue == null || dateValue.length == 0)
+			{
+				document.getElementById('DocForm:dateRecoveredInputDate').style.backgroundColor = "rgb(255, 229, 229)";
+				result = false;
+			}
+			else
+			{
+				document.getElementById('DocForm:dateRecoveredInputDate').style.backgroundColor = "";
+			}	
+			
+			var reasonRecoveryField = document.getElementById('DocForm:reasonRecoveryField').value;
+			if(reasonRecoveryField == null || reasonRecoveryField.length == 0)
+			{
+				document.getElementById('DocForm:reasonRecoveryField').style.backgroundColor = "rgb(255, 229, 229)";
+				result = false;
+			}
+			else
+			{
+				document.getElementById('DocForm:reasonRecoveryField').style.backgroundColor = "";
+			}	
+			
+			return result;
+		}
+		</script>
+	</ui:define>
+</ui:composition>
+

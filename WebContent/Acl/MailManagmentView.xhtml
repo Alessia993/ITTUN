@@ -1,0 +1,209 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 4.01 Transitional//EN" 
+  "http://www.w3.org/TR/xhtml4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ListBase.xhtml">
+	<ui:param name="heading" value="#{msg.mails}" />
+	<ui:define name="list_body">
+		<a4j:outputPanel ajaxRendered="true"
+			id="FormPanel">
+			<fieldset style="margin: 10px; width: auto;">
+			<table style="margin: 10px;">
+				<tr>
+					<td><t:selectOneRadio style="margin:5px;"
+						value="#{mailManagmentViewBean.filterValue}">
+						<f:selectItem itemValue="all" itemLabel="#{msg.all}" />
+						<f:selectItem itemValue="success" itemLabel="#{msg.sendSuc}" />
+						<f:selectItem itemValue="fail" itemLabel="#{msg.sendFails}" />
+						<a4j:support event="onclick" id="filterValues" action="#{mailManagmentViewBean.changeFilter}"
+							reRender="FormPanel" />
+					</t:selectOneRadio></td>
+				</tr>
+			</table>
+			</fieldset>
+			<div class="table_container"><t:dataTable width="99%"
+				style="margin:0 auto;" rows="#{mailManagmentViewBean.itemsPerPage}"
+				id="table" var="data" value="#{mailManagmentViewBean.list}"
+				styleClass="form_table" rowClasses="row_table_n,row_table_g" binding="#{mailManagmentViewBean.dataTable}">
+				<f:facet name="header">
+					<t:column>
+						<h:outputText style="text-align: center"
+							value="#{msg.mails}" />
+						<h:selectOneMenu id="itemPP" styleClass="headerPanelSelect"
+							value="#{mailManagmentViewBean.itemsPerPage}">
+							<f:selectItems value="#{mailManagmentViewBean.itemsPerPageList}" />
+							<a4j:support event="onchange" reRender="FormPanel" />
+						</h:selectOneMenu>
+					</t:column>
+				</f:facet>
+				<sec:ifAnyGranted roles="ROLE_APU_W">
+					<t:column id="select" styleClass="ActionColumn"
+						rendered="#{!empty mailManagmentViewBean.list}">
+						<f:facet name="header">
+							<h:selectBooleanCheckbox
+								value="#{mailManagmentViewBean.selectAll}">
+								<a4j:support event="onclick" id="doSelectAll"
+									action="#{mailManagmentViewBean.doSelectAll}" />
+							</h:selectBooleanCheckbox>
+						</f:facet>
+						<t:selectBooleanCheckbox value="#{data.selected}">
+							<a4j:support event="onclick" id="addToCache"
+								action="#{mailManagmentViewBean.addToCache}" />
+						</t:selectBooleanCheckbox>
+					</t:column>
+					<t:column id="edit" styleClass="ActionColumn"
+						rendered="#{!empty mailManagmentViewBean.list}"
+						headerstyleClass="ActionColumn">
+						<a4j:commandLink ajaxSingle="true" id="editlink"
+							title="#{msg.send}" action="#{mailManagmentViewBean.sendEntity}">
+							<h:graphicImage alt="#{msg.send}" value="/images/send_mail.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{data.id}"
+								target="#{mailManagmentViewBean.sendEntityId}" />
+						</a4j:commandLink>
+					</t:column>
+					<t:column id="delete"
+						rendered="#{!empty mailManagmentViewBean.list}"
+						styleClass="ActionColumn" headerstyleClass="ActionColumn">
+						<a4j:commandLink ajaxSingle="true" id="deletelink"
+							title="#{msg.delete}"
+							oncomplete="#{rich:component('deletePanel')}.show()">
+							<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{data.id}"
+								target="#{mailManagmentViewBean.entityDeleteId}" />
+						</a4j:commandLink>
+					</t:column>
+				</sec:ifAnyGranted>
+				<t:column styleClass="StringColumn"
+					rendered="#{!empty mailManagmentViewBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.message}" />
+					</f:facet>
+					<t:outputText value="#{data.message}" />
+				</t:column>
+				<t:column styleClass="StringColumn"
+					rendered="#{!empty mailManagmentViewBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.user}" />
+					</f:facet>
+					<t:outputText value="${data.user.name} ${data.user.surname}" />
+				</t:column>
+				<t:column styleClass="StringColumn"
+					rendered="#{!empty mailManagmentViewBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.email}" />
+					</f:facet>
+					<t:outputText value="#{data.user.mail}" />
+				</t:column>
+				<t:column styleClass="StringColumn"
+					rendered="#{!empty mailManagmentViewBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.status}" />
+					</f:facet>
+					<t:outputText value="#{msg.sendSuc}" rendered="#{data.success}" />
+					<t:outputText value="#{msg.sendFails}" rendered="#{!data.success}" />
+				</t:column>
+				<t:column styleClass="DateColumn"
+					rendered="#{!empty mailManagmentViewBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.date}" />
+					</f:facet>
+					<t:outputText value="#{data.createDate}" converter="dateTimeConverter"/>
+				</t:column>
+				<t:column styleClass="StringColumn"
+					rendered="#{empty mailManagmentViewBean.list}">
+					<f:facet name="header">
+						<h:outputText value="#{msg.noData}" />
+					</f:facet>
+				</t:column>
+			</t:dataTable></div>
+			<a4j:outputPanel styleClass="scrollerPanel">
+				<t:dataScroller id="scroll" styleClass="scroller" for="table"
+					rendered="#{mailManagmentViewBean.showScroll}" paginator="true"
+					paginatorMaxPages="5" fastStep="5" paginatorColumnClass="page"
+					paginatorActiveColumnClass="page_active" immediate="true">
+					<f:facet name="first">
+						<t:graphicImage alt="#{msg.first}" url="../images/back_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="last">
+						<t:graphicImage alt="#{msg.last}" url="../images/forward_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="previous">
+						<t:graphicImage alt="#{msg.previous}" url="../images/back.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="next">
+						<t:graphicImage alt="#{msg.next}" url="../images/forward.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="fastforward">
+						<t:graphicImage alt="#{msg.fastforward}"
+							url="../images/all_forward.gif" border="1" />
+					</f:facet>
+					<f:facet name="fastrewind">
+						<t:graphicImage alt="#{msg.fastrewind}"
+							url="../images/all_back.gif" border="1" />
+					</f:facet>
+				</t:dataScroller>
+			</a4j:outputPanel>
+			<table width="100%">
+				<sec:ifAnyGranted roles="ROLE_APU_W">
+					<tr>
+						<td style="text-align: center;">
+						<a4j:commandButton
+							value="#{msg.sendSelected}" styleClass="button4"
+							rendered="#{!empty mailManagmentViewBean.list}"
+							action="#{mailManagmentViewBean.sentEntities}"
+							reRender="FormPanel" />
+							<a4j:commandButton
+							value="#{msg.deleteSelected}" styleClass="button4"
+							rendered="#{!empty mailManagmentViewBean.list}"
+							action="#{mailManagmentViewBean.deleteEntities}"
+							reRender="FormPanel" />
+						</td>
+					</tr>
+				</sec:ifAnyGranted>
+			</table>
+		</a4j:outputPanel>
+
+	</ui:define>
+	<ui:define name="delete_panels">
+			<rich:modalPanel id="deletePanel" autosized="true" width="200">
+		<f:facet name="header">
+			<h:outputText value="#{msg.delete}?" style="padding-right:15px;" />
+		</f:facet>
+		<f:facet name="controls">
+		</f:facet>
+		<h:form>
+			<table width="100%">
+				<tbody>
+					<tr>
+						<td align="center" width="50%">
+						<a4j:commandButton
+							value="#{msg.yes}" ajaxSingle="true" styleClass="button"
+							action="#{mailManagmentViewBean.deleteEntity}"
+							oncomplete="#{rich:component('deletePanel')}.hide();"
+							reRender="FormPanel" />
+						</td>
+						<td align="center" width="50%">
+						<a4j:commandButton
+							value="#{msg.cancel}" styleClass="button"
+							onclick="#{rich:component('deletePanel')}.hide();return false;" />
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</h:form>
+	</rich:modalPanel>
+	</ui:define>
+</ui:composition>
+</html>

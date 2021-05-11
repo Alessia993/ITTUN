@@ -1,0 +1,595 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/EditTabBase.xhtml">
+	<ui:param name="headWidth" value="900px" />
+	<ui:param name="heading" value="#{msg.closingOfAccountsEditPageName}" />
+	<ui:param name="heading_top"
+		value="#{msg.closingOfAccountsEditPageName}" />
+	<ui:define name="edit_body">
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+			<t:panelTabbedPane serverSideTabSwitch="false">
+
+				<t:panelTab id="tab1" label="#{msg.closingOfAccountsListPageName}">
+					<div>
+
+						<a4j:outputPanel ajaxRendered="true" id="FormPanelNonValidate">
+							<table class="forms" border="0" cellpadding="1" cellspacing="1">
+								<tr>
+									<td class="LabelCell" style="width: 25%;"><t:outputText
+											value="#{msg.closingOfAccountsListNumber}:"
+											rendered="#{closingOfAccountsEditBean.rendered}" /></td>
+									<td class="ControlCell" style="width: 25%;"><t:inputText
+											maxlength="50" styleClass="editbox_form"
+											id="closingOfAccountsId"
+											value="#{closingOfAccountsEditBean.closingOfAccountsId}"
+											rendered="#{closingOfAccountsEditBean.rendered}"
+											disabled="true" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell" style="width: 25%;"><t:outputText
+											value="#{msg.closingOfAccountsListDescription}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td class="ControlCell" style="width: 25%;"><t:inputText
+											maxlength="50" styleClass="editbox_form"
+											id="closingOfAccountsDescription"
+											value="#{closingOfAccountsEditBean.description}"
+											disabled="#{closingOfAccountsEditBean.edit}" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell" style="width: 25%;"><t:outputText
+											value="#{msg.closingOfAccountsEditReferencePeriod}:" /></td>
+									<td class="ControlCell" style="width: 25%;"><rich:calendar
+											locale="#{LocalizeBean.currentLocaleValue}"
+											id="referenceDate" inputClass="editbox_form2"
+											converter="dateTimeConverter"
+											value="#{closingOfAccountsEditBean.referencePeriod}"
+											datePattern="dd/MM/yyyy"
+											disabled="#{closingOfAccountsEditBean.edit}">
+										</rich:calendar></td>
+								</tr>
+								<tr>
+									<td class="LabelCell" style="width: 25%;"><t:outputText
+											value="#{msg.closingOfAccountsListCompilationDate}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td class="ControlCell" style="width: 25%;"><rich:calendar
+											locale="#{LocalizeBean.currentLocaleValue}"
+											id="compilationDate" inputClass="editbox_form2"
+											converter="dateTimeConverter"
+											value="#{closingOfAccountsEditBean.compilationDate}"
+											datePattern="dd/MM/yyyy"
+											disabled="#{closingOfAccountsEditBean.edit}">
+										</rich:calendar></td>
+								</tr>
+								<tr>
+									<td class="LabelCell" style="width: 25%;"><t:outputText
+											value="#{msg.closingOfAccountsEditProjectAbove1Mln}:" /></td>
+									<td class="ControlCell"><t:selectBooleanCheckbox
+											disabled="#{closingOfAccountsEditBean.edit}"
+											value="#{closingOfAccountsEditBean.finalExpendsesForProjAbove1Mil}">
+										</t:selectBooleanCheckbox></td>
+								</tr>
+
+
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.closingOfAccountsEditTotalAmountOfEligibleExpenses}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td class="ControlCell"><h:inputText maxlength="12"
+											rendered="true" converter="floatConverter"
+											styleClass="editbox_form2" id="totalAmountOfEligibleExpenses"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+											value="#{closingOfAccountsEditBean.totalAmountOfEligibleExpenses}"
+											validator="#{validator.checkEmpty}"
+											disabled="true" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.closingOfAccountsEditTotalAmountOfPublicExpenditure}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td class="ControlCell"><h:inputText maxlength="12"
+											rendered="true" converter="floatConverter"
+											styleClass="editbox_form2"
+											id="totalAmountOfPublicExpenditure"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+											value="#{closingOfAccountsEditBean.totalAmountOfPublicExpenditure}"
+											validator="#{validator.checkEmpty}"
+											disabled="true" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.closingOfAccountsEditTotalAmountOfTransfersLinkedToPaymentsToEligibleEx}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td class="ControlCell"><h:inputText maxlength="12"
+											rendered="true" converter="floatConverter"
+											styleClass="editbox_form2"
+											id="totalAmountOfTransfersLinkedToPaymentsToEligibleEx"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+											value="#{closingOfAccountsEditBean.totalAmountOfTransfersLinkedToPaymentsToEligibleEx}"
+											validator="#{validator.checkEmpty}"
+											disabled="true" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.closingOfAccountsEditTotalAmountOfEligibleExpenditureWithdrawn}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td class="ControlCell"><h:inputText maxlength="12"
+											rendered="true" converter="floatConverter"
+											styleClass="editbox_form2"
+											id="totalAmountOfEligibleExpenditureWithdrawn"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+											value="#{closingOfAccountsEditBean.totalAmountOfEligibleExpenditureWithdrawn}"
+											validator="#{validator.checkEmpty}"
+											disabled="true" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.closingOfAccountsEditTotalAmountOfPublicExpenditureWithdrawn}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td class="ControlCell"><h:inputText maxlength="12"
+											rendered="true" converter="floatConverter"
+											styleClass="editbox_form2"
+											id="totalAmountOfPublicExpenditureWithdrawn"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+											value="#{closingOfAccountsEditBean.totalAmountOfPublicExpenditureWithdrawn}"
+											validator="#{validator.checkEmpty}"
+											disabled="true" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.closingOfAccountsEditTotalAmountOfEligibleExpenditureRecovered}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td class="ControlCell"><h:inputText maxlength="12"
+											rendered="true" converter="floatConverter"
+											styleClass="editbox_form2"
+											id="totalAmountOfEligibleExpenditureRecovered"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+											value="#{closingOfAccountsEditBean.totalAmountOfEligibleExpenditureRecovered}"
+											validator="#{validator.checkEmpty}"
+											disabled="true" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.closingOfAccountsEditTotalAmountOfPublicExpenditureRecovered}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td class="ControlCell"><h:inputText maxlength="12"
+											rendered="true" converter="floatConverter"
+											styleClass="editbox_form2"
+											id="totalAmountOfPublicExpenditureRecovered"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+											value="#{closingOfAccountsEditBean.totalAmountOfPublicExpenditureRecovered}"
+											validator="#{validator.checkEmpty}"
+											disabled="true" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.closingOfAccountsEditTotalAmountOfEligibleExpenditureToBeRecovered}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td class="ControlCell"><h:inputText maxlength="12"
+											rendered="true" converter="floatConverter"
+											styleClass="editbox_form2"
+											id="totalAmountOfEligibleExpenditureToBeRecovered"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+											value="#{closingOfAccountsEditBean.totalAmountOfEligibleExpenditureToBeRecovered}"
+											validator="#{validator.checkEmpty}"
+											disabled="#{closingOfAccountsEditBean.edit}" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.closingOfAccountsEditTotalAmountOfPublicExpenditureToBeRecovered}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td class="ControlCell"><h:inputText maxlength="12"
+											rendered="true" converter="floatConverter"
+											styleClass="editbox_form2"
+											id="totalAmountOfPublicExpenditureToBeRecovered"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+											value="#{closingOfAccountsEditBean.totalAmountOfPublicExpenditureToBeRecovered}"
+											validator="#{validator.checkEmpty}"
+											disabled="#{closingOfAccountsEditBean.edit}" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.closingOfAccountsEditTotalAmountOfEligibleExpenditureRecoveredInAccountingPeriod}:" /></td>
+									<td class="ControlCell"><h:inputText maxlength="12"
+											rendered="true" converter="floatConverter"
+											styleClass="editbox_form2"
+											id="totalAmountOfEligibleExpenditureRecoveredInAccountingPeriod"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+											value="#{closingOfAccountsEditBean.totalAmountOfEligibleExpenditureRecoveredInAccountingPeriod}"
+											validator="#{validator.checkEmpty}"
+											disabled="true" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.closingOfAccountsEditTotalAmountOfPublicExpenditureRecoveredInAccountingPeriod}:" /></td>
+									<td class="ControlCell"><h:inputText maxlength="12"
+											rendered="true" converter="floatConverter"
+											styleClass="editbox_form2"
+											id="totalAmountOfPublicExpenditureRecoveredInAccountingPeriod"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+											value="#{closingOfAccountsEditBean.totalAmountOfPublicExpenditureRecoveredInAccountingPeriod}"
+											validator="#{validator.checkEmpty}"
+											disabled="true" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.closingOfAccountsEditTotalAmountOfEligibleExpenditureThatCanNotBeRecovered}:" /></td>
+									<td class="ControlCell"><h:inputText maxlength="12"
+											rendered="true" converter="floatConverter"
+											styleClass="editbox_form2"
+											id="totalAmountOfEligibleExpenditureThatCanNotBeRecovered"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+											value="#{closingOfAccountsEditBean.totalAmountOfEligibleExpenditureThatCanNotBeRecovered}"
+											validator="#{validator.checkEmpty}"
+											disabled="true" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.closingOfAccountsEditTotalAmountOfPublicExpenditureThatCanNotBeRecovered}:" /></td>
+									<td class="ControlCell"><h:inputText maxlength="12"
+											rendered="true" converter="floatConverter"
+											styleClass="editbox_form2"
+											id="totalAmountOfPublicExpenditureThatCanNotBeRecovered"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+											value="#{closingOfAccountsEditBean.totalAmountOfPublicExpenditureThatCanNotBeRecovered}"
+											validator="#{validator.checkEmpty}"
+											disabled="true" /></td>
+								</tr>
+							</table>
+
+						</a4j:outputPanel>
+
+					</div>
+
+				</t:panelTab>
+				<t:panelTab id="tab2"
+					label="#{msg.closingOfAccountsEditRegistredAmount}"
+					style="#{phisicalClassificationPriorityThemaController.tab2Style}">
+
+					<t:dataTable style="margin:0 auto; width: 47%;" id="table"
+						var="adv" value="#{closingOfAccountsEditBean.registredAmountList}"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g">
+
+						<f:facet name="header">
+							<t:column>
+								<h:outputText
+									value="#{msg.closingOfAccountsEditRegistredAmount}" />
+							</t:column>
+						</f:facet>
+
+						<f:facet name="footer">
+							<a4j:htmlCommandLink action="#{closingOfAccountsEditBean.exportRegistredAmount}"
+								styleClass="headerPanelExport">
+								<h:graphicImage alt="#{msg.exportXls}" value="/images/xls.png" />
+							</a4j:htmlCommandLink>
+						</f:facet>
+
+						<!-- Info columns -->
+
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty closingOfAccountsEditBean.registredAmountList}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.closingOfAccountsEditRegistredAmountAxis}"></t:outputText>
+							</f:facet>
+							<t:outputText value="#{adv.asse}"></t:outputText>
+						</t:column>
+						<t:column styleClass="NumberColumn"
+							rendered="#{!empty closingOfAccountsEditBean.registredAmountList}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.closingOfAccountsEditRegistredAmountEligibleExpenditure}" />
+							</f:facet>
+							<t:inputText value="#{adv.eligibleExpenditure}"
+								id="registredAmountEligibleExpenditure"
+								styleClass="editbox_form" maxlength="50"
+								onkeypress="return decimalonly(this, event)"
+								onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+								disabled="#{closingOfAccountsEditBean.edit}"></t:inputText>
+						</t:column>
+						<t:column styleClass="NumberColumn"
+							rendered="#{!empty closingOfAccountsEditBean.registredAmountList}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.closingOfAccountsEditRegistredAmountPublicSpending}" />
+							</f:facet>
+							<t:inputText value="#{adv.publicSpending}"
+								id="registredAmountPublicSpending" styleClass="editbox_form"
+								maxlength="50" onkeypress="return decimalonly(this, event)"
+								onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+								disabled="#{closingOfAccountsEditBean.edit}"></t:inputText>
+						</t:column>
+						<t:column styleClass="NumberColumn"
+							rendered="#{!empty closingOfAccountsEditBean.registredAmountList}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.closingOfAccountsEditRegistredAmountPaymentsMadeToTheBeneficiaries}" />
+							</f:facet>
+							<t:inputText value="#{adv.paymentsMadeToTheBeneficiaries}"
+								id="registredAmountPaymentsMadeToTheBeneficiaries"
+								styleClass="editbox_form" maxlength="50"
+								onkeypress="return decimalonly(this, event)"
+								onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+								disabled="#{closingOfAccountsEditBean.edit}"></t:inputText>
+						</t:column>
+					</t:dataTable>
+				</t:panelTab>
+
+				<t:panelTab id="tab3"
+					label="#{msg.closingOfAccountsEditAmountsWithdrawnAndRecoveredName}"
+					style="#{phisicalClassificationPriorityThemaController.tab2Style}">
+
+					<div class="table_container" style="width: 1220px;">
+						<div
+							style="margin: 0 auto; width: 1195px; height: 25px; border-bottom: 0px;"
+							class="form_table noBodyTable">
+
+							<ui:fragment>
+								<div style="width: 13.6%" class="table_cell"></div>
+								<div style="width: 42.55%" class="table_cell">
+									<t:outputText value="#{msg.closingOfAccountsEditWithdrawn}" />
+								</div>
+								<div style="width: 42.57%" class="table_cell">
+									<t:outputText value="#{msg.closingOfAccountsEditRecovered}" />
+								</div>
+
+							</ui:fragment>
+						</div>
+						<ui:fragment>
+							<div style="margin: 0 auto; width: 1195px; border-bottom: 0px;"
+								class="form_table noBodyTable">
+								<div style="width: 13.65%; margin-left: -1px; border-left: 0.1px solid #cccccc; height: 36px;" class="table_cell">
+									<t:outputText
+										value="#{msg.closingOfAccountsEditRegistredAmountAxis}" />
+								</div>
+								<div style="width: 21.1%; height: 36px;" class="table_cell">
+									<t:outputText
+										value="#{msg.closingOfAccountsEditAmountsWithdrawnAndRecoveredWithdrawEligibleExpenditure}" />
+								</div>
+								<div style="width: 21.1%; height: 36px;" class="table_cell">
+									<t:outputText
+										value="#{msg.closingOfAccountsEditAmountsWithdrawnAndRecoveredWithdrawPublicSpending}" />
+								</div>
+								<div style="width: 21.05%; height: 36px;" class="table_cell">
+									<t:outputText
+										value="#{msg.closingOfAccountsEditAmountsWithdrawnAndRecoveredRecoveryEligibleExpenditure}" />
+								</div>
+								<div style="width: 21.05%; height: 36px;" class="table_cell">
+									<t:outputText
+										value="#{msg.closingOfAccountsEditAmountsWithdrawnAndRecoveredRecoveryPublicSpending}" />
+								</div>
+							</div>
+						</ui:fragment>
+
+
+						<t:dataTable style="margin:0 auto; width: 98%;" id="table"
+							var="adv"
+							value="#{closingOfAccountsEditBean.amountsWithdrawnAndRecoveredDuringTheAccountingPeriodList}"
+							styleClass="form_table" rowClasses="row_table_n,row_table_g">
+
+							<f:facet name="footer">
+								<a4j:htmlCommandLink action="#{closingOfAccountsEditBean.exportAmountsWithdrawnAndRecoveredDuringTheAccountingPeriod}"
+									styleClass="headerPanelExport">
+									<h:graphicImage alt="#{msg.exportXls}" value="/images/xls.png" />
+								</a4j:htmlCommandLink>
+							</f:facet>
+							<t:column style="width: 35%;"
+								rendered="#{!empty closingOfAccountsEditBean.amountsWithdrawnAndRecoveredDuringTheAccountingPeriodList}">
+								<t:outputText value="#{adv.asse}"></t:outputText>
+							</t:column>
+							<t:column style="width: 20%;"
+								rendered="#{!empty closingOfAccountsEditBean.amountsWithdrawnAndRecoveredDuringTheAccountingPeriodList}">
+								<t:inputText value="#{adv.withdrawEligibleExpenditure}"
+									id="withdrawEligibleExpenditure" styleClass="editbox_form"
+									maxlength="50" onkeypress="return decimalonly(this, event)"
+									onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+									disabled="#{closingOfAccountsEditBean.edit}"></t:inputText>
+							</t:column>
+							<t:column style="width: 242px;"
+								rendered="#{!empty closingOfAccountsEditBean.amountsWithdrawnAndRecoveredDuringTheAccountingPeriodList}">
+
+								<t:inputText value="#{adv.withdrawPublicSpending}"
+									id="withdrawPublicSpending" styleClass="editbox_form"
+									maxlength="50" onkeypress="return decimalonly(this, event)"
+									onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+									disabled="#{closingOfAccountsEditBean.edit}"></t:inputText>
+							</t:column>
+							<t:column style="width: 243px;"
+								rendered="#{!empty closingOfAccountsEditBean.amountsWithdrawnAndRecoveredDuringTheAccountingPeriodList}">
+
+								<t:inputText value="#{adv.recoveryEligibleExpenditure}"
+									id="recoveryEligibleExpenditure" styleClass="editbox_form"
+									maxlength="50" onkeypress="return decimalonly(this, event)"
+									onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+									disabled="#{closingOfAccountsEditBean.edit}"></t:inputText>
+							</t:column>
+							<t:column style="width: 242px;"
+								rendered="#{!empty closingOfAccountsEditBean.amountsWithdrawnAndRecoveredDuringTheAccountingPeriodList}">
+
+								<t:inputText value="#{adv.recoveryPublicSpending}"
+									id="recoveryPublicSpending" styleClass="editbox_form"
+									maxlength="50" onkeypress="return decimalonly(this, event)"
+									onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+									disabled="#{closingOfAccountsEditBean.edit}"></t:inputText>
+							</t:column>
+						</t:dataTable>
+					</div>
+				</t:panelTab>
+				<t:panelTab id="tab4"
+					label="#{msg.closingOfAccountsEditAmountsToBeRecoveredAtTheClose}"
+					style="#{phisicalClassificationPriorityThemaController.tab2Style}">
+
+					<t:dataTable style="margin:0 auto; width: 33%;" id="table"
+						var="adv"
+						value="#{closingOfAccountsEditBean.amountsToBeRecoveredAtTheCloseList}"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g">
+
+						<f:facet name="header">
+							<t:column>
+								<h:outputText
+									value="#{msg.closingOfAccountsEditAmountsToBeRecoveredAtTheClose}" />
+							</t:column>
+						</f:facet>
+						<f:facet name="footer">
+							<a4j:htmlCommandLink action="#{closingOfAccountsEditBean.exportAmountsToBeRecoveredAtTheClose}"
+								styleClass="headerPanelExport">
+								<h:graphicImage alt="#{msg.exportXls}" value="/images/xls.png" />
+							</a4j:htmlCommandLink>
+						</f:facet>
+
+						<!-- Info columns -->
+
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty closingOfAccountsEditBean.amountsToBeRecoveredAtTheCloseList}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.closingOfAccountsEditAmountsToBeRecoveredAtTheCloseAxis}"></t:outputText>
+							</f:facet>
+							<t:outputText value="#{adv.asse}"></t:outputText>
+						</t:column>
+						<t:column styleClass="NumberColumn"
+							rendered="#{!empty closingOfAccountsEditBean.amountsToBeRecoveredAtTheCloseList}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.closingOfAccountsEditAmountsToBeRecoveredAtTheCloseEligibleExpenditure}" />
+							</f:facet>
+							<t:inputText value="#{adv.eligibleExpenditure}"
+								id="amountsToBeRecoveredeligibleExpenditure"
+								styleClass="editbox_form" maxlength="50"
+								onkeypress="return decimalonly(this, event)"
+								onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+								disabled="#{closingOfAccountsEditBean.edit}"></t:inputText>
+						</t:column>
+						<t:column styleClass="NumberColumn"
+							rendered="#{!empty closingOfAccountsEditBean.amountsToBeRecoveredAtTheCloseList}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.closingOfAccountsEditAmountsToBeRecoveredAtTheClosePublicSpending}" />
+							</f:facet>
+							<t:inputText value="#{adv.publicSpending}"
+								id="mountsToBeRecoveredPublicSpending" styleClass="editbox_form"
+								maxlength="50" onkeypress="return decimalonly(this, event)"
+								onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+								disabled="#{closingOfAccountsEditBean.edit}"></t:inputText>
+						</t:column>
+					</t:dataTable>
+				</t:panelTab>
+				<t:panelTab id="tab5"
+					label="#{msg.closingOfAccountsEditUnrecoverableAmountsAtTheCloseName}"
+					style="#{phisicalClassificationPriorityThemaController.tab2Style}">
+
+					<t:dataTable style="margin:0 auto; width: 50%;" id="table"
+						var="adv"
+						value="#{closingOfAccountsEditBean.unrecoverableAmountsAtTheCloseList}"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g">
+
+						<f:facet name="header">
+							<t:column>
+								<h:outputText
+									value="#{msg.closingOfAccountsEditUnrecoverableAmountsAtTheCloseName}" />
+							</t:column>
+						</f:facet>
+
+						<f:facet name="footer">
+							<a4j:htmlCommandLink action="#{closingOfAccountsEditBean.exportUnrecoverableAmountsAtTheClose}"
+								styleClass="headerPanelExport">
+								<h:graphicImage alt="#{msg.exportXls}" value="/images/xls.png" />
+							</a4j:htmlCommandLink>
+						</f:facet>
+
+						<!-- Info columns -->
+
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty closingOfAccountsEditBean.unrecoverableAmountsAtTheCloseList}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.closingOfAccountsEditUnrecoverableAmountsAtTheCloseAxis}"></t:outputText>
+							</f:facet>
+							<t:outputText value="#{adv.asse}"></t:outputText>
+						</t:column>
+						<t:column styleClass="NumberColumn"
+							rendered="#{!empty closingOfAccountsEditBean.unrecoverableAmountsAtTheCloseList}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.closingOfAccountsEditUnrecoverableAmountsAtTheCloseEligibleExpenditure}" />
+							</f:facet>
+							<t:inputText value="#{adv.eligibleExpenditure}"
+								id="unrecoverableEligibleExpenditure" styleClass="editbox_form"
+								maxlength="50" onkeypress="return decimalonly(this, event)"
+								onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+								disabled="#{closingOfAccountsEditBean.edit}"></t:inputText>
+						</t:column>
+						<t:column styleClass="NumberColumn"
+							rendered="#{!empty closingOfAccountsEditBean.unrecoverableAmountsAtTheCloseList}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.closingOfAccountsEditUnrecoverableAmountsAtTheClosePublicSpending}" />
+							</f:facet>
+							<t:inputText value="#{adv.publicSpending}"
+								id="unrecoverablePublicSpending" styleClass="editbox_form"
+								maxlength="50" onkeypress="return decimalonly(this, event)"
+								onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+								disabled="#{closingOfAccountsEditBean.edit}"></t:inputText>
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty closingOfAccountsEditBean.unrecoverableAmountsAtTheCloseList}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.closingOfAccountsEditUnrecoverableAmountsAtTheCloseObservations}" />
+							</f:facet>
+							<t:inputText value="#{adv.observations}"
+								id="unrecoverableObservations" styleClass="editbox_form"
+								maxlength="250" disabled="#{closingOfAccountsEditBean.edit}"></t:inputText>
+						</t:column>
+					</t:dataTable>
+				</t:panelTab>
+
+			</t:panelTabbedPane>
+			<table width="100%">
+				<tr>
+					<td class="btn_line" colspan="3"><a4j:commandButton
+							immediate="false"
+							action="#{closingOfAccountsEditBean.temporarySave}"
+							reRender="pagePanel" styleClass="button3"
+							value="#{msg.saveIntermediateStep}" id="data_save"
+							rendered="#{not closingOfAccountsEditBean.showButton}" /> <sec:ifAnyGranted
+							roles="ROLE_ACUM_W">
+							<a4j:commandButton immediate="false"
+								visibleOnUserRole="ROLE_ACUM_W" enabledOnUserRole="ROLE_ACUM_W"
+								action="#{closingOfAccountsEditBean.definitiveSave}"
+								reRender="pagePanel" styleClass="button2" value="#{msg.save}"
+								id="save" rendered="#{not closingOfAccountsEditBean.showButton}" />
+						</sec:ifAnyGranted> <a4j:commandButton value="#{msg.cancel}" styleClass="button2"
+							immediate="true" action="#{closingOfAccountsEditBean.GoBack}" /></td>
+				</tr>
+			</table>
+			<table width="100%">
+				<tr>
+					<td align="center"><t:outputText
+							value="#{phisicalClassificationPriorityThemaController.errorMessage}"
+							styleClass="RequiredFieldMarker" /></td>
+				</tr>
+			</table>
+		</a4j:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

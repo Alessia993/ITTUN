@@ -1,0 +1,441 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/EditTabBase.xhtml">
+	<ui:param name="heading" value="#{msg.editLocalCheck}" />
+	<ui:define name="edit_body">
+		<a4j:outputPanel ajaxRendered="true" id="FormPanel">
+			<table width="50%" class="forms" border="0" cellpadding="1"
+				cellspacing="1">
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.localCheckInsertedUserName}:" /></td>
+					<td><t:outputText value="#{localCheckEditBean.userName}"></t:outputText>
+					</td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.localCheckInsertedUserSurname}:" /></td>
+					<td><t:outputText value="#{localCheckEditBean.userSurname}"></t:outputText></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.localCheckInsertedUserRole}:" /></td>
+					<td><t:outputText value="#{localCheckEditBean.userRoleName}"></t:outputText></td>
+				</tr>
+
+			</table>
+			<t:panelTabbedPane serverSideTabSwitch="false"
+				selectedIndex="#{localCheckEditBean.selectTab}">
+				<t:panelTab id="tab1" label="#{msg.localCheck}">
+					<table width="50%" class="forms" border="0" cellpadding="1"
+						cellspacing="1">
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.checkStartDate}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" id="checkStartDate"
+									required="true" inputClass="editbox_form2"
+									converter="dateTimeConverter"
+									rendered="#{!localCheckEditBean.isView}"
+									value="#{localCheckEditBean.entity.checkStartDate}"
+									datePattern="dd/MM/yyyy">
+								</rich:calendar> <t:outputText rendered="#{localCheckEditBean.isView}"
+									converter="dateTimeConverter"
+									value="#{localCheckEditBean.entity.checkStartDate}"
+									style="font-weight:bold;" /></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.evaluation}:" /><span class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><h:inputText maxlength="250"
+									rendered="#{!localCheckEditBean.isView}"
+									styleClass="editbox_form" id="evaluation" required="true"
+									value="#{localCheckEditBean.entity.evaluation}" /> <t:outputText
+									rendered="#{localCheckEditBean.isView}"
+									value="#{localCheckEditBean.entity.evaluation}"
+									style="font-weight:bold;" /></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.controlexpense}:" /><span class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><h:inputText maxlength="250"
+									rendered="#{!localCheckEditBean.isView}"
+									styleClass="editbox_form" id="controlexpense" required="true"
+									value="#{localCheckEditBean.entity.controlexpense}" /> <t:outputText
+									rendered="#{localCheckEditBean.isView}"
+									value="#{localCheckEditBean.entity.controlexpense}"
+									style="font-weight:bold;" /></td>
+						</tr>
+						
+						<tr>
+							<td class="LabelCell"><t:outputText value="#{msg.results}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><h:inputText maxlength="250"
+									rendered="#{!localCheckEditBean.isView}"
+									styleClass="editbox_form" id="results" required="true"
+									value="#{localCheckEditBean.entity.results}" /> <t:outputText
+									rendered="#{localCheckEditBean.isView}"
+									value="#{localCheckEditBean.entity.results}"
+									style="font-weight:bold;" /></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText value="#{msg.resume}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><h:inputText maxlength="250"
+									rendered="#{!localCheckEditBean.isView}"
+									styleClass="editbox_form" id="resume" required="true"
+									value="#{localCheckEditBean.entity.resume}" /> <t:outputText
+									rendered="#{localCheckEditBean.isView}"
+									value="#{localCheckEditBean.entity.resume}"
+									style="font-weight:bold;" /></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.ineligibleexpense}:" /><span class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><h:inputText maxlength="250"
+									rendered="#{!localCheckEditBean.isView}"
+									styleClass="editbox_form" id="ineligibleexpense" required="true"
+									value="#{localCheckEditBean.entity.ineligibleexpense}" /> <t:outputText
+									rendered="#{localCheckEditBean.isView}"
+									value="#{localCheckEditBean.entity.ineligibleexpense}"
+									style="font-weight:bold;" /></td>
+						</tr>
+						<!--  new acagnoni 2019/03/18 -->
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.finalAmountIneligibleExpenditure}:" /><span class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><h:inputText maxlength="250"
+									rendered="#{!localCheckEditBean.isView}"
+									styleClass="editbox_form" id="finalAmountIneligibleExpenditure" required="true"
+									value="#{localCheckEditBean.entity.finalAmountIneligibleExpenditure}" /> <t:outputText
+									rendered="#{localCheckEditBean.isView}"
+									value="#{localCheckEditBean.entity.finalAmountIneligibleExpenditure}"
+									style="font-weight:bold;" /></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.checkClosureDate}:" /> <t:outputText
+									rendered="#{localCheckEditBean.isClosed}"
+									styleClass="RequiredFieldMarker" value="*"></t:outputText></td>
+							<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" id="checkClosureDate"
+									required="#{localCheckEditBean.isClosed}"
+									rendered="#{!localCheckEditBean.isView}"
+									inputClass="editbox_form2" converter="dateTimeConverter"
+									value="#{localCheckEditBean.entity.checkClosureDate}"
+									datePattern="dd/MM/yyyy">
+								</rich:calendar> <t:outputText rendered="#{localCheckEditBean.isView}"
+									converter="dateTimeConverter"
+									value="#{localCheckEditBean.entity.checkClosureDate}"
+									style="font-weight:bold;" /></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.dateOfIssueprovisionalControl}:" /> <t:outputText
+									rendered="#{localCheckEditBean.isClosed}"
+									styleClass="RequiredFieldMarker" value="*"></t:outputText></td>
+							<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" id="dateOfIssueprovisionalControl"
+									required="#{localCheckEditBean.isClosed}"
+									rendered="#{!localCheckEditBean.isView}"
+									inputClass="editbox_form2" converter="dateTimeConverter"
+									value="#{localCheckEditBean.entity.dateOfIssueprovisionalControl}"
+									datePattern="dd/MM/yyyy">
+								</rich:calendar> <t:outputText rendered="#{localCheckEditBean.isView}"
+									converter="dateTimeConverter"
+									value="#{localCheckEditBean.entity.checkClosureDate}"
+									style="font-weight:bold;" /></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.documentForPartner}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><t:selectOneMenu
+									onmousedown="collapse(this);" onchange="expand(this);"
+									onblur="expand(this);"
+									value="#{localCheckEditBean.selectedPartnerEntity}"
+									required="true" rendered="#{!localCheckEditBean.isView}"
+									styleClass="DropDown">
+									<f:selectItems value="#{localCheckEditBean.listPartners}" />
+								</t:selectOneMenu> <t:outputText rendered="#{localCheckEditBean.isView}"
+									value="#{localCheckEditBean.entity.partnerName}" /></td>
+						</tr>
+												<tr>
+							<td class="LabelCell"><t:outputText
+										value="#{msg.protocolNumberLocalCheck}:" /></td>
+								<td class="ControlCell"><h:inputText maxlength="12"
+										rendered="#{!localCheckEditBean.isView}"
+										converter="floatConverter" styleClass="editbox_form2"
+										id="protocolNumber"
+										onkeypress="return decimalonly(this, event)"
+										onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+										value="#{localCheckEditBean.entity.protocolNumber}" /> <b><t:outputText
+											value="#{localCheckEditBean.entity.protocolNumber}"
+											
+											rendered="#{localCheckEditBean.isView}" /></b></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.closureControl}:" /></td>
+							<td class="ControlCell"><t:selectOneRadio
+									value="#{localCheckEditBean.entity.closedControl}"
+									immediate="true" disabled="#{localCheckEditBean.isView}"
+									valueChangeListener="#{localCheckEditBean.closedChanged}">
+									<f:selectItem itemValue="false"
+										itemLabel="#{msg.inCourseControl}" />
+									<f:selectItem itemValue="true" itemLabel="#{msg.closeControl}" />
+									<a4j:support event="onclick" id="filterValuesPA"
+										reRender="FormPanel" />
+								</t:selectOneRadio></td>
+						</tr>
+
+						
+					</table>
+				</t:panelTab>
+				<t:panelTab id="tab5" label="#{msg.documents}">
+					<div class="table_container">
+						<t:dataTable width="80%" style="margin:0 auto;" id="table"
+							var="data" rowIndexVar="row"
+							value="#{localCheckEditBean.docList}" styleClass="form_table"
+							rowClasses="row_table_n,row_table_g">
+							<f:facet name="header">
+								<t:column>
+									<a4j:commandLink styleClass="headerPanelLink"
+										rendered="#{!localCheckEditBean.isView}"
+										oncomplete="#{rich:component('documentPanel3')}.show()">#{msg.uploadFile}</a4j:commandLink>
+
+									<h:outputText style="text-align: center"
+										value="#{msg.documents}" />
+								</t:column>
+							</f:facet>
+							<t:column id="download" styleClass="ActionColumn"
+								rendered="#{!empty localCheckEditBean.docList}">
+								<a4j:htmlCommandLink id="downloadLink" title="#{msg.download}"
+									ajaxSingle="true" immediate="true"
+									action="#{localCheckEditBean.downloadDocFromList}">
+									<h:graphicImage alt="#{msg.download}"
+										value="/images/file-down.png" style="border:0" />
+									<f:setPropertyActionListener value="#{row}"
+										target="#{localCheckEditBean.entityDownloadId}" />
+								</a4j:htmlCommandLink>
+							</t:column>
+
+							<t:column id="delete" styleClass="ActionColumn"
+								rendered="#{!empty localCheckEditBean.docList and !localCheckEditBean.isView}">
+								<a4j:commandLink id="deletelink24" title="#{msg.delete}"
+									ajaxSingle="true"
+									action="#{localCheckEditBean.deleteDocFromList}">
+									<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+										style="border:0" />
+									<f:setPropertyActionListener value="#{row}"
+										target="#{localCheckEditBean.entityDeleteId}" />
+								</a4j:commandLink>
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty localCheckEditBean.docList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.documentTitle}" />
+								</f:facet>
+								<t:outputText value="#{data.title}"
+									converter="longNameConverter" />
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty localCheckEditBean.docList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.protocolNumber}" />
+								</f:facet>
+								<t:outputText value="#{data.protocolNumber}" />
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty localCheckEditBean.docList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.documentDate}" />
+								</f:facet>
+								<t:outputText value="#{data.documentDate}"
+									converter="dateTimeConverter" />
+							</t:column>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{empty localCheckEditBean.docList}">
+								<f:facet name="header">
+									<h:outputText value="#{msg.noData}" />
+								</f:facet>
+							</t:column>
+						</t:dataTable>
+					</div>
+				</t:panelTab>
+			</t:panelTabbedPane>
+			<table width="100%">
+				<tr>
+					<td colspan="2" class="btn_line"><a4j:commandButton
+							immediate="false" action="#{localCheckEditBean.Page_Save}"
+							rendered="#{!localCheckEditBean.isView}" styleClass="button2"
+							value="#{msg.save}" id="save" /> <a4j:commandButton
+							value="#{msg.cancel}" styleClass="button2" immediate="true"
+							action="#{localCheckEditBean.GoBack}" /></td>
+				</tr>
+			</table>
+		</a4j:outputPanel>
+	</ui:define>
+
+	<ui:define name="document_body">
+		<rich:modalPanel id="documentPanel3" autosized="true" width="300">
+			<f:facet name="header">
+				<h:outputText value="#{msg.document}" style="padding-right:15px;" />
+			</f:facet>
+
+			<table>
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.date}:" /></td>
+					<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" disabled="false"
+							inputClass="editbox_form2" converter="dateTimeConverter"
+							value="#{localCheckEditBean.newDocument.documentDate}"
+							datePattern="dd/MM/yyyy">
+						</rich:calendar></td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentDescription}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							style="width:216px;" maxlength="50"
+							value="#{localCheckEditBean.newDocument.description}" /></td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.protocolNumber}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							maxlength="50" style="width:216px;"
+							value="#{localCheckEditBean.newDocument.protocolNumber}" /></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentPublic}:" /></td>
+					<td class="ControlCell"><t:selectBooleanCheckbox
+							value="#{localCheckEditBean.newDocument.isPublic}">
+						</t:selectBooleanCheckbox></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentUploadRole}:" /></td>
+					<td class="ControlCell"><t:selectOneMenu
+							onmousedown="collapse(this);" onchange="expand(this);"
+							onblur="expand(this);" value="#{localCheckEditBean.newDocRole}"
+							required="false" styleClass="DropDown">
+							<f:selectItems value="#{localCheckEditBean.listSelectRoles}" />
+						</t:selectOneMenu></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentForPartner}:" /></td>
+					<td class="ControlCell"><t:selectOneMenu
+							onmousedown="collapse(this);" onchange="expand(this);"
+							onblur="expand(this);"
+							value="#{localCheckEditBean.selectedPartner}" required="false"
+							styleClass="DropDown">
+							<f:selectItems value="#{localCheckEditBean.listPartners}" />
+						</t:selectOneMenu></td>
+				</tr>
+				<ui:remove>
+				<tr class="tempDisplay">
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentCategory}:" /></td>
+					<td class="ControlCell"><t:selectOneMenu
+							onmousedown="collapse(this);" onchange="expand(this);"
+							onblur="expand(this);"
+							value="#{localCheckEditBean.selectedCategory}" required="false"
+							styleClass="DropDown">
+							<f:selectItems value="#{localCheckEditBean.categories}" />
+						</t:selectOneMenu></td>
+				</tr>
+				</ui:remove>
+				<ui:remove>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentNumberField}:" /></td>
+					<td class="ControlCell"><t:inputText
+							styleClass="editbox_form2" id="docNumber"
+							value="#{localCheckEditBean.newDocument.documentNumber}"
+							onkeypress="return numbersonly(this, event)"
+							onkeyup="checknumber(this)" maxlength="10" /></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.date}:" /></td>
+					<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+							inputClass="editbox_form2" converter="dateTimeConverter"
+							value="#{localCheckEditBean.newDocument.editableDate}"
+							datePattern="dd/MM/yyyy">
+						</rich:calendar></td>
+				</tr>
+				</ui:remove>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.uploadFile}:" /></td>
+					<td class="ControlCell"><t:inputFileUpload id="fileupload3"
+							value="#{localCheckEditBean.newDocumentUpFile}" storage="file"
+							styleClass="fileUploadInput" maxlength="200000" /></td>
+				</tr>
+				<tr>
+					<td align="center" colspan="2">#{msg.fileSize}</td>
+				</tr>
+				
+				<ui:remove>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentNote}:" /></td>
+					<td class="ControlCell"><t:inputTextarea maxlength="255"
+							rows="6" cols="40" value="#{localCheckEditBean.newDocument.note}"
+							onkeypress="return textArea(this, 255)"
+							styleClass="editbox_form2" id="note" /></td>
+				</tr>
+				</ui:remove>
+				
+				<tr>
+					<td colspan="2" style="text-align: center;"><h:commandButton
+							value="#{msg.uploadFile}" styleClass="button3"
+							action="#{localCheckEditBean.addNewDocument}"
+							reRender="FormPanel"
+							onclick="#{rich:component('documentPanel3')}.hide();" /> <a4j:commandButton
+							value="#{msg.cancel}" styleClass="button" immediate="false"
+							onclick="#{rich:component('documentPanel3')}.hide();return false;" /></td>
+				</tr>
+			</table>
+		</rich:modalPanel>
+	</ui:define>
+
+	<ui:define name="delete_panels">
+
+		<rich:modalPanel id="deletePanel" autosized="true" width="200">
+			<f:facet name="header">
+				<h:outputText value="#{msg.delete}?" style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+			</f:facet>
+			<h:form>
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.yes}" ajaxSingle="true" styleClass="button"
+									action="#{localCheckEditBean.deleteDocFromList}"
+									immediate="false" rendered="#{!localCheckEditBean.isView}"
+									oncomplete="#{rich:component('deletePanel')}.hide();"
+									reRender="FormPanel" /></td>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.cancel}" styleClass="button"
+									onclick="#{rich:component('deletePanel')}.hide();return false;" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</h:form>
+		</rich:modalPanel>
+	</ui:define>
+</ui:composition>
+</html>

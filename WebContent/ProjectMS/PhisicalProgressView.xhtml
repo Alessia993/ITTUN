@@ -1,0 +1,1277 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ListTabBase.xhtml">
+	<ui:param name="heading" value="#{msg.physicalProgress}" />
+	<ui:param name="heading_top" value="#{msg.physicalProgress}" />
+	<ui:define name="list_body">
+		<a4j:keepAlive beanName="phisicalProgressViewBean" />
+		<a4j:outputPanel ajaxRendered="true" id="FormPanel">
+
+			<t:panelTabbedPane serverSideTabSwitch="false" id="progressTabs"
+				selectedIndex="#{phisicalProgressViewBean.selectedIndex}">
+				<ui:remove>
+					<t:panelTab id="tab10" label="#{msg.indicatorsQSN}">
+						<div class="table_container">
+							<t:dataTable width="100%" style="margin:0 auto;" id="qsnTable"
+								var="data" value="#{phisicalProgressViewBean.qsnList}"
+								styleClass="form_table" rowClasses="row_table_n,row_table_g">
+								<f:facet name="header">
+									<t:column>
+										<h:outputText style="text-align: center"
+											value="#{msg.indicatorsQSN}" />
+									</t:column>
+								</f:facet>
+								<t:column styleClass="CodeColumn"
+									rendered="#{!empty phisicalProgressViewBean.qsnList}">
+									<f:facet name="header">
+										<t:outputText value="#{msg.priorityCode}" />
+									</f:facet>
+									<t:outputText value="#{data.indicator.priorityCode}" />
+								</t:column>
+								<t:column styleClass="StringColumn"
+									rendered="#{!empty phisicalProgressViewBean.qsnList}">
+									<f:facet name="header">
+										<t:outputText value="#{msg.descriptionPriorirty}" />
+									</f:facet>
+									<t:outputText value="#{data.indicator.descriptionPriorirty}" />
+								</t:column>
+								<t:column styleClass="StringColumn"
+									rendered="#{!empty phisicalProgressViewBean.qsnList}">
+									<f:facet name="header">
+										<t:outputText value="#{msg.descriptionPriorirty}" />
+									</f:facet>
+									<h:outputText value="#{data.indicator.descriptionResult}" />
+								</t:column>
+								<t:column rendered="#{!empty phisicalProgressViewBean.qsnList}">
+									<f:facet name="header">
+										<h:outputText value="#{msg.indicatoryQsnResult}" />
+									</f:facet>
+									<h:outputText value="#{data.indicator.qsnResalto}" />
+								</t:column>
+								<t:column styleClass="StringColumn"
+									rendered="#{empty phisicalProgressViewBean.qsnList}">
+									<f:facet name="header">
+										<h:outputText value="#{msg.noData}" />
+									</f:facet>
+								</t:column>
+							</t:dataTable>
+						</div>
+					</t:panelTab>
+					<t:panelTab id="tab2" label="#{msg.coreIndicators}"
+						style="#{phisicalProgressViewBean.coreStyle}">
+						<div class="table_container">
+							<t:dataTable width="100%" style="margin:0 auto;" id="coreTable"
+								var="data" value="#{phisicalProgressViewBean.coreList}"
+								styleClass="form_table" rowClasses="row_table_n,row_table_g">
+								<f:facet name="header">
+									<h:outputText style="text-align: center"
+										value="#{msg.coreIndicators}" />
+								</f:facet>
+
+
+								<t:column id="coreFiles" styleClass="ActionColumn"
+									rendered="#{!empty phisicalProgressViewBean.coreList and !Session.isAguRead and phisicalProgressViewBean.editable}">
+									<a4j:commandLink ajaxSingle="true" id="coreFileslink"
+										title="#{msg.uploadFile}"
+										rendered="#{phisicalProgressViewBean.entityCoreEditId != data.id}"
+										action="#{phisicalProgressViewBean.coreUpload}"
+										reRender="FormPanel">
+										<h:graphicImage alt="#{msg.uploadFile}"
+											value="/images/file-add.png" style="border:0" />
+										<f:setPropertyActionListener value="#{data.id}"
+											target="#{phisicalProgressViewBean.entityCoreUploadId}" />
+									</a4j:commandLink>
+								</t:column>
+
+								<sec:ifAnyGranted roles="ROLE_AGU_W,ROLE_BP_W">
+
+									<t:column id="edit" styleClass="ActionColumn"
+										rendered="#{!empty phisicalProgressViewBean.coreList and !Session.isAguRead and phisicalProgressViewBean.editable}">
+										<a4j:commandLink ajaxSingle="true" id="editlink"
+											title="#{msg.edit}"
+											rendered="#{phisicalProgressViewBean.entityCoreEditId != data.id}"
+											action="#{phisicalProgressViewBean.editCore}"
+											reRender="FormPanel">
+											<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+												style="border:0" />
+											<f:setPropertyActionListener value="#{data.id}"
+												target="#{phisicalProgressViewBean.entityCoreEditId}" />
+										</a4j:commandLink>
+										<a4j:commandLink id="savelink"
+											rendered="#{phisicalProgressViewBean.entityCoreEditId == data.id}"
+											title="#{msg.save}" immediate="false"
+											action="#{phisicalProgressViewBean.saveCore}"
+											reRender="FormPanel">
+											<h:graphicImage alt="#{msg.save}"
+												value="/images/SaveAllFiles.png" style="border:0" />
+										</a4j:commandLink>
+									</t:column>
+								</sec:ifAnyGranted>
+								<t:column styleClass="StringColumn"
+									rendered="#{!empty phisicalProgressViewBean.coreList}">
+									<f:facet name="header">
+										<t:outputText value="#{msg.indicartorDescription}" />
+									</f:facet>
+									<t:outputText value="#{data.indicator.descriptionOfIndicator}" />
+								</t:column>
+								<t:column styleClass="StringColumn"
+									rendered="#{!empty phisicalProgressViewBean.coreList}">
+									<f:facet name="header">
+										<t:outputText value="#{msg.descriptionUnitsMeasure}" />
+									</f:facet>
+									<t:outputText value="#{data.indicator.descriptionUnitsMeasure}" />
+								</t:column>
+								<t:column styleClass="StrignColumn" style="width:300px;"
+									rendered="#{!empty phisicalProgressViewBean.coreList}">
+									<f:facet name="header">
+										<t:outputText value="#{msg.additionalValues}" />
+									</f:facet>
+									<table class="forms" border="0" cellpadding="1" cellspacing="1">
+										<tr>
+											<td><t:outputText value="#{msg.programmedValue}:" /></td>
+											<td><b><t:outputText
+														value="#{data.programmedValues}"
+														converter="floatConverter" /></b></td>
+										</tr>
+										<tr>
+											<td><t:outputText value="#{msg.engageValue}:" /><span
+												class="RequiredFieldMarker">*</span></td>
+											<td><b><t:outputText value="#{data.engageValue}"
+														converter="floatConverter"
+														rendered="#{phisicalProgressViewBean.entityCoreEditId != data.id}" /></b>
+												<t:inputText value="#{data.engageValue}"
+													style="#{phisicalProgressViewBean.engageStyle}"
+													styleClass="editbox_form2" maxlength="12"
+													converter="floatConverter"
+													validator="#{validator.isFloat92}"
+													onkeypress="return decimalonly(this, event)"
+													onkeyup="checkdecimal(this)"
+													rendered="#{phisicalProgressViewBean.entityCoreEditId == data.id}" /></td>
+										</tr>
+										<tr>
+											<td><t:outputText value="#{msg.gotValue}:" /><span
+												class="RequiredFieldMarker">*</span></td>
+											<td><b><t:outputText value="#{data.gotValue}"
+														converter="floatConverter"
+														rendered="#{phisicalProgressViewBean.entityCoreEditId != data.id}" /></b>
+												<t:inputText value="#{data.gotValue}"
+													style="#{phisicalProgressViewBean.gotStyle}"
+													styleClass="editbox_form2" maxlength="12"
+													converter="floatConverter"
+													validator="#{validator.isFloat92}"
+													onkeypress="return decimalonly(this, event)"
+													onkeyup="checkdecimal(this)"
+													rendered="#{phisicalProgressViewBean.entityCoreEditId == data.id}" /></td>
+										</tr>
+										<tr>
+											<td><t:outputText value="#{msg.closureValue}:" /></td>
+											<td><b><t:outputText value="#{data.closureValue}"
+														converter="floatConverter"
+														rendered="#{phisicalProgressViewBean.entityCoreEditId != data.id}" /></b>
+												<t:inputText value="#{data.closureValue}"
+													style="#{phisicalProgressViewBean.coreStyle}"
+													styleClass="editbox_form2" maxlength="12"
+													onkeypress="return decimalonly(this, event)"
+													onkeyup="checkdecimal(this)" converter="floatConverter"
+													validator="#{validator.isFloat92}"
+													rendered="#{phisicalProgressViewBean.entityCoreEditId == data.id}" /></td>
+										</tr>
+										<tr>
+											<td><t:outputText value="#{msg.programmedValueUpdate}:" /><span
+												class="RequiredFieldMarker">*</span></td>
+											<td><b><t:outputText
+														value="#{data.programmedValueUpdate}"
+														converter="floatConverter"
+														rendered="#{phisicalProgressViewBean.entityCoreEditId != data.id}" /></b>
+												<t:inputText value="#{data.programmedValueUpdate}"
+													style="#{phisicalProgressViewBean.programmedUpdateStyle}"
+													styleClass="editbox_form2" maxlength="12"
+													onkeypress="return decimalonly(this, event)"
+													onkeyup="checkdecimal(this)" converter="floatConverter"
+													validator="#{validator.isFloat92}"
+													rendered="#{phisicalProgressViewBean.entityCoreEditId == data.id}" /></td>
+										</tr>
+									</table>
+								</t:column>
+								<t:column styleClass="StringColumn"
+									rendered="#{empty phisicalProgressViewBean.coreList}">
+									<f:facet name="header">
+										<h:outputText value="#{msg.noData}" />
+									</f:facet>
+								</t:column>
+							</t:dataTable>
+						</div>
+					</t:panelTab>
+					<t:panelTab id="tab4" label="#{msg.employmentIndicators}"
+						style="#{phisicalProgressViewBean.employmentStyle}">
+						<div class="table_container">
+							<t:dataTable width="100%" style="margin:0 auto;"
+								id="employmentTable" var="data"
+								value="#{phisicalProgressViewBean.employmentList}"
+								styleClass="form_table" rowClasses="row_table_n,row_table_g">
+								<f:facet name="header">
+									<h:outputText style="text-align: center"
+										value="#{msg.employmentIndicators}" />
+								</f:facet>
+								<sec:ifAnyGranted roles="ROLE_AGU_W,ROLE_BP_W">
+									<t:column id="edit" styleClass="ActionColumn"
+										rendered="#{!empty phisicalProgressViewBean.employmentList and !Session.isAguRead and phisicalProgressViewBean.editable}">
+										<a4j:commandLink ajaxSingle="true" id="editlink"
+											rendered="#{phisicalProgressViewBean.entityEmpEditId != data.id}"
+											title="#{msg.edit}"
+											action="#{phisicalProgressViewBean.editEmp}"
+											reRender="FormPanel">
+											<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+												style="border:0" />
+											<f:setPropertyActionListener value="#{data.id}"
+												target="#{phisicalProgressViewBean.entityEmpEditId}" />
+										</a4j:commandLink>
+										<a4j:commandLink id="savelink"
+											rendered="#{phisicalProgressViewBean.entityEmpEditId == data.id}"
+											title="#{msg.save}" immediate="false" reRender="FormPanel"
+											action="#{phisicalProgressViewBean.saveEmp}">
+											<h:graphicImage alt="#{msg.save}"
+												value="/images/SaveAllFiles.png" style="border:0" />
+										</a4j:commandLink>
+									</t:column>
+								</sec:ifAnyGranted>
+								<t:column styleClass="StringColumn"
+									rendered="#{!empty phisicalProgressViewBean.employmentList}">
+									<f:facet name="header">
+										<t:outputText value="#{msg.description}" />
+									</f:facet>
+									<t:outputText value="#{data.indicator.description}" />
+								</t:column>
+								<t:column styleClass="NumberColumn"
+									rendered="#{!empty phisicalProgressViewBean.employmentList}">
+									<f:facet name="header">
+										<t:outputText value="#{msg.measurementUnits}" />
+									</f:facet>
+									<t:outputText value="#{data.indicator.measurementUnits}" />
+								</t:column>
+								<t:column styleClass="StrignColumn" style="width:300px;"
+									rendered="#{!empty phisicalProgressViewBean.coreList}">
+									<f:facet name="header">
+										<t:outputText value="#{msg.additionalValues}" />
+									</f:facet>
+									<table class="forms" border="0" cellpadding="1" cellspacing="1">
+										<tr>
+											<td><t:outputText value="#{msg.programmedValue}:" /></td>
+											<td><b><t:outputText
+														value="#{data.programmedValues}"
+														converter="floatConverter" /></b></td>
+										</tr>
+										<tr>
+											<td><t:outputText value="#{msg.engageValue}:" /><span
+												class="RequiredFieldMarker">*</span></td>
+											<td><b><t:outputText value="#{data.engageValue}"
+														converter="floatConverter"
+														rendered="#{phisicalProgressViewBean.entityEmpEditId != data.id}" /></b>
+												<t:inputText value="#{data.engageValue}"
+													style="#{phisicalProgressViewBean.engageStyle}"
+													styleClass="editbox_form2" maxlength="12"
+													converter="floatConverter"
+													validator="#{validator.isFloat92}"
+													onkeypress="return decimalonly(this, event)"
+													onkeyup="checkdecimal(this)"
+													rendered="#{phisicalProgressViewBean.entityEmpEditId == data.id}" /></td>
+										</tr>
+										<tr>
+											<td><t:outputText value="#{msg.gotValue}:" /><span
+												class="RequiredFieldMarker">*</span></td>
+											<td><b><t:outputText value="#{data.gotValue}"
+														converter="floatConverter"
+														rendered="#{phisicalProgressViewBean.entityEmpEditId != data.id}" /></b>
+												<t:inputText value="#{data.gotValue}"
+													style="#{phisicalProgressViewBean.gotStyle}"
+													styleClass="editbox_form2" maxlength="12"
+													converter="floatConverter"
+													validator="#{validator.isFloat92}"
+													onkeypress="return decimalonly(this, event)"
+													onkeyup="checkdecimal(this)"
+													rendered="#{phisicalProgressViewBean.entityEmpEditId == data.id}" /></td>
+										</tr>
+										<tr>
+											<td><t:outputText value="#{msg.closureValue}:" /></td>
+											<td><b><t:outputText value="#{data.closureValue}"
+														converter="floatConverter"
+														rendered="#{phisicalProgressViewBean.entityEmpEditId != data.id}" /></b>
+												<t:inputText value="#{data.closureValue}"
+													styleClass="editbox_form2" maxlength="12"
+													onkeypress="return decimalonly(this, event)"
+													ajaxSingle="true" onkeyup="checkdecimal(this)"
+													converter="floatConverter"
+													validator="#{validator.isFloat92}"
+													rendered="#{phisicalProgressViewBean.entityEmpEditId == data.id}" /></td>
+										</tr>
+										<tr>
+											<td><t:outputText value="#{msg.programmedValueUpdate}:" /><span
+												class="RequiredFieldMarker">*</span></td>
+											<td><b><t:outputText
+														value="#{data.programmedValueUpdate}"
+														converter="floatConverter"
+														rendered="#{phisicalProgressViewBean.entityEmpEditId != data.id}" /></b>
+												<t:inputText value="#{data.programmedValueUpdate}"
+													style="#{phisicalProgressViewBean.programmedUpdateStyle}"
+													styleClass="editbox_form2" maxlength="12"
+													onkeypress="return decimalonly(this, event)"
+													onkeyup="checkdecimal(this)" converter="floatConverter"
+													validator="#{validator.isFloat92}"
+													rendered="#{phisicalProgressViewBean.entityEmpEditId == data.id}" /></td>
+										</tr>
+									</table>
+								</t:column>
+								<t:column styleClass="StringColumn"
+									rendered="#{empty phisicalProgressViewBean.employmentList}">
+									<f:facet name="header">
+										<h:outputText value="#{msg.noData}" />
+									</f:facet>
+								</t:column>
+							</t:dataTable>
+						</div>
+					</t:panelTab>
+				</ui:remove>
+				
+				<ui:remove>
+				<t:panelTab id="tab7" label="#{msg.communicationIndicators}">
+					<div class="table_container">
+						<t:dataTable width="100%" style="margin:0 auto;"
+							id="communicationTable" var="data"
+							value="#{phisicalProgressViewBean.commList}"
+							styleClass="form_table" rowClasses="row_table_n,row_table_g">
+
+							<f:facet name="header">
+								<h:outputText style="text-align: center"
+									value="#{msg.communicationIndicators}" />
+							</f:facet>
+
+
+							<t:column id="commFiles" styleClass="ActionColumn"
+								rendered="#{!empty phisicalProgressViewBean.commList and !Session.isAguRead and phisicalProgressViewBean.editable}">
+								<a4j:commandLink ajaxSingle="true" id="commFileslink"
+									title="#{msg.uploadFile}"
+									rendered="#{phisicalProgressViewBean.entityComEditId != data.id}"
+									action="#{phisicalProgressViewBean.commUpload}"
+									reRender="FormPanel">
+									<h:graphicImage alt="#{msg.uploadFile}"
+										value="/images/file-add.png" style="border:0" />
+									<f:setPropertyActionListener value="#{data.id}"
+										target="#{phisicalProgressViewBean.entityCommUploadId}" />
+								</a4j:commandLink>
+							</t:column>
+							<sec:ifAnyGranted roles="ROLE_AGU_W,ROLE_BP_W">
+								<t:column id="edit" styleClass="ActionColumn"
+									rendered="#{!empty phisicalProgressViewBean.commList and !Session.isAguRead and phisicalProgressViewBean.editable}">
+									<a4j:commandLink ajaxSingle="true" id="editlink"
+										rendered="#{phisicalProgressViewBean.entityComEditId != data.id}"
+										title="#{msg.edit}"
+										action="#{phisicalProgressViewBean.editComm}"
+										reRender="FormPanel">
+										<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+											style="border:0" />
+										<f:setPropertyActionListener value="#{data.id}"
+											target="#{phisicalProgressViewBean.entityComEditId}" />
+									</a4j:commandLink>
+									<a4j:commandLink id="savelink" title="#{msg.save}"
+										immediate="false" reRender="FormPanel"
+										action="#{phisicalProgressViewBean.saveComm}">
+										<h:graphicImage alt="#{msg.save}"
+											rendered="#{phisicalProgressViewBean.entityComEditId == data.id}"
+											value="/images/SaveAllFiles.png" style="border:0" />
+									</a4j:commandLink>
+								</t:column>
+							</sec:ifAnyGranted>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressViewBean.commList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.communicationIndicatorsProductCode}" />
+								</f:facet>
+								<t:outputText value="#{data.productCode}" />
+							</t:column>
+							<!-- <t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressViewBean.commList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.communicationIndicatorsCom}" />
+								</f:facet>
+								<t:outputText value="#{data.communicationObjective}" />
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressViewBean.commList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.communicationIndicatorsTargetGroup}" />
+								</f:facet>
+								<t:outputText value="#{data.targetGroup}" />
+							</t:column> -->
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressViewBean.commList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.communicationIndicatorsDesc}" />
+								</f:facet>
+								<t:outputText value="#{data.name}" />
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressViewBean.commList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.projectIndicatorsTarget}" />
+								</f:facet>
+								<t:outputText value="#{data.target}" />
+							</t:column>
+							<t:column
+								rendered="#{!empty phisicalProgressViewBean.commList and phisicalProgressViewBean.asseNumber&gt;0}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.year} 2018" />
+								</f:facet>
+
+								<t:outputText value="#{data.asse1}" />
+								<t:inputText value="#{data.asse1}"
+									rendered="#{phisicalProgressViewBean.entityComEditId == data.id}" />
+
+							</t:column>
+
+							<t:column
+								rendered="#{!empty phisicalProgressViewBean.commList and phisicalProgressViewBean.asseNumber&gt;0}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.year} 2019" />
+								</f:facet>
+								<t:outputText value="#{data.asse2}" />
+								<t:inputText value="#{data.asse2}"
+									rendered="#{phisicalProgressViewBean.entityComEditId == data.id}" />
+
+							</t:column>
+
+							<t:column
+								rendered="#{!empty phisicalProgressViewBean.commList and phisicalProgressViewBean.asseNumber&gt;0}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.year} 2020" />
+								</f:facet>
+								<t:outputText value="#{data.asse3}" />
+								<t:inputText value="#{data.asse3}"
+									rendered="#{phisicalProgressViewBean.entityComEditId == data.id}" />
+
+							</t:column>
+
+							<t:column
+								rendered="#{!empty phisicalProgressViewBean.commList and phisicalProgressViewBean.asseNumber&gt;0}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.year} 2021" />
+								</f:facet>
+								<t:outputText value="#{data.asse4}" />
+								<t:inputText value="#{data.asse4}"
+									rendered="#{phisicalProgressViewBean.entityComEditId == data.id}" />
+
+							</t:column>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressViewBean.commList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.phisicalProgressViewExpectedDateRealization}" />
+								</f:facet>
+								
+								<rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+									inputClass="editbox_form2" converter="dateTimeConverter"
+									value="#{data.expectedDateRealization}"
+									datePattern="dd/MM/yyyy" 
+									rendered="#{phisicalProgressViewBean.entityComEditId == data.id}" >
+								</rich:calendar>
+								<t:outputText value="#{data.expectedDateRealization}" converter="dateTimeConverter"/>
+							</t:column>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressViewBean.commList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.phisicalProgressViewActualDateRealization}" />
+								</f:facet>
+								
+								<rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+									inputClass="editbox_form2" converter="dateTimeConverter"
+									value="#{data.actualDateRealization}"
+									datePattern="dd/MM/yyyy" rendered="#{phisicalProgressViewBean.entityComEditId == data.id}" >
+								</rich:calendar>
+								<t:outputText value="#{data.actualDateRealization}" converter="dateTimeConverter"/>
+							</t:column>
+							
+							
+
+							<t:column id="commNotes" styleClass="ActionColumn"
+								rendered="#{!empty phisicalProgressViewBean.commList and !Session.isAguRead and phisicalProgressViewBean.editable}">
+								<f:facet name="header">
+									<h:outputText value="#{msg.notes}" />
+								</f:facet>
+								<a4j:commandLink ajaxSingle="true" id="commNoteslink"
+									title="#{msg.notes}"
+									rendered="#{phisicalProgressViewBean.entityComEditId != data.id}"
+									action="#{phisicalProgressViewBean.commNote}"
+									reRender="FormPanel">
+									<h:graphicImage alt="#{msg.notes}" value="/images/write.png"
+										style="border:0" />
+									<f:setPropertyActionListener value="#{data.id}"
+										target="#{phisicalProgressViewBean.entityCommNoteId}" />
+								</a4j:commandLink>
+							</t:column>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{empty phisicalProgressViewBean.commList}">
+								<f:facet name="header">
+									<h:outputText value="#{msg.noData}" />
+								</f:facet>
+							</t:column>
+
+
+						</t:dataTable>
+					</div>
+				</t:panelTab>
+				</ui:remove>
+				
+				<ui:remove>
+				<t:panelTab id="tab8" label="#{msg.progIndicators}">
+					<div class="table_container">
+						<t:dataTable width="100%" style="margin:0 auto;" id="progTable"
+							var="data" value="#{phisicalProgressViewBean.progList}"
+							styleClass="form_table" rowClasses="row_table_n,row_table_g">
+
+							<f:facet name="header">
+								<h:outputText style="text-align: center"
+									value="#{msg.progIndicators}" />
+							</f:facet>
+
+
+
+							<t:column id="progFiles" styleClass="ActionColumn"
+								rendered="#{!empty phisicalProgressViewBean.progList and !Session.isAguRead and phisicalProgressViewBean.editable}">
+								<a4j:commandLink ajaxSingle="true" id="progFileslink"
+									title="#{msg.uploadFile}"
+									rendered="#{phisicalProgressViewBean.entityProgEditId != data.id}"
+									action="#{phisicalProgressViewBean.progUpload}"
+									reRender="FormPanel">
+									<h:graphicImage alt="#{msg.uploadFile}"
+										value="/images/file-add.png" style="border:0" />
+									<f:setPropertyActionListener value="#{data.id}"
+										target="#{phisicalProgressViewBean.entityProgUploadId}" />
+								</a4j:commandLink>
+							</t:column>
+							<sec:ifAnyGranted roles="ROLE_AGU_W,ROLE_BP_W">
+								<t:column id="edit" styleClass="ActionColumn"
+									rendered="#{!empty phisicalProgressViewBean.progList and !Session.isAguRead and phisicalProgressViewBean.editable}">
+									<a4j:commandLink ajaxSingle="true" id="editlink"
+										rendered="#{phisicalProgressViewBean.entityProgEditId != data.id}"
+										title="#{msg.edit}"
+										action="#{phisicalProgressViewBean.editProg}"
+										reRender="FormPanel">
+										<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+											style="border:0" />
+										<f:setPropertyActionListener value="#{data.id}"
+											target="#{phisicalProgressViewBean.entityProgEditId}" />
+									</a4j:commandLink>
+									<a4j:commandLink id="savelink" title="#{msg.save}"
+										immediate="false" reRender="FormPanel"
+										action="#{phisicalProgressViewBean.saveProg}">
+										<h:graphicImage alt="#{msg.save}"
+											rendered="#{phisicalProgressViewBean.entityProgEditId == data.id}"
+											value="/images/SaveAllFiles.png" style="border:0" />
+									</a4j:commandLink>
+								</t:column>
+							</sec:ifAnyGranted>
+
+							<ui:remove>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressViewBean.commList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.communicationIndicatorsProductCode}" />
+								</f:facet>
+								<t:outputText value="#{data.productCode}" />
+							</t:column>
+							</ui:remove>
+							
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressViewBean.progList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.programIndicatorsDescription}" />
+								</f:facet>
+								<t:outputText value="#{data.name}" />
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressViewBean.progList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.programIndicatorsTargetValue}" />
+								</f:facet>
+								<t:outputText value="#{data.target}" />
+							</t:column>
+
+							<t:column
+								rendered="#{!empty phisicalProgressViewBean.progList and phisicalProgressViewBean.asseNumber&gt;0}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.year} 2018" />
+								</f:facet>
+
+								<t:outputText value="#{data.asse1}" />
+								<t:inputText value="#{data.asse1}"
+									rendered="#{phisicalProgressViewBean.entityProgEditId == data.id}" />
+
+							</t:column>
+
+							<t:column
+								rendered="#{!empty phisicalProgressViewBean.progList and phisicalProgressViewBean.asseNumber&gt;0}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.year} 2019" />
+								</f:facet>
+								<t:outputText value="#{data.asse2}" />
+								<t:inputText value="#{data.asse2}"
+									rendered="#{phisicalProgressViewBean.entityProgEditId == data.id}" />
+
+							</t:column>
+
+							<t:column
+								rendered="#{!empty phisicalProgressViewBean.progList and phisicalProgressViewBean.asseNumber&gt;0}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.year} 2020" />
+								</f:facet>
+								<t:outputText value="#{data.asse3}" />
+								<t:inputText value="#{data.asse3}"
+									rendered="#{phisicalProgressViewBean.entityProgEditId == data.id}" />
+
+							</t:column>
+
+							<t:column
+								rendered="#{!empty phisicalProgressViewBean.progList and phisicalProgressViewBean.asseNumber&gt;0}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.year} 2021" />
+								</f:facet>
+								<t:outputText value="#{data.asse4}" />
+								<t:inputText value="#{data.asse4}"
+									rendered="#{phisicalProgressViewBean.entityProgEditId == data.id}" />
+
+							</t:column>
+							
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressViewBean.progList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.phisicalProgressViewExpectedDateRealization}" />
+								</f:facet>
+								
+								<rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+									inputClass="editbox_form2" converter="dateTimeConverter"
+									value="#{data.expectedDateRealization}"
+									datePattern="dd/MM/yyyy" 
+									rendered="#{phisicalProgressViewBean.entityProgEditId == data.id}" >
+								</rich:calendar>
+								<t:outputText value="#{data.expectedDateRealization}" converter="dateTimeConverter"/>
+							</t:column>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressViewBean.progList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.phisicalProgressViewActualDateRealization}" />
+								</f:facet>
+								
+								<rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+									inputClass="editbox_form2" converter="dateTimeConverter"
+									value="#{data.actualDateRealization}"
+									datePattern="dd/MM/yyyy" rendered="#{phisicalProgressViewBean.entityProgEditId == data.id}" >
+								</rich:calendar>
+								<t:outputText value="#{data.actualDateRealization}" converter="dateTimeConverter"/>
+							</t:column>
+
+							<t:column id="progNotes" styleClass="ActionColumn"
+								rendered="#{!empty phisicalProgressViewBean.progList and !Session.isAguRead and phisicalProgressViewBean.editable}">
+								<f:facet name="header">
+									<h:outputText value="#{msg.notes}" />
+								</f:facet>
+								<a4j:commandLink ajaxSingle="true" id="progNoteslink"
+									title="#{msg.notes}"
+									rendered="#{phisicalProgressViewBean.entityProgEditId != data.id}"
+									action="#{phisicalProgressViewBean.progNote}"
+									reRender="FormPanel">
+									<h:graphicImage alt="#{msg.notes}" value="/images/write.png"
+										style="border:0" />
+									<f:setPropertyActionListener value="#{data.id}"
+										target="#{phisicalProgressViewBean.entityProgNoteId}" />
+								</a4j:commandLink>
+							</t:column>
+
+
+							<t:column styleClass="StringColumn"
+								rendered="#{empty phisicalProgressViewBean.progList}">
+								<f:facet name="header">
+									<h:outputText value="#{msg.noData}" />
+								</f:facet>
+							</t:column>
+
+
+						</t:dataTable>
+					</div>
+				</t:panelTab>
+				</ui:remove>
+				
+				<t:panelTab id="tab3" label="#{msg.resultIndicators}">
+					<div class="table_container">
+						<t:dataTable width="100%" style="margin:0 auto;" id="resultTable"
+							var="data" value="#{phisicalProgressViewBean.resultList}"
+							styleClass="form_table" rowClasses="row_table_n,row_table_g">
+							<f:facet name="header">
+								<h:outputText style="text-align: center"
+									value="#{msg.resultIndicators}" />
+							</f:facet>
+
+							<t:column id="resultFiles" styleClass="ActionColumn"
+								rendered="#{!empty phisicalProgressViewBean.resultList and !Session.isAguRead and phisicalProgressViewBean.editable}">
+								<a4j:commandLink ajaxSingle="true" id="resultFileslink"
+									title="#{msg.uploadFile}"
+									rendered="#{phisicalProgressViewBean.entityResEditId != data.id}"
+									action="#{phisicalProgressViewBean.resultUpload}"
+									reRender="FormPanel">
+									<h:graphicImage alt="#{msg.uploadFile}"
+										value="/images/file-add.png" style="border:0" />
+									<f:setPropertyActionListener value="#{data.id}"
+										target="#{phisicalProgressViewBean.entityResultUploadId}" />
+								</a4j:commandLink>
+							</t:column>
+							<sec:ifAnyGranted roles="ROLE_AGU_W,ROLE_BP_W">
+								<t:column id="edit" styleClass="ActionColumn"
+									rendered="#{!empty phisicalProgressViewBean.resultList and !Session.isAguRead and phisicalProgressViewBean.editable}">
+									<a4j:commandLink ajaxSingle="true" id="editlink"
+										rendered="#{phisicalProgressViewBean.entityResEditId != data.id}"
+										title="#{msg.edit}"
+										action="#{phisicalProgressViewBean.editRes}"
+										reRender="FormPanel">
+										<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+											style="border:0" />
+										<f:setPropertyActionListener value="#{data.id}"
+											target="#{phisicalProgressViewBean.entityResEditId}" />
+									</a4j:commandLink>
+									<a4j:commandLink id="savelink" title="#{msg.save}"
+										immediate="false" reRender="FormPanel"
+										action="#{phisicalProgressViewBean.saveRes}">
+										<h:graphicImage alt="#{msg.save}"
+											rendered="#{phisicalProgressViewBean.entityResEditId == data.id}"
+											value="/images/SaveAllFiles.png" style="border:0" />
+									</a4j:commandLink>
+								</t:column>
+							</sec:ifAnyGranted>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressViewBean.resultList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.resultIndicatorsName}" />
+								</f:facet>
+								<t:outputText value="#{data.name}" />
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressViewBean.resultList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.resultIndicatorsCom}" />
+								</f:facet>
+								<t:outputText value="#{data.communicationObjective}" />
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressViewBean.resultList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.resultIndicatorsMeasureUnit}" />
+								</f:facet>
+								<t:outputText value="#{data.measureUnit}" />
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressViewBean.resultList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.resultIndicatorsTargetValue}" />
+								</f:facet>
+								<t:outputText value="#{data.target}" />
+							</t:column>
+
+							<t:column
+								rendered="#{!empty phisicalProgressViewBean.resultList and phisicalProgressViewBean.asseNumber>0}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.year} 2018" />
+								</f:facet>
+
+								<t:outputText value="#{data.asse1}" />
+								<t:inputText value="#{data.asse1}"
+									rendered="#{phisicalProgressViewBean.entityResEditId == data.id}"
+									onkeypress="return decimalonly(this, event)"
+									onkeyup="checkdecimal(this)" onblur="checkdecimal(this)" />
+
+							</t:column>
+
+							<t:column
+								rendered="#{!empty phisicalProgressViewBean.resultList and phisicalProgressViewBean.asseNumber>0}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.year} 2019" />
+								</f:facet>
+								<t:outputText value="#{data.asse2}" />
+								<t:inputText value="#{data.asse2}"
+									rendered="#{phisicalProgressViewBean.entityResEditId == data.id}"
+									onkeypress="return decimalonly(this, event)"
+									onkeyup="checkdecimal(this)" onblur="checkdecimal(this)" />
+
+							</t:column>
+
+							<t:column
+								rendered="#{!empty phisicalProgressViewBean.resultList and phisicalProgressViewBean.asseNumber>0}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.year} 2020" />
+								</f:facet>
+								<t:outputText value="#{data.asse3}" />
+								<t:inputText value="#{data.asse3}"
+									rendered="#{phisicalProgressViewBean.entityResEditId == data.id}"
+									onkeypress="return decimalonly(this, event)"
+									onkeyup="checkdecimal(this)" onblur="checkdecimal(this)" />
+
+							</t:column>
+
+							<t:column
+								rendered="#{!empty phisicalProgressViewBean.resultList and phisicalProgressViewBean.asseNumber>0}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.year} 2021" />
+								</f:facet>
+								<t:outputText value="#{data.asse4}" />
+								<t:inputText value="#{data.asse4}"
+									rendered="#{phisicalProgressViewBean.entityResEditId == data.id}"
+									onkeypress="return decimalonly(this, event)"
+									onkeyup="checkdecimal(this)" onblur="checkdecimal(this)" />
+
+							</t:column>
+							
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressViewBean.resultList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.phisicalProgressViewExpectedDateRealization}" />
+								</f:facet>
+								
+								<rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+									inputClass="editbox_form2" converter="dateTimeConverter"
+									value="#{data.expectedDateRealization}"
+									datePattern="dd/MM/yyyy" 
+									rendered="#{phisicalProgressViewBean.entityResEditId == data.id}" >
+								</rich:calendar>
+								<t:outputText value="#{data.expectedDateRealization}" converter="dateTimeConverter"/>
+							</t:column>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressViewBean.resultList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.phisicalProgressViewActualDateRealization}" />
+								</f:facet>
+								
+								<rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+									inputClass="editbox_form2" converter="dateTimeConverter"
+									value="#{data.actualDateRealization}"
+									datePattern="dd/MM/yyyy" rendered="#{phisicalProgressViewBean.entityResEditId == data.id}" >
+								</rich:calendar>
+								<t:outputText value="#{data.actualDateRealization}" converter="dateTimeConverter"/>
+							</t:column>
+
+							<t:column id="resultNotes" styleClass="ActionColumn"
+								rendered="#{!empty phisicalProgressViewBean.resultList and !Session.isAguRead and phisicalProgressViewBean.editable}">
+								<f:facet name="header">
+									<h:outputText value="#{msg.notes}" />
+								</f:facet>
+								<a4j:commandLink ajaxSingle="true" id="resultNoteslink"
+									title="#{msg.notes}"
+									rendered="#{phisicalProgressViewBean.entityResultNoteId != data.id}"
+									action="#{phisicalProgressViewBean.resultNote}"
+									reRender="FormPanel">
+									<h:graphicImage alt="#{msg.notes}" value="/images/write.png"
+										style="border:0" />
+									<f:setPropertyActionListener value="#{data.id}"
+										target="#{phisicalProgressViewBean.entityResultNoteId}" />
+								</a4j:commandLink>
+							</t:column>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{empty phisicalProgressViewBean.resultList}">
+								<f:facet name="header">
+									<h:outputText value="#{msg.noData}" />
+								</f:facet>
+							</t:column>
+
+						</t:dataTable>
+					</div>
+				</t:panelTab>
+
+
+				<t:panelTab id="tab9" label="#{msg.projectIndicators}">
+					<div class="table_container">
+						<t:dataTable width="100%" style="margin:0 auto;" id="projTable"
+							var="data" value="#{phisicalProgressViewBean.projList}"
+							styleClass="form_table" rowClasses="row_table_n,row_table_g">
+
+							<f:facet name="header">
+								<h:outputText style="text-align: center"
+									value="#{msg.projectIndicators}" />
+							</f:facet>
+
+
+
+							<t:column id="projFiles" styleClass="ActionColumn"
+								rendered="#{!empty phisicalProgressViewBean.projList and !Session.isAguRead and phisicalProgressViewBean.editable}">
+								<a4j:commandLink ajaxSingle="true" id="projFileslink"
+									title="#{msg.uploadFile}"
+									rendered="#{phisicalProgressViewBean.entityProjEditId != data.id}"
+									action="#{phisicalProgressViewBean.projUpload}"
+									reRender="FormPanel">
+									<h:graphicImage alt="#{msg.uploadFile}"
+										value="/images/file-add.png" style="border:0" />
+									<f:setPropertyActionListener value="#{data.id}"
+										target="#{phisicalProgressViewBean.entityProjUploadId}" />
+								</a4j:commandLink>
+							</t:column>
+							<sec:ifAnyGranted roles="ROLE_AGU_W,ROLE_BP_W">
+								<t:column id="edit" styleClass="ActionColumn"
+									rendered="#{!empty phisicalProgressViewBean.projList and !Session.isAguRead and phisicalProgressViewBean.editable}">
+									<a4j:commandLink ajaxSingle="true" id="editlink"
+										rendered="#{phisicalProgressViewBean.entityProjEditId != data.id}"
+										title="#{msg.edit}"
+										action="#{phisicalProgressViewBean.editProj}"
+										reRender="FormPanel">
+										<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+											style="border:0" />
+										<f:setPropertyActionListener value="#{data.id}"
+											target="#{phisicalProgressViewBean.entityProjEditId}" />
+									</a4j:commandLink>
+									<a4j:commandLink id="savelink" title="#{msg.save}"
+										immediate="false" reRender="FormPanel"
+										action="#{phisicalProgressViewBean.saveProj}">
+										<h:graphicImage alt="#{msg.save}"
+											rendered="#{phisicalProgressViewBean.entityProjEditId == data.id}"
+											value="/images/SaveAllFiles.png" style="border:0" />
+									</a4j:commandLink>
+								</t:column>
+							</sec:ifAnyGranted>
+
+
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressViewBean.projList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.projectIndicatorsPhase}" />
+								</f:facet>
+								<t:outputText value="#{data.phase}" />
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressViewBean.projList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.projectIndicatorsCom}" />
+								</f:facet>
+								<t:outputText value="#{data.communicationObjective}" />
+							</t:column>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressViewBean.projList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.projectIndicatorsTargetGroup}" />
+								</f:facet>
+								<t:outputText value="#{data.targetGroup}" />
+							</t:column>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressViewBean.projList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.projectIndicatorsName}" />
+								</f:facet>
+								<t:outputText value="#{data.name}" />
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressViewBean.projList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.projectIndicatorsMeasureUnit}" />
+								</f:facet>
+								<t:outputText value="#{data.measureUnit}" />
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressViewBean.projList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.projectIndicatorsTarget}" />
+								</f:facet>
+								<t:outputText value="#{data.target}" />
+							</t:column>
+
+
+
+							<t:column
+								rendered="#{!empty phisicalProgressViewBean.projList and phisicalProgressViewBean.asseNumber>0}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.year} 2018" />
+								</f:facet>
+
+								<t:outputText value="#{data.asse1}" />
+								<t:inputText value="#{data.asse1}"
+									rendered="#{phisicalProgressViewBean.entityProjEditId == data.id}"
+									onkeypress="return decimalonly(this, event)"
+									onkeyup="checkdecimal(this)" onblur="checkdecimal(this)" />
+
+							</t:column>
+
+							<t:column
+								rendered="#{!empty phisicalProgressViewBean.projList and phisicalProgressViewBean.asseNumber>0}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.year} 2019" />
+								</f:facet>
+								<t:outputText value="#{data.asse2}" />
+								<t:inputText value="#{data.asse2}"
+									rendered="#{phisicalProgressViewBean.entityProjEditId == data.id}"
+									onkeypress="return decimalonly(this, event)"
+									onkeyup="checkdecimal(this)" onblur="checkdecimal(this)" />
+
+							</t:column>
+
+							<t:column
+								rendered="#{!empty phisicalProgressViewBean.projList and phisicalProgressViewBean.asseNumber>0}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.year} 2020" />
+								</f:facet>
+								<t:outputText value="#{data.asse3}" />
+								<t:inputText value="#{data.asse3}"
+									rendered="#{phisicalProgressViewBean.entityProjEditId == data.id}"
+									onkeypress="return decimalonly(this, event)"
+									onkeyup="checkdecimal(this)" onblur="checkdecimal(this)" />
+
+							</t:column>
+
+							<t:column
+								rendered="#{!empty phisicalProgressViewBean.projList and phisicalProgressViewBean.asseNumber>0}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.year} 2021" />
+								</f:facet>
+								<t:outputText value="#{data.asse4}" />
+								<t:inputText value="#{data.asse4}"
+									rendered="#{phisicalProgressViewBean.entityProjEditId == data.id}"
+									onkeypress="return decimalonly(this, event)"
+									onkeyup="checkdecimal(this)" onblur="checkdecimal(this)" />
+
+							</t:column>
+							
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressViewBean.projList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.phisicalProgressViewExpectedDateRealization}" />
+								</f:facet>
+								
+								<rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+									inputClass="editbox_form2" converter="dateTimeConverter"
+									value="#{data.expectedDateRealization}"
+									datePattern="dd/MM/yyyy" 
+									rendered="#{phisicalProgressViewBean.entityProjEditId == data.id}" >
+								</rich:calendar>
+								<t:outputText value="#{data.expectedDateRealization}" converter="dateTimeConverter"/>
+							</t:column>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressViewBean.projList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.phisicalProgressViewActualDateRealization}" />
+								</f:facet>
+								
+								<rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+									inputClass="editbox_form2" converter="dateTimeConverter"
+									value="#{data.actualDateRealization}"
+									datePattern="dd/MM/yyyy" rendered="#{phisicalProgressViewBean.entityProjEditId == data.id}" >
+								</rich:calendar>
+								<t:outputText value="#{data.actualDateRealization}" converter="dateTimeConverter"/>
+							</t:column>
+
+							<t:column id="projNotes" styleClass="ActionColumn"
+								rendered="#{!empty phisicalProgressViewBean.projList and !Session.isAguRead and phisicalProgressViewBean.editable}">
+								<f:facet name="header">
+									<h:outputText value="#{msg.notes}" />
+								</f:facet>
+								<a4j:commandLink ajaxSingle="true" id="projNoteslink"
+									title="#{msg.notes}"
+									rendered="#{phisicalProgressViewBean.entityProjEditId != data.id}"
+									action="#{phisicalProgressViewBean.projNote}"
+									reRender="FormPanel">
+									<h:graphicImage alt="#{msg.notes}" value="/images/write.png"
+										style="border:0" />
+									<f:setPropertyActionListener value="#{data.id}"
+										target="#{phisicalProgressViewBean.entityProjNoteId}" />
+								</a4j:commandLink>
+							</t:column>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{empty phisicalProgressViewBean.projList}">
+								<f:facet name="header">
+									<h:outputText value="#{msg.noData}" />
+								</f:facet>
+							</t:column>
+
+
+						</t:dataTable>
+					</div>
+				</t:panelTab>
+				<ui:remove>
+					<t:panelTab id="tab5" label="#{msg.implementationIndicators}"
+						style="#{phisicalProgressViewBean.implementationStyle}">
+						<div class="table_container">
+							<t:dataTable width="100%" style="margin:0 auto;"
+								id="implementationTable" var="data"
+								value="#{phisicalProgressViewBean.realizList}" rowIndexVar="row"
+								styleClass="form_table" rowClasses="row_table_n,row_table_g">
+								<f:facet name="header">
+									<h:outputText style="text-align: center"
+										value="#{msg.implementationIndicators}" />
+								</f:facet>
+								<sec:ifAnyGranted roles="ROLE_AGU_W,ROLE_BP_W">
+									<t:column id="edit" styleClass="ActionColumn"
+										rendered="#{!empty phisicalProgressViewBean.realizList and !Session.isAguRead and phisicalProgressViewBean.editable}">
+										<a4j:commandLink ajaxSingle="true" id="editlink"
+											title="#{msg.edit}" reRender="FormPanel"
+											rendered="#{phisicalProgressViewBean.entityRealEditId != data.id}"
+											action="#{phisicalProgressViewBean.editReal}">
+											<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+												style="border:0" />
+											<f:setPropertyActionListener value="#{data.id}"
+												target="#{phisicalProgressViewBean.entityRealEditId}" />
+										</a4j:commandLink>
+										<a4j:commandLink id="savelink" reRender="FormPanel"
+											rendered="#{phisicalProgressViewBean.entityRealEditId == data.id}"
+											title="#{msg.save}" immediate="false"
+											action="#{phisicalProgressViewBean.saveReal}">
+											<h:graphicImage alt="#{msg.save}"
+												value="/images/SaveAllFiles.png" style="border:0" />
+										</a4j:commandLink>
+									</t:column>
+								</sec:ifAnyGranted>
+								<t:column styleClass="NumberColumn"
+									rendered="#{!empty phisicalProgressViewBean.realizList}">
+									<f:facet name="header">
+										<t:outputText value="#{msg.asse}" />
+									</f:facet>
+									<t:outputText value="#{data.programIndicator.asse}" />
+								</t:column>
+								<t:column styleClass="StringColumn"
+									rendered="#{!empty phisicalProgressViewBean.realizList}">
+									<f:facet name="header">
+										<t:outputText value="#{msg.specificGoal}" />
+									</f:facet>
+									<t:outputText
+										value="#{data.programIndicator.specificObjective}" />
+								</t:column>
+								<ui:remove>
+									<t:column styleClass="StringColumn"
+										rendered="#{!empty phisicalProgressViewBean.realizList}">
+										<f:facet name="header">
+											<t:outputText value="#{msg.description}" />
+										</f:facet>
+										<t:outputText value="#{data.programIndicator.description}" />
+									</t:column>
+								</ui:remove>
+								<t:column
+									rendered="#{!empty phisicalProgressViewBean.realizList}">
+									<f:facet name="header">
+										<t:outputText value="#{msg.measurementUnits}" />
+									</f:facet>
+									<h:outputText value="#{data.programIndicator.units}" />
+								</t:column>
+								<t:column
+									rendered="#{!empty phisicalProgressViewBean.realizList}">
+									<f:facet name="header">
+										<t:outputText value="#{msg.target}" />
+									</f:facet>
+									<h:outputText value="#{data.programIndicator.target}" />
+								</t:column>
+								<t:column
+									rendered="#{!empty phisicalProgressViewBean.realizList}">
+									<f:facet name="header">
+										<t:outputText value="#{msg.baseLine}" />
+									</f:facet>
+									<h:outputText value="#{data.programIndicator.baseLine}" />
+								</t:column>
+								<t:column styleClass="StrignColumn" style="width:300px;"
+									rendered="#{!empty phisicalProgressViewBean.coreList}">
+									<f:facet name="header">
+										<t:outputText value="#{msg.additionalValues}" />
+									</f:facet>
+									<table class="forms" border="0" cellpadding="1" cellspacing="1">
+										<tr>
+											<td><t:outputText value="#{msg.programmedValue}:" /></td>
+											<td><b><t:outputText
+														value="#{data.programmedValues}"
+														converter="floatConverter" /></b></td>
+										</tr>
+										<tr>
+											<td><t:outputText value="#{msg.engageValue}:" /><span
+												class="RequiredFieldMarker">*</span></td>
+											<td><b><t:outputText value="#{data.engageValue}"
+														converter="floatConverter"
+														rendered="#{phisicalProgressViewBean.entityRealEditId != data.id}" /></b>
+												<t:inputText value="#{data.engageValue}"
+													style="#{phisicalProgressViewBean.engageStyle}"
+													styleClass="editbox_form2" maxlength="12"
+													converter="floatConverter"
+													validator="#{validator.isFloat92}" id="ttt"
+													onkeypress="return decimalonly(this, event)"
+													onkeyup="checkdecimal(this)"
+													rendered="#{phisicalProgressViewBean.entityRealEditId == data.id}" /></td>
+										</tr>
+										<tr>
+											<td><t:outputText value="#{msg.gotValue}:" /><span
+												class="RequiredFieldMarker">*</span></td>
+											<td><b><t:outputText value="#{data.gotValue}"
+														converter="floatConverter"
+														rendered="#{phisicalProgressViewBean.entityRealEditId != data.id}" /></b>
+												<t:inputText value="#{data.gotValue}"
+													style="#{phisicalProgressViewBean.gotStyle}"
+													styleClass="editbox_form2" maxlength="12"
+													converter="floatConverter"
+													validator="#{validator.isFloat92}"
+													onkeypress="return decimalonly(this, event)"
+													onkeyup="checkdecimal(this)"
+													rendered="#{phisicalProgressViewBean.entityRealEditId == data.id}" /></td>
+										</tr>
+										<tr>
+											<td><t:outputText value="#{msg.closureValue}:" /></td>
+											<td><b><t:outputText value="#{data.closureValue}"
+														converter="floatConverter"
+														rendered="#{phisicalProgressViewBean.entityRealEditId != data.id}" /></b>
+												<t:inputText value="#{data.closureValue}"
+													styleClass="editbox_form2" maxlength="12"
+													onkeypress="return decimalonly(this, event)"
+													onkeyup="checkdecimal(this)" converter="floatConverter"
+													validator="#{validator.isFloat92}"
+													rendered="#{phisicalProgressViewBean.entityRealEditId == data.id}" /></td>
+										</tr>
+										<tr>
+											<td><t:outputText value="#{msg.programmedValueUpdate}:" /><span
+												class="RequiredFieldMarker">*</span></td>
+											<td><b><t:outputText
+														value="#{data.programmedValueUpdate}"
+														converter="floatConverter"
+														rendered="#{phisicalProgressViewBean.entityRealEditId != data.id}" /></b>
+												<t:inputText value="#{data.programmedValueUpdate}"
+													style="#{phisicalProgressViewBean.programmedUpdateStyle}"
+													styleClass="editbox_form2" maxlength="12"
+													onkeypress="return decimalonly(this, event)"
+													onkeyup="checkdecimal(this)" converter="floatConverter"
+													validator="#{validator.isFloat92}"
+													rendered="#{phisicalProgressViewBean.entityRealEditId == data.id}" /></td>
+										</tr>
+									</table>
+								</t:column>
+								<t:column styleClass="StringColumn"
+									rendered="#{empty phisicalProgressViewBean.realizList}">
+									<f:facet name="header">
+										<h:outputText value="#{msg.noData}" />
+									</f:facet>
+								</t:column>
+							</t:dataTable>
+						</div>
+					</t:panelTab>
+				</ui:remove>
+				<table width="100%">
+					<tr>
+						<td align="center"><t:outputText
+								value="#{phisicalProgressViewBean.errorMessage}"
+								styleClass="RequiredFieldMarker" /></td>
+					</tr>
+				</table>
+			</t:panelTabbedPane>
+			<t:inputHidden validator="#{validator.requiredPage}" value="hidden" />
+		</a4j:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

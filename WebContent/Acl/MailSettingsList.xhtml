@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ListTabBase.xhtml">
+	<ui:param name="heading" value="#{msg.mailSetting}" />
+	<ui:define name="list_body">
+		<a4j:outputPanel ajaxRendered="false" id="FormPanel">
+			<t:panelTabbedPane serverSideTabSwitch="false">
+				<t:panelTab id="tab1" label="#{msg.mailSetting}">
+
+					<div class="table_container"><t:dataTable width="80%"
+						style="margin:0 auto;" id="table" var="data"
+						value="#{mailSettingListController.list}" styleClass="form_table"
+						rowClasses="row_table_n,row_table_g">
+						<f:facet name="header">
+							<t:column>
+								<h:outputText style="text-align: center"
+									value="#{msg.mailSetting}" />
+							</t:column>
+						</f:facet>
+						<sec:ifAnyGranted roles="ROLE_APU_W">
+							<t:column id="edit" styleClass="ActionColumn"
+								rendered="#{!empty mailSettingListController.list}">
+								<a4j:commandLink ajaxSingle="true" id="editlink"
+									title="#{msg.edit}"
+									action="#{mailSettingListController.editEntity}">
+									<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+										style="border:0" />
+									<f:setPropertyActionListener value="#{data.id}"
+										target="#{mailSettingListController.entityEditId}" />
+								</a4j:commandLink>
+							</t:column>
+						</sec:ifAnyGranted>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty mailSettingListController.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.name}" />
+							</f:facet>
+							<t:outputText value="#{data.displayValue}" />
+						</t:column>
+					</t:dataTable></div>
+				</t:panelTab>
+				<t:panelTab id="tab2" label="#{msg.commonSettings}">
+					<table class="forms" border="0" cellpadding="1" cellspacing="1"
+						width="50%">
+						<tr>
+							<td class="LabelCell"><t:outputText value="#{msg.host}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><h:inputText
+								styleClass="editbox_form" required="true" id="host"
+								maxlength="200" value="#{mailSettingListController.smtp}" /></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText value="#{msg.from}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><h:inputText
+								styleClass="editbox_form" required="true" id="from"
+								maxlength="200" value="#{mailSettingListController.from}" /></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText value="#{msg.smtpAuth}:" /></td>
+							<td class="ControlCell"><t:selectBooleanCheckbox
+								value="#{mailSettingListController.smtpAuth}">
+							</t:selectBooleanCheckbox></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText value="#{msg.useSecureSmptProtocol}:" /></td>
+							<td class="ControlCell"><t:selectBooleanCheckbox
+								value="#{mailSettingListController.secureProtocol}">
+							</t:selectBooleanCheckbox></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText value="#{msg.smtpPort}:" /></td>
+							<td class="ControlCell"><h:inputText
+								styleClass="editbox_form" id="port"
+								onkeypress="return numbersonly(this, event)"
+								onkeyup="checknumber(this)"
+								maxlength="200" value="#{mailSettingListController.port}" /></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText value="#{msg.userName}:" /></td>
+							<td class="ControlCell"><h:inputText
+								styleClass="editbox_form" id="name"
+								maxlength="200" value="#{mailSettingListController.name}" /></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText value="#{msg.password}:" /></td>
+							<td class="ControlCell"><h:inputSecret
+								styleClass="editbox_form" autocomplete="off"
+								id="password" maxlength="200"
+								value="#{mailSettingListController.password}" /></td>
+						</tr>
+					</table>
+
+					<table class="forms" border="0" cellpadding="1" cellspacing="1">
+						<tr>
+							<td colspan="2" class="btn_line"><a4j:commandButton
+								immediate="false"
+								action="#{mailSettingListController.Page_Save}"
+								styleClass="button2" value="#{msg.save}" id="save" /></td>
+						</tr>
+					</table>
+				</t:panelTab>
+			</t:panelTabbedPane>
+		</a4j:outputPanel>
+	</ui:define>
+</ui:composition>
+
+
+</html>

@@ -1,0 +1,172 @@
+<?xml version="1.0"?>
+<project name="PAAMS" basedir="." default="compile.bin">
+
+	<!-- Local system paths -->
+	<property file="${basedir}/paams.properties" />
+	
+	<property name="dist.dir" location="../bin"/>
+	<property name="src.dir" value="../src"/>
+	<property name="lib.dir" value="lib"/>
+	<property name="jar.file" value="PAAMS.jar"/>	
+	<property name="create.DB.script" value="${dist.dir}/init/scripts/CreateDataBase.sql"/>
+	<property name="drop.DB.script" value="${dist.dir}/init/scripts/DropDataBase.sql"/>
+	
+	<property name="tomcat.lib" value="${file.tomcat.lib}" /> 
+	<property name="webroot.dir" value="../WebContent" />
+	<property name="webinf.dir" value="${webroot.dir}/WEB-INF" />
+
+	<patternset id="java.libs" includes="**/*.jar,**/*.zip" />
+	<!-- deploy, install, list, reload, remove, resources, roles, start, stop, undeploy -->
+	<path id="tomcat.classpath">
+		<pathelement location="${tomcat.lib}/catalina-ant.jar" />
+		<pathelement location="${tomcat.lib}/servlet-api.jar" />
+		<pathelement location="${tomcat.lib}/jasper.jar" />
+		<pathelement location="${tomcat.home}/bin/tomcat-juli.jar" />
+	</path>
+	<path id="web.libs">
+		<fileset dir="${webinf.dir}/lib">
+			<patternset refid="java.libs" /> 
+		</fileset>
+		<fileset dir="${tomcat.lib}">
+			<patternset refid="java.libs" /> 
+		</fileset>
+	</path>
+	
+<!--###################################################################################-->	
+
+	<path id="compile.jar.libs">
+		<fileset dir="./${lib.dir}">
+			<patternset refid="java.libs" />
+		</fileset>
+	</path>
+
+	<path id="run.jar.libs">
+		<fileset dir="./${lib.dir}">
+			<patternset refid="java.libs" />
+		</fileset>
+	</path>
+
+	<target name="clean.files"
+			description="clean all binary files">
+			<tstamp/>
+		<delete>
+			<fileset dir="${dist.dir}"> 
+				<include name="**/*"/>
+			</fileset>
+			<dirset dir="${dist.dir}"> 
+				<include name="**/*"/>
+			</dirset>
+		</delete>
+	</target>
+
+	<target name="init" depends="clean.files" description="creating of all necessary directories">
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${dist.dir}"/>
+	</target>
+		
+	<target name="copy.files" 
+			description="copying of files for run" >
+		<!-- Compile the java code from ${src} into ${build} -->
+		<copy todir="${dist.dir}">
+			<fileset dir="${src.dir}"> 
+				<include name="**/*"/>
+				<exclude name="**/*.java"/>
+				<exclude name="build.xml"/>
+				<exclude name="paams.properties"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="compile.bin" depends="init,copy.files">
+			<!--<property name="src.dir" refid="src.filter.ref" />-->
+			<javac classpathref="web.libs" srcdir="${basedir}" destdir="${dist.dir}" />
+	</target>
+	
+	<target name="run.create.db" description="run create db">
+		<exec executable="mysql">
+			<arg value="--user=${db.login}"/>
+			<arg value="--password=${db.passw}"/>
+			<arg value="-e"/>
+			<arg value="&quot;source ${create.DB.script}&quot;"/>
+		</exec>		
+	</target>
+	
+	<target name="run.inst.db" depends="run.create.db" description="run init db of sources">
+		<java dir="." fork="true" classname="com.infostroy.paams.model.Initialize" classpathref="run.jar.libs" >
+			<classpath>
+				<pathelement path="${dist.dir}"/>
+			</classpath>
+		</java>
+	</target>
+
+	<target name="run.drop.db" description="run drop db of sources">
+		<exec executable="mysql">
+			<arg value="--user=${db.login}"/>
+			<arg value="--password=${db.passw}"/>
+			<arg value="-e"/>
+			<arg value="&quot;source ${drop.DB.script}&quot;"/>
+		</exec>
+	</target>
+
+	<target name="make.manifest" description="make jars">
+		<manifest file="MANIFEST.MF">
+			<attribute name="Main-Class" value="com.infostroy.paams.model.Initialize" />
+			<attribute name="Class-Path" value="${class-path}" />
+	    </manifest>
+	</target>
+
+	<target name="make.jar" depends="compile.bin,make.manifest" description="make jars">
+		<jar destfile="${dist.dir}/${jar.file}" basedir="${dist.dir}" manifest="manifest.mf">
+			<dirset dir="${dist.dir}">
+				<include name="**/*" />
+			</dirset>
+		</jar>
+		<copy todir="${dist.dir}">
+			<fileset dir="${src.dir}"> 
+				<include name="build.xml"/>
+				<include name="paams.properties"/>
+			</fileset>
+		</copy>		
+		<copy todir="${dist.dir}/lib">
+			<fileset dir="${webinf.dir}/lib"/>
+		</copy>
+		<delete>
+			<fileset dir="${basedir}"> 
+				<include name="MANIFEST.MF"/>
+			</fileset>
+		</delete>
+	 </target>
+	  
+	<path id="class.path">		
+	  <fileset dir="${webinf.dir}" >
+		<include name="lib/*.jar"/>
+	  </fileset>
+	</path>
+
+	<pathconvert property="class-path" pathsep=" " dirsep="/">
+		<path refid="class.path"></path>
+		<mapper>
+			<chainedmapper>
+				<flattenmapper />
+				<globmapper from="*" to="lib/*" />
+			</chainedmapper>
+		</mapper>
+	</pathconvert>
+	
+	<target name="initialize">
+		<java dir="." fork="true" jar="${dist.dir}/${jar.file}">
+			<classpath /> 
+		</java>
+	</target>
+
+	<target name="localization">
+		<copy todir="${src.dir}">
+			<fileset dir="${src.dir}"/>
+			<globmapper from="Resources*.properties" to="Resources*.bak"/>
+		</copy>
+		<native2ascii src="${src.dir}" dest="${src.dir}" 
+			includes="Resources*.bak" encoding="cp1251" ext=".properties"/>
+	</target>
+
+	
+</project>

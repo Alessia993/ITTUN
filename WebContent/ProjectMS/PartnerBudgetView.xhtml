@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ListBase.xhtml">
+	<ui:param name="heading" value="#{msg.partnerBudgetPageName}" />
+	<ui:define name="list_body">
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">	
+			<div class="table_container">
+			<t:dataTable width="100%"
+				style="margin:0 auto;" id="table" var="item"
+				value="#{partnerBudgetBean.listPBToShow}" styleClass="form_table"
+				rowClasses="row_table_n,row_table_g">
+				
+				<sec:ifAnyGranted roles="ROLE_AGU_W,ROLE_STC_W">
+					<t:column id="edit" styleClass="ActionColumn" rendered="#{!Session.isActualSateAndAguRead and (Session.AGU or Session.STC)}">
+						<a4j:commandLink ajaxSingle="true" id="editlink" rendered="#{item.editAvailable}"
+							title="#{msg.edit}" action="#{partnerBudgetBean.editItem}">
+							<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{item.id}"
+								target="#{partnerBudgetBean.entityEditId}" />
+						</a4j:commandLink>
+					</t:column>
+				</sec:ifAnyGranted>
+				
+				<t:column styleClass="StringColumn">
+					<f:facet name="header">
+						<t:outputText value="#{msg.generalBudgetPartnerName}" />
+					</f:facet>
+					<t:outputText
+						value="#{item.name}" />
+				</t:column>
+				<t:column styleClass="NumberColumn">
+					<f:facet name="header">
+						<t:outputText value="#{msg.partnerBudgetTotal}" />
+					</f:facet>
+					<t:outputText
+						value="#{item.totalBudget}" converter="moneyConverter" />
+				</t:column>
+								
+			</t:dataTable>
+			</div>		
+			
+		</a4j:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

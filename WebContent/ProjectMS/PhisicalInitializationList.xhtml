@@ -1,0 +1,409 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ListTabBase.xhtml">
+	<ui:param name="heading" value="#{msg.phisicalInit}" />
+	<ui:param name="heading_top" value="#{msg.phisicalInit}" />
+	<ui:define name="list_body">
+		<a4j:outputPanel ajaxRendered="false" id="FormPanel">
+
+			<t:panelTabbedPane serverSideTabSwitch="false">
+			
+			<ui:remove>
+			<t:panelTab id="tab1" label="#{msg.communicationIndicators}">
+					<div class="table_container">
+						<t:dataTable width="100%" style="margin:0 auto;" id="communicationTable"
+							var="data" value="#{communicationIndicatorsListBean.list}"
+							styleClass="form_table" rowClasses="row_table_n,row_table_g">
+							
+							
+							<!-- Header -->
+
+							<f:facet name="header">
+								<t:column>
+
+									<a4j:commandLink styleClass="headerPanelLink" rendered="#{communicationIndicatorsListBean.editAvailable}"
+										action="#{communicationIndicatorsListBean.addEntity}">
+											#{msg.addProductIndicator}</a4j:commandLink>
+
+									<h:outputText style="text-align: center"
+										value="#{msg.communicationIndicators}" />
+									<ui:remove>
+										<h:selectOneMenu id="itemPP" styleClass="headerPanelSelect"
+											value="#{localCheckListBean.itemsPerPage}">
+											<f:selectItems value="#{localCheckListBean.itemsPerPageList}" />
+											<a4j:support event="onchange" reRender="FormPanel" />
+										</h:selectOneMenu>
+									</ui:remove>
+								</t:column>
+							</f:facet>
+
+							<!-- Action columns -->
+							
+	
+								<t:column id="edit" styleClass="ActionColumn" 
+									rendered="#{!empty communicationIndicatorsListBean.list and communicationIndicatorsListBean.editAvailable}"
+									headerstyleClass="ActionColumn">
+									<a4j:commandLink ajaxSingle="true" id="editlink"
+										title="#{msg.edit}"
+										action="#{communicationIndicatorsListBean.editEntity}">
+										<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+											style="border:0" />
+										<f:setPropertyActionListener value="#{data.id}"
+											target="#{communicationIndicatorsListBean.entityEditId}" />
+									</a4j:commandLink>
+								</t:column>
+								<t:column id="delete" 
+									rendered="#{!empty communicationIndicatorsListBean.list and communicationIndicatorsListBean.editAvailable}"
+									styleClass="ActionColumn" headerstyleClass="ActionColumn">
+									<a4j:commandLink ajaxSingle="true" id="deletelink"
+										title="#{msg.delete}"
+										action="#{communicationIndicatorsListBean.deleteEntity}"
+										reRender="FormPanel">
+										<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+											style="border:0" />
+										<f:setPropertyActionListener value="#{data.id}"
+											target="#{communicationIndicatorsListBean.entityDeleteId}" />
+									</a4j:commandLink>
+								</t:column>
+
+							
+							<!-- Info columns -->	
+							
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty communicationIndicatorsListBean.list}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.communicationIndicatorsProductCode}" />
+								</f:facet>
+								<t:outputText value="#{data.productCode}" />
+							</t:column>
+							<!-- <t:column styleClass="StringColumn" 
+								rendered="#{!empty communicationIndicatorsListBean.list}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.communicationIndicatorsCom}" />
+								</f:facet>
+								<t:outputText value="#{data.communicationObjective}" />
+							</t:column>
+							<t:column styleClass="StringColumn" 
+								rendered="#{!empty communicationIndicatorsListBean.list}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.communicationIndicatorsTargetGroup}" />
+								</f:facet>
+								<t:outputText value="#{data.targetGroup}" />
+							</t:column> -->
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty communicationIndicatorsListBean.list}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.communicationIndicatorsDescription}" />
+								</f:facet>
+								<t:outputText value="#{data.name}" />
+							</t:column>
+							<t:column styleClass="StringColumn" 
+								rendered="#{!empty communicationIndicatorsListBean.list}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.projectIndicatorsTarget}" />
+								</f:facet>
+								<t:outputText value="#{data.target}" />
+							</t:column>
+						</t:dataTable>
+					</div>
+				</t:panelTab>
+				</ui:remove>
+				
+				<ui:remove>
+				<t:panelTab id="tab2" label="#{msg.progIndicators}">
+					<div class="table_container">
+						<t:dataTable width="100%" style="margin:0 auto;" id="progTable"
+							var="data" value="#{progIndicatorsListBean.list}"
+							styleClass="form_table" rowClasses="row_table_n,row_table_g">
+							
+							
+							<!-- Header -->
+
+							<f:facet name="header">
+								<t:column>
+
+									<a4j:commandLink styleClass="headerPanelLink" rendered="#{progIndicatorsListBean.editAvailable}"
+										action="#{progIndicatorsListBean.addEntity}">
+											#{msg.addProductIndicator}</a4j:commandLink>
+
+									<h:outputText style="text-align: center"
+										value="#{msg.progIndicators}" />
+									<ui:remove>
+										<h:selectOneMenu id="itemPP" styleClass="headerPanelSelect"
+											value="#{localCheckListBean.itemsPerPage}">
+											<f:selectItems value="#{localCheckListBean.itemsPerPageList}" />
+											<a4j:support event="onchange" reRender="FormPanel" />
+										</h:selectOneMenu>
+									</ui:remove>
+								</t:column>
+							</f:facet>
+
+							<!-- Action columns -->
+							
+	
+								<t:column id="edit" styleClass="ActionColumn" 
+									rendered="#{!empty progIndicatorsListBean.list and progIndicatorsListBean.editAvailable}"
+									headerstyleClass="ActionColumn">
+									<a4j:commandLink ajaxSingle="true" id="editlink"
+										title="#{msg.edit}"
+										action="#{progIndicatorsListBean.editEntity}">
+										<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+											style="border:0" />
+										<f:setPropertyActionListener value="#{data.id}"
+											target="#{progIndicatorsListBean.entityEditId}" />
+									</a4j:commandLink>
+								</t:column>
+								<t:column id="delete" 
+									rendered="#{!empty progIndicatorsListBean.list and progIndicatorsListBean.editAvailable}"
+									styleClass="ActionColumn" headerstyleClass="ActionColumn">
+									<a4j:commandLink ajaxSingle="true" id="deletelink"
+										title="#{msg.delete}"
+										action="#{progIndicatorsListBean.deleteEntity}"
+										reRender="FormPanel">
+										<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+											style="border:0" />
+										<f:setPropertyActionListener value="#{data.id}"
+											target="#{progIndicatorsListBean.entityDeleteId}" />
+									</a4j:commandLink>
+								</t:column>
+
+							
+							<!-- Info columns -->	
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty progIndicatorsListBean.list}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.communicationIndicatorsProductCode}" />
+								</f:facet>
+								<t:outputText value="#{data.productCode}" />
+							</t:column>
+							<t:column styleClass="StringColumn" 
+								rendered="#{!empty progIndicatorsListBean.list}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.programIndicatorsDescription}" />
+								</f:facet>
+								<t:outputText value="#{data.name}" />
+							</t:column>
+							<t:column styleClass="StringColumn" 
+								rendered="#{!empty progIndicatorsListBean.list}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.programIndicatorsTargetValue}" />
+								</f:facet>
+								<t:outputText value="#{data.target}" />
+							</t:column>
+						</t:dataTable>
+					</div>
+				</t:panelTab>
+				</ui:remove>
+				
+				<t:panelTab id="tab3" label="#{msg.resultIndicators}">
+					<div class="table_container">
+						<t:dataTable width="100%" style="margin:0 auto;" id="resultTable"
+							var="data" value="#{programResultIndicatorsListBean.list}"
+							styleClass="form_table" rowClasses="row_table_n,row_table_g">
+							
+							
+							<!-- Header -->
+
+							<f:facet name="header">
+								<t:column>
+
+									<a4j:commandLink styleClass="headerPanelLink" rendered="#{programResultIndicatorsListBean.editAvailable}"
+										action="#{programResultIndicatorsListBean.addEntity}">
+											#{msg.addProjectIndicator}</a4j:commandLink>
+
+									<h:outputText style="text-align: center"
+										value="#{msg.resultIndicators}" />
+									<ui:remove>
+										<h:selectOneMenu id="itemPP" styleClass="headerPanelSelect"
+											value="#{localCheckListBean.itemsPerPage}">
+											<f:selectItems value="#{localCheckListBean.itemsPerPageList}" />
+											<a4j:support event="onchange" reRender="FormPanel" />
+										</h:selectOneMenu>
+									</ui:remove>
+								</t:column>
+							</f:facet>
+
+							<!-- Action columns -->
+							
+	
+								<t:column id="edit" styleClass="ActionColumn" 
+									rendered="#{!empty programResultIndicatorsListBean.list and programResultIndicatorsListBean.editAvailable}"
+									headerstyleClass="ActionColumn">
+									<a4j:commandLink ajaxSingle="true" id="editlink"
+										title="#{msg.edit}"
+										action="#{programResultIndicatorsListBean.editEntity}">
+										<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+											style="border:0" />
+										<f:setPropertyActionListener value="#{data.id}"
+											target="#{programResultIndicatorsListBean.entityEditId}" />
+									</a4j:commandLink>
+								</t:column>
+								<t:column id="delete" 
+									rendered="#{!empty programResultIndicatorsListBean.list and programResultIndicatorsListBean.editAvailable}"
+									styleClass="ActionColumn" headerstyleClass="ActionColumn">
+									<a4j:commandLink ajaxSingle="true" id="deletelink"
+										title="#{msg.delete}"
+										action="#{programResultIndicatorsListBean.deleteEntity}"
+										reRender="FormPanel">
+										<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+											style="border:0" />
+										<f:setPropertyActionListener value="#{data.id}"
+											target="#{programResultIndicatorsListBean.entityDeleteId}" />
+									</a4j:commandLink>
+								</t:column>
+
+							
+							<!-- Info columns -->	
+							
+							<t:column styleClass="StringColumn" 
+								rendered="#{!empty programResultIndicatorsListBean.list}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.resultIndicatorsName}" />
+								</f:facet>
+								<t:outputText value="#{data.name}" />
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty programResultIndicatorsListBean.list}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.resultIndicatorsCom}" />
+								</f:facet>
+								<t:outputText value="#{data.communicationObjective}" />
+							</t:column>
+							<t:column styleClass="StringColumn" 
+								rendered="#{!empty programResultIndicatorsListBean.list}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.resultIndicatorsMeasureUnit}" />
+								</f:facet>
+								<t:outputText value="#{data.measureUnit}" />
+							</t:column>
+							<t:column styleClass="StringColumn" 
+								rendered="#{!empty programResultIndicatorsListBean.list}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.resultIndicatorsTargetValue}" />
+								</f:facet>
+								<t:outputText value="#{data.target}" />
+							</t:column>
+						</t:dataTable>
+					</div>
+				</t:panelTab>
+				<t:panelTab id="tab6" label="#{msg.projectIndicators}">
+					<div class="table_container">
+						<t:dataTable width="100%" style="margin:0 auto;" id="resultTable"
+							var="data" value="#{projectIndicatorsListBean.list}"
+							styleClass="form_table" rowClasses="row_table_n,row_table_g">
+							
+							
+							<!-- Header -->
+
+							<f:facet name="header">
+								<t:column>
+
+									<a4j:commandLink styleClass="headerPanelLink" rendered="#{projectIndicatorsListBean.editAvailable}"
+										action="#{projectIndicatorsListBean.addEntity}">
+											#{msg.addProjectIndicator}</a4j:commandLink>
+
+									<h:outputText style="text-align: center"
+										value="#{msg.projectIndicators}" />
+									<ui:remove>
+										<h:selectOneMenu id="itemPP" styleClass="headerPanelSelect"
+											value="#{localCheckListBean.itemsPerPage}">
+											<f:selectItems value="#{localCheckListBean.itemsPerPageList}" />
+											<a4j:support event="onchange" reRender="FormPanel" />
+										</h:selectOneMenu>
+									</ui:remove>
+								</t:column>
+							</f:facet>
+
+							<!-- Action columns -->
+							
+	
+								<t:column id="edit" styleClass="ActionColumn" 
+									rendered="#{!empty projectIndicatorsListBean.list and projectIndicatorsListBean.editAvailable}"
+									headerstyleClass="ActionColumn">
+									<a4j:commandLink ajaxSingle="true" id="editlink"
+										title="#{msg.edit}"
+										action="#{projectIndicatorsListBean.editEntity}">
+										<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+											style="border:0" />
+										<f:setPropertyActionListener value="#{data.id}"
+											target="#{projectIndicatorsListBean.entityEditId}" />
+									</a4j:commandLink>
+								</t:column>
+								<t:column id="delete" 
+									rendered="#{!empty projectIndicatorsListBean.list and projectIndicatorsListBean.editAvailable}"
+									styleClass="ActionColumn" headerstyleClass="ActionColumn">
+									<a4j:commandLink ajaxSingle="true" id="deletelink"
+										title="#{msg.delete}"
+										action="#{projectIndicatorsListBean.deleteEntity}"
+										reRender="FormPanel">
+										<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+											style="border:0" />
+										<f:setPropertyActionListener value="#{data.id}"
+											target="#{projectIndicatorsListBean.entityDeleteId}" />
+									</a4j:commandLink>
+								</t:column>
+
+							
+							<!-- Info columns -->	
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty projectIndicatorsListBean.list}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.projectIndicatorsPhase}" />
+								</f:facet>
+								<t:outputText value="#{data.phase}" />
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty projectIndicatorsListBean.list}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.projectIndicatorsCom}" />
+								</f:facet>
+								<t:outputText value="#{data.communicationObjective}" />
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty projectIndicatorsListBean.list}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.projectIndicatorsTargetGroup}" />
+								</f:facet>
+								<t:outputText value="#{data.targetGroup}" />
+							</t:column>
+							<t:column styleClass="StringColumn" 
+								rendered="#{!empty projectIndicatorsListBean.list}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.projectIndicatorsName}" />
+								</f:facet>
+								<t:outputText value="#{data.name}" />
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty projectIndicatorsListBean.list}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.projectIndicatorsMeasureUnit}" />
+								</f:facet>
+								<t:outputText value="#{data.measureUnit}" />
+							</t:column>
+							<t:column styleClass="StringColumn" 
+								rendered="#{!empty projectIndicatorsListBean.list}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.projectIndicatorsTarget}" />
+								</f:facet>
+								<t:outputText value="#{data.target}" />
+							</t:column>
+							
+							
+						</t:dataTable>
+					</div>
+				</t:panelTab>
+			</t:panelTabbedPane>
+		</a4j:outputPanel>
+	</ui:define>
+
+
+</ui:composition>
+</html>

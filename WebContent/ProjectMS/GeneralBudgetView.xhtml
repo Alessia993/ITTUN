@@ -1,0 +1,331 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ListBase.xhtml">
+	<ui:param name="heading" value="#{msg.generalBudgetEdit}" />
+	<ui:define name="list_body">
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+		
+			<t:div rendered="#{generalBudgetBean.isEdit}">
+				<fieldset style="margin:10px; width:auto;">
+					<table width="100%">
+						<tr>
+							<td style="width: 20%;">
+								<h:graphicImage value="../images/info.png" alt="{msg.info}"/>
+								<h:outputText value="   #{msg.generalBudgetTotalEligibleBudget}:" />
+							</td>
+							<td>
+								<h:outputText value="#{generalBudgetBean.sourceBudget.totalBudget}" converter="moneyConverter" />
+							</td>
+						</tr>
+						<tr>
+							<td style="width: 20%;"><h:graphicImage alt="{msg.info}"
+								value="../images/info.png" /> <h:outputText
+								value="   #{msg.generalBudgetLegendEligibleCosts}:" /></td>
+							<td><h:outputText
+								value="#{generalBudgetBean.sourceBudget.fesr + generalBudgetBean.sourceBudget.cnPublic + generalBudgetBean.sourceBudget.cnPrivateReal}"
+								converter="moneyConverter" /></td>
+						</tr>
+						
+						<tr>
+							<td style="width: 20%;">
+								<h:graphicImage value="../images/info.png" alt="{msg.info}"/>
+								<h:outputText value="   #{msg.generalBudgetLegendFESR}:" />
+							</td>
+							<td>
+								<h:outputText value="#{generalBudgetBean.sourceBudget.fesr}" converter="moneyConverter" />
+							</td>
+						</tr>
+						<tr>
+							<td style="width: 20%;">
+								<h:graphicImage value="../images/info.png" alt="{msg.info}"/>
+								<h:outputText value="   #{msg.generalBudgetLegendCNPublic}:" />
+							</td>
+							<td>
+								<h:outputText value="#{generalBudgetBean.sourceBudget.cnPublic}" converter="moneyConverter" />
+							</td>
+						</tr>
+						<ui:remove>
+						<tr>
+							<td style="width: 20%;">
+								<h:graphicImage value="../images/info.png" alt="{msg.info}"/>
+								<h:outputText value="   #{msg.generalBudgetLegendCNPrivate}:" />
+							</td>
+							<td>
+								<h:outputText value="#{generalBudgetBean.sourceBudget.cnPublicOther}" converter="moneyConverter" />
+							</td>
+						</tr>
+						</ui:remove>
+						<tr>
+							<td style="width: 20%;">
+								<h:graphicImage value="../images/info.png" alt="{msg.info}"/>
+								<h:outputText value="   #{msg.generalBudgetLegendAdditionalFinansing}:" />
+							</td>
+							<td>
+								<h:outputText value="#{generalBudgetBean.sourceBudget.cnPrivate}" converter="moneyConverter" />
+							</td>
+						</tr>
+					</table>
+				</fieldset>
+			</t:div>
+			
+			<div class="table_container" style="width: 1520px;">			
+				<div style="margin:0 auto; width: 1498px; height: 25px; border-bottom: 0px;" class="form_table noBodyTable">
+					<div style="width: 338px" class="table_cell">
+						<t:outputText value="#{msg.generalBudgetPartner}" />
+					</div>
+					<div style="width: 111px" class="table_cell"></div>	
+					<div style="width: 226px" class="table_cell">
+						<t:outputText value="#{msg.generalBudgetCoFinancing}" />
+					</div>
+					<div style="width: 803px" class="table_cell">
+						<t:outputText value="#{msg.generalBudgetContribution}" />
+					</div>
+				</div>
+				
+				<div style="margin:0 auto; width: 1498px; height: 25px; border-bottom: 0px;" class="form_table noBodyTable">					
+					<div style="width: 338px" class="table_cell"></div>	
+					<div style="width: 111px" class="table_cell"></div>	
+					<div style="width: 226px" class="table_cell"></div>					
+					<div style="width: 341px" class="table_cell">	
+						<t:outputText value="#{msg.generalBudgetPublicContribution}" />					
+					</div>						
+					<div style="width: 457px" class="table_cell"></div>						
+										
+				</div>																											
+				
+				<t:dataTable style="margin:0 auto; width: 1500px;" id="table" var="item"
+					value="#{generalBudgetBean.listGeneralBudgets}" styleClass="form_table"
+					rowClasses="row_table_n,row_table_g">		
+					
+					<t:column styleClass="StringColumn" headerstyle="width:100px">
+						<f:facet name="header">
+							<t:outputText value="#{msg.generalBudgetPartnerNumber}" />
+						</f:facet>
+						<t:outputText rendered="#{item.listCfProgressiveId != 0}"
+							value="#{item.listCfProgressiveId}" />
+					</t:column>
+							
+					<t:column styleClass="StringColumn" headerstyle="width:100px">
+						<f:facet name="header">
+							<t:outputText value="#{msg.generalBudgetPartnerName}" />
+						</f:facet>
+						<t:outputText
+							value="#{item.listCfNaming}" />
+					</t:column>
+					
+					<t:column styleClass="StringColumn" headerstyle="width:100px">
+						<f:facet name="header">
+							<t:outputText value="#{msg.generalBudgetUserCountry}" />
+						</f:facet>
+						<t:outputText
+							value="#{item.listCfCountry}" />
+					</t:column>
+					
+					<t:column styleClass="NumberColumn" headerstyle="width:100px">
+						<f:facet name="header">
+							<t:outputText value="#{msg.totalBudget}" />
+						</f:facet>
+						<t:outputText converter="moneyConverter"						
+							value="#{item.budgetTotal}" />					
+					</t:column>
+					
+					<t:column styleClass="NumberColumn" headerstyle="width:100px">
+						<f:facet name="header">
+							<t:outputText value="#{msg.generalBudgetFESR}" />
+						</f:facet>
+						<t:outputText converter="moneyConverter"
+							rendered="#{!generalBudgetBean.isEdit or (generalBudgetBean.isEdit and empty item.cfPartnerAnagraph.country)}"
+							value="#{item.fesr}" />
+						<t:inputText rendered="#{generalBudgetBean.isEdit and !empty item.cfPartnerAnagraph.country}" maxlength="12" onkeypress="return decimalonly(this, event)"
+							onkeyup="checkdecimal(this)"
+							converter="floatConverter" styleClass="editbox_form2"
+							validator="#{validator.isFloat92}" id="budgetFESR"
+							value="#{item.fesr}" />
+					</t:column>
+					
+					<t:column styleClass="NumberColumn" headerstyle="width:100px">
+						<f:facet name="header">
+							<t:outputText value="#{msg.generalBudgetCoFinancingRate}" />
+						</f:facet>
+						<!-- <t:outputText converter="floatConverter" rendered="#{(item.cnPublic + item.fesr) > 0}"
+							value="#{item.fesr / (item.cnPublic + item.fesr) * 100}" />
+						<t:outputText converter="floatConverter" rendered="#{(item.cnPublic + item.fesr) == 0}"
+							value="0" /> -->
+							<t:outputText converter="floatConverter" rendered="#{(item.cnPublic + item.fesr) > 0}"
+							value="#{(item.fesr/(item.budgetTotal - item.quotaPrivate- item.netRevenue)) * 100}" />
+						<t:outputText converter="floatConverter" rendered="#{(item.cnPublic + item.fesr) == 0}"
+							value="0" />
+					</t:column>
+					
+					<t:column styleClass="NumberColumn" headerstyle="width:100px">
+						<f:facet name="header">
+							<t:outputText value="#{msg.generalBudgetCNPublic}" />
+						</f:facet>
+						<t:outputText converter="moneyConverter"
+							rendered="#{!generalBudgetBean.isEdit or (generalBudgetBean.isEdit and empty item.cfPartnerAnagraph.country)}"
+							value="#{item.cnPublic}" />
+						<t:inputText rendered="#{generalBudgetBean.isEdit and !empty item.cfPartnerAnagraph.country}" maxlength="12" onkeypress="return decimalonly(this, event)"
+							onkeyup="checkdecimal(this)"
+							converter="floatConverter" styleClass="editbox_form2"
+							validator="#{validator.isFloat92}" id="budgetCNPublic"
+							value="#{item.cnPublic}" />					
+					</t:column>			
+					
+					<t:column styleClass="NumberColumn" headerstyle="width:100px">
+						<f:facet name="header">
+							<t:outputText value="#{msg.generalBudgetOtherPublicContribution}" />
+						</f:facet>
+						<t:outputText converter="moneyConverter"
+							rendered="#{!generalBudgetBean.isEdit or (generalBudgetBean.isEdit and empty item.cfPartnerAnagraph.country)}"
+							value="#{item.cnPublicOther}" />
+	
+						<t:inputText rendered="#{generalBudgetBean.isEdit and !empty item.cfPartnerAnagraph.country}"
+							onkeypress="return decimalonly(this, event)"
+							onkeyup="checkdecimal(this)" maxlength="12"
+							converter="floatConverter" styleClass="editbox_form2"
+							validator="#{validator.isFloat92}" id="cnPublicOther"
+							value="#{item.cnPublicOther}" />
+					</t:column>
+					
+					<t:column styleClass="NumberColumn" headerstyle="width:100px">
+						<f:facet name="header">
+							<t:outputText value="#{msg.generalBudgetTotalPublicContribution}" />
+						</f:facet>
+						<t:outputText converter="floatConverter" rendered="#{(item.cnPublic + item.fesr) > 0}"
+							value="#{(item.fesr/(item.cnPublic + item.fesr + item.cnPrivateReal))*100}" />
+						<t:outputText converter="floatConverter" rendered="#{(item.cnPublic + item.fesr) == 0}"
+							value="0" />
+					</t:column>
+					
+					
+					<t:column styleClass="NumberColumn" headerstyle="width:100px">
+						<f:facet name="header">
+							<t:outputText value="#{msg.generalBudgetPrivateContribution}" />
+						</f:facet>
+						<t:outputText converter="moneyConverter"
+							rendered="#{!generalBudgetBean.isEdit or (generalBudgetBean.isEdit and empty item.cfPartnerAnagraph.country)}"
+							value="#{item.cnPrivateReal}" />
+	
+						<t:inputText rendered="#{generalBudgetBean.isEdit and !empty item.cfPartnerAnagraph.country}"
+							onkeypress="return decimalonly(this, event)"
+							onkeyup="checkdecimal(this)" maxlength="12"
+							converter="floatConverter" styleClass="editbox_form2"
+							validator="#{validator.isFloat92}" id="cnPrivateReal"
+							value="#{item.cnPrivateReal}" />
+					</t:column>
+					
+					<t:column styleClass="NumberColumn" headerstyle="width:100px">
+						<f:facet name="header">
+							<t:outputText value="#{msg.generalBudgetTotalContribution}" />
+						</f:facet>
+						<t:outputText converter="moneyConverter"
+							value="#{item.fesr + item.cnPublic + item.cnPrivateReal}" />
+					</t:column>	
+					
+					<t:column styleClass="NumberColumn" headerstyle="width:100px">
+						<f:facet name="header">
+							<t:outputText value="#{msg.generalBudgetCNPrivate}" />
+						</f:facet>
+						<t:outputText converter="moneyConverter"
+							rendered="#{!generalBudgetBean.isEdit or (generalBudgetBean.isEdit and empty item.cfPartnerAnagraph.country)}"
+							value="#{item.quotaPrivate}" />
+	
+						<t:inputText validator="#{validator.isFloat92}"
+							onkeypress="return decimalonly(this, event)"
+							onkeyup="checkdecimal(this)" id="cnPrivate"
+							converter="floatConverter" rendered="#{generalBudgetBean.isEdit and !empty item.cfPartnerAnagraph.country}"
+							styleClass="editbox_form2" maxlength="12"
+							value="#{item.quotaPrivate}" />
+					</t:column>		
+					
+					<t:column styleClass="NumberColumn" headerstyle="width:100px">
+						<f:facet name="header">
+							<t:outputText value="#{msg.generalBudgetNetRevenue}" />
+						</f:facet>
+						<t:outputText converter="moneyConverter"
+							rendered="#{!generalBudgetBean.isEdit or (generalBudgetBean.isEdit and empty item.cfPartnerAnagraph.country)}"
+							value="#{item.netRevenue}" />
+	
+						<t:inputText validator="#{validator.isFloat92}"
+							onkeypress="return decimalonly(this, event)"
+							onkeyup="checkdecimal(this)" id="netRevenue"
+							converter="floatConverter" rendered="#{generalBudgetBean.isEdit and !empty item.cfPartnerAnagraph.country}"
+							styleClass="editbox_form2" maxlength="12"
+							value="#{item.netRevenue}" />
+					</t:column>	
+					
+					<!-- <t:column styleClass="NumberColumn" headerstyle="width:100px">
+						<f:facet name="header">
+							<t:outputText value="#{msg.generalBudgetTotalEligibleBudget}" />
+						</f:facet>
+						<t:outputText converter="moneyConverter"
+							value="#{item.budgetTotal - item.quotaPrivate - item.netRevenue}" />
+					</t:column> -->
+				</t:dataTable>
+			</div>
+			
+			<table style="margin:0 auto; width: 1500px;">				
+				<tr style="display: #{generalBudgetBean.spanValidatorVisibility}">
+					<td colspan="2" style="text-align:center;">
+						<span class="RequiredFieldMarker">#{msg.generalBudgetValidatorMessage}</span>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" class="btn_line">
+						<a4j:commandButton
+							rendered="#{generalBudgetBean.isEdit}" immediate="false"
+							styleClass="button2"
+							action="#{generalBudgetBean.preSave}"
+							oncomplete="if(#{generalBudgetBean.isModified}) {document.getElementById('deletePanel').component.show();}"
+							value="#{msg.save}" id="save" />
+						<a4j:commandButton
+							rendered="#{generalBudgetBean.isEdit}" value="#{msg.cancel}"
+							styleClass="button2" immediate="true"
+							action="#{generalBudgetBean.GoBack}" />
+						<sec:ifAnyGranted roles="ROLE_AGU_W,ROLE_STC_W,ROLE_B_W">	
+						<a4j:commandButton ajaxSingle="true" id="editlink" immediate="false"
+							rendered="#{!generalBudgetBean.isEdit and !Session.isActualSateAndAguRead and (Session.STC or Session.AGU)}" styleClass="button2"
+							value="#{msg.edit}" action="#{generalBudgetBean.editItem}" >
+						</a4j:commandButton>
+						</sec:ifAnyGranted>
+					</td>
+				</tr>
+			</table>
+		</a4j:outputPanel>
+	</ui:define>
+	<ui:define name="delete_panels">
+		<rich:modalPanel id="deletePanel" autosized="true" width="200">
+			<f:facet name="header">
+				<h:outputText value="#{msg.partnerBudgetDelete}" style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+				
+			</f:facet>
+			<h:form>
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td align="center" width="50%"><a4j:commandButton
+								value="#{msg.yes}" ajaxSingle="true" styleClass="button"
+								action="#{generalBudgetBean.Page_Save}"
+								oncomplete="#{rich:component('deletePanel')}.hide();"
+								reRender="FormPanel" /></td>
+							<td align="center" width="50%"><a4j:commandButton
+								value="#{msg.cancel}" styleClass="button"
+								onclick="#{rich:component('deletePanel')}.hide();return false;" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</h:form>
+		</rich:modalPanel>
+	</ui:define>
+</ui:composition>
+</html>

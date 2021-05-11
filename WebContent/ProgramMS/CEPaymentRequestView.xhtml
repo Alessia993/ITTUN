@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/EditBase.xhtml">
+	<ui:param name="headWidth" value="900px" />
+	<ui:param name="heading" value="#{msg.paymentCESectionName}" />
+	<ui:param name="heading_top" value="#{msg.paymentCESectionName}" />
+
+	<!--  new acagnoni 2019/03/18 -->
+	<ui:define name="edit_body">
+
+		<table width="50%" class="forms" border="0" cellpadding="1"
+			cellspacing="1">
+			<tr>
+				<td class="LabelCell"><t:outputText
+						value="#{msg.cePaymentRequestAnnualNotificationCommitmentDate}" /><span
+					class="RequiredFieldMarker">*</span></td>
+				<td style="width: 25%;"><rich:calendar
+						locale="#{LocalizeBean.currentLocaleValue}"
+						id="annualNotificationCommitmentDate"
+						converter="dateTimeConverter"
+						enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="true"
+						inputClass="editbox_form"
+						value="#{cePaymentRequestController.annualNotificationCommitmentDate}"
+						datePattern="dd/MM/yyyy">
+					</rich:calendar></td>
+			</tr>
+			<tr>
+				<td class="LabelCell"><t:outputText
+						value="#{msg.cePaymentRequestAnnualCommitmentAmount}:" /><span
+					class="RequiredFieldMarker">*</span></td>
+				<td class="ControlCell"><h:inputText maxlength="200"
+						styleClass="editbox_form" id="annualCommitmentAmount"
+						converter="floatConverter" validator="#{validator.isFloat92}"
+						onkeypress="return decimalonly(this, event)"
+						onkeyup="checkdecimal(this)"
+						enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="true"
+						value="#{cePaymentRequestController.annualCommitmentAmount}" /></td>
+			</tr>
+			<tr>
+
+				<td class="LabelCell"><t:outputText
+						value="#{msg.cePaymentRequestPreFinancingPaymentRequestDate}" /><span
+					class="RequiredFieldMarker">*</span></td>
+				<td style="width: 25%;"><rich:calendar
+						locale="#{LocalizeBean.currentLocaleValue}"
+						id="preFinancingPaymentRequestDate" inputClass="editbox_form"
+						converter="dateTimeConverter" required="true"
+						enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+						value="#{cePaymentRequestController.preFinancingPaymentRequestDate}"
+						datePattern="dd/MM/yyyy">
+					</rich:calendar></td>
+			</tr>
+			<tr>
+				<td class="LabelCell"><t:outputText
+						value="#{msg.cePaymentRequestPreFinancingSupportingDoc}:" /><span
+					class="RequiredFieldMarker">*</span></td>
+				<td class="ControlCell"><h:inputText maxlength="200"
+						styleClass="editbox_form" id="preFinancingSupportingDoc"
+						enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="true"
+						value="#{cePaymentRequestController.preFinancingSupportingDoc}" /></td>
+			</tr>
+			<tr>
+				<td class="LabelCell"><t:outputText
+						value="#{msg.cePaymentRequestPreFinancingRequestedAmount}:" /><span
+					class="RequiredFieldMarker">*</span></td>
+				<td class="ControlCell"><h:inputText maxlength="200"
+						enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="true"
+						styleClass="editbox_form" id="preFinancingRequestedAmount"
+						converter="floatConverter" validator="#{validator.isFloat92}"
+						onkeypress="return decimalonly(this, event)"
+						onkeyup="checkdecimal(this)"
+						value="#{cePaymentRequestController.preFinancingRequestedAmount}" /></td>
+			</tr>
+			<tr>
+				<td class="LabelCell"><t:outputText
+						value="#{msg.cePaymentRequestAnnualReportSubmissionDate}" /><span
+					class="RequiredFieldMarker">*</span></td>
+				<td style="width: 25%;"><rich:calendar
+						locale="#{LocalizeBean.currentLocaleValue}"
+						enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+						id="annualReportSubmissionDate" inputClass="editbox_form"
+						converter="dateTimeConverter" required="true"
+						value="#{cePaymentRequestController.annualReportSubmissionDate}"
+						datePattern="dd/MM/yyyy">
+					</rich:calendar></td>
+			</tr>
+			<tr>
+				<td class="LabelCell"><t:outputText
+						value="#{msg.cePaymentRequestAnnualReportDoc}:" /><span
+					class="RequiredFieldMarker">*</span></td>
+				<td class="ControlCell"><h:inputText maxlength="200"
+						styleClass="editbox_form" id="annualReportDoc"
+						enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="true"
+						value="#{cePaymentRequestController.annualReportDoc}" /></td>
+			</tr>
+			<tr>
+				<td class="LabelCell"><t:outputText
+						value="#{msg.cePaymentRequestAcceptedTechAssAmountCertified}:" /><span
+					class="RequiredFieldMarker">*</span></td>
+				<td class="ControlCell"><h:inputText maxlength="200"
+						styleClass="editbox_form" id="acceptedTechAssAmountCertified"
+						enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="true"
+						converter="floatConverter" validator="#{validator.isFloat92}"
+						onkeypress="return decimalonly(this, event)"
+						onkeyup="checkdecimal(this)"
+						value="#{cePaymentRequestController.acceptedTechAssAmountCertified}" /></td>
+			</tr>
+			<tr>
+				<td class="LabelCell"><t:outputText
+						value="#{msg.cePaymentRequestAcceptedProjectsExpenditureCertifiedAmount}:" /><span
+					class="RequiredFieldMarker">*</span></td>
+				<td class="ControlCell"><h:inputText maxlength="200"
+						styleClass="editbox_form"
+						id="acceptedProjectsExpenditureCertifiedAmount"
+						enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="true"
+						converter="floatConverter" validator="#{validator.isFloat92}"
+						onkeypress="return decimalonly(this, event)"
+						onkeyup="checkdecimal(this)"
+						value="#{cePaymentRequestController.acceptedProjectsExpenditureCertifiedAmount}" /></td>
+			</tr>
+			<tr>
+				<td class="LabelCell"><t:outputText
+						value="#{msg.cePaymentRequestAnnualEUAllocationAmount}:" /><span
+					class="RequiredFieldMarker">*</span></td>
+				<td class="ControlCell"><h:inputText maxlength="200"
+						styleClass="editbox_form" id="annualEUAllocationAmount"
+						enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="true"
+						value="#{cePaymentRequestController.annualEUAllocationAmount}" /></td>
+			</tr>
+			<tr>
+				<td colspan="2" class="btn_line"><a4j:commandButton
+						immediate="false" action="#{cePaymentRequestController.Page_Save}"
+						enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" styleClass="button2"
+						value="#{msg.save}" id="save" /></td>
+			</tr>
+		</table>
+
+	</ui:define>
+</ui:composition>
+

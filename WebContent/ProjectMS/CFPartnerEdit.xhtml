@@ -1,0 +1,307 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/EditBase.xhtml">
+	<ui:param name="headWidth" value="600px" />
+	<ui:param name="heading"
+		value="#{cfPartnerEditBean.innerHeadingString}" />
+	<ui:param name="heading_top" value="#{cfPartnerEditBean.headingString}" />	
+	<ui:define name="edit_body">
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+
+			<table class="forms" border="0" cellpadding="1" cellspacing="1"
+				width="600px">
+				<tr style="display: #{cfPartnerEditBean.aguMode}">
+					<!-- CF or Partner -->
+					<td class="ControlCell"><t:outputText
+						value="#{cfPartnerEditBean.userRoleLabel}:" />
+					</td>
+					<td class="ControlCell">
+						<t:selectOneMenu id="partners"
+							value="#{cfPartnerEditBean.selectedPartner}"
+							rendered="#{cfPartnerEditBean.editMode}"
+							enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" 
+							required="true" reRender="pagePanel"
+							styleClass="DropDown">
+							<f:selectItems value="#{cfPartnerEditBean.listPartners}" />
+							<a4j:support event="onchange" reRender="pagePanel" ajaxSingle="true"/>
+						</t:selectOneMenu>
+						<b><t:outputText value="#{cfPartnerEditBean.selectedPartner}" 
+							rendered="#{!cfPartnerEditBean.editMode}">
+						</t:outputText></b>
+					</td>
+				</tr>
+				<tr>
+					<!-- Country -->
+					<td class="ControlCell"><t:outputText
+						value="#{msg.cfPartnerListTableCountry}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell">
+						<t:selectOneMenu id="countries"
+							value="#{cfPartnerEditBean.country}"
+							disabled="#{cfPartnerEditBean.editActualMode}"
+							enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+							required="true" styleClass="DropDown"
+							rendered="#{cfPartnerEditBean.editMode}"
+							valueChangeListener="#{cfPartnerEditBean.countryChanged}">
+							<f:selectItems value="#{cfPartnerEditBean.listCountries}" />
+							<a4j:support event="onchange" reRender="pagePanel" />
+						</t:selectOneMenu>
+						<b><t:outputText value="#{cfPartnerEditBean.countryTitle}"
+							rendered="#{!cfPartnerEditBean.editMode}">
+						</t:outputText></b>
+					</td>
+				</tr>
+				<tr>
+					<!-- Partita IVA -->
+					<td class="LabelCell"><t:outputText
+						value="#{msg.cfPartnerListTablePartita}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell">
+						<t:inputText styleClass="editbox_form"
+							rendered="#{cfPartnerEditBean.editMode}"
+							disabled="#{cfPartnerEditBean.editActualMode}"
+							enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W,ROLE_BP_W,ROLE_B_W"
+							required="true" id="partita" value="#{cfPartnerEditBean.partita}"
+							validator="#{validator.isAlphaNumerical}" maxlength="250" />
+						<b><t:outputText value="#{cfPartnerEditBean.partita}"
+							rendered="#{!cfPartnerEditBean.editMode}">
+						</t:outputText></b>
+					</td>
+				</tr>
+				<!-- remove to update -->
+				<!--  <tr style="display: #{cfPartnerEditBean.aguMode}"> -->
+				<tr style="display: none;"> 
+					<!-- Name -->
+					<td class="LabelCell"><t:outputText
+						value="#{msg.cfPartnerListTableName}:" /></td>
+					<td class="ControlCell"><t:selectOneMenu id="naming"
+							value="#{cfPartnerEditBean.naming}"
+							disabled="#{cfPartnerEditBean.editActualMode}"
+							enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+							required="false" styleClass="DropDown"
+							onchange="onNamingChange()"
+							rendered="#{cfPartnerEditBean.editMode}">
+							<f:selectItems value="#{cfPartnerEditBean.listNamings}" />
+							<a4j:support event="onchange" reRender="name" />
+						</t:selectOneMenu>
+						<b><t:outputText value="#{cfPartnerEditBean.naming}"
+							rendered="#{!cfPartnerEditBean.editMode}">
+						</t:outputText></b>
+						</td>
+				</tr>
+				<tr>
+					<!-- Name -->
+					<td class="LabelCell"><t:outputText
+						value="#{msg.cfPartnerListTableName}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+						enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+						disabled="#{cfPartnerEditBean.editActualMode or cfPartnerEditBean.disableNaming}"
+						rendered="#{cfPartnerEditBean.editMode}"
+						required="true" id="name" value="#{cfPartnerEditBean.name}"
+						maxlength="250" />
+						<b><t:outputText value="#{cfPartnerEditBean.name}"
+							rendered="#{!cfPartnerEditBean.editMode}">
+						</t:outputText></b>
+						</td>
+				</tr>
+				<tr>
+					<!-- Soggetto pubblico -->
+					<td class="LabelCell">
+						<t:outputText value="#{msg.cfPartnerListTableIsPublic}:" />
+					</td>
+					<td class="ControlCell">
+						<h:selectBooleanCheckbox
+							rendered="#{cfPartnerEditBean.editMode}"
+							disabled="#{cfPartnerEditBean.editActualMode}"
+							enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W,ROLE_BP_W,ROLE_B_W"
+							id="publicSubject" value="#{cfPartnerEditBean.publicSubject}" />
+						<b>
+							<h:selectBooleanCheckbox
+								rendered="#{!cfPartnerEditBean.editMode}"
+								disabled="true"
+								value="#{cfPartnerEditBean.publicSubject}" />
+						</b>
+					</td>
+				</tr>
+				<tr style="display: #{cfPartnerEditBean.nonAutoCil}">
+					<!-- CIL -->
+					<td class="ControlCell">
+						<t:outputText
+						value="#{msg.cfPartnerListTableCIL}:" />
+					</td>
+					<td class="ControlCell">
+					
+					<t:selectOneMenu id="cils"
+						value="#{cfPartnerEditBean.firstLevelController}"						
+						enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="false"						
+						styleClass="DropDown">
+						<f:selectItems value="#{cfPartnerEditBean.listCIL}" />						
+					</t:selectOneMenu>					
+					<b><t:outputText value="#{cfPartnerEditBean.firstLevelController}"
+							style="display: #{cfPartnerEditBean.aguMode}"
+							rendered="#{!cfPartnerEditBean.editMode and !empty cfPartnerEditBean.aguMode}">
+						</t:outputText></b>
+					</td>
+				</tr>
+				<tr style="display: #{cfPartnerEditBean.autoCil}">
+					<!-- CIL -->
+					<td class="ControlCell"><t:outputText
+						value="#{msg.cfPartnerListTableCIL}:" /></td>
+					<td class="ControlCell">
+					
+					<t:selectOneMenu id="cils_2"
+						value="#{cfPartnerEditBean.firstLevelControllerIt}"						
+						enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="false"
+						immediate="true"						
+						styleClass="DropDown">
+						<f:selectItems value="#{cfPartnerEditBean.listCIL}" />
+						
+					</t:selectOneMenu>					
+					<b><t:outputText value="#{cfPartnerEditBean.firstLevelController}"
+							style="display: #{cfPartnerEditBean.aguMode}"
+							rendered="#{!cfPartnerEditBean.editMode and !empty cfPartnerEditBean.aguMode}">
+						</t:outputText></b>
+					</td>
+				</tr>
+				<ui:remove>
+
+					<tr style="display: #{cfPartnerEditBean.nonAutoCil}">
+						<!-- DAEC -->
+						<td class="ControlCell"><t:outputText
+								value="#{cfPartnerEditBean.daecLabel}:" /></td>
+						<td class="ControlCell"><t:selectOneMenu id="daecs"
+								value="#{cfPartnerEditBean.daec}"
+								enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="false"
+								styleClass="DropDown">
+								<f:selectItems value="#{cfPartnerEditBean.listDAEC}" />
+							</t:selectOneMenu></td>
+					</tr>
+					
+				</ui:remove>
+				<tr style="display: #{cfPartnerEditBean.aguMode}">
+					<!-- Referent name -->
+					<td class="LabelCell"><t:outputText
+						value="#{msg.cfPartnerListTableOperatorName}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+						enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+						disabled="#{cfPartnerEditBean.editActualMode}"
+						rendered="#{cfPartnerEditBean.editMode}"
+						required="true" id="referent_name"
+						value="#{cfPartnerEditBean.referentName}" maxlength="250" />
+						<b><t:outputText value="#{cfPartnerEditBean.referentName}"
+							rendered="#{!cfPartnerEditBean.editMode}">
+						</t:outputText></b>
+					</td>
+				</tr>
+				<tr style="display: #{cfPartnerEditBean.aguMode}">
+					<!-- Referent surname -->
+					<td class="LabelCell"><t:outputText
+						value="#{msg.cfPartnerListTableOperatorSurname}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+						enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+						disabled="#{cfPartnerEditBean.editActualMode}"
+						rendered="#{cfPartnerEditBean.editMode}"
+						required="true" id="referent_surname"
+						value="#{cfPartnerEditBean.referentSurname}" maxlength="250" />
+						<b><t:outputText value="#{cfPartnerEditBean.referentSurname}"
+							rendered="#{!cfPartnerEditBean.editMode}">
+						</t:outputText></b>	
+					</td>
+				</tr>
+				<tr style="display: #{cfPartnerEditBean.aguMode}">
+					<!-- Referent fiscal code -->
+					<td class="LabelCell"><t:outputText
+						value="#{msg.cfPartnerListTableOperatorCFRef}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+						enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+						rendered="#{cfPartnerEditBean.editMode}"
+						disabled="#{cfPartnerEditBean.editActualMode}"
+						required="true" id="referent_fiscal"
+						value="#{cfPartnerEditBean.cfReferent}"
+						validator="#{validator.checkFiscalCodeForCfPartner}"
+						maxlength="16" />
+						<b><t:outputText value="#{cfPartnerEditBean.cfReferent}"
+							rendered="#{!cfPartnerEditBean.editMode}">
+						</t:outputText></b>
+						</td>
+				</tr>
+				<tr style="display: #{cfPartnerEditBean.aguMode}">
+					<!-- Referent email -->
+					<td class="LabelCell"><t:outputText
+						value="#{msg.cfPartnerListTableOperatorEmailRef}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+						enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+						required="true" id="referent_email"
+						disabled="#{cfPartnerEditBean.editActualMode}"
+						rendered="#{cfPartnerEditBean.editMode}"
+						value="#{cfPartnerEditBean.emailReferent}"
+						validator="#{validator.checkMailUniqueCFPartner}" maxlength="250" />
+						<b><t:outputText value="#{cfPartnerEditBean.emailReferent}"
+							rendered="#{!cfPartnerEditBean.editMode}">
+						</t:outputText></b>
+					</td>
+				</tr>
+				<tr style="display: #{cfPartnerEditBean.aguMode}">
+					<!-- CUP -->
+					<td class="LabelCell"><t:outputText
+						value="#{msg.cfPartnerListTableCUPCode}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+						enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+						required="true" id="beneficiary_cup"
+						disabled="#{cfPartnerEditBean.editActualMode}"
+						rendered="#{cfPartnerEditBean.editMode}"
+						value="#{cfPartnerEditBean.cupCode}" maxlength="250" />
+						<b><t:outputText value="#{cfPartnerEditBean.cupCode}"
+							rendered="#{!cfPartnerEditBean.editMode}">
+						</t:outputText></b>
+					</td>
+				</tr>
+			</table>
+
+			<div class="btn_line">
+			<table>
+				<tr>
+					<td><a4j:commandButton immediate="false"						
+						action="#{cfPartnerEditBean.Page_Save}" reRender="pagePanel"
+						styleClass="button2" value="#{msg.save}" id="save" /></td>
+					<td><a4j:commandButton value="#{msg.cancel}"
+						styleClass="button2" immediate="true"
+						action="#{cfPartnerEditBean.GoBack}" /></td>
+				</tr>
+			</table>
+			</div>
+
+		</a4j:outputPanel>
+<!-- remove to update -->
+		<!-- <script type="text/javascript">
+			function onNamingChange()
+			{
+				var naming = document.getElementById('EditForm:naming').value;
+				var name = document.getElementById('EditForm:name');
+				if(naming == "")
+				{
+					name.disabled = false;
+				}
+				else
+				{
+					name.value = naming;
+					name.disabled = true;
+				}
+			}
+			
+			document.getElementById('EditForm:name').disabled = document.getElementById('EditForm:naming').value!="";
+		</script> -->
+	</ui:define>
+</ui:composition>

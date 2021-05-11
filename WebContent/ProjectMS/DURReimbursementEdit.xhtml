@@ -1,0 +1,404 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/EditTabBase.xhtml">
+	<ui:param name="headWidth" value="800px" />
+	<ui:param name="heading" value="#{msg.durReimbPageName}" />
+	<ui:param name="heading_top" value="#{msg.durReimbPageTop}" />
+
+	<ui:define name="edit_body">
+
+		<a4j:commandButton id="buttonChangedPartner" reRender="pagePanel"
+			onclick="Richfaces.showModalPanel('waitPopup');"
+			action="#{durReimbursementEditBean.handleChangePartnerFilter}"
+			style="display: none;"
+			oncomplete="Richfaces.hideModalPanel('waitPopup');"></a4j:commandButton>
+
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+			<h:inputText style="display:none" id="closeReimbrValidationFailed"
+				value="#{durReimbursementEditBean.closeReimbrValidationFailed}" />
+			<t:panelTabbedPane serverSideTabSwitch="false">
+
+				<t:panelTab id="tabSet1" label="#{msg.durReimbTab1}">
+
+					<div class="table_container">
+						<t:dataTable style="margin:0 auto; width: 80%;position:relative;"
+							id="table" var="item" value="#{durReimbursementEditBean.listF}"
+							styleClass="form_table" rowClasses="row_table_n,row_table_g">
+
+							<f:facet name="header">
+								<t:column>
+									<sec:ifAnyGranted roles="ROLE_AGU_W">
+										<a4j:commandLink styleClass="headerPanelLink"
+											rendered="#{durReimbursementEditBean.canAddF}"
+											action="#{durReimbursementEditBean.addFEntity}">#{msg.addFESRInfo}</a4j:commandLink>
+									</sec:ifAnyGranted>
+									<h:outputText value="#{msg.notRegularTableName}" />
+
+								</t:column>
+							</f:facet>
+							<sec:ifAnyGranted roles="ROLE_AGU_W">
+								<t:column id="edit"
+									rendered="#{!empty durReimbursementEditBean.listF and durReimbursementEditBean.isEdit and durReimbursementEditBean.renderEditLink}"
+									styleClass="ActionColumn" headerstyleClass="ActionColumn">
+									<a4j:commandLink ajaxSingle="true" id="editlink"
+										title="#{msg.edit}"
+										action="#{durReimbursementEditBean.editFEntity}">
+										<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+											style="border:0" />
+										<f:setPropertyActionListener value="#{item.id}"
+											target="#{durReimbursementEditBean.entityFEditId}" />
+									</a4j:commandLink>
+								</t:column>
+							</sec:ifAnyGranted>
+
+							<!-- Info columns -->
+
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty durReimbursementEditBean.listF}">
+								<f:facet name="header">
+									<h:outputText value="#{msg.durReimbNumber}" />
+								</f:facet>
+								<t:outputText value="#{item.fesrReimbursmentNumber}" />
+							</t:column>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty durReimbursementEditBean.listF}">
+								<f:facet name="header">
+									<a4j:outputPanel ajaxRendered="false">
+										<t:outputText value="#{msg.durReimbBFNumber}" />
+										<br />
+										<t:selectOneMenu id="partners" styleClass="DropDown"
+											value="#{durReimbursementEditBean.selectedPartnerId}"
+											onchange="document.getElementById('EditForm:buttonChangedPartner').click();">
+											<f:selectItems
+												value="#{durReimbursementEditBean.partnerList}" />
+										</t:selectOneMenu>
+									</a4j:outputPanel>
+								</f:facet>
+								<t:outputText value="#{item.fesrBf.name}" />
+							</t:column>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty durReimbursementEditBean.listF}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.durReimbPaymentAct}" />
+								</f:facet>
+								<t:outputText value="#{item.fesrPaymentAct}"
+									converter="dateTimeConverter" />
+							</t:column>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty durReimbursementEditBean.listF}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.durReimbNumberSettlementAct}" />
+								</f:facet>
+								<t:outputText value="#{item.numberSettlementAct}" />
+							</t:column>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty durReimbursementEditBean.listF}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.durReimbFesrDate}" />
+								</f:facet>
+								<t:outputText value="#{item.fesrDate}"
+									converter="dateTimeConverter" />
+							</t:column>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty durReimbursementEditBean.listF}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.durReimbursementAmount}" />
+								</f:facet>
+								<t:outputText value="#{item.reimbursementAmount}"
+									converter="moneyConverter" />
+							</t:column>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty durReimbursementEditBean.listF}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.durReimbQuota}" />
+								</f:facet>
+								<t:outputText value="#{item.quotaString}" />
+							</t:column>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{empty durReimbursementEditBean.listF}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.noData}"></t:outputText>
+								</f:facet>
+							</t:column>
+
+						</t:dataTable>
+						<!-- End of info columns -->
+					</div>
+
+					<table class="forms" border="1" rules="none" cellpadding="1"
+						cellspacing="1" style="width: 60%; max-width: 400px;">
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.durReimbBottomFormTotaleImportoRimborsato}:" /></td>
+							<td class="ControlCell"><t:inputText
+									converter="floatConverter"
+									value="#{durReimbursementEditBean.totalReimbursmentAmount}"
+									styleClass="editbox_form2" readonly="true"
+									id="totaleImportoRimborsato" /></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.durReimbBottomFormImportoComplessivoDUR}:" /></td>
+							<td class="ControlCell"><t:inputText
+									converter="floatConverter"
+									value="#{durReimbursementEditBean.totalDurAmount}"
+									styleClass="editbox_form2" readonly="true"
+									id="importoComplessivoDUR" /></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.durReimbBottomFormQuotaFESRFinoraRimborsata}:" /></td>
+							<td class="ControlCell"><t:inputText
+									value="#{durReimbursementEditBean.previouslyRefundedFesr}"
+									styleClass="editbox_form2" converter="floatConverter"
+									validator="#{validator.isFloat92}" readonly="#{!durReimbursementEditBean.isEdit}"
+									onkeypress="return decimalonly(this, event)"
+									onkeyup="checkdecimal(this)" maxlength="12"
+									id="quotaFESRFinoraRimborsata" /></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.durReimbBottomFormQuotaCNFinoraRimborsata}:" /></td>
+							<td class="ControlCell"><t:inputText
+									value="#{durReimbursementEditBean.previouslyRefundedCn}"
+									styleClass="editbox_form2" converter="floatConverter"
+									validator="#{validator.isFloat92}" readonly="#{!durReimbursementEditBean.isEdit}"
+									onkeypress="return decimalonly(this, event)"
+									onkeyup="checkdecimal(this)" maxlength="12"
+									id="durReimbBottomFormQuotaCNFinoraRimborsata" /></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.durReimbBottomFormContropartitaNazionaleFrancese}:" /></td>
+							<td class="ControlCell"><t:inputText
+									converter="floatConverter"
+									value="#{durReimbursementEditBean.frCnReimbursement}"
+									styleClass="editbox_form2" readonly="true"
+									id="durReimbBottomFormContropartitaNazionaleFrancese" /></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.durReimbBottomFormNote}:" /></td>
+							<td class="ControlCell"><t:inputTextarea maxlength="255"
+									rows="6" cols="40" value="#{durReimbursementEditBean.note}"
+									onkeypress="return textArea(this, 255)"  readonly="#{!durReimbursementEditBean.isEdit}"
+									styleClass="editbox_form2" id="note" /></td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<div class="btn_line">
+									<a4j:commandButton value="#{msg.save}" styleClass="button2"
+										onclick="Richfaces.showModalPanel('waitPopup');"
+										oncomplete="Richfaces.hideModalPanel('waitPopup');"
+										rendered="#{!durReimbursementEditBean.durCompilations.reimbursed and durReimbursementEditBean.isEdit}"
+										action="#{durReimbursementEditBean.saveAdditinalFormData}" />
+									<a4j:commandButton value="#{msg.cancel}" styleClass="button2"
+										action="#{durReimbursementEditBean.cancelAdditionalFormChanges}"
+										onclick="Richfaces.showModalPanel('waitPopup');"
+										oncomplete="Richfaces.hideModalPanel('waitPopup'); if($(document.getElementById('EditForm:closeReimbursementFailed')).val() != 'true'){}" />
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2"><ui:fragment
+									rendered="#{durReimbursementEditBean.additionalFormValidateFailed}">
+									<span class="RequiredFieldMarker">#{msg.durReimbAdditinalFormSaveValidationFailed}</span>
+								</ui:fragment></td>
+						</tr>
+					</table>
+					
+
+					<div class="btn_line">
+						<a4j:htmlCommandLink
+							action="#{durReimbursementEditBean.exportSummary}"
+							styleClass="footerPanelExport">
+							<h:graphicImage alt="#{msg.exportXls}" value="/images/xls.png" />
+						</a4j:htmlCommandLink>
+					</div>
+
+					
+				</t:panelTab>
+
+				<ui:remove>
+				<t:panelTab id="tabSet2" label="#{msg.durReimbTab2}">
+
+					<div class="table_container">
+						<t:dataTable style="margin:0 auto; width: 80%;" id="table"
+							var="item" value="#{durReimbursementEditBean.listR}"
+							styleClass="form_table" rowClasses="row_table_n,row_table_g">
+
+							<f:facet name="header">
+								<t:column>
+									<sec:ifAnyGranted roles="ROLE_AGU_W">
+										<a4j:commandLink styleClass="headerPanelLink"
+											rendered="#{durReimbursementEditBean.canAddR}"
+											action="#{durReimbursementEditBean.addREntity}">#{msg.addRotationFoundInfo}</a4j:commandLink>
+									</sec:ifAnyGranted>
+									<h:outputText value="#{msg.notRegularTableName}" />
+								</t:column>
+							</f:facet>
+							<sec:ifAnyGranted roles="ROLE_AGU_W">
+								<t:column id="edit"
+									rendered="#{!empty durReimbursementEditBean.listR and durReimbursementEditBean.isEdit}"
+									styleClass="ActionColumn" headerstyleClass="ActionColumn">
+									<a4j:commandLink ajaxSingle="true" id="editlink"
+										title="#{msg.edit}"
+										action="#{durReimbursementEditBean.editREntity}">
+										<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+											style="border:0" />
+										<f:setPropertyActionListener value="#{item.id}"
+											target="#{durReimbursementEditBean.entityREditId}" />
+									</a4j:commandLink>
+								</t:column>
+							</sec:ifAnyGranted>
+							<!-- Info columns -->
+
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty durReimbursementEditBean.listR}">
+								<f:facet name="header">
+									<h:outputText value="#{msg.durReimbNumber}" />
+								</f:facet>
+								<t:outputText value="#{item.rotationReimbursmentNumber}" />
+							</t:column>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty durReimbursementEditBean.listR}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.durReimbPartnerName}" />
+								</f:facet>
+								<t:outputText value="#{item.rotationPartner.name}" />
+							</t:column>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty durReimbursementEditBean.listR}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.durReimbRotFTotalAmount}" />
+								</f:facet>
+								<t:outputText value="#{item.rotationTotalAmount}"
+									converter="floatConverter" />
+							</t:column>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty durReimbursementEditBean.listR}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.durReimbRotFPartnerIban}" />
+								</f:facet>
+								<t:outputText value="#{item.rotationPartnerIban}" />
+							</t:column>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty durReimbursementEditBean.listR}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.durReimbRotFLiquidationDate}" />
+								</f:facet>
+								<t:outputText value="#{item.rotationPaymentAct}"
+									converter="dateTimeConverter" />
+							</t:column>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty durReimbursementEditBean.listR}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.durReimbRotFDate}" />
+								</f:facet>
+								<t:outputText value="#{item.rotationDate}"
+									converter="dateTimeConverter" />
+							</t:column>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty durReimbursementEditBean.listR}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.durReimbCRO}" />
+								</f:facet>
+								<t:outputText value="#{item.rptationCro}" />
+							</t:column>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{empty durReimbursementEditBean.listR}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.noData}"></t:outputText>
+								</f:facet>
+							</t:column>
+
+						</t:dataTable>
+						<!-- End of info columns -->
+					</div>
+
+				</t:panelTab></ui:remove>
+
+				<div class="btn_line">
+					<table>
+						<tr>
+							<td><a4j:commandButton value="#{msg.finishReimbursement}"
+									reRender="pagePanel, closeReimbursementDialog"
+									styleClass="button4"
+									action="#{durReimbursementEditBean.tryClose}"
+									onclick="Richfaces.showModalPanel('waitPopup');"
+									oncomplete="Richfaces.hideModalPanel('waitPopup');if($(document.getElementById('EditForm:closeReimbrValidationFailed')).value!='true'){Richfaces.showModalPanel('closeReimbursementDialog');}"
+									rendered="#{!durReimbursementEditBean.durCompilations.reimbursed and durReimbursementEditBean.isEdit and !durReimbursementEditBean.isContainSuspendOrRectif}" />
+								<a4j:commandButton value="#{msg.cancel}" styleClass="button2"
+									immediate="true" action="#{durReimbursementEditBean.GoBack}" /></td>
+						</tr>
+						<tr>
+							<td><ui:fragment
+									rendered="#{durReimbursementEditBean.closeReimbursementFailed}">
+									<span class="RequiredFieldMarker">#{msg.durReimbTotalAmountNotReachedValidationFailed}</span>
+								</ui:fragment></td>
+						</tr>
+						<tr>
+							<td><ui:fragment
+									rendered="#{durReimbursementEditBean.percentValidationFailed}">
+									<span class="RequiredFieldMarker">#{msg.durReimbAmountShouldBe75Percent}</span>
+								</ui:fragment></td>
+						</tr>
+					</table>
+				</div>
+
+			</t:panelTabbedPane>
+
+		</a4j:outputPanel>
+		<rich:modalPanel id="waitPopup" autosized="true" width="300"
+			resizeable="false">
+			<center>#{msg.suspensionManagementWaiting}</center>
+
+		</rich:modalPanel>
+
+		<rich:modalPanel id="closeReimbursementDialog" autosized="true"
+			width="300" resizeable="false">
+			<f:facet name="header">
+				<h:outputText value="#{msg.finishReimbursement}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<center>
+				<a4j:outputPanel ajaxRendered="true" id="closeReimbDialogPanel">
+					<span>#{msg.durReimbCloseDialogWarnMes1}</span>
+					<t:outputText value="#{durReimbursementEditBean.percentFesr}"
+						converter="floatConverter" />
+					<span>#{msg.durReimbCloseDialogWarnMes2}</span>
+				</a4j:outputPanel>
+				<div class="btn_line">
+					<a4j:commandButton value="#{msg.yes}"
+						reRender="pagePanel, closeReimbursementDialog"
+						styleClass="button2"
+						action="#{durReimbursementEditBean.Page_Save}"
+						oncomplete="Richfaces.hideModalPanel('closeReimbursementDialog');" />
+					<a4j:commandButton value="#{msg.no}" styleClass="button2"
+						onclick="Richfaces.hideModalPanel('closeReimbursementDialog');" />
+				</div>
+			</center>
+		</rich:modalPanel>
+	</ui:define>
+</ui:composition>

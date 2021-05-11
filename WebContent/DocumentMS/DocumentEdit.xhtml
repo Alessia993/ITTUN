@@ -1,0 +1,362 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/EditBase.xhtml">
+	<ui:param name="headWidth" value="70%" />
+	<ui:param name="heading" value="#{msg.documentEditHead}" />
+	<ui:param name="heading_top" value="#{msg.documentEditHeadTop}" />
+	<ui:define name="edit_body">
+
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+
+			<table class="forms" border="0" cellpadding="1" cellspacing="1"
+				width="73%">
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentListDocReleaseFrom}:" /></td>
+					<td class="ControlCell"><b><t:outputText
+								value="#{empty documentEditBean.document.user ? '' : documentEditBean.document.user.name}">
+							</t:outputText></b></td>
+				</tr>
+
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentListDocProtNumber}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							maxlength="50" id="protocolNumber"
+							value="#{documentEditBean.document.protocolNumber}"
+							rendered="#{documentEditBean.editMode}" /> <b> <t:outputText
+								rendered="#{!documentEditBean.editMode}"
+								value="#{documentEditBean.document.protocolNumber}" />
+					</b></td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentDescription}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							maxlength="50" id="description"
+							value="#{documentEditBean.document.description}"
+							rendered="#{documentEditBean.editMode}" /> <b> <t:outputText
+								rendered="#{!documentEditBean.editMode}"
+								value="#{documentEditBean.document.description}" />
+					</b></td>
+				</tr>
+				
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentListLoadingDate}" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td><t:div rendered="#{documentEditBean.editMode}">
+							<rich:calendar locale="#{LocalizeBean.currentLocaleValue}" id="docLoadDate" required="true" disabled="true" 
+								inputClass="editbox_form2" converter="dateTimeConverter"
+								value="#{documentEditBean.document.loadingDate}" 
+								datePattern="dd/MM/yyyy">
+							</rich:calendar>
+						</t:div> <b> <t:outputText rendered="#{!documentEditBean.editMode}"
+								value="#{documentEditBean.document.loadingDate}"
+								converter="dateTimeConverter" />
+					</b></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentListDocDate}" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td><t:div rendered="#{documentEditBean.editMode}">
+							<rich:calendar locale="#{LocalizeBean.currentLocaleValue}" id="docDate" required="true" disabled="false" 
+								inputClass="editbox_form2" converter="dateTimeConverter"
+								value="#{documentEditBean.document.documentDate}"
+								datePattern="dd/MM/yyyy">
+							</rich:calendar>
+						</t:div> <b> <t:outputText rendered="#{!documentEditBean.editMode}"
+								value="#{documentEditBean.document.documentDate}"
+								converter="dateTimeConverter" />
+					</b></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentListDocSection}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:selectOneMenu id="sections"
+							rendered="#{documentEditBean.editMode}"
+							value="#{documentEditBean.selectedSection}" required="true"
+							styleClass="DropDown">
+							<f:selectItems value="#{documentEditBean.listSections}" />
+						</t:selectOneMenu> <b> <t:outputText rendered="#{!documentEditBean.editMode}"
+								value="#{documentEditBean.sectionTitle}" />
+					</b></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentPublic}:" /></td>
+					<td class="ControlCell"><t:selectBooleanCheckbox
+							value="#{documentEditBean.document.isPublic}"
+							disabled="#{!documentEditBean.editMode}">
+						</t:selectBooleanCheckbox></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentUploadRole}:" /></td>
+					<td class="ControlCell"><t:selectOneMenu
+							onmousedown="collapse(this);" onchange="expand(this);"
+							onblur="expand(this);" rendered="#{documentEditBean.editMode}"
+							value="#{documentEditBean.role}" required="false"
+							styleClass="DropDown">
+							<f:selectItems value="#{documentEditBean.listSelectRoles}" />
+						</t:selectOneMenu> <b> <t:outputText rendered="#{!documentEditBean.editMode}"
+								value="#{documentEditBean.roleTitle}" />
+					</b></td>
+				</tr>
+				<tr
+					style="display: #{(Session.CIL and!empty documentEditBean.listPartners )?'':'none'}">
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentForPartner}:" /></td>
+					<td class="ControlCell"><t:selectOneMenu
+							onmousedown="collapse(this);" onchange="expand(this);"
+							onblur="expand(this);"
+							value="#{documentEditBean.selectedPartner}" required="false"
+							rendered="#{documentEditBean.editMode}" styleClass="DropDown">
+							<f:selectItems value="#{documentEditBean.listPartners}" />
+						</t:selectOneMenu> <b> <t:outputText rendered="#{!documentEditBean.editMode}"
+								value="#{documentEditBean.partnerTitle}" />
+					</b></td>
+				</tr>
+				<ui:remove>
+				<tr class="tempDisplay">
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentCategory}:" /></td>
+					<td class="ControlCell"><t:selectOneMenu
+							onmousedown="collapse(this);" onchange="expand(this);"
+							onblur="expand(this);"  disabled="#{!documentEditBean.newEntity and !documentEditBean.canEditCategory}"
+							value="#{documentEditBean.selectedCategory}" required="false"
+							rendered="#{documentEditBean.editMode}" styleClass="DropDown">
+							<f:selectItems value="#{documentEditBean.categories}" />
+						</t:selectOneMenu> <b> <t:outputText rendered="#{!documentEditBean.editMode}"
+								value="#{documentEditBean.document.category}" />
+					</b></td>
+				</tr>
+				
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentNumberField}:" /></td>
+					<td class="ControlCell"><t:inputText rendered="#{documentEditBean.editMode}"
+							styleClass="editbox_form2"  id="docNumber"
+							value="#{documentEditBean.document.documentNumber}"
+							onkeypress="return numbersonly(this, event)"
+							onkeyup="checknumber(this)" maxlength="10" />
+							<t:outputText rendered="#{!documentEditBean.editMode}" value="#{documentEditBean.document.documentNumber}" />
+							</td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentListDocDate}" /></td>
+					<td><t:div rendered="#{documentEditBean.editMode}">
+							<rich:calendar locale="#{LocalizeBean.currentLocaleValue}" id="docEditableDate" required="true"
+								inputClass="editbox_form2" converter="dateTimeConverter"
+								value="#{documentEditBean.document.editableDate}"
+								datePattern="dd/MM/yyyy">
+							</rich:calendar>
+						</t:div> <b> <t:outputText rendered="#{!documentEditBean.editMode}"
+								value="#{documentEditBean.document.editableDate}"
+								converter="dateTimeConverter" />
+					</b></td>
+				</tr>
+				</ui:remove>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentEditFile}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><a4j:htmlCommandLink id="docLink"
+							action="#{documentEditBean.getDoc}"
+							style="text-decoration: underline;" converter="longNameConverter"
+							value="#{documentEditBean.docTitle}" /> <a4j:commandLink
+							rendered="#{!empty documentEditBean.docTitle and documentEditBean.editMode and empty documentEditBean.docTitle2}"
+							id="docDeletelink" immediate="true" reRender="pagePanel"
+							action="#{documentEditBean.deleteDoc}">
+							<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+								style="border:0; padding-left: 20px;" />
+						</a4j:commandLink> <a4j:commandLink
+							rendered="#{empty documentEditBean.docTitle and documentEditBean.editMode}"
+							id="docLinkAdd" value="#{msg.uploadFile}"
+							oncomplete="#{rich:component('documentPanel')}.show()">
+							<h:graphicImage alt="#{msg.delete}" value="/images/plus.png"
+								style="border:0; float:left;" />
+						</a4j:commandLink></td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.signedDocumentEditFile}:" 
+							rendered="#{!empty documentEditBean.docTitle}"/>
+						</td>
+					<td class="ControlCell"><a4j:htmlCommandLink id="docLink2"
+							action="#{documentEditBean.getDoc2}"
+							style="text-decoration: underline;" converter="longNameConverter"
+							value="#{documentEditBean.docTitle2}" /> <a4j:commandLink
+							rendered="#{documentEditBean.editMode and !empty documentEditBean.docTitle2 and !empty documentEditBean.docTitle}"
+							id="docDeletelink2" immediate="true" reRender="pagePanel"
+							action="#{documentEditBean.deleteDoc2}">
+							<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+								style="border:0; padding-left: 20px;" />
+						</a4j:commandLink> <a4j:commandLink
+							rendered="#{empty documentEditBean.docTitle2 and documentEditBean.editMode and !empty documentEditBean.docTitle}"
+							id="docLinkAdd2" value="#{msg.uploadSignedDocument}"
+							oncomplete="#{rich:component('documentPanel4')}.show()">
+							<h:graphicImage alt="#{msg.delete}" value="/images/plus.png"
+								style="border:0; float:left;" />
+						</a4j:commandLink></td>
+				</tr>		
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.signerName}:" 
+							rendered="#{!empty documentEditBean.docTitle2}" /></td>
+					<td class="ControlCell"><b><t:outputText								
+								value="#{documentEditBean.signername}"
+								rendered="#{!empty documentEditBean.docTitle2}">
+							</t:outputText></b></td>
+				</tr>
+				
+			 	<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.signDate}:" 
+							rendered="#{!empty documentEditBean.docTitle2}" /></td>
+					<td class="ControlCell"><b><t:outputText								
+								value="#{documentEditBean.signdate}"
+								rendered="#{!empty documentEditBean.docTitle2}">
+							</t:outputText></b></td>
+				</tr> 
+				
+				
+				<tr>
+					<td><h:outputText styleClass="RequiredFieldMarker" value="#{documentEditBean.authMessage}" /></td>
+				</tr>								
+				
+				<ui:remove>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentNote}:" /></td>
+					<td class="ControlCell"><t:inputTextarea maxlength="255" rendered="#{documentEditBean.editMode}"
+							rows="6" cols="40" value="#{documentEditBean.document.note}"
+							onkeypress="return textArea(this, 255)"
+							styleClass="editbox_form2" id="note" />
+							<t:outputText rendered="#{!documentEditBean.editMode}" value="#{documentEditBean.document.note}" /></td>
+				</tr>
+				</ui:remove>
+				
+			</table>
+
+			<div class="btn_line">
+				<table>
+					<tr style="display: #{documentEditBean.showErrorMessage}">
+						<td colspan="2" style="text-align: center;"><span
+							class="RequiredFieldMarker">#{msg.documentEditErrorMessage}</span>
+						</td>
+					</tr>
+					<tr>
+						<td><a4j:commandButton immediate="false"
+								action="#{documentEditBean.Page_Save}" reRender="pagePanel"
+								rendered="#{documentEditBean.editMode}" styleClass="button2"
+								value="#{msg.save}" id="save" /></td>
+						<td><a4j:commandButton value="#{msg.cancel}"
+								styleClass="button2" immediate="true"
+								action="#{documentEditBean.GoBack}" /></td>
+								
+						<ui:remove>
+						 <td><a4j:commandButton value="Firma Documento"
+								styleClass="button2" immediate="true"
+								action="#{documentEditBean.Document_Sign}" /></td>			 
+						</ui:remove>
+										
+					</tr>
+				</table>
+			</div>
+
+		</a4j:outputPanel>
+	</ui:define>
+
+	<ui:define name="document_body">
+
+		<rich:modalPanel id="documentPanel" autosized="true" width="300">
+			<f:facet name="header">
+				<h:outputText value="Document" style="padding-right:15px;" />
+			</f:facet>
+			<table>
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.uploadFile}:" />
+					</td>
+					<td class="ControlCell"><t:inputFileUpload id="fileupload1"
+							disabled="#{!documentEditBean.editMode}"
+							value="#{documentEditBean.documentUpFile}" storage="file"
+							styleClass="fileUploadInput" maxlength="200000" /></td>
+				</tr>
+				<tr>
+					<td align="center" colspan="2">#{msg.fileSize}</td>
+				</tr>
+			</table>
+			<table style="width: 100%;">
+				<tr>
+					<td style="width: 50%;" align="center"><h:commandButton
+							value="#{msg.uploadFile}" styleClass="button3"
+							action="#{documentEditBean.saveDocument}" reRender="pagePanel"
+							onclick="#{rich:component('documentPanel')}.hide();" /></td>
+					<td><a4j:commandButton value="#{msg.cancel}"
+							styleClass="button" immediate="false"
+							onclick="#{rich:component('documentPanel')}.hide();return false;" />
+					</td>
+				</tr>
+			</table>
+		</rich:modalPanel>	
+
+		<rich:modalPanel id="documentPanel4" autosized="true" width="300">
+			<f:facet name="header">
+				<h:outputText value="Document2" style="padding-right:15px;" />
+			</f:facet>
+			<table>
+				<tr style="display: #{documentEditBean.showErrorMessage2}">
+						<td colspan="2" style="text-align: center;"><span
+							class="RequiredFieldMarker">#{msg.validatorSignedDocuments}</span>
+						</td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.uploadSignedDocument}:" />
+					</td>
+					<td class="ControlCell"><t:inputFileUpload id="fileupload2"
+							disabled="#{!documentEditBean.editMode}"
+							value="#{documentEditBean.documentUpFile2}" storage="file"
+							styleClass="fileUploadInput" maxlength="200000" /></td>
+				</tr>
+				<tr>
+					<td align="center" colspan="2">#{msg.fileSize}</td>
+				</tr>
+			</table>
+			<table style="width: 100%;">
+				<tr>
+					<td style="width: 80%;" align="center"><h:commandButton
+							value="#{msg.uploadSignedDocument}" styleClass="button3"
+							action="#{documentEditBean.saveDocument2}" reRender="pagePanel"
+							onclick="#{rich:component('documentPanel4')}.hide();" /></td>
+					<td><a4j:commandButton value="#{msg.cancel}"
+							styleClass="button" immediate="false"
+							onclick="#{rich:component('documentPanel4')}.hide();return false;" />
+					</td>
+				</tr>
+			</table>
+			
+		</rich:modalPanel>	
+		
+
+	</ui:define>
+	
+
+</ui:composition>

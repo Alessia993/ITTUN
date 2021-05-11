@@ -1,0 +1,209 @@
+<?xml version="1.0"?>
+<project name="ITMAL" basedir="." default="custom.deploy">
+
+	<!-- Local system paths -->
+	<property file="${basedir}/ittun.properties" />
+
+	<property name="dist.dir" location="${basedir}/bin" />
+	<property name="builddir" value="${basedir}/bin" />
+	<property name="src.dir" value="${basedir}/src" />
+	<property name="lib.dir" value="${basedir}/WebContent/WEB-INF/lib" />
+
+	<property name="war.file" value="${ittun.war}" />
+
+	<property name="deploy.dir" value="${file.deploy.dir}" />
+	<property name="deploy.dir.bak" value="${file.deploy.dir.bak}" />
+
+	<property name="tomcat.home" value="${file.tomcat.home}" />
+	<property name="work.dir" value="${file.work.dir}" />
+	<property name="tomcat.lib" value="${file.tomcat.lib}" />
+	<property name="libdir" value="${basedir}/lib" />
+	<property name="webroot.dir" value="${basedir}/WebContent" />
+	<property name="webinf.dir" value="${webroot.dir}/WEB-INF" />
+	<property name="build.dir" value="${basedir}" />
+
+	<property name="tomcat.manager.url" value="${file.tomcat.manager.url}" />
+	<property name="tomcat.manager.user" value="${file.tomcat.manager.user}" />
+	<property name="tomcat.manager.password" value="${file.tomcat.manager.password}" />
+	<property name="tomcat.root.url" value="${file.tomcat.root.url}" />
+	<property name="project.distname" value="${webapp.name}" />
+	<property environment="env" />
+	<property name="revision" value="${env.BUILD_NUMBER}" />
+
+	<patternset id="java.libs" includes="**/*.jar,**/*.zip" />
+	<!-- deploy, install, list, reload, remove, resources, roles, start, stop, undeploy -->
+	<path id="tomcat.classpath">
+		<pathelement location="${tomcat.lib}/catalina-ant.jar" />
+		<pathelement location="${tomcat.lib}/servlet-api.jar" />
+		<pathelement location="${tomcat.lib}/jasper.jar" />
+		<pathelement location="${tomcat.home}/bin/tomcat-juli.jar" />
+	</path>
+	<taskdef resource="org/apache/catalina/ant/catalina.tasks" classpathref="tomcat.classpath" />
+
+	<!-- Copy any resource or configuration files and libs -->
+	<target name="resources">
+
+		<exec executable="git" outputproperty="git.last" failifexecutionfails="false" errorproperty="">
+			<arg value="describe" />
+			<arg value="--always" />
+			<arg value="HEAD" />
+		</exec>
+		<echo message="VERSIONE = ${git.last}" />
+
+		<copy todir="${webinf.dir}/classes" includeEmptyDirs="no">
+			<fileset dir="src">
+				<patternset>
+					<include name="**/*.conf" />
+					<include name="**/*.properties" />
+					<include name="**/*.xml" />
+				</patternset>
+			</fileset>
+		</copy>
+		<copy file="ittun.properties" todir="${webinf.dir}/classes/" />
+
+		<replace file="${webinf.dir}/classes/ittun.properties">
+			<replacefilter token="@versione.applicativo@" value="${git.last}" />
+		</replace>
+		<replace file="${webinf.dir}/classes/hibernate.cfg.xml">
+					<replacefilter token="@ittun.db.host@" value="${ittun.db.host}" />
+					<replacefilter token="@ittun.db.port@" value="${ittun.db.port}" />
+					<replacefilter token="@ittun.db.name@" value="${ittun.db.name}" />
+					<replacefilter token="@ittun.db.username@" value="${ittun.db.username}" />
+					<replacefilter token="@ittun.db.password@" value="${ittun.db.password}" />
+		</replace>
+	</target>
+
+	<path id="web.libs">
+		<fileset dir="${webinf.dir}/lib">
+			<patternset refid="java.libs" />
+		</fileset>
+		<fileset dir="${file.tomcat.lib}">
+			<patternset refid="java.libs" />
+		</fileset>
+	</path>
+
+	<path id="src.filter.ref">
+		<pathelement path="src" />
+	</path>
+
+	<!-- Normal build of application -->
+	<target name="compile" depends="resources">
+		<!--	<target name="compile" depends="resources"> -->
+		<!--<property name="src.dir" refid="src.filter.ref" />-->
+		<mkdir dir="${webinf.dir}/classes" />
+		<javac debug="true" classpathref="web.libs" srcdir="${basedir}/src" destdir="${webinf.dir}/classes" />
+
+	</target>
+
+	<!-- Remove classes directory for clean build -->
+	<target name="clean" description="Prepare for clean build">
+		<delete dir="${basedir}/${builddir}" />
+		<delete dir="${webinf.dir}/classes" />
+		<mkdir dir="${webinf.dir}/classes" />
+	</target>
+
+
+	<!-- Build entire project -->
+	<target name="build" depends="compile" />
+	<target name="rebuild" depends="clean,compile" />
+
+	<!-- Create binary distribution -->
+	<target name="make.war" depends="build">
+		<mkdir dir="${build.dir}" />
+		<war basedir="${webroot.dir}" warfile="${build.dir}/${war.file}" webxml="${webinf.dir}/web.xml">
+			<exclude name="WEB-INF/${build.dir}/**" />
+			<exclude name="WEB-INF/src/**" />
+			<exclude name="WEB-INF/web.xml" />
+		</war>
+	</target>
+
+	<target name="wardeploy" depends="make.war">
+		<delete dir="${work.dir}/${project.distname}" />
+		<delete dir="${deploy.dir}/${project.distname}" />
+		<delete file="${deploy.dir}/${war.file}" />
+		<copy file="${build.dir}/${war.file}" todir="${deploy.dir}" />
+	</target>
+
+	<target name="wardeploy.backup" depends="wardeploy">
+		<mkdir dir="${deploy.dir.bak}/${revision}" />
+		<copy file="${basedir}/${src.zip.file}" todir="${deploy.dir.bak}/${revision}" />
+		<copy file="${build.dir}/${war.file}" todir="${deploy.dir.bak}/${revision}" />
+	</target>
+
+	<target name="custom.deploy" depends="compile">
+		<copy todir="${deploy.dir}/${webapp.name}" preservelastmodified="true">
+			<fileset dir="${webroot.dir}">
+				<include name="**/*.*" />
+			</fileset>
+		</copy>
+		<copy todir="${deploy.dir}/${webapp.name}/WEB-INF/classes" preservelastmodified="true">
+			<fileset dir="${build.dir}/classes" />
+		</copy>
+	</target>
+
+	<!--	<target name="deploy" depends="make.war,undeploy"> -->
+	<target name="deploy" depends="undeploy">
+		<deploy url="${tomcat.manager.url}" username="${tomcat.manager.user}" password="${tomcat.manager.password}" path="/${project.distname}" war="file:./${war.file}" />
+	</target>
+
+	<target name="undeploy" />
+
+	<path id="class.path">
+		<fileset dir="${webinf.dir}">
+			<include name="lib/*.jar" />
+		</fileset>
+	</path>
+
+	<pathconvert property="class-path" pathsep=" " dirsep="/">
+		<path refid="class.path">
+		</path>
+		<map from="${webinf.dir}/" to="" />
+	</pathconvert>
+
+	<path id="compile.jar.libs">
+		<fileset dir="${lib.dir}">
+			<patternset refid="java.libs" />
+		</fileset>
+	</path>
+
+	<path id="run.jar.libs">
+		<fileset dir="${basedir}/../${lib.dir}">
+			<patternset refid="java.libs" />
+		</fileset>
+	</path>
+
+	<target name="clean.files" description="clean all binary files">
+		<tstamp />
+		<mkdir dir="${dist.dir}" />
+		<delete>
+			<fileset dir="${dist.dir}">
+				<include name="**/*" />
+			</fileset>
+		</delete>
+	</target>
+
+	<target name="init" depends="clean.files" description="creating of all necessary directories">
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${dist.dir}" />
+	</target>
+
+	<target name="copy.files" description="copying of files for run">
+		<!-- Compile the java code from ${src} into ${build} -->
+		<copy todir="${dist.dir}">
+			<fileset dir="${src.dir}">
+				<include name="**/*" />
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+
+		<copy todir="${dist.dir}/lib">
+			<fileset dir="${lib.dir}" />
+		</copy>
+
+	</target>
+
+	<target name="compile.bin" depends="init,copy.files">
+		<javac debug="true" classpathref="web.libs" srcdir="${basedir}/src" destdir="${builddir}" />
+	</target>
+
+</project>

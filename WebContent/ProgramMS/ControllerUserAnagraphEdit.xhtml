@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/EditBase.xhtml">
+	<ui:param name="headWidth" value="900px" />
+	<ui:param name="heading" value="#{msg.controllerUserAnagraph}" />
+	<ui:param name="heading_top"
+		value="#{msg.createOrManageControllerUserAnagraph}" />
+	<ui:define name="edit_body">
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+
+			<t:div>
+				<table style="margin-bottom: 0; margin-top: 0;" width="600px"
+					class="forms" border="0" cellpadding="1" cellspacing="1">
+					<tr>
+						<td class="LabelCell"><t:outputText value="#{msg.role}:" /><span
+							class="RequiredFieldMarker">*</span></td>
+						<td class="ControlCell"><t:selectOneMenu id="roles"
+							onchange="submit()" immediate="false"
+							value="#{controllerUserAnagraphEditController.role}"
+							required="true" styleClass="DropDown"
+							validator="#{validator.checkEmpty}"
+							valueChangeListener="#{controllerUserAnagraphEditController.roleChange}">
+							<f:selectItems
+								value="#{controllerUserAnagraphEditController.rolesList}" />
+						</t:selectOneMenu></td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText value="#{msg.country}:" /><span
+							class="RequiredFieldMarker">*</span></td>
+						<td class="ControlCell"><t:selectOneMenu id="countries"
+							onchange="submit()"
+							value="#{controllerUserAnagraphEditController.country}"
+							required="#{controllerUserAnagraphEditController.showCountryList}"
+							styleClass="DropDown"
+							rendered="#{controllerUserAnagraphEditController.showCountryList}"
+							valueChangeListener="#{controllerUserAnagraphEditController.countryChange}">
+							<f:selectItems
+								value="#{controllerUserAnagraphEditController.countryList}" />
+						</t:selectOneMenu> <t:outputText
+							value="#{controllerUserAnagraphEditController.countryToShow}"
+							rendered="#{!controllerUserAnagraphEditController.showCountryList}" />
+						</td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText
+							value="#{msg.controllerType}:" /><span
+							class="RequiredFieldMarker">*</span></td>
+						<td class="ControlCell"><t:selectOneMenu id="types"
+							onchange="submit()"
+							value="#{controllerUserAnagraphEditController.controllerType}"
+							valueChangeListener="#{controllerUserAnagraphEditController.cilControllerTypeChange}"
+							required="true" styleClass="DropDown"
+							validator="#{validator.checkEmpty}">
+							<f:selectItems
+								value="#{controllerUserAnagraphEditController.controllerTypeList}" />
+						</t:selectOneMenu></td>
+					</tr>
+				</table>
+			</t:div>
+			<t:div
+				rendered="#{controllerUserAnagraphEditController.showPhisical}">
+				<table width="600px" style="margin-bottom: 0; margin-top: 0;"
+					class="forms" border="0" cellpadding="1" cellspacing="1">
+					<tr>
+						<td class="LabelCell"><t:outputText
+							value="#{msg.fiscalCode}:" /> <span class="RequiredFieldMarker">*</span>
+						</td>
+						<td class="ControlCell"><t:inputText id="fiscalCode"
+							maxlength="16" styleClass="editbox_form"
+							validator="#{validator.checkfiscalNumber}"
+							value="#{controllerUserAnagraphEditController.fiscalCode}"
+							required="true" /></td>
+					</tr>
+				</table>
+			</t:div>
+			<t:div
+				rendered="#{controllerUserAnagraphEditController.showGiuridical}">
+				<table width="600px" style="margin-bottom: 0; margin-top: 0;"
+					class="forms" border="0" cellpadding="1" cellspacing="1">
+					<tr>
+						<td class="LabelCell"><t:outputText
+							value="#{msg.vatNumber}:" /> <span class="RequiredFieldMarker">*</span>
+						</td>
+						<td class="ControlCell"><t:inputText id="vatNumber"
+							maxlength="11" styleClass="editbox_form"
+							validator="#{validator.checkVatNumber}"
+							value="#{controllerUserAnagraphEditController.vatNumber}"
+							required="true" /></td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText
+							value="#{msg.denomination}:" /><span class="RequiredFieldMarker">*</span></td>
+						<td class="ControlCell"><h:inputText maxlength="150"
+							styleClass="editbox_form" id="denomination" required="true"
+							value="#{controllerUserAnagraphEditController.denomination}" /></td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText
+							value="#{msg.giuridicalTypes}:" /><span
+							class="RequiredFieldMarker">*</span></td>
+						<td class="ControlCell"><h:inputText  maxlength="150"
+							styleClass="editbox_form" id="giuridicalType" required="true"
+							value="#{controllerUserAnagraphEditController.giuridicalType}" /></td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText
+							value="#{msg.lawAddress}:" /><span class="RequiredFieldMarker">*</span></td>
+						<td class="ControlCell"><h:inputText maxlength="150"
+							styleClass="editbox_form" id="lawAddress" required="true"
+							value="#{controllerUserAnagraphEditController.lawAddress}" /></td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText
+							value="#{msg.legalPhone}:" /></td>
+						<td class="ControlCell"><h:inputText maxlength="150"
+							styleClass="editbox_form" id="legalPhone"
+							value="#{controllerUserAnagraphEditController.legalPhone}" /></td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText value="#{msg.legalFax}:" /></td>
+						<td class="ControlCell"><h:inputText maxlength="150"
+							styleClass="editbox_form" id="legalFax"
+							value="#{controllerUserAnagraphEditController.legalFax}" /></td>
+					</tr>
+				</table>
+			</t:div>
+			<t:div
+				rendered="#{controllerUserAnagraphEditController.showPhisical or 
+						controllerUserAnagraphEditController.showGiuridical}">
+				<table width="600px" style="margin-bottom: 0; margin-top: 0;"
+					class="forms" border="0" cellpadding="1" cellspacing="1">
+					<tr>
+						<td class="LabelCell"><t:outputText value="#{msg.surname}:" />
+						<span class="RequiredFieldMarker">*</span></td>
+						<td class="ControlCell"><t:inputText maxlength="100"
+							styleClass="editbox_form" id="surname" required="true"
+							validator="#{validator.checkEmpty}"
+							value="#{controllerUserAnagraphEditController.surname}" /></td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText value="#{msg.name}:" />
+						<span class="RequiredFieldMarker">*</span></td>
+						<td class="ControlCell"><h:inputText maxlength="100"
+							styleClass="editbox_form" id="name" required="true"
+							validator="#{validator.checkEmpty}"
+							value="#{controllerUserAnagraphEditController.name}" /></td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText value="#{msg.nation}:" />
+						</td>
+						<td class="ControlCell"><t:selectOneMenu id="nation"
+							validator="#{validator.checkEmpty}"
+							value="#{controllerUserAnagraphEditController.nation}"
+							styleClass="DropDown">
+							<f:selectItems
+								value="#{controllerUserAnagraphEditController.countryAllList}" />
+						</t:selectOneMenu></td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText
+							value="#{msg.birthDate}:" /></td>
+						<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" id="birthDate"
+							inputClass="editbox_form2" converter="dateTimeConverter"
+							value="#{controllerUserAnagraphEditController.birthDate}"
+							datePattern="dd/MM/yyyy">
+						</rich:calendar></td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText
+							value="#{msg.placeOfLive}:" /></td>
+						<td class="ControlCell"><h:inputText
+							styleClass="editbox_form" id="placeOfLive" maxlength="200"
+							value="#{controllerUserAnagraphEditController.placeOfLive}" /></td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText value="#{msg.address}:" /></td>
+						<td class="ControlCell"><h:inputText
+							styleClass="editbox_form" id="address" maxlength="200"
+							value="#{controllerUserAnagraphEditController.address}" /></td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText
+							value="#{msg.telephoneNumber}:" /><span
+							class="RequiredFieldMarker">*</span></td>
+						<td class="ControlCell"><h:inputText required="true"
+							styleClass="editbox_form" id="telephoneNumber" maxlength="200"
+							value="#{controllerUserAnagraphEditController.telephoneNumber}" /></td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText
+							value="#{msg.faxNumber}:" /></td>
+						<td class="ControlCell"><h:inputText 
+							styleClass="editbox_form" id="faxNumber" maxlength="200"
+							value="#{controllerUserAnagraphEditController.faxNumber}" /></td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText value="#{msg.email}:" /><span
+							class="RequiredFieldMarker">*</span></td>
+						<td class="ControlCell"><t:inputText
+							styleClass="editbox_form" maxlength="200"
+							validator="#{validator.checkCUMailUnique}" id="mail"
+							required="true"
+							value="#{controllerUserAnagraphEditController.email}" /></td>
+					</tr>
+				</table>
+			</t:div>
+			<table width="100%">
+				<tr>
+					<td colspan="2" class="btn_line"><a4j:commandButton
+						immediate="false"
+						action="#{controllerUserAnagraphEditController.Page_Save}"
+						styleClass="button2" value="#{msg.save}" id="save" /> <a4j:commandButton
+						value="#{msg.cancel}" styleClass="button2" immediate="true"
+						action="#{controllerUserAnagraphEditController.GoBack}" /></td>
+				</tr>
+			</table>
+
+		</a4j:outputPanel>
+	</ui:define>
+</ui:composition>
+

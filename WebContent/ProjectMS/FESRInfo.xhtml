@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/EditBase.xhtml">
+	<ui:param name="headWidth" value="800px" />
+	<ui:param name="heading" value="#{msg.durReimbTab1}" />
+	<ui:param name="heading_top" value="#{msg.durReimbTab1}" />
+	<ui:define name="edit_body">
+
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+
+			<table class="forms" border="0" cellpadding="1" cellspacing="1"
+				width="60%">
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.durReimbNumber}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><b><t:outputText 
+							value="#{FESRinfoEditBean.number}" /></b></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.durReimbBFNumber}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:selectOneMenu id="partners"
+							required="true" value="#{FESRinfoEditBean.partner}"
+							styleClass="DropDown">
+							<f:selectItems value="#{FESRinfoEditBean.listPartners}" />
+						</t:selectOneMenu></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.durReimbursementAmount}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText
+							styleClass="editbox_form2" required="true"
+							id="reimbursementAmount"
+							value="#{FESRinfoEditBean.reimbursementAmount}"
+							converter="floatConverter" validator="#{validator.isFloat92}"
+							onkeypress="return decimalonly(this, event)"
+							onkeyup="checkdecimal(this)" maxlength="12" /></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.durReimbModeOfCreditingFunds}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText
+							styleClass="editbox_form2" required="true"
+							id="modeOfCreditingFunds"
+							value="#{FESRinfoEditBean.entity.modeOfCreditingFunds}"
+							maxlength="50" /></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.durReimbNumberSettlementAct}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText
+							styleClass="editbox_form2" required="true"
+							id="numberSettlementAct"
+							value="#{FESRinfoEditBean.entity.numberSettlementAct}"
+							maxlength="50" /></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.durReimbNumberMandatePayment}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText
+							styleClass="editbox_form2" required="true"
+							id="numberMandatePayment"
+							value="#{FESRinfoEditBean.entity.numberMandatePayment}"
+							maxlength="50" /></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.durReimbQuota}:" /></td>
+					<td class="ControlCell"><t:selectOneRadio
+							value="#{FESRinfoEditBean.entity.quota}">
+							<f:selectItem itemValue="1"
+								itemLabel="#{msg.durReimbQuotaContoCapitale}" />
+							<f:selectItem itemValue="2"
+								itemLabel="#{msg.durReimbQuotaContoCorrente}" />
+						</t:selectOneRadio></td>
+				</tr>
+
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.durReimbPaymentAct}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" id="paymentActDate"
+							required="true" inputClass="editbox_form2"
+							converter="dateTimeConverter"
+							value="#{FESRinfoEditBean.entity.fesrPaymentAct}"
+							datePattern="dd/MM/yyyy">
+						</rich:calendar></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.durReimbFesrDate}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" id="fesrDate"
+							required="true" inputClass="editbox_form2"
+							converter="dateTimeConverter"
+							value="#{FESRinfoEditBean.entity.fesrDate}"
+							datePattern="dd/MM/yyyy">
+						</rich:calendar></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.durReimbCRO}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							id="cro" value="#{FESRinfoEditBean.entity.fesrCro}"
+							maxlength="11" /></td>
+				</tr>
+
+
+			</table>
+
+			<div class="btn_line">
+				<table>
+					<tr>
+						<td><a4j:commandButton immediate="false"
+								action="#{FESRinfoEditBean.Page_Save}" reRender="pagePanel"
+								styleClass="button2" value="#{msg.save}" id="save" /></td>
+						<td><a4j:commandButton value="#{msg.cancel}"
+								styleClass="button2" immediate="true"
+								action="#{FESRinfoEditBean.GoBack}" /></td>
+
+					</tr>
+				</table>
+				<ui:fragment rendered="#{FESRinfoEditBean.validationError}">
+					<span class="RequiredFieldMarker">#{msg.durReimbTotalReimToHight}</span>
+				</ui:fragment>
+			</div>
+
+
+		</a4j:outputPanel>
+	</ui:define>
+</ui:composition>

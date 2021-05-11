@@ -1,0 +1,1571 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/ListTabBase.xhtml">
+	<ui:param name="heading"
+		value="${msg.partnerBudgetEditPartner}: ${partnerBudgetEditBean.currentPartner.name}" />
+	<ui:param name="heading_top" value="#{msg.partnerBudgetEditPageName}" />
+	<ui:define name="list_body">
+		<a4j:outputPanel styleClass="form_100" ajaxRendered="true"
+			id="pagePanel">
+			<div>
+				<fieldset style="">
+					<table width="100%">
+						<tr>
+							<td><h:graphicImage value="../images/info.png"
+									alt="{msg.info}" /> <h:outputText
+									value="   #{msg.generalBudgetLegendTotalBudget}: " /> <h:outputText
+									value="#{partnerBudgetEditBean.currentGeneralBudget.budgetTotal}"
+									converter="moneyConverter" /></td>
+						</tr>
+					</table>
+				</fieldset>
+			</div>
+			
+			<a4j:outputPanel ajaxRendered="false" id="FormPanel">
+
+				<t:panelTabbedPane serverSideTabSwitch="false" rendered="#{!partnerBudgetEditBean.asse3}">
+						
+							<t:panelTab id="phase1" label="#{msg.partnerBudgetProjectPhase1}">
+							<div class="table_container">
+
+								<t:dataTable width="100%" style="margin:0 auto;" var="item"
+									value="#{partnerBudgetEditBean.listPB}" styleClass="form_table"
+									rowClasses="row_table_n,row_table_g">
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetYearHeader}" />
+										</f:facet>
+										<t:outputText value="#{msg.generalBudgetLegendTotalBudget}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem1}" />
+										</f:facet>
+										<t:inputText id="ci1" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[0].partHumanRes}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[0].partHumanRes}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem2}" />
+										</f:facet>
+										<t:inputText id="ci2" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[0].partProvisionOfService}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[0].partProvisionOfService}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem3}" />
+										</f:facet>
+										<t:inputText id="ci3" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[0].partMissions}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[0].partMissions}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem4}" />
+										</f:facet>
+										<t:inputText id="ci4" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[0].partDurables}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[0].partDurables}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem5}" />
+										</f:facet>
+										<t:inputText id="ci5" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[0].partDurableGoods}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[0].partDurableGoods}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem6}" />
+										</f:facet>
+										<t:inputText id="ci6" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[0].partAdvInfoPublicEvents}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[0].partAdvInfoPublicEvents}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem7}" />
+										</f:facet>
+										<t:inputText id="ci7" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[0].partAdvInfoProducts}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[0].partAdvInfoProducts}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem8}" />
+										</f:facet>
+										<t:inputText id="ci8" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[0].partOverheads}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[0].partOverheads}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem9}" />
+										</f:facet>
+										<t:inputText id="ci9" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[0].partGeneralCosts}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[0].partGeneralCosts}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem10}" />
+										</f:facet>
+										<t:inputText id="ci10" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[0].partOther}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[0].partOther}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="NumberColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetTotal}" />
+										</f:facet>
+										<t:outputText value="#{item.totalAmount}"
+											converter="moneyConverter" />
+									</t:column>
+								</t:dataTable>
+							</div>
+						</t:panelTab>
+						
+						<t:panelTab id="phase2" label="#{msg.partnerBudgetProjectPhase2}">
+							<div class="table_container">
+
+								<t:dataTable width="100%" style="margin:0 auto;" var="item"
+									value="#{partnerBudgetEditBean.listPB}" styleClass="form_table"
+									rowClasses="row_table_n,row_table_g">
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetYearHeader}" />
+										</f:facet>
+										<t:outputText value="#{msg.generalBudgetLegendTotalBudget}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem1}" />
+										</f:facet>
+										<t:inputText id="ci1" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[1].partHumanRes}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[1].partHumanRes}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem2}" />
+										</f:facet>
+										<t:inputText id="ci2" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[1].partProvisionOfService}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[1].partProvisionOfService}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem3}" />
+										</f:facet>
+										<t:inputText id="ci3" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[1].partMissions}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[1].partMissions}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem4}" />
+										</f:facet>
+										<t:inputText id="ci4" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[1].partDurables}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[1].partDurables}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem5}" />
+										</f:facet>
+										<t:inputText id="ci5" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[1].partDurableGoods}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[1].partDurableGoods}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem6}" />
+										</f:facet>
+										<t:inputText id="ci6" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[1].partAdvInfoPublicEvents}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[1].partAdvInfoPublicEvents}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem7}" />
+										</f:facet>
+										<t:inputText id="ci7" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[1].partAdvInfoProducts}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[1].partAdvInfoProducts}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem8}" />
+										</f:facet>
+										<t:inputText id="ci8" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[1].partOverheads}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[1].partOverheads}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem9}" />
+										</f:facet>
+										<t:inputText id="ci9" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[1].partGeneralCosts}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[1].partGeneralCosts}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem10}" />
+										</f:facet>
+										<t:inputText id="ci10" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[1].partOther}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[1].partOther}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="NumberColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetTotal}" />
+										</f:facet>
+										<t:outputText value="#{item.totalAmount}"
+											converter="moneyConverter" />
+									</t:column>
+								</t:dataTable>
+							</div>
+						</t:panelTab>
+						
+						<t:panelTab id="phase3" label="#{msg.partnerBudgetProjectPhase3}">
+							<div class="table_container">
+
+								<t:dataTable width="100%" style="margin:0 auto;" var="item"
+									value="#{partnerBudgetEditBean.listPB}" styleClass="form_table"
+									rowClasses="row_table_n,row_table_g">
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetYearHeader}" />
+										</f:facet>
+									<t:outputText value="#{msg.generalBudgetLegendTotalBudget}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem1}" />
+										</f:facet>
+										<t:inputText id="ci1" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[2].partHumanRes}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[2].partHumanRes}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem2}" />
+										</f:facet>
+										<t:inputText id="ci2" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[2].partProvisionOfService}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[2].partProvisionOfService}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem3}" />
+										</f:facet>
+										<t:inputText id="ci3" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[2].partMissions}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[2].partMissions}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem4}" />
+										</f:facet>
+										<t:inputText id="ci4" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[2].partDurables}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[2].partDurables}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem5}" />
+										</f:facet>
+										<t:inputText id="ci5" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[2].partDurableGoods}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[2].partDurableGoods}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem6}" />
+										</f:facet>
+										<t:inputText id="ci6" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[2].partAdvInfoPublicEvents}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[2].partAdvInfoPublicEvents}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem7}" />
+										</f:facet>
+										<t:inputText id="ci7" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[2].partAdvInfoProducts}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[2].partAdvInfoProducts}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem8}" />
+										</f:facet>
+										<t:inputText id="ci8" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[2].partOverheads}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[2].partOverheads}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem9}" />
+										</f:facet>
+										<t:inputText id="ci9" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[2].partGeneralCosts}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[2].partGeneralCosts}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem10}" />
+										</f:facet>
+										<t:inputText id="ci10" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[2].partOther}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[2].partOther}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="NumberColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetTotal}" />
+										</f:facet>
+										<t:outputText value="#{item.totalAmount}"
+											converter="moneyConverter" />
+									</t:column>
+								</t:dataTable>
+							</div>
+						</t:panelTab>			
+							<t:panelTab id="phase4" label="#{msg.partnerBudgetProjectPhase4}">
+							<div class="table_container">
+
+								<t:dataTable width="100%" style="margin:0 auto;" var="item"
+									value="#{partnerBudgetEditBean.listPB}" styleClass="form_table"
+									rowClasses="row_table_n,row_table_g">
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetYearHeader}" />
+										</f:facet>
+									<t:outputText value="#{msg.generalBudgetLegendTotalBudget}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem1}" />
+										</f:facet>
+										<t:inputText id="ci1" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[3].partHumanRes}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[3].partHumanRes}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem2}" />
+										</f:facet>
+										<t:inputText id="ci2" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[3].partProvisionOfService}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[3].partProvisionOfService}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem3}" />
+										</f:facet>
+										<t:inputText id="ci3" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[3].partMissions}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[3].partMissions}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem4}" />
+										</f:facet>
+										<t:inputText id="ci4" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[3].partDurables}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[3].partDurables}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem5}" />
+										</f:facet>
+										<t:inputText id="ci5" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[3].partDurableGoods}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[3].partDurableGoods}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem6}" />
+										</f:facet>
+										<t:inputText id="ci6" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[3].partAdvInfoPublicEvents}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[3].partAdvInfoPublicEvents}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem7}" />
+										</f:facet>
+										<t:inputText id="ci7" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[3].partAdvInfoProducts}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[3].partAdvInfoProducts}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem8}" />
+										</f:facet>
+										<t:inputText id="ci8" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[3].partOverheads}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[3].partOverheads}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem9}" />
+										</f:facet>
+										<t:inputText id="ci9" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[3].partGeneralCosts}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[3].partGeneralCosts}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem10}" />
+										</f:facet>
+										<t:inputText id="ci10" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[3].partOther}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[3].partOther}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="NumberColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetTotal}" />
+										</f:facet>
+										<t:outputText value="#{item.totalAmount}"
+											converter="moneyConverter" />
+									</t:column>
+								</t:dataTable>
+							</div>
+						</t:panelTab>
+							<t:panelTab id="phase5" label="#{msg.partnerBudgetProjectPhase5}">
+							<div class="table_container">
+
+								<t:dataTable width="100%" style="margin:0 auto;" var="item"
+									value="#{partnerBudgetEditBean.listPB}" styleClass="form_table"
+									rowClasses="row_table_n,row_table_g">
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetYearHeader}" />
+										</f:facet>
+										<t:outputText value="#{msg.generalBudgetLegendTotalBudget}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem1}" />
+										</f:facet>
+										<t:inputText id="ci1" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[4].partHumanRes}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[4].partHumanRes}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem2}" />
+										</f:facet>
+										<t:inputText id="ci2" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[4].partProvisionOfService}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[4].partProvisionOfService}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem3}" />
+										</f:facet>
+										<t:inputText id="ci3" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[4].partMissions}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[4].partMissions}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem4}" />
+										</f:facet>
+										<t:inputText id="ci4" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[4].partDurables}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[4].partDurables}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem5}" />
+										</f:facet>
+										<t:inputText id="ci5" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[4].partDurableGoods}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[4].partDurableGoods}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem6}" />
+										</f:facet>
+										<t:inputText id="ci6" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[4].partAdvInfoPublicEvents}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[4].partAdvInfoPublicEvents}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem7}" />
+										</f:facet>
+										<t:inputText id="ci7" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[4].partAdvInfoProducts}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[4].partAdvInfoProducts}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem8}" />
+										</f:facet>
+										<t:inputText id="ci8" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[4].partOverheads}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[4].partOverheads}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem9}" />
+										</f:facet>
+										<t:inputText id="ci9" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[4].partGeneralCosts}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[4].partGeneralCosts}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem10}" />
+										</f:facet>
+										<t:inputText id="ci10" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[4].partOther}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[4].partOther}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="NumberColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetTotal}" />
+										</f:facet>
+										<t:outputText value="#{item.totalAmount}"
+											converter="moneyConverter" />
+									</t:column>
+								</t:dataTable>
+							</div>
+						</t:panelTab>
+						<t:panelTab id="phase6" label="#{msg.partnerBudgetProjectPhase6}">
+							<div class="table_container">
+
+								<t:dataTable width="100%" style="margin:0 auto;" var="item"
+									value="#{partnerBudgetEditBean.listPB}" styleClass="form_table"
+									rowClasses="row_table_n,row_table_g">
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetYearHeader}" />
+										</f:facet>
+										<t:outputText value="#{msg.generalBudgetLegendTotalBudget}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem1}" />
+										</f:facet>
+										<t:inputText id="ci1" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[5].partHumanRes}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[5].partHumanRes}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem2}" />
+										</f:facet>
+										<t:inputText id="ci2" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[5].partProvisionOfService}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[5].partProvisionOfService}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem3}" />
+										</f:facet>
+										<t:inputText id="ci3" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[5].partMissions}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[5].partMissions}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem4}" />
+										</f:facet>
+										<t:inputText id="ci4" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[5].partDurables}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[5].partDurables}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem5}" />
+										</f:facet>
+										<t:inputText id="ci5" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[5].partDurableGoods}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[5].partDurableGoods}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem6}" />
+										</f:facet>
+										<t:inputText id="ci6" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[5].partAdvInfoPublicEvents}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[5].partAdvInfoPublicEvents}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem7}" />
+										</f:facet>
+										<t:inputText id="ci7" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[5].partAdvInfoProducts}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[5].partAdvInfoProducts}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem8}" />
+										</f:facet>
+										<t:inputText id="ci8" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[5].partOverheads}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[5].partOverheads}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+										<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem9}" />
+										</f:facet>
+										<t:inputText id="ci9" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[5].partGeneralCosts}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[5].partGeneralCosts}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="StringColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetCostItem10}" />
+										</f:facet>
+										<t:inputText id="ci10" maxlength="12"
+											converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{item.phaseBudgets[5].partOther}"
+											rendered="#{!item.totalRow}" />
+										<t:outputText converter="moneyConverter"
+											value="#{item.phaseBudgets[5].partOther}"
+											rendered="#{item.totalRow}" />
+									</t:column>
+									<t:column styleClass="NumberColumn">
+										<f:facet name="header">
+											<t:outputText value="#{msg.partnerBudgetTotal}" />
+										</f:facet>
+										<t:outputText value="#{item.totalAmount}"
+											converter="moneyConverter" />
+									</t:column>
+								</t:dataTable>
+							</div>
+						</t:panelTab>
+					
+				</t:panelTabbedPane>
+				
+				<t:panelTabbedPane serverSideTabSwitch="false" rendered="#{partnerBudgetEditBean.asse3}"
+					style="margin: 10px 10px 0px 10px; width: 98%">
+					<t:panelTab id="phase0Asse3"
+						label="#{partnerBudgetEditBean.tabForAsse3.tables[0].rows[0].tabName}">
+						<div class="table_container">
+
+							<t:dataTable
+								value="#{partnerBudgetEditBean.tabForAsse3.tables[0].rows}"
+								var="row" rowIndexVar="rowNum" width="100%"
+								style="margin:0 auto;" styleClass="form_table"
+								rowClasses="row_table_n,row_table_g">
+								<t:column styleClass="ActionColumn">
+									<f:facet name="header">
+										<h:outputText value="#{msg.year}" />
+									</f:facet>
+
+									<h:outputText value="#{row.items[0].year}" />
+								</t:column>
+								<t:columns
+									value="#{partnerBudgetEditBean.tabForAsse3.tables[0].rows[0].columns}"
+									var="column">
+									<f:facet name="header">
+										<h:outputText value="#{column.header}" />
+									</f:facet>
+
+									<div align="center">
+										<t:inputText maxlength="12" converter="floatConverter" rendered="#{!row.total}"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{row.items[column.number].value}" />
+											
+											<h:outputText value="#{row.items[column.number].value}" rendered="#{row.total}" converter="moneyConverter"/>
+									</div>
+								</t:columns>
+
+							</t:dataTable>
+						</div>
+
+					</t:panelTab>
+					
+					
+					
+					
+										<t:panelTab id="phase1Asse3"
+						label="#{partnerBudgetEditBean.tabForAsse3.tables[1].rows[0].tabName}">
+						<div class="table_container">
+
+							<t:dataTable
+								value="#{partnerBudgetEditBean.tabForAsse3.tables[1].rows}"
+								var="row" rowIndexVar="rowNum" width="100%"
+								style="margin:0 auto;" styleClass="form_table"
+								rowClasses="row_table_n,row_table_g">
+								<t:column styleClass="ActionColumn">
+									<f:facet name="header">
+										<h:outputText value="#{msg.year}" />
+									</f:facet>
+
+									<h:outputText value="#{row.items[0].year}" />
+								</t:column>
+								<t:columns
+									value="#{partnerBudgetEditBean.tabForAsse3.tables[1].rows[0].columns}"
+									var="column">
+									<f:facet name="header">
+										<h:outputText value="#{column.header}" />
+									</f:facet>
+
+									<div align="center">
+										<t:inputText maxlength="12" converter="floatConverter" rendered="#{!row.total}"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{row.items[column.number].value}" />
+										<h:outputText value="#{row.items[column.number].value}" rendered="#{row.total}" converter="moneyConverter"/>
+									</div>
+								</t:columns>
+
+							</t:dataTable>
+						</div>
+
+					</t:panelTab>
+					
+					
+					
+					
+										<t:panelTab id="phase2Asse3"
+						label="#{partnerBudgetEditBean.tabForAsse3.tables[2].rows[0].tabName}">
+						<div class="table_container">
+
+							<t:dataTable
+								value="#{partnerBudgetEditBean.tabForAsse3.tables[2].rows}"
+								var="row" rowIndexVar="rowNum" width="100%"
+								style="margin:0 auto;" styleClass="form_table"
+								rowClasses="row_table_n,row_table_g">
+								<t:column styleClass="ActionColumn">
+									<f:facet name="header">
+										<h:outputText value="#{msg.year}" />
+									</f:facet>
+
+									<h:outputText value="#{row.items[0].year}" />
+								</t:column>
+								<t:columns
+									value="#{partnerBudgetEditBean.tabForAsse3.tables[2].rows[0].columns}" 
+									var="column">
+									<f:facet name="header">
+										<h:outputText value="#{column.header}" />
+									</f:facet>
+
+									<div align="center">
+										<t:inputText maxlength="12" converter="floatConverter" rendered="#{!row.total}"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{row.items[column.number].value}" />
+										<h:outputText value="#{row.items[column.number].value}" rendered="#{row.total}" converter="moneyConverter"/>
+									</div>
+								</t:columns>
+
+							</t:dataTable>
+						</div>
+
+					</t:panelTab>
+					
+					
+					
+										<t:panelTab id="phase3Asse3"
+						label="#{partnerBudgetEditBean.tabForAsse3.tables[3].rows[0].tabName}">
+						<div class="table_container">
+
+							<t:dataTable
+								value="#{partnerBudgetEditBean.tabForAsse3.tables[3].rows}"
+								var="row" rowIndexVar="rowNum" width="100%"
+								style="margin:0 auto;" styleClass="form_table"
+								rowClasses="row_table_n,row_table_g">
+								<t:column styleClass="ActionColumn">
+									<f:facet name="header">
+										<h:outputText value="#{msg.year}" />
+									</f:facet>
+
+									<h:outputText value="#{row.items[0].year}" />
+								</t:column>
+								<t:columns
+									value="#{partnerBudgetEditBean.tabForAsse3.tables[3].rows[0].columns}" rendered="#{!row.total}"
+									var="column">
+									<f:facet name="header">
+										<h:outputText value="#{column.header}" />
+									</f:facet>
+
+									<div align="center">
+										<t:inputText maxlength="12" converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{row.items[column.number].value}" />
+										<h:outputText value="#{row.items[column.number].value}" rendered="#{row.total}" converter="moneyConverter"/>
+									</div>
+								</t:columns>
+
+							</t:dataTable>
+						</div>
+
+					</t:panelTab>
+					
+					
+					
+										<t:panelTab id="phase4Asse3"
+						label="#{partnerBudgetEditBean.tabForAsse3.tables[4].rows[0].tabName}">
+						<div class="table_container">
+
+							<t:dataTable
+								value="#{partnerBudgetEditBean.tabForAsse3.tables[4].rows}"
+								var="row" rowIndexVar="rowNum" width="100%"
+								style="margin:0 auto;" styleClass="form_table"
+								rowClasses="row_table_n,row_table_g">
+								<t:column styleClass="ActionColumn">
+									<f:facet name="header">
+										<h:outputText value="#{msg.year}" />
+									</f:facet>
+
+									<h:outputText value="#{row.items[0].year}" />
+								</t:column>
+								<t:columns
+									value="#{partnerBudgetEditBean.tabForAsse3.tables[4].rows[0].columns}" rendered="#{!row.total}"
+									var="column">
+									<f:facet name="header">
+										<h:outputText value="#{column.header}" />
+									</f:facet>
+
+									<div align="center">
+										<t:inputText maxlength="12" converter="floatConverter"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{row.items[column.number].value}" />
+										<h:outputText value="#{row.items[column.number].value}" rendered="#{row.total}" converter="moneyConverter"/>
+									</div>
+								</t:columns>
+
+							</t:dataTable>
+						</div>
+
+					</t:panelTab>
+					
+					
+					
+										<t:panelTab id="phase5Asse3"
+						label="#{partnerBudgetEditBean.tabForAsse3.tables[5].rows[0].tabName}">
+						<div class="table_container">
+
+							<t:dataTable
+								value="#{partnerBudgetEditBean.tabForAsse3.tables[5].rows}"
+								var="row" rowIndexVar="rowNum" width="100%"
+								style="margin:0 auto;" styleClass="form_table"
+								rowClasses="row_table_n,row_table_g">
+								<t:column styleClass="ActionColumn">
+									<f:facet name="header">
+										<h:outputText value="#{msg.year}" />
+									</f:facet>
+
+									<h:outputText value="#{row.items[0].year}" />
+								</t:column>
+								<t:columns
+									value="#{partnerBudgetEditBean.tabForAsse3.tables[5].rows[0].columns}"
+									var="column">
+									<f:facet name="header">
+										<h:outputText value="#{column.header}" />
+									</f:facet>
+
+									<div align="center">
+										<t:inputText maxlength="12" converter="floatConverter" rendered="#{!row.total}"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{row.items[column.number].value}" />
+										<h:outputText value="#{row.items[column.number].value}" rendered="#{row.total}" converter="moneyConverter"/>
+									</div>
+								</t:columns>
+
+							</t:dataTable>
+						</div>
+
+					</t:panelTab>
+					
+					<ui:remove>
+					
+										<t:panelTab id="phase6Asse3"
+						label="#{partnerBudgetEditBean.tabForAsse3.tables[6].rows[0].tabName}">
+						<div class="table_container">
+
+							<t:dataTable
+								value="#{partnerBudgetEditBean.tabForAsse3.tables[6].rows}"
+								var="row" rowIndexVar="rowNum" width="100%"
+								style="margin:0 auto;" styleClass="form_table"
+								rowClasses="row_table_n,row_table_g">
+								<t:column styleClass="ActionColumn">
+									<f:facet name="header">
+										<h:outputText value="#{msg.year}" />
+									</f:facet>
+
+									<h:outputText value="#{row.items[0].year}" />
+								</t:column>
+								<t:columns
+									value="#{partnerBudgetEditBean.tabForAsse3.tables[6].rows[0].columns}"
+									var="column">
+									<f:facet name="header">
+										<h:outputText value="#{column.header}" />
+									</f:facet>
+
+									<div align="center">
+										<t:inputText maxlength="12" converter="floatConverter" rendered="#{!row.total}"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{row.items[column.number].value}" />
+										<h:outputText value="#{row.items[column.number].value}" rendered="#{row.total}" converter="moneyConverter"/>
+									</div>
+								</t:columns>
+
+							</t:dataTable>
+						</div>
+
+					</t:panelTab>
+					</ui:remove>
+					
+					
+					<t:panelTab id="phase7Asse3"
+						label="#{partnerBudgetEditBean.tabForAsse3.tables[7].rows[0].tabName}">
+						<div class="table_container">
+
+							<t:dataTable
+								value="#{partnerBudgetEditBean.tabForAsse3.tables[7].rows}"
+								var="row" rowIndexVar="rowNum" width="100%"
+								style="margin:0 auto;" styleClass="form_table"
+								rowClasses="row_table_n,row_table_g">
+								<t:column styleClass="ActionColumn">
+									<f:facet name="header">
+										<h:outputText value="#{msg.year}" />
+									</f:facet>
+
+									<h:outputText value="#{row.items[0].year}" />
+								</t:column>
+								<t:columns
+									value="#{partnerBudgetEditBean.tabForAsse3.tables[7].rows[0].columns}"
+									var="column">
+									<f:facet name="header">
+										<h:outputText value="#{column.header}" />
+									</f:facet>
+
+									<div align="center">
+										<t:inputText maxlength="12" converter="floatConverter" rendered="#{!row.total}"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{row.items[column.number].value}" />
+										<h:outputText value="#{row.items[column.number].value}" rendered="#{row.total}" converter="moneyConverter"/>
+									</div>
+								</t:columns>
+
+							</t:dataTable>
+						</div>
+
+					</t:panelTab>
+					
+					
+					
+										<t:panelTab id="phase8Asse3"
+						label="#{partnerBudgetEditBean.tabForAsse3.tables[8].rows[0].tabName}">
+						<div class="table_container">
+
+							<t:dataTable
+								value="#{partnerBudgetEditBean.tabForAsse3.tables[8].rows}"
+								var="row" rowIndexVar="rowNum" width="100%"
+								style="margin:0 auto;" styleClass="form_table"
+								rowClasses="row_table_n,row_table_g">
+								<t:column styleClass="ActionColumn">
+									<f:facet name="header">
+										<h:outputText value="#{msg.year}" />
+									</f:facet>
+
+									<h:outputText value="#{row.items[0].year}" />
+								</t:column>
+								<t:columns
+									value="#{partnerBudgetEditBean.tabForAsse3.tables[8].rows[0].columns}"
+									var="column">
+									<f:facet name="header">
+										<h:outputText value="#{column.header}" />
+									</f:facet>
+
+									<div align="center">
+										<t:inputText maxlength="12" converter="floatConverter" rendered="#{!row.total}"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											validator="#{validator.isFloat92}" styleClass="editbox_form2"
+											value="#{row.items[column.number].value}" />
+										<h:outputText value="#{row.items[column.number].value}" rendered="#{row.total}" converter="moneyConverter"/>
+									</div>
+								</t:columns>
+
+							</t:dataTable>
+						</div>
+
+					</t:panelTab>
+					
+					
+					<ui:remove>
+					
+						<t:panelTab id="phase9Asse3"
+							label="#{partnerBudgetEditBean.tabForAsse3.tables[9].rows[0].tabName}">
+							<div class="table_container">
+	
+								<t:dataTable
+									value="#{partnerBudgetEditBean.tabForAsse3.tables[9].rows}"
+									var="row" rowIndexVar="rowNum" width="100%"
+									style="margin:0 auto;" styleClass="form_table"
+									rowClasses="row_table_n,row_table_g">
+									<t:column styleClass="ActionColumn">
+										<f:facet name="header">
+											<h:outputText value="#{msg.year}" />
+										</f:facet>
+	
+										<h:outputText value="#{row.items[0].year}" />
+									</t:column>
+									<t:columns
+										value="#{partnerBudgetEditBean.tabForAsse3.tables[9].rows[0].columns}"
+										var="column">
+										<f:facet name="header">
+											<h:outputText value="#{column.header}" />
+										</f:facet>
+	
+										<div align="center">
+											<t:inputText maxlength="12" converter="floatConverter" rendered="#{!row.total}"
+												onkeypress="return decimalonly(this, event)"
+												onkeyup="checkdecimal(this)"
+												validator="#{validator.isFloat92}" styleClass="editbox_form2"
+												value="#{row.items[column.number].value}" />
+											<h:outputText value="#{row.items[column.number].value}" rendered="#{row.total}" converter="moneyConverter"/>
+										</div>
+									</t:columns>
+	
+								</t:dataTable>
+							</div>
+	
+						</t:panelTab>
+						
+						
+						<t:panelTab id="phase10Asse3"
+							label="#{partnerBudgetEditBean.tabForAsse3.tables[10].rows[0].tabName}">
+							<div class="table_container">
+	
+								<t:dataTable
+									value="#{partnerBudgetEditBean.tabForAsse3.tables[10].rows}"
+									var="row" rowIndexVar="rowNum" width="100%"
+									style="margin:0 auto;" styleClass="form_table"
+									rowClasses="row_table_n,row_table_g">
+									<t:column styleClass="ActionColumn">
+										<f:facet name="header">
+											<h:outputText value="#{msg.year}" />
+										</f:facet>
+										
+										<h:outputText value="#{row.items[0].year}" />
+									</t:column>
+									<t:columns
+										value="#{partnerBudgetEditBean.tabForAsse3.tables[10].rows[0].columns}"
+										var="column">
+										<f:facet name="header">
+											<h:outputText value="#{column.header}" />
+										</f:facet>
+	
+										<div align="center">
+											<t:inputText maxlength="12" converter="floatConverter" rendered="#{!row.total}"
+												onkeypress="return decimalonly(this, event)"
+												onkeyup="checkdecimal(this)"
+												validator="#{validator.isFloat92}" styleClass="editbox_form2"
+												value="#{row.items[column.number].value}" />
+											<h:outputText value="#{row.items[column.number].value}" rendered="#{row.total}" converter="moneyConverter"/>
+										</div>
+									</t:columns>
+	
+								</t:dataTable>
+							</div>
+	
+						</t:panelTab>
+					</ui:remove>
+				</t:panelTabbedPane>
+
+
+			</a4j:outputPanel>
+
+			<div class="btn_line">
+				<table>
+					<tr
+						style="display: #{partnerBudgetEditBean.spanValidatorVisibility}">
+						<td colspan="2" style="text-align: center;"><span
+							class="RequiredFieldMarker">#{msg.partnerBudgetValidatorMessage}</span>
+						</td>
+					</tr>
+					<tr>
+						<td><a4j:commandButton immediate="false"
+								action="#{partnerBudgetEditBean.Page_Save}" reRender="pagePanel"
+								styleClass="button2" value="#{msg.save}" id="save" /></td>
+						<td><a4j:commandButton value="#{msg.cancel}"
+								styleClass="button2" immediate="true"
+								action="#{partnerBudgetEditBean.GoBack}" /></td>
+					</tr>
+				</table>
+			</div>
+		</a4j:outputPanel>
+		
+						<a4j:outputPanel ajaxRendered="true" id="LegendPanel">
+					<div class="table_container">
+
+							<t:dataTable rendered="#{partnerBudgetEditBean.asse3}"
+								value="#{partnerBudgetEditBean.legend}"
+								var="data" rowIndexVar="rowNum" width="30%"
+								 styleClass="form_table"
+								rowClasses="row_table_n,row_table_g">
+								<t:column styleClass="StringColumn">
+									<f:facet name="header">
+										<h:outputText value="#{msg.code}" />
+									</f:facet>
+									
+									<h:outputText value="#{data.value}" />
+									
+								</t:column>
+								
+								<t:column styleClass="StringColumn">
+									<f:facet name="header">
+										<h:outputText value="#{msg.viewInfoTableDescription}" />
+									</f:facet>
+									
+									<h:outputText value="#{data.description}" />
+									
+								</t:column>
+								
+
+							</t:dataTable>
+							</div>
+				
+				</a4j:outputPanel>
+	</ui:define>
+</ui:composition>

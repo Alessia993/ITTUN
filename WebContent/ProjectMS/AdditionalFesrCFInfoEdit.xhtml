@@ -1,0 +1,379 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/EditBase.xhtml">
+	<ui:param name="headWidth" value="800px" />
+	<ui:param name="heading" value="#{msg.durReimbListPageNameCF}" />
+	<ui:param name="heading_top" value="#{msg.durReimbListPageNameCF}" />
+	<ui:define name="script_body">
+		<script type="text/javascript">
+			function recalcImport(){
+				var fesr = document.getElementById("EditForm:quotaFesr");
+				var cpn  = document.getElementById("EditForm:quotaCpn");
+				var result=0;
+				if(fesr.value!=''){
+					result+=parseFloat(fesr.value)
+				}
+				if(cpn.value!=''){
+					result+=parseFloat(cpn.value)
+				}
+				
+				document.getElementById("EditForm:transferImport").value=result.toFixed(2);
+			}
+		</script>
+	
+	</ui:define>
+	<ui:define name="edit_body">
+
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+	
+			<table class="forms" border="0" cellpadding="1" cellspacing="1"
+				width="60%">
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.durReimbBFNumber}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:selectOneMenu id="partners"
+							required="true" value="#{additionalFesrInfoCFEditBean.partner}"
+							styleClass="DropDown">
+							<f:selectItems value="#{additionalFesrInfoCFEditBean.listPartners}" />
+							<a4j:support event="onchange" reRender="pagePanel" ajaxSingle="true"/>
+						</t:selectOneMenu>
+						</td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.addFesrInfoTotalDDR}:" /></td>
+					<td class="ControlCell">
+					
+					<t:inputText
+							styleClass="editbox_form2" 
+							id="totalDDR"
+							value="#{additionalFesrInfoCFEditBean.entity.totalDDR}"
+														converter="floatConverter" readonly="true" /></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.addFesrInfoTransferType}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:selectOneMenu id="transferTypes"
+							required="true" value="#{additionalFesrInfoCFEditBean.transferType}"
+							styleClass="DropDown">
+							<a4j:support event="onchange" reRender="pagePanel" ajaxSingle="true"/>
+							<f:selectItems value="#{additionalFesrInfoCFEditBean.transferTypes}" />
+						</t:selectOneMenu></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.addFesrInfoAxis}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:selectOneMenu id="axisList"
+							required="true" value="#{additionalFesrInfoCFEditBean.axis}"
+							styleClass="DropDown">
+							<a4j:support event="onchange" reRender="pagePanel" ajaxSingle="true"/>
+							<f:selectItems value="#{additionalFesrInfoCFEditBean.axisList}"/>
+						</t:selectOneMenu></td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.addFesrInfoQuotaFesr}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText
+							styleClass="editbox_form2" required="true"
+							id="quotaFesr"
+							value="#{additionalFesrInfoCFEditBean.entity.quotaFesr}"
+							converter="floatConverter" validator="#{validator.isFloat92}"
+							onkeypress="return decimalonly(this, event)"
+							onkeyup="checkdecimal(this), recalcImport();" maxlength="12" /></td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.addFesrInfoQuotaCpn}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText
+							styleClass="editbox_form2" required="true"
+							id="quotaCpn"
+							value="#{additionalFesrInfoCFEditBean.entity.quotaCpn}"
+							converter="floatConverter" validator="#{validator.isFloat92}"
+							onkeypress="return decimalonly(this, event)"
+							onkeyup="checkdecimal(this), recalcImport();" maxlength="12" /></td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.addFesrInfoTransferImport}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText 
+							styleClass="editbox_form2" required="true"
+							id="transferImport"
+							value="#{additionalFesrInfoCFEditBean.entity.transferImport}"
+							converter="floatConverter" validator="#{validator.isFloat92}"
+							onkeypress="return decimalonly(this, event)"
+							onkeyup="checkdecimal(this)" maxlength="12" /></td>
+				</tr> 
+				
+				<!-- <tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.addFesrInfoTotalTransfer}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText
+							styleClass="editbox_form2" 
+							id="totalTransfer"
+							value="#{additionalFesrInfoCFEditBean.entity.totalTransfer}"
+							converter="floatConverter" readonly="true"/></td>
+				</tr> -->
+				
+				<!-- <tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.addFesrInfoTotalAdvances}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText
+							styleClass="editbox_form2" 
+							id="totalAdvances"
+							value="#{additionalFesrInfoCFEditBean.entity.totalAdvances}"
+							converter="floatConverter" readonly="true"/></td>
+				</tr> -->
+				
+				<!-- <tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.addFersInfoAdvanceStateAidDeMinimis}:" /></td>
+					<td class="ControlCell"><t:inputText
+							styleClass="editbox_form2" 
+							id="advanceStateAidDeMinimis"
+							value="#{additionalFesrInfoCFEditBean.entity.advanceStateAidDeMinimis}"
+							converter="floatConverter" readonly="true"/></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.addFersInfoAdvanceStateAidExemptionScheme}:" /></td>
+					<td class="ControlCell"><t:inputText
+							styleClass="editbox_form2" 
+							id="advanceStateAidExemptionScheme"
+							value="#{additionalFesrInfoCFEditBean.entity.advanceStateAidExemptionScheme}"
+							converter="floatConverter" readonly="true"/></td>
+				</tr> -->
+				
+				<!-- <tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.addFesrInfoTotalRepayments}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText
+							styleClass="editbox_form2" 
+							id="totalRepayments"
+							value="#{additionalFesrInfoCFEditBean.entity.totalRepayments}"
+							converter="floatConverter" readonly="true"/></td>
+				</tr> -->
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.durReimbModeOfCreditingFunds}:" /></td>
+					<td class="ControlCell"><t:inputText
+							styleClass="editbox_form2" 
+							id="modeOfCreditingFunds"
+							value="#{additionalFesrInfoCFEditBean.entity.modeOfCreditingFunds}"
+							maxlength="50" /></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.durReimbNumberSettlementAct}:" /></td>
+					<td class="ControlCell"><t:inputText
+							styleClass="editbox_form2" 
+							id="numberSettlementAct"
+							value="#{additionalFesrInfoCFEditBean.entity.numberSettlementAct}"
+							maxlength="50" /></td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.durReimbPaymentAct}:" /> </td>
+					<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" id="paymentActDate"
+							inputClass="editbox_form2"
+							converter="dateTimeConverter"
+							value="#{additionalFesrInfoCFEditBean.entity.fesrPaymentAct}"
+							datePattern="dd/MM/yyyy">
+						</rich:calendar></td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.durReimbNumberMandatePayment}:" /></td>
+					<td class="ControlCell"><t:inputText
+							styleClass="editbox_form2" 
+							id="numberMandatePayment"
+							value="#{additionalFesrInfoCFEditBean.entity.numberMandatePayment}"
+							maxlength="50" /></td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.durReimbFesrDate}:" /></td>
+					<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" id="fesrDate"
+							 inputClass="editbox_form2"
+							converter="dateTimeConverter"
+							value="#{additionalFesrInfoCFEditBean.entity.fesrDate}"
+							datePattern="dd/MM/yyyy">
+						</rich:calendar></td>
+				</tr>
+				<ui:remove>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.durReimbCRO}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							id="cro" value="#{additionalFesrInfoCFEditBean.entity.fesrCro}"
+							maxlength="11" /></td>
+				</tr>
+				</ui:remove>
+				
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{Session.CF ? msg.paymentDocument: msg.additionalFesrInfoAttach}:"/><h:column rendered="#{Session.CF}"><span
+						class="RequiredFieldMarker">*</span></h:column></td>
+							<td class="ControlCell"><a4j:htmlCommandLink id="DocLink"
+									action="#{additionalFesrInfoCFEditBean.getDoc}"
+									style="text-decoration: underline; float:left;"
+									immediate="true" value="#{additionalFesrInfoCFEditBean.docTitle}" /> <a4j:commandLink
+									rendered="#{!empty additionalFesrInfoCFEditBean.docTitle}"
+									id="docDeletelink" immediate="true" reRender="pagePanel"
+									action="#{additionalFesrInfoCFEditBean.deleteDoc}">
+									<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+										style="border:0; float:right;" />
+								</a4j:commandLink> <a4j:commandLink
+									rendered="#{empty additionalFesrInfoCFEditBean.docTitle}"
+									id="docLink" immediate="true"  style="#{not additionalFesrInfoCFEditBean.docInvalid ? '':'color:red;'}"
+									oncomplete="#{rich:component('documentPanel')}.show()">
+									<h:graphicImage alt="#{msg.delete}" value="/images/plus.png"
+										style="border:0; " />
+									<span>#{msg.uploadFile}</span>
+								</a4j:commandLink></td>
+						</tr>
+				
+
+			</table>
+
+			<div class="btn_line">
+				<table>
+					<tr>
+						<td><a4j:commandButton immediate="false"
+								action="#{additionalFesrInfoCFEditBean.SaveEntity}" reRender="pagePanel"
+								styleClass="button2" value="#{msg.save}" id="save" /></td>
+						<td><a4j:commandButton value="#{msg.cancel}"
+								styleClass="button2" immediate="true"
+								action="#{additionalFesrInfoCFEditBean.GoBack}" /></td>
+
+					</tr>
+				</table>
+				<ui:fragment rendered="#{FESRinfoEditBean.validationError}">
+					<span class="RequiredFieldMarker">#{msg.durReimbTotalReimToHight}</span>
+				</ui:fragment>
+			</div>
+
+
+		</a4j:outputPanel>
+	</ui:define>
+		<ui:define name="document_body">
+
+		<rich:modalPanel id="documentPanel" autosized="true" width="300">
+			<f:facet name="header">
+				<h:outputText value="Document" style="padding-right:15px;" />
+			</f:facet>
+			<table>
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.date}:" /></td>
+					<td class="CalendarCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+							styleClass="editbox_form2"
+							disabled="false"
+							converter="dateTimeConverter" 
+							value="#{additionalFesrInfoCFEditBean.document.documentDate}"
+							datePattern="dd/MM/yyyy">
+						</rich:calendar></td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentDescription}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							style="width:216px;" maxlength="50"
+							value="#{additionalFesrInfoCFEditBean.document.description}" /></td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.protocolNumber}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							maxlength="50" 
+							value="#{additionalFesrInfoCFEditBean.document.protocolNumber}" /></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentPublic}:" /></td>
+					<td class="ControlCell"><t:selectBooleanCheckbox
+							value="#{additionalFesrInfoCFEditBean.document.isPublic}">
+						</t:selectBooleanCheckbox></td>
+				</tr>
+				<tr style="display: #{Session.AGU}">
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentUploadRole}:" /></td>
+					<td class="ControlCell"><t:selectOneMenu
+							onmousedown="collapse(this);" onchange="expand(this);"
+							onblur="expand(this);" value="#{additionalFesrInfoCFEditBean.role}"
+							required="false" styleClass="DropDown">
+							<f:selectItems value="#{additionalFesrInfoCFEditBean.listSelectRoles}" />
+						</t:selectOneMenu></td>
+				</tr>
+				<ui:remove>
+				<tr class="tempDisplay">
+					<td class="LabelCell"><t:outputText
+						value="#{msg.documentCategory}:" /></td>
+					<td class="ControlCell"><t:selectOneMenu
+						onmousedown="collapse(this);" onchange="expand(this);"
+						onblur="expand(this);" 
+						value="#{additionalFesrInfoCFEditBean.selectedCategory}" 
+						required="false"
+						styleClass="DropDown">
+						<f:selectItems
+							value="#{additionalFesrInfoCFEditBean.categories}" />
+					</t:selectOneMenu></td>
+				</tr>
+				</ui:remove>
+
+				
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.uploadFile}:" />
+					</td>
+					<td class="ControlCell"><t:inputFileUpload id="fileupload1"
+							value="#{additionalFesrInfoCFEditBean.documentUpFile}" storage="file"
+							styleClass="fileUploadInput" maxlength="200000" /></td>
+				</tr>
+				<tr>
+					<td align="center" colspan="2">#{msg.fileSize}</td>
+				</tr>
+				
+								
+			</table>
+			<table style="width: 100%;">
+				<tr>
+					<td style="width: 50%;" align="center"><h:commandButton
+							value="#{msg.uploadFile}" styleClass="button3"
+							action="#{additionalFesrInfoCFEditBean.saveDocument}"
+							reRender="pagePanel"
+							onclick="#{rich:component('documentPanel')}.hide();" /></td>
+					<td><a4j:commandButton value="#{msg.cancel}"
+							styleClass="button" immediate="false"
+							onclick="#{rich:component('documentPanel')}.hide();return false;" />
+					</td>
+				</tr>
+			</table>
+		</rich:modalPanel>
+		<script type="text/javascript">
+		document.getElementById("EditForm:transferImport").readOnly=true;
+		</script>
+		</ui:define>
+	
+</ui:composition>

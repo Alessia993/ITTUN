@@ -1,0 +1,491 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/EditTabBaseNoForm.xhtml">
+	<ui:param name="headWidth" value="650px" />
+	<ui:param name="heading_top" value="#{msg.editAssigmentProcedure}" />
+	<ui:define name="edit_body">
+		<fieldset style="width: auto;">
+			<legend>#{msg.assigmentProcedure}</legend>
+			<h:form name="EditForm1" id="EditForm1" enctype="multipart/form-data">
+				<t:inputHidden validator="#{validator.requiredPage}" value="hidden" />
+				<a4j:outputPanel ajaxRendered="false" id="pagePanel">
+					<table width="50%" class="forms" border="0" cellpadding="1"
+						cellspacing="1">
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.procedureTipology2}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><div
+									style="width: 252px; overflow: hidden;">
+									<t:selectOneMenu id="typology" onmousedown="collapse(this);"
+										onblur="expand(this);"
+										value="#{assigmentProcedureEditBean.typology}"
+										rendered="#{!assigmentProcedureEditBean.isView}"
+										enabledOnUserRole="ROLE_BP_W,ROLE_AGU_W,ROLE_B_W, ROLE_STC_W"
+										required="true" styleClass="DropDown" onchange="submit()"
+										valueChangeListener="#{assigmentProcedureEditBean.typologyChanged}">
+										<f:selectItems
+											value="#{assigmentProcedureEditBean.typologies}" />
+									</t:selectOneMenu>
+								</div> <b><t:outputText
+										value="#{assigmentProcedureEditBean.typologyTitle}"
+										rendered="#{assigmentProcedureEditBean.isView}" /></b></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.contractingDenomination}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><t:inputText maxlength="255"
+									validator="#{validator.isAlphaNumerical}"
+									rendered="#{!assigmentProcedureEditBean.isView}"
+									styleClass="editbox_form" required="true" id="description"
+									value="#{assigmentProcedureEditBean.entity.description}" /> <b><t:outputText
+										value="#{assigmentProcedureEditBean.entity.description}"
+										rendered="#{assigmentProcedureEditBean.isView}" /></b></td>
+						</tr>
+						
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.assignmentProcedureDescription}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><t:inputTextarea maxlength="1500"
+									 rows="6" cols="40"
+									rendered="#{!assigmentProcedureEditBean.isView}"
+									styleClass="editbox_form" required="true" id="procedureDescription"
+									value="#{assigmentProcedureEditBean.entity.procedureDescription}" /> <b><t:outputText
+										value="#{assigmentProcedureEditBean.entity.procedureDescription}"
+										rendered="#{assigmentProcedureEditBean.isView}" /></b></td>
+						</tr>
+						
+						<tr>
+								<td class="LabelCell"><t:outputText value="#{msg.assignmentProcedurePublicationDate}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+								<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" disabled="false"
+										inputClass="editbox_form2" converter="dateTimeConverter"
+										value="#{assigmentProcedureEditBean.entity.publicationDate}"
+										rendered="#{!assigmentProcedureEditBean.isView}"
+										required="true"
+										datePattern="dd/MM/yyyy">
+									</rich:calendar>
+									<b><t:outputText value="#{assigmentProcedureEditBean.entity.publicationDate}"
+															converter="dateTimeConverter"
+															rendered="#{assigmentProcedureEditBean.isView}" /></b></td>
+						</tr>
+						<tr>
+								<td class="LabelCell"><t:outputText value="#{msg.assignmentProcedureAwardDate}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+								<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" disabled="false"
+										inputClass="editbox_form2" converter="dateTimeConverter"
+										rendered="#{!assigmentProcedureEditBean.isView}"
+										value="#{assigmentProcedureEditBean.entity.awardDate}"
+										required="true"
+										datePattern="dd/MM/yyyy">
+									</rich:calendar>
+									<b><t:outputText value="#{assigmentProcedureEditBean.entity.awardDate}"
+															converter="dateTimeConverter"
+															rendered="#{assigmentProcedureEditBean.isView}" /></b></td>
+						</tr>
+						
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.cigProcedure}:" /><span 
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><t:inputText maxlength="10"
+									validator="#{validator.isAlphaNumerical}"
+									rendered="#{!assigmentProcedureEditBean.isView}"
+									styleClass="editbox_form" id="cigProcedure"
+									required="true"
+									value="#{assigmentProcedureEditBean.entity.cigProcedure}" /> <b><t:outputText
+										value="#{assigmentProcedureEditBean.entity.cigProcedure}"
+										rendered="#{assigmentProcedureEditBean.isView}" /></b></td>
+						</tr>
+						
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.assignmentProcedureReasonAbsenceCIG}:" /></td>
+							<td class="ControlCell"><div
+									style="width: 252px; overflow: hidden;">
+									<t:selectOneMenu id="reasonAbsenceCIG" 
+										value="#{assigmentProcedureEditBean.entity.reasonForAbsenceCIG.id}"
+										rendered="#{!assigmentProcedureEditBean.isView}"
+										enabledOnUserRole="ROLE_BP_W,ROLE_AGU_W,ROLE_B_W, ROLE_STC_W"
+										styleClass="DropDown" 
+										>
+										<f:selectItems
+											value="#{assigmentProcedureEditBean.reasonsAbsenceCIG}" />
+									</t:selectOneMenu>
+								</div> <b><t:outputText
+										value="#{assigmentProcedureEditBean.entity.reasonForAbsenceCIG}"
+										rendered="#{assigmentProcedureEditBean.isView}" /></b></td>
+						</tr>
+
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.baseProcedureAmount}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><t:inputText maxlength="12"
+									converter="floatConverter" validator="#{validator.isFloat92}"
+									onkeypress="return decimalonly(this, event)"
+									rendered="#{!assigmentProcedureEditBean.isView}"
+									onkeyup="checkdecimal(this)" styleClass="editbox_form"
+									required="true" id="baseProcedureAmount"
+									value="#{assigmentProcedureEditBean.entity.baseProcedureAmount}" />
+								<b><t:outputText converter="moneyConverter"
+										value="#{assigmentProcedureEditBean.entity.baseProcedureAmount}"
+										rendered="#{assigmentProcedureEditBean.isView}" /></b></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.assignedProcedureAmount}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><t:inputText maxlength="12"
+									converter="floatConverter" validator="#{validator.isFloat92}"
+									onkeypress="return decimalonly(this, event)"
+									rendered="#{!assigmentProcedureEditBean.isView}"
+									onkeyup="checkdecimal(this)" styleClass="editbox_form"
+									required="true" id="assignedProcedureAmount"
+									value="#{assigmentProcedureEditBean.entity.assignedProcedureAmount}" />
+								<b><t:outputText converter="moneyConverter"
+										value="#{assigmentProcedureEditBean.entity.assignedProcedureAmount}"
+										rendered="#{assigmentProcedureEditBean.isView}" /></b></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.differentPercentage}:" /></td>
+							<td class="ControlCell"><b><t:outputText
+										id="differentPercentage" converter="floatConverter"
+										value="#{assigmentProcedureEditBean.entity.differentPercentage}" /></b></td>
+						</tr>
+						<tr>
+
+							<td class="LabelCell"><t:outputText
+									value="#{msg.attachment}:" /></td>
+							<td class="ControlCell"><a4j:htmlCommandLink
+									id="costDocLink" action="#{assigmentProcedureEditBean.getDoc}"
+									style="text-decoration: underline; float:left;"
+									immediate="true" value="#{assigmentProcedureEditBean.docTitle}" />
+								<a4j:commandLink
+									rendered="#{!empty assigmentProcedureEditBean.docTitle and !assigmentProcedureEditBean.isView}"
+									id="doc1deletelink" immediate="true" reRender="EditForm1"
+									action="#{assigmentProcedureEditBean.deleteDoc}">
+									<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+										style="border:0; float:right;" />
+								</a4j:commandLink> <a4j:commandLink
+									rendered="#{empty assigmentProcedureEditBean.docTitle and !assigmentProcedureEditBean.isView}"
+									id="doc1link"
+									onclick="#{rich:component('documentPanel1')}.show();  javascript:return false;">
+									<h:graphicImage alt="#{msg.delete}" value="/images/plus.png"
+										style="border:0;" />
+									<span>#{msg.uploadFile}</span>
+								</a4j:commandLink></td>
+
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText value="#{msg.notes}:" /></td>
+							<td class="ControlCell"><t:inputTextarea maxlength="255"
+									rendered="#{!assigmentProcedureEditBean.isView}"
+									styleClass="editbox_form" id="note" rows="6" cols="40"
+									onkeypress="return textArea(this, 255)"
+									value="#{assigmentProcedureEditBean.entity.note}" /> <b><t:outputText
+										value="#{assigmentProcedureEditBean.entity.note}"
+										rendered="#{assigmentProcedureEditBean.isView}" /></b></td>
+						</tr>
+					</table>
+
+					<table class="forms" border="0" cellpadding="1" cellspacing="1"
+						width="100%">
+						<tr>
+							<td style="text-align: center;"><t:outputText
+									styleClass="RequiredFieldMarker"
+									value="#{validator.tabMessage}" /></td>
+						</tr>
+						<tr>
+							<td colspan="2" class="btn_line"><a4j:commandButton
+									immediate="false" reRender="pagePanel"
+									rendered="#{!assigmentProcedureEditBean.isView}"
+									action="#{assigmentProcedureEditBean.Page_Save}"
+									styleClass="button2" value="#{msg.save}" id="save" /> <a4j:commandButton
+									value="#{msg.cancel}" styleClass="button2" immediate="true"
+									action="#{assigmentProcedureEditBean.GoBack}" /></td>
+						</tr>
+					</table>
+					
+					<rich:modalPanel id="documentPanel1" autosized="true" width="300">
+						<f:facet name="header">
+							<h:outputText value="Document" style="padding-right:15px;" />
+						</f:facet>
+
+						<table>
+							<tr>
+								<td class="LabelCell"><t:outputText
+										value="#{msg.protocolNumber}:" /></td>
+								<td class="ControlCell"><t:inputText
+										styleClass="editbox_form" style="width:216px;" maxlength="50"
+										value="#{assigmentProcedureEditBean.document.protocolNumber}" /></td>
+							</tr>
+
+							<tr>
+								<td class="LabelCell"><t:outputText
+										value="#{msg.documentDescription}:" /></td>
+								<td class="ControlCell"><t:inputText
+										styleClass="editbox_form" style="width:216px;" maxlength="50"
+										value="#{assigmentProcedureEditBean.document.description}" /></td>
+							</tr>
+
+							<tr>
+								<td class="LabelCell"><t:outputText value="#{msg.date}:" /></td>
+								<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" disabled="false"
+										inputClass="editbox_form2" converter="dateTimeConverter"
+										value="#{assigmentProcedureEditBean.document.documentDate}"
+										datePattern="dd/MM/yyyy">
+									</rich:calendar></td>
+							</tr>
+							<tr>
+								<td class="LabelCell"><t:outputText
+										value="#{msg.documentPublic}:" /></td>
+								<td class="ControlCell"><t:selectBooleanCheckbox
+										value="#{assigmentProcedureEditBean.document.isPublic}">
+									</t:selectBooleanCheckbox></td>
+							</tr>
+							<tr>
+								<td class="LabelCell"><t:outputText
+										value="#{msg.documentUploadRole}:" /></td>
+								<td class="ControlCell"><t:selectOneMenu
+										onmousedown="collapse(this);" onchange="expand(this);"
+										onblur="expand(this);"
+										value="#{assigmentProcedureEditBean.docRole}" required="false"
+										styleClass="DropDown">
+										<f:selectItems
+											value="#{assigmentProcedureEditBean.listSelectRoles}" />
+									</t:selectOneMenu></td>
+							</tr>
+							<ui:remove>
+							<tr class="tempDisplay">
+								<td class="LabelCell"><t:outputText
+										value="#{msg.documentCategory}:" /></td>
+								<td class="ControlCell"><t:selectOneMenu
+										onmousedown="collapse(this);" onchange="expand(this);"
+										onblur="expand(this);"
+										value="#{assigmentProcedureEditBean.selectedCategory}"
+										required="false" styleClass="DropDown">
+										<f:selectItems
+											value="#{assigmentProcedureEditBean.categories}" />
+									</t:selectOneMenu></td>
+							</tr>
+</ui:remove>
+							<tr>
+								<td class="LabelCell"><t:outputText
+										value="#{msg.uploadFile}:" /></td>
+								<td class="ControlCell"><t:inputFileUpload id="fileupload2"
+										value="#{assigmentProcedureEditBean.documentUpFile}"
+										storage="file" styleClass="fileUploadInput" maxlength="200000" /></td>
+							</tr>
+							<tr>
+								<td align="center" colspan="2">#{msg.fileSize}</td>
+							</tr>
+							<tr>
+								<td colspan="2" style="text-align: center;"><h:commandButton
+										value="#{msg.uploadFile}" styleClass="button3"
+										action="#{assigmentProcedureEditBean.SaveDocument}"
+										reRender="EditForm1"
+										onclick="#{rich:component('documentPanel1')}.hide()" /> <a4j:commandButton
+										value="#{msg.cancel}" styleClass="button" immediate="false"
+										onclick="#{rich:component('documentPanel1')}.hide();return false;" /></td>
+							</tr>
+						</table>
+					</rich:modalPanel>
+				</a4j:outputPanel>
+			</h:form>
+		</fieldset>
+		<h:form name="EditForm2" id="EditForm2">
+				<t:inputHidden validator="#{validator.requiredPage}" value="hidden" />
+					<a4j:outputPanel ajaxRendered="true" id="pagePanel1">
+						<table class="forms" border="0" cellpadding="1" cellspacing="1"
+							width="100%">
+							<tr>
+								<td colspan="2">
+								<div class="table_container"><t:dataTable width="100%"
+									style="margin:0 auto;" id="table" var="data"
+									value="#{assigmentProcedureEditBean.procedures}"
+									styleClass="form_table" rowClasses="row_table_n,row_table_g">
+									<f:facet name="header">
+										<t:column>
+											<h:outputText style="text-align: center"
+												value="#{msg.assigmentProcedures}" />
+										</t:column>
+									</f:facet>
+									<t:column styleClass="CodeColumn"
+										rendered="#{!empty assigmentProcedureEditBean.procedures}">
+										<f:facet name="header">
+											<t:outputText value="#{msg.code}" />
+										</f:facet>
+										<t:outputText value="#{data.code}" />
+									</t:column>
+									<t:column styleClass="StringColumn" style="width: 150px;"
+										rendered="#{!empty assigmentProcedureEditBean.procedures}">
+										<f:facet name="header">
+											<t:outputText value="#{msg.description}" />
+										</f:facet>
+										<t:outputText value="#{data.description}" />
+									</t:column>
+									<t:column styleClass="StringColumn"
+										rendered="#{!empty assigmentProcedureEditBean.procedures}">
+										<f:facet name="header">
+										</f:facet>
+										<div class="table_container" style="margin: 0; width: 100%;">
+										<t:dataTable width="100%" style="margin:0 auto;" id="table"
+											var="data" value="#{assigmentProcedureEditBean.stepsInfo}"
+											styleClass="form_table" rowClasses="row_table_n,row_table_g">
+											<t:column id="edit" styleClass="ActionColumn"
+												rendered="#{!empty assigmentProcedureEditBean.stepsInfo and !assigmentProcedureEditBean.isView}">
+												<a4j:commandLink id="editlink"
+													rendered="#{data.tipologyStep.id!=assigmentProcedureEditBean.entityEditId}"
+													title="#{msg.edit}" immediate="true"
+													>
+													<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+														style="border:0" />
+													<f:setPropertyActionListener
+														value="#{data.tipologyStep.id}"
+														target="#{assigmentProcedureEditBean.entityEditId}" />
+												</a4j:commandLink>
+												<a4j:commandLink id="savelink"
+													rendered="#{data.tipologyStep.id==assigmentProcedureEditBean.entityEditId}"
+													title="#{msg.save}" immediate="false"
+													action="#{assigmentProcedureEditBean.saveStepInfo}">
+													<h:graphicImage alt="#{msg.save}"
+														value="/images/SaveAllFiles.png" style="border:0" />
+												</a4j:commandLink>
+											</t:column>
+											<t:column styleClass="CodeColumn"
+												rendered="#{!empty assigmentProcedureEditBean.stepsInfo}">
+												<f:facet name="header">
+													<t:outputText value="#{msg.code}" />
+												</f:facet>
+												<t:outputText value="#{data.tipologyStep.code}" />
+											</t:column>
+											<t:column styleClass="StringColumn" style="width: 150px;"
+												rendered="#{!empty assigmentProcedureEditBean.stepsInfo}">
+												<f:facet name="header">
+													<t:outputText value="#{msg.description}" />
+												</f:facet>
+												<t:outputText value="#{data.tipologyStep.description}" />
+											</t:column>
+											<t:column styleClass="StringColumn"
+												rendered="#{!empty assigmentProcedureEditBean.stepsInfo}">
+												<f:facet name="header">
+
+												</f:facet>
+												<table style="float: left;">
+													<tr>
+														<td class="LabelCell"><t:outputText
+															value="#{msg.description}:" /></td>
+														<td class="ControlCell"><t:inputText
+															style="width:150px;" value="#{data.description}"
+															maxlength="250" styleClass="edit_td editbox_form"
+															rendered="#{data.tipologyStep.id==assigmentProcedureEditBean.entityEditId}" />
+														<b><t:outputText value="#{data.description}"
+															rendered="#{data.tipologyStep.id!=assigmentProcedureEditBean.entityEditId}" /></b></td>
+													</tr>
+													<tr>
+														<td class="LabelCell"><t:outputText
+															value="#{msg.estimationDate}:" />
+															<span class="RequiredFieldMarker">*</span></td>
+														<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+															id="estimationDate"
+															rendered="#{data.tipologyStep.id==assigmentProcedureEditBean.entityEditId}"
+															inputClass="edit_td editbox_form2"
+															converter="dateTimeConverter"
+															required="true"
+															value="#{data.estimationDate}" datePattern="dd/MM/yyyy" />
+														<b><t:outputText value="#{data.estimationDate}"
+															converter="dateTimeConverter"
+															rendered="#{data.tipologyStep.id!=assigmentProcedureEditBean.entityEditId}" /></b></td>
+													</tr>
+													<tr>
+														<td class="LabelCell"><t:outputText
+															value="#{msg.realDate}:" /></td>
+														<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" id="realDate"
+															rendered="#{data.tipologyStep.id==assigmentProcedureEditBean.entityEditId}"
+															inputClass="edit_td editbox_form2"
+															converter="dateTimeConverter" value="#{data.realDate}"
+															datePattern="dd/MM/yyyy" /> <b><t:outputText
+															value="#{data.realDate}" converter="dateTimeConverter"
+															rendered="#{data.tipologyStep.id!=assigmentProcedureEditBean.entityEditId}" /></b></td>
+													</tr>
+													<tr>
+														<td class="LabelCell"><t:outputText
+															value="#{msg.competencePeople}:" /></td>
+														<td class="ControlCell"><t:inputText
+															value="#{data.competencePeople}" maxlength="250"
+															styleClass="edit_td editbox_form" style="width:150px;"
+															rendered="#{data.tipologyStep.id==assigmentProcedureEditBean.entityEditId}" />
+														<b><t:outputText value="#{data.competencePeople}"
+															rendered="#{data.tipologyStep.id!=assigmentProcedureEditBean.entityEditId}" /></b></td>
+													</tr>
+													<tr>
+														<td class="LabelCell"><t:outputText
+															value="#{msg.amount}:" /></td>
+														<td class="ControlCell"><t:inputText
+															value="#{data.amount}"
+															onkeypress="return decimalonly(this, event)"
+															onkeyup="checkdecimal(this)" maxlength="12"
+															converter="floatConverter"
+															validator="#{validator.isFloat92}"
+															styleClass="edit_td editbox_form2"
+															rendered="#{data.tipologyStep.id==assigmentProcedureEditBean.entityEditId}" />
+														<b><t:outputText value="#{data.amount}"
+															converter="moneyConverter"
+															rendered="#{data.tipologyStep.id!=assigmentProcedureEditBean.entityEditId}" /></b></td>
+													</tr>
+													<tr>
+														<td class="LabelCell"><t:outputText
+															value="#{msg.differenceReason}:" /></td>
+														<td class="ControlCell"><t:selectOneMenu
+															style="width:150px;" id="diffReasonId"
+															value="#{data.diffReasonId}"
+															rendered="#{data.tipologyStep.id==assigmentProcedureEditBean.entityEditId}"
+															styleClass="edit_td DropDown">
+															<f:selectItems
+																value="#{assigmentProcedureEditBean.differenceReasons}" />
+														</t:selectOneMenu><b><t:outputText
+															value="#{data.differenceReason.value}"
+															rendered="#{data.tipologyStep.id!=assigmentProcedureEditBean.entityEditId}" /></b></td>
+													</tr>
+													<tr>
+														<td class="LabelCell"><t:outputText
+															value="#{msg.notes}:" /></td>
+														<td class="ControlCell"><t:inputText maxlength="250"
+															style="width:150px;" value="#{data.note}"
+															styleClass="edit_td editbox_form"
+															rendered="#{data.tipologyStep.id==assigmentProcedureEditBean.entityEditId}" />
+														<b><t:outputText value="#{data.note}"
+															rendered="#{data.tipologyStep.id!=assigmentProcedureEditBean.entityEditId}" /></b></td>
+													</tr>
+												</table>
+											</t:column>
+										</t:dataTable></div>
+									</t:column>
+									<t:column styleClass="StringColumn"
+										rendered="#{empty assigmentProcedureEditBean.procedures}">
+										<f:facet name="header">
+											<h:outputText value="#{msg.noData}" />
+										</f:facet>
+									</t:column>
+								</t:dataTable></div>
+								</td>
+							</tr>
+						</table>						
+					</a4j:outputPanel>					
+				</h:form>	
+	</ui:define>
+	<ui:define name="document_body">
+							
+	</ui:define>
+</ui:composition>

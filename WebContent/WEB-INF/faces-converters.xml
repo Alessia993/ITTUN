@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+	version="1.2">
+	
+	<!--  Converters  -->
+	<converter>
+		<description>A Converter date to our internal date format</description>
+		<converter-id>dateTimeConverter</converter-id>
+		<converter-class>com.infostroy.paamns.web.converters.DateConverter</converter-class>
+	</converter>
+	<converter>
+		<description>A Converter date to our internal date format</description>
+		<converter-id>dateTimeConverterWithMinutes</converter-id>
+		<converter-class>com.infostroy.paamns.web.converters.DateConverterWithMinutes</converter-class>
+	</converter>
+	<converter>
+		<description></description>
+		<converter-id>noDataConverter</converter-id>
+		<converter-class>com.infostroy.paamns.web.converters.NoDataConverter</converter-class>
+	</converter>
+	
+	<converter>
+		<description></description>
+		<converter-id>floatConverter</converter-id>
+		<converter-class>com.infostroy.paamns.web.converters.FloatConverter</converter-class>
+	</converter>
+	
+	<converter>
+		<description></description>
+		<converter-id>moneyConverter</converter-id>
+		<converter-class>com.infostroy.paamns.web.converters.MoneyConverter</converter-class>
+	</converter>
+	
+	<converter>
+		<description></description>
+		<converter-id>percentageConverter</converter-id>
+		<converter-class>com.infostroy.paamns.web.converters.PercentageConverter</converter-class>
+	</converter>
+	
+	<converter>
+		<description></description>
+		<converter-id>standardNumberConverter</converter-id>
+		<converter-class>javax.faces.convert.NumberConverter</converter-class>
+	</converter>
+	
+	<converter>
+		<description></description>
+		<converter-id>booleanConverter</converter-id>
+		<converter-class>com.infostroy.paamns.web.converters.BooleanConverter</converter-class>
+	</converter>
+	
+	<converter>
+		<description></description>
+		<converter-id>longNameConverter</converter-id>
+		<converter-class>com.infostroy.paamns.web.converters.LongNameConverter</converter-class>
+	</converter>
+	
+			
+</faces-config>

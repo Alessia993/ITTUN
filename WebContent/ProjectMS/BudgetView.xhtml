@@ -1,0 +1,314 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ListBase.xhtml">
+	<ui:param name="heading" value="#{msg.budgetEdit}" />
+	<ui:define name="list_body">
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+			<div class="table_container" style="width: 1220px;">			
+				<div style="margin:0 auto; width: 1198px; height: 25px; border-bottom: 0px;" class="form_table noBodyTable">
+					<sec:ifAnyGranted roles="ROLE_AGU_W,ROLE_STC_W">
+						<ui:fragment rendered="#{!budgetViewBean.isEdit and (!Session.isActualSateAndAguRead or Session.projectLock and Session.STCW)}">
+							<div style="width: 33px" class="table_cell"></div>	
+							<div style="width: 110px" class="table_cell"></div>									
+							<div style="width: 226px" class="table_cell">					
+								<t:outputText value="#{msg.projectBudgetCoFinancing}" />					
+							</div>							
+							<div style="width: 808px" class="table_cell">	
+								<t:outputText value="#{msg.projectBudgetContribution}" />					
+							</div>							
+										
+						</ui:fragment>
+						
+						<ui:fragment rendered="#{budgetViewBean.isEdit or Session.isActualSateAndAguRead and (!Session.projectLock or !Session.STCW)}">
+							<div style="width: 114px" class="table_cell"></div>
+							<div style="width: 235px" class="table_cell">					
+								<t:outputText value="#{msg.projectBudgetCoFinancing}" />					
+							</div>							
+							<div style="width: 834px" class="table_cell">	
+								<t:outputText value="#{msg.projectBudgetContribution}" />					
+							</div>							
+							
+						</ui:fragment>
+					</sec:ifAnyGranted>
+					
+					<sec:ifNotGranted roles="ROLE_AGU_W,ROLE_STC_W">									
+						<div style="width: 322px" class="table_cell">					
+							<t:outputText value="#{msg.projectBudgetCoFinancing}" />					
+						</div>						
+						<div style="width: 758px" class="table_cell">	
+							<t:outputText value="#{msg.projectBudgetContribution}" />					
+						</div>						
+						<div style="width: 103px" class="table_cell"></div>					
+					</sec:ifNotGranted>
+				</div>
+				
+				<div style="margin:0 auto; width: 1198px; height: 25px; border-bottom: 0px;" class="form_table noBodyTable">
+					<sec:ifAnyGranted roles="ROLE_AGU_W,ROLE_STC_W">
+						<ui:fragment rendered="#{!budgetViewBean.isEdit and (!Session.isActualSateAndAguRead or Session.projectLock and Session.STCW)}">
+							
+							<div style="width: 33px" class="table_cell"></div>	
+							<div style="width: 110px" class="table_cell"></div>							
+							<div style="width: 226px" class="table_cell"></div>							
+							<div style="width: 343px" class="table_cell">	
+								<t:outputText value="#{msg.projectBudgetPublicContribution}" />					
+							</div>							
+							<div style="width: 460px" class="table_cell"></div>							
+												
+						</ui:fragment>   			
+						
+						<ui:fragment rendered="#{budgetViewBean.isEdit or Session.isActualSateAndAguRead and (!Session.projectLock or !Session.STCW)}">
+							<div style="width: 114px" class="table_cell"></div>
+							<div style="width: 235px" class="table_cell"></div>							
+							<div style="width: 355px" class="table_cell">	
+								<t:outputText value="#{msg.projectBudgetPublicContribution}" />					
+							</div>							
+							<div style="width: 474px" class="table_cell"></div>							
+									
+						</ui:fragment>   					
+					</sec:ifAnyGranted>
+					
+					<sec:ifNotGranted roles="ROLE_AGU_W,ROLE_STC_W">	
+					<div style="width: 114px" class="table_cell"></div>	
+						<div style="width: 235px" class="table_cell"></div>						
+						<div style="width: 355px" class="table_cell">	
+							<t:outputText value="#{msg.projectBudgetPublicContribution}" />					
+						</div>						
+						<div style="width: 474px" class="table_cell"></div>						
+						
+					</sec:ifNotGranted>
+				</div>																											
+				
+				<t:dataTable rows="1" id="table" var="item" style="margin:0 auto; width: 1200px;"
+					value="#{budgetViewBean.list}" styleClass="form_table"
+					rowClasses="row_table_n,row_table_g">
+					<sec:ifAnyGranted roles="ROLE_AGU_W,ROLE_STC_W">
+						<t:column id="edit" styleClass="ActionColumn" headerstyle="width:30px"
+							rendered="#{!budgetViewBean.isEdit and (!Session.isActualSateAndAguRead or Session.projectLock and Session.STCW)}">
+							<a4j:commandLink ajaxSingle="true" id="editlink"
+								title="#{msg.edit}" action="#{budgetViewBean.editItem}">
+								<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+									style="border:0" />
+							</a4j:commandLink>
+						</t:column>
+					</sec:ifAnyGranted>
+					
+					 <t:column styleClass="NumberColumn" headerstyle="width:100px">
+						<f:facet name="header">
+							<t:outputText value="#{msg.projectBudgetTotalEligibleBudget}" />
+						</f:facet>
+						<t:outputText converter="moneyConverter"
+							value="#{budgetViewBean.entity.totalBudget}" />
+					</t:column>	 
+						
+					
+					<t:column styleClass="NumberColumn" headerstyle="width:100px">
+						<f:facet name="header">
+							<t:outputText value="#{msg.fesr}" />
+						</f:facet>
+						<t:outputText converter="moneyConverter"
+							rendered="#{!budgetViewBean.isEdit}"
+							value="#{budgetViewBean.entity.fesr}" />
+	
+						<t:inputText rendered="#{budgetViewBean.isEdit}"
+							onkeypress="return decimalonly(this, event)"
+							onkeyup="checkdecimal(this)" maxlength="12"
+							converter="floatConverter" styleClass="editbox_form2"
+							validator="#{validator.isFloat92}" id="fesr"
+							value="#{budgetViewBean.entity.fesr}" />
+					</t:column>
+					
+					<t:column styleClass="NumberColumn" headerstyle="width:100px">
+						<f:facet name="header">
+							<t:outputText value="#{msg.projectBudgetCoFinancingRate}" />
+						</f:facet>
+						<t:outputText converter="floatConverter"
+							value="#{budgetViewBean.entity.fesrPct}" />
+					</t:column>
+					
+					<t:column styleClass="NumberColumn" headerstyle="width:100px">
+						<f:facet name="header">
+							<t:outputText value="#{msg.publicCn}" />
+						</f:facet>
+						<t:outputText converter="moneyConverter"
+							rendered="#{!budgetViewBean.isEdit}"
+							value="#{budgetViewBean.entity.cnPublic}" />
+	
+						<t:inputText rendered="#{budgetViewBean.isEdit}"
+							onkeypress="return decimalonly(this, event)"
+							onkeyup="checkdecimal(this)" id="cnPublic"
+							converter="floatConverter" validator="#{validator.isFloat92}"
+							styleClass="editbox_form2" maxlength="12"
+							value="#{budgetViewBean.entity.cnPublic}" />
+					</t:column>										
+					
+					<t:column styleClass="NumberColumn" headerstyle="width:100px">
+						<f:facet name="header">
+							<t:outputText value="#{msg.projectBudgetOtherPublicContribution}" />
+						</f:facet>
+						<t:outputText converter="moneyConverter"
+							rendered="#{!budgetViewBean.isEdit}"
+							value="#{budgetViewBean.entity.cnPublicOther}" />
+	
+						<t:inputText rendered="#{budgetViewBean.isEdit}"
+							onkeypress="return decimalonly(this, event)"
+							onkeyup="checkdecimal(this)" maxlength="12"
+							converter="floatConverter" styleClass="editbox_form2"
+							validator="#{validator.isFloat92}" id="cnPublicOther"
+							value="#{budgetViewBean.entity.cnPublicOther}" />
+					</t:column>
+					
+					<t:column styleClass="NumberColumn" headerstyle="width:100px">
+						<f:facet name="header">
+							<t:outputText value="#{msg.projectBudgetTotalPublicContribution}" />
+						</f:facet>
+						<t:outputText converter="floatConverter" rendered="#{(budgetViewBean.entity.cnPublic + budgetViewBean.entity.fesr) > 0}"
+							value="#{(budgetViewBean.entity.fesr/(budgetViewBean.entity.cnPublic + budgetViewBean.entity.fesr + budgetViewBean.entity.cnPrivateReal))*100}" />
+						<t:outputText converter="floatConverter" rendered="#{(budgetViewBean.entity.cnPublic + budgetViewBean.entity.fesr) == 0}"
+							value="0" />
+					</t:column>										
+					
+					<t:column styleClass="NumberColumn" headerstyle="width:100px">
+						<f:facet name="header">
+							<t:outputText value="#{msg.projectBudgetPrivateContribution}" />
+						</f:facet>
+						<t:outputText converter="moneyConverter"
+							rendered="#{!budgetViewBean.isEdit}"
+							value="#{budgetViewBean.entity.cnPrivateReal}" />
+	
+						<t:inputText rendered="#{budgetViewBean.isEdit}"
+							onkeypress="return decimalonly(this, event)"
+							onkeyup="checkdecimal(this)" maxlength="12"
+							converter="floatConverter" styleClass="editbox_form2"
+							validator="#{validator.isFloat92}" id="cnPrivateReal"
+							value="#{budgetViewBean.entity.cnPrivateReal}" />
+					</t:column>
+					
+					<t:column styleClass="NumberColumn" headerstyle="width:100px">
+						<f:facet name="header">
+							<t:outputText value="#{msg.projectBudgetTotalContribution}" />
+						</f:facet>
+						<t:outputText converter="moneyConverter"
+							value="#{budgetViewBean.entity.cnPublic + budgetViewBean.entity.fesr + budgetViewBean.entity.cnPrivateReal}" />
+					</t:column>										
+					
+					<t:column styleClass="NumberColumn" headerstyle="width:100px">
+						<f:facet name="header">
+							<t:outputText value="#{msg.privateCn}" />
+						</f:facet>
+						<t:outputText converter="moneyConverter"
+							rendered="#{!budgetViewBean.isEdit}"
+							value="#{budgetViewBean.entity.cnPrivate}" />
+	
+						<t:inputText validator="#{validator.isFloat92}"
+							onkeypress="return decimalonly(this, event)"
+							onkeyup="checkdecimal(this)" id="cnPrivate"
+							converter="floatConverter" rendered="#{budgetViewBean.isEdit}"
+							styleClass="editbox_form2" maxlength="12"
+							value="#{budgetViewBean.entity.cnPrivate}" />
+					</t:column>		
+					
+					<t:column styleClass="NumberColumn" headerstyle="width:100px">
+						<f:facet name="header">
+							<t:outputText value="#{msg.projectBudgetNetRevenue}" />
+						</f:facet>
+						<t:outputText converter="moneyConverter"
+							rendered="#{!budgetViewBean.isEdit}"
+							value="#{budgetViewBean.entity.netRevenue}" />
+	
+						<t:inputText validator="#{validator.isFloat92}"
+							onkeypress="return decimalonly(this, event)"
+							onkeyup="checkdecimal(this)" id="netRevenue"
+							converter="floatConverter" rendered="#{budgetViewBean.isEdit}"
+							styleClass="editbox_form2" maxlength="12"
+							value="#{budgetViewBean.entity.netRevenue}" />
+					</t:column>										
+					
+					<!-- <t:column styleClass="NumberColumn" headerstyle="width:100px">
+						<f:facet name="header">
+							<t:outputText value="#{msg.projectBudgetTotalEligibleBudget}" />
+						</f:facet>
+						<t:outputText converter="moneyConverter"
+							value="#{budgetViewBean.entity.totalBudget - budgetViewBean.entity.cnPrivate - budgetViewBean.entity.netRevenue}" />
+					</t:column>	 -->	
+				</t:dataTable>
+			</div>
+			<table width="100%">
+				<tr>
+					<td colspan="2" class="btn_line"><ui:fragment
+							rendered="#{budgetViewBean.isEdit}">
+							<a4j:commandButton immediate="false" styleClass="button2" rendered="#{Session.project.locked and !budgetViewBean.isNew}"
+								action="#{budgetViewBean.PreSave}" value="#{msg.save}" id="saveOld"
+								oncomplete="document.getElementById('savePanel').component.show();" />
+							<a4j:commandButton immediate="false" styleClass="button2" rendered="#{!Session.project.locked}"
+								action="#{budgetViewBean.PreSave}" value="#{msg.save}" id="saveNew"
+								oncomplete="if(#{!budgetViewBean.isNew}) {document.getElementById('deletePanel').component.show();}" />
+							<a4j:commandButton value="#{msg.cancel}" styleClass="button2"
+								immediate="true" action="#{budgetViewBean.GoBack}" />
+						</ui:fragment></td>
+				</tr>
+			</table>
+		</a4j:outputPanel>
+	</ui:define>
+	<ui:define name="delete_panels">
+		<rich:modalPanel id="deletePanel" autosized="true" width="200">
+			<f:facet name="header">
+				<h:outputText value="#{msg.partnerBudgetDelete}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+
+			</f:facet>
+			<h:form>
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td align="center" width="50%"><a4j:commandButton
+								value="#{msg.yes}" ajaxSingle="true" styleClass="button"
+								action="#{budgetViewBean.Page_Save}"
+								oncomplete="#{rich:component('deletePanel')}.hide();"
+								reRender="FormPanel" /></td>
+							<td align="center" width="50%"><a4j:commandButton
+								value="#{msg.cancel}" styleClass="button"
+								onclick="#{rich:component('deletePanel')}.hide();return false;" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</h:form>
+		</rich:modalPanel>
+		<rich:modalPanel id="savePanel" autosized="true" width="200">
+			<f:facet name="header">
+				<h:outputText value="#{msg.partnerBudgetSave}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+
+			</f:facet>
+			<h:form>
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td align="center" width="50%"><a4j:commandButton
+								value="#{msg.yes}" ajaxSingle="true" styleClass="button"
+								action="#{budgetViewBean.budgetSave}"
+								oncomplete="#{rich:component('savePanel')}.hide();"
+								reRender="FormPanel" /></td>
+							<td align="center" width="50%"><a4j:commandButton
+								value="#{msg.cancel}" styleClass="button"
+								onclick="#{rich:component('savePanel')}.hide();return false;" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</h:form>
+		</rich:modalPanel>
+	</ui:define>
+</ui:composition>
+</html>

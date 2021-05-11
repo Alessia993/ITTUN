@@ -1,0 +1,529 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ListFormsBase.xhtml">
+	<ui:param name="heading" value="#{msg.costCertificationPageName}" />
+	<ui:param name="requireValidation" value="false" />
+	<ui:define name="list_body_non_validate">
+		<h:outputText id="requiredMessage" style="display: none"
+			value="#{msg.validatorMessage}"></h:outputText>
+		<h:outputText id="checkFields" style="display: none"
+			value="#{msg.validatorCheckAllFields}"></h:outputText>
+		<script type="text/javascript">
+		function ajaxRequestContainsErrors() 
+		{
+			var result = document.getElementById("Common:maximumSeverity").value >= 2; 
+		    return result;
+		}
+
+		function highlightTextBox(result)
+		{
+			if (result)
+			{
+				if(document.getElementById("paymentRqst:paymentNumberTb").value == "")
+					{
+				document.getElementById("paymentRqst:paymentNumberTb").style.background = '#ffe5e5';
+				document.getElementById("paymentRqst:paymentNumberTb").title = document.getElementById("FormListNonValidate:requiredMessage").innerHTML;
+					}
+				else
+					{
+					document.getElementById("paymentRqst:paymentNumberTb").style.background = '#ffffff';
+					document.getElementById("paymentRqst:paymentNumberTb").title = "";
+					}
+				
+				if(document.getElementById("paymentRqst:paymentDateInputDate").value == "")
+					{
+					document.getElementById("paymentRqst:paymentDateInputDate").style.background = '#ffe5e5';
+					document.getElementById("paymentRqst:paymentDateInputDate").title = document.getElementById("FormListNonValidate:requiredMessage").innerHTML;
+					}
+				else 
+					{
+					document.getElementById("paymentRqst:paymentDateInputDate").style.background = '#ffffff';
+					document.getElementById("paymentRqst:paymentDateInputDate").title = "";
+					}
+				document.getElementById('validatorMessage').innerHTML = document.getElementById("FormListNonValidate:checkFields").innerHTML;
+			}
+			else
+			{
+				document.getElementById("paymentRqst:paymentNumberTb").style.background = '#ffffff';
+				document.getElementById("paymentRqst:paymentDateInputDate").style.background = '#ffffff';
+				document.getElementById("paymentRqst:paymentNumberTb").title = "";
+				document.getElementById("paymentRqst:paymentDateInputDate").title = "";
+			}
+		}
+	</script>
+
+		<a4j:outputPanel ajaxRendered="false" id="FormPanelNonValidate">
+			<div align="center">
+				<fieldset style="width: 90%;">
+					<table width="100%" class="forms">
+						<tr>
+							<td style="width: 25%;"><t:outputText
+									value="#{msg.costCertificationStartDate}: "></t:outputText></td>
+							<td style="width: 25%;"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" id="startDate"
+									inputClass="editbox_form2" converter="dateTimeConverter"
+									value="#{costCertificationListBean.startDate}"
+									datePattern="dd/MM/yyyy">
+								</rich:calendar></td>
+							<td style="width: 25%;"><t:outputText
+									value="#{msg.costCertificationEndDate}: "></t:outputText></td>
+							<td style="width: 25%;"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" id="endDate"
+									inputClass="editbox_form2" converter="dateTimeConverter"
+									value="#{costCertificationListBean.endDate}"
+									datePattern="dd/MM/yyyy">
+								</rich:calendar></td>
+
+						</tr>
+						<tr>
+							<td><t:outputText value="#{msg.asse}: "></t:outputText></td>
+							<td><t:selectOneMenu
+									value="#{costCertificationListBean.asse}" styleClass="DropDown">
+									<f:selectItem itemValue="0" itemLabel="#{msg.all}" />
+									<f:selectItem itemValue="1" itemLabel="#{msg.asse} 1" />
+									<f:selectItem itemValue="2" itemLabel="#{msg.asse} 2" />
+									<f:selectItem itemValue="3" itemLabel="#{msg.asse} 3" />
+									<f:selectItem itemValue="4" itemLabel="#{msg.asse} 4" />
+								</t:selectOneMenu></td>
+							<td><t:outputText
+									value="#{msg.costCertificationListCertified}: "></t:outputText>
+							</td>
+							<td><t:selectOneMenu
+									value="#{costCertificationListBean.certified}"
+									styleClass="DropDown">
+									<f:selectItems
+										value="#{costCertificationListBean.certifiedItems}" />
+								</t:selectOneMenu></td>
+						</tr>
+						<tr>
+						
+						<ui:remove>
+							<td><t:outputText
+									value="#{msg.costCertificationListWithRequest}: "></t:outputText>
+							</td>
+							<td><t:selectOneMenu
+									value="#{costCertificationListBean.withRequest}"
+									styleClass="DropDown">
+									<f:selectItems
+										value="#{costCertificationListBean.withRequestItems}" />
+								</t:selectOneMenu></td>
+						</ui:remove>
+							<td><t:outputText
+									value="#{msg.costCertificationListProjectCode}: "></t:outputText>
+							</td>
+							<td><t:inputText
+									value="#{costCertificationListBean.projectCode}"
+									styleClass="editbox_form" maxlength="50"></t:inputText></td>
+						
+							<td><t:outputText
+									value="#{msg.costCertificationListProtocolNumber}: "></t:outputText>
+							</td>
+							<td><t:inputText
+									value="#{costCertificationListBean.searchProtocolNumber}"
+									styleClass="editbox_form" maxlength="50"></t:inputText></td>
+						</tr>
+					<ui:remove>
+						<tr>
+							<td><t:outputText
+									value="#{msg.costCertificationListProjectCode}: "></t:outputText>
+							</td>
+							<td><t:inputText
+									value="#{costCertificationListBean.projectCode}"
+									styleClass="editbox_form" maxlength="50"></t:inputText></td>
+						<ui:remove>
+							<td><t:outputText
+									value="#{msg.costCertificationListPaymRqNumber}: "></t:outputText>
+							</td>
+							<td><t:inputText
+									value="#{costCertificationListBean.paymentRequestNumber}"
+									styleClass="editbox_form2" maxlength="10"
+									onkeypress="return numbersonly(this, event)"
+									onkeyup="checknumber(this)"></t:inputText></td>
+						</ui:remove>
+						</tr>
+						</ui:remove>
+						
+						 <ui:remove>
+						<tr>
+							<td><t:outputText
+									value="#{msg.costCertificationListPaymRqStartDate}: "></t:outputText>
+							</td>
+							<td><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" inputClass="editbox_form2"
+									converter="dateTimeConverter"
+									value="#{costCertificationListBean.startPaymentRequest}"
+									datePattern="dd/MM/yyyy">
+								</rich:calendar></td>
+							<td><t:outputText
+									value="#{msg.costCertificationListPaymRqEndDate}: "></t:outputText>
+							</td>
+							<td><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" inputClass="editbox_form2"
+									converter="dateTimeConverter"
+									value="#{costCertificationListBean.endPaymentRequest}"
+									datePattern="dd/MM/yyyy">
+								</rich:calendar></td>
+						</tr>
+						 </ui:remove>
+					</table>
+					<table>
+						<tr>
+							<td style="text-align: right;"><a4j:commandButton
+									immediate="false"
+									action="#{costCertificationListBean.doSearch}"
+									reRender="FormPanel,FormPanelNonValidate" styleClass="button7"
+									value="#{msg.costCertificationSearch}" id="search" /></td>
+							<td><a4j:commandButton immediate="false"
+									action="#{costCertificationListBean.clear}"
+									reRender="FormPanel,FormPanelNonValidate" styleClass="button2"
+									value="#{msg.costCertificationClear}" id="clear" /></td>
+						</tr>
+					</table>
+				</fieldset>
+			</div>
+
+		</a4j:outputPanel>
+	</ui:define>
+
+	<ui:define name="common">
+		<a4j:outputPanel ajaxRendered="true">
+			<h:inputHidden id="maximumSeverity"
+				value="#{facesContext.maximumSeverity.ordinal}" />
+		</a4j:outputPanel>
+	</ui:define>
+
+	<ui:define name="list_body_validate">
+
+		<a4j:outputPanel ajaxRendered="false" id="FormPanelValidate">
+
+			<t:div align="center"
+				rendered="#{costCertificationListBean.showCertPanel}">
+				<fieldset style="width: 90%;">
+					<table width="100%" class="forms">
+						<tr>
+							<td style="text-align: center;"><t:outputText
+									value="#{msg.costCertificationCertificationDate}: "></t:outputText>
+								<span class="RequiredFieldMarker">* </span> <rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+									id="certDate" inputClass="editbox_form2"
+									converter="dateTimeConverter"
+									value="#{costCertificationListBean.certificationDate}"
+									datePattern="dd/MM/yyyy">
+								</rich:calendar> <a4j:commandButton style="margin-left: 10px;" immediate="false"
+									action="#{costCertificationListBean.certifyItems}"
+									reRender="FormPanel,FormPanelValidate,certificationValidatorMessages"
+									styleClass="button2" value="#{msg.costCertificationCertify}"
+									id="certify" /> <a4j:commandButton style="margin-left: 10px;"
+									immediate="true"
+									action="#{costCertificationListBean.refuseItems}"
+									reRender="FormPanel,FormPanelValidate" styleClass="button2"
+									value="#{msg.costCertificationRefuseDur}" id="refuse" /></td>
+						</tr>
+					</table>
+					<t:div id="certificationValidatorMessages">
+						<table width="100%">
+							<tr>
+								<td align="center"><t:outputText
+										rendered="#{costCertificationListBean.certificationDateInvalid}"
+										styleClass="RequiredFieldMarker"
+										value="#{msg.validatorMessage}" /></td>
+							</tr>
+						</table>
+
+					</t:div>
+
+				</fieldset>
+			</t:div>
+			
+			
+           <ui:remove>
+			<t:div align="center"
+				rendered="#{costCertificationListBean.showPaymentPanel}">
+				<fieldset style="width: 90%;">
+					<table width="100%" class="forms">
+						<tr>
+							<td style="text-align: center;"><a4j:commandButton
+									ajaxSingle="true"
+									oncomplete="#{rich:component('paymentRequest')}.show(); Richfaces.getComponent('paymentDate').today(false, false);"
+									reRender="FormPanel,FormPanelValidate" styleClass="button5"
+									value="#{msg.costCertificationCreatePaymentRequest}" /></td>
+						</tr>
+					</table>
+				</fieldset>
+			</t:div>
+		</ui:remove>
+
+		</a4j:outputPanel>
+	</ui:define>
+
+	<ui:define name="list_body">
+		<a4j:outputPanel ajaxRendered="false" id="FormPanel">
+
+			<div class="table_container">
+				<t:dataTable style="margin:0 auto; width: 100%;" id="table"
+					var="item" value="#{costCertificationListBean.list}"
+					styleClass="form_table"
+					rows="#{costCertificationListBean.itemsPerPage}"
+					rowClasses="row_table_n,row_table_g">
+
+					<f:facet name="header">
+						<t:column>
+							<h:outputText value="#{msg.costCertificationTableName}" />
+						</t:column>
+					</f:facet>
+					
+
+
+					<f:facet name="footer">
+						<a4j:htmlCommandLink action="#{costCertificationListBean.export}"
+							styleClass="footerPanelExport">
+							<h:graphicImage alt="#{msg.exportXls}" value="/images/xls.png" />
+						</a4j:htmlCommandLink>
+					</f:facet>
+					
+
+
+
+					<!-- Action columns -->
+
+					<!-- Check box column -->
+					
+					
+
+					<sec:ifAnyGranted roles="ROLE_ACUM_W">
+						<t:column id="select" styleClass="ActionColumn"
+							rendered="#{!empty costCertificationListBean.list and !Session.projectLock}">
+							<f:facet name="header">
+								<t:selectBooleanCheckbox immediate="true"
+									disabled="#{!costCertificationListBean.showSelectAll}"
+									value="#{costCertificationListBean.selectAll}">
+									<a4j:support event="onclick" id="selectAll"
+										reRender="FormPanel,FormPanelValidate"
+										action="#{costCertificationListBean.selectAll}" />
+								</t:selectBooleanCheckbox>
+							</f:facet>
+							<t:selectBooleanCheckbox value="#{item.selected}"
+								immediate="true" rendered="#{item.selectable}"
+								disabled="#{!item.canCreatePaymentRequest}">
+								<a4j:support event="onclick" id="selectItem"
+									reRender="FormPanel,FormPanelValidate"
+									action="#{costCertificationListBean.selectItem}" />
+							</t:selectBooleanCheckbox>
+						</t:column>
+					</sec:ifAnyGranted>
+
+
+					<!-- Show column -->
+
+					<sec:ifAnyGranted roles="ROLE_ACUM_R,ROLE_ACUM_W">
+						<t:column id="show"
+							rendered="#{!empty costCertificationListBean.list}"
+							styleClass="ActionColumn" headerstyleClass="ActionColumn">
+							<a4j:commandLink ajaxSingle="true" id="showlink"
+								title="#{msg.show}"
+								action="#{costCertificationListBean.showItem}">
+								<h:graphicImage alt="#{msg.show}" value="/images/ok.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{item.id}"
+									target="#{costCertificationListBean.entityEditId}" />
+							</a4j:commandLink>
+						</t:column>
+					</sec:ifAnyGranted>
+
+					<!-- Info columns -->
+
+					<t:column styleClass="DateColumn"
+						rendered="#{!empty costCertificationListBean.list}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.durCompilationListHeaderCompilationDate}" />
+						</f:facet>
+						<t:outputText converter="dateTimeConverter"
+							value="#{item.certificationDate}" />
+					</t:column>
+					<t:column styleClass="NumberColumn"
+						rendered="#{!empty costCertificationListBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.durCompilationListHeaderProtocolN}" />
+						</f:facet>
+						<t:outputText value="#{item.protocolNumber}" />
+					</t:column>
+					<t:column styleClass="NumberColumn"
+						rendered="#{!empty costCertificationListBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.durCompilationListHeaderRowNumber}" />
+						</f:facet>
+						<t:outputText value="#{item.rowNumber}" />
+					</t:column>
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty costCertificationListBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.durCompilationListHeaderSumAmount}"></t:outputText>
+						</f:facet>
+						<t:outputText converter="moneyConverter"
+							value="#{item.sumAmoutCertification}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty costCertificationListBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.costCertificationProjectName}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{item.project.code}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty costCertificationListBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.durCompilationListHeaderState}"></t:outputText>
+						</f:facet>
+						<t:outputText style="color: #{item.color}" value="#{item.state}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{empty costCertificationListBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.noData}"></t:outputText>
+						</f:facet>
+					</t:column>
+
+				<ui:remove>
+					<t:column styleClass="NumberColumn"
+						rendered="#{!empty costCertificationListBean.list}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.durCompilationListHeaderPaymentRequestNumber}" />
+						</f:facet>
+						<t:outputText value="#{item.paymentRequestNumber}" />
+					</t:column>
+				</ui:remove>
+				
+				<ui:remove>
+					<t:column styleClass="DateColumn"
+						rendered="#{!empty costCertificationListBean.list}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.durCompilationListHeaderPaymentRequestDate}" />
+						</f:facet>
+						<t:outputText converter="dateTimeConverter"
+							value="#{item.paymentRequestDate}" />
+					</t:column>
+				</ui:remove>
+
+				</t:dataTable>
+			</div>
+
+			<a4j:outputPanel styleClass="scrollerPanel">
+				<t:dataScroller id="scroll_1"
+					
+					styleClass="scroller" for="table" fastStep="10"
+					pageCountVar="pageCount" pageIndexVar="pageIndex" paginator="true"
+					paginatorMaxPages="5" paginatorColumnClass="page"
+					paginatorActiveColumnClass="page_active" immediate="true"
+					rendered="#{costCertificationListBean.showScroll}">
+					<f:facet name="first">
+						<t:graphicImage alt="#{msg.first}" url="../images/back_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="last">
+						<t:graphicImage alt="#{msg.last}" url="../images/forward_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="previous">
+						<t:graphicImage alt="#{msg.previous}" url="../images/back.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="next">
+						<t:graphicImage alt="#{msg.next}" url="../images/forward.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="fastforward">
+						<t:graphicImage alt="#{msg.fastforward}"
+							url="../images/all_forward.gif" border="1" />
+					</f:facet>
+					<f:facet name="fastrewind">
+						<t:graphicImage alt="#{msg.fastrewind}"
+							url="../images/all_back.gif" border="1" />
+					</f:facet>
+				</t:dataScroller>
+			</a4j:outputPanel>
+
+		</a4j:outputPanel>
+
+	</ui:define>
+	<ui:define name="delete_panels">
+
+		<rich:modalPanel id="paymentRequest" autosized="true" width="400">
+		
+		<ui:remove>
+			<f:facet name="header">
+				<h:outputText value="#{msg.costCertificationCreatePaymentRequest}"
+					style="padding-right:15px;" />
+			</f:facet>
+		</ui:remove>
+			
+			<h:form id="paymentRqst">
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.paymentRequestNumber}:" /> <span
+								class="RequiredFieldMarker">* </span></td>
+							<td class="ControlCell"><t:inputText
+									styleClass="editbox_form" id="paymentNumberTb" maxlength="9"
+									style="width:100px;"
+									value="#{costCertificationListBean.paymentNumber}"
+									onkeypress="return numbersonly(this, event)"
+									onkeyup="checknumber(this)" /></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.paymentRequestDate}:" /><span
+								class="RequiredFieldMarker">* </span></td>
+							<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" id="paymentDate"
+									inputClass="editbox_form2" converter="dateTimeConverter"
+									value="#{costCertificationListBean.paymentDate}"
+									defaultTime="{costCertificationListBean.currentDate}"
+									datePattern="dd/MM/yyyy">
+								</rich:calendar></td>
+						</tr>
+						<tr>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.yes}" immediate="false" styleClass="button"
+									action="#{costCertificationListBean.createPayment}"
+									oncomplete="
+										var res = ajaxRequestContainsErrors();
+										if (!res)
+										{
+											Richfaces.hideModalPanel('paymentRequest');
+										}										
+										highlightTextBox(res);"
+									reRender="FormPanel,FormPanelValidate,paymentValidatorMessages" /></td>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.cancel}" styleClass="button" immediate="true"
+									onclick="#{rich:component('paymentRequest')}.hide();return false;" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<t:div id="paymentValidatorMessages">
+					<table width="100%">
+						<tr>
+							<td align="center"><t:outputText
+									rendered="#{costCertificationListBean.paymentDataInvalid}"
+									styleClass="RequiredFieldMarker"
+									value="#{msg.validatorMessage}" /></td>
+						</tr>
+					</table>
+
+				</t:div>
+
+			</h:form>
+		</rich:modalPanel>
+
+
+	</ui:define>
+</ui:composition>
+</html>

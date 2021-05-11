@@ -1,0 +1,584 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ListBase.xhtml">
+	<ui:param name="heading" value="#{msg.durCompilationListName}" />
+
+	<ui:define name="list_body">
+		<a4j:outputPanel ajaxRendered="false" id="FormPanel">
+
+			<table width="100%" class="forms">
+				<tr>
+					<td><t:selectOneRadio style="margin:auto;"
+							value="#{durCompilationListBean.filter}">
+							<f:selectItems value="#{durCompilationListBean.listFilter}"></f:selectItems>
+							<a4j:support event="onclick" id="listFilter" reRender="FormPanel" />
+						</t:selectOneRadio></td>
+				</tr>
+			</table>
+			<fieldset style="margin: 10px; width: auto;">
+
+				<table width="100%" class="forms">
+
+
+					<tr>
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.durCompilationListValidationStatus}:" /></td>
+						<td style="width: 25%;"><t:selectOneMenu
+								styleClass="DropDown"
+								value="#{durCompilationListBean.durFilterValidationStatus}">
+								<f:selectItems
+									value="#{durCompilationListBean.filterDurStatusValues}" />
+							</t:selectOneMenu></td>
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.durCompilationListNumberPayment}:" /></td>
+						<td class="ControlCell" style="width: 25%;"><t:inputText
+								maxlength="9" styleClass="editbox_form" id="idNumberPayment"
+								value="#{durCompilationListBean.numberPayment}"
+								onkeypress="return numbersonly(this, event)"
+								onkeyup="checknumber(this)" /></td>
+					</tr>
+
+					<tr>
+
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.durCompilationListHeaderRowNumber}:" /></td>
+						<td class="ControlCell" style="width: 25%;"><t:inputText
+								maxlength="8" styleClass="editbox_form" id="durReimbNumber"
+								value="#{durCompilationListBean.durReimbNumber}"
+								onkeypress="return numbersonly(this, event)"
+								onkeyup="checknumber(this)" /></td>
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.durCompilationListPartner}:" /></td>
+						<td class="ControlCell" style="width: 25%;"><t:inputText
+								maxlength="50" styleClass="editbox_form" id="idPartner"
+								value="#{durCompilationListBean.partner}" /></td>
+					</tr>
+					
+					<tr>
+					<ui:remove>
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.durCompilationListIDPartner}:" /></td>
+						<td class="ControlCell" style="width: 25%;"><t:inputText
+								maxlength="8" styleClass="editbox_form" id="idIDPartner"
+								value="#{durCompilationListBean.idPartner}"
+								onkeypress="return numbersonly(this, event)"
+								onkeyup="checknumber(this)" /></td>
+								</ui:remove>
+						
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.costDefinitionPhase}:" /></td>
+						<td style="width: 25%;">
+						
+						<t:selectOneMenu rendered="#{!durCompilationListBean.asse3Mode}"
+								styleClass="DropDown"
+								value="#{durCompilationListBean.filterPhaseId}">
+								<f:selectItems
+									value="#{durCompilationListBean.filterPhase}" />
+							</t:selectOneMenu>
+							
+							
+								<t:selectOneMenu rendered="#{durCompilationListBean.asse3Mode}"
+									styleClass="DropDown"
+									value="#{durCompilationListBean.selectedCostPhaseAsse3}"
+									valueChangeListener="#{durCompilationListBean.asse3PhaseChange}"
+									onchange="submit()">
+									<f:selectItems
+										value="#{durCompilationListBean.filterCostPhaseAsse3}" />
+								</t:selectOneMenu>
+							
+							
+							</td>	
+								
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.costItem}:" /></td>
+						<td style="width: 25%;"><t:selectOneMenu rendered="#{!durCompilationListBean.asse3Mode}"
+								styleClass="DropDown"
+								value="#{durCompilationListBean.durFilterCostItem}">
+								<f:selectItems
+									value="#{durCompilationListBean.filterDurCostItem}" />
+							</t:selectOneMenu>
+							
+							
+							<t:selectOneMenu rendered="#{durCompilationListBean.asse3Mode}"
+								styleClass="DropDown"
+								value="#{durCompilationListBean.selectedCostItemAsse3}">
+								<f:selectItems
+									value="#{durCompilationListBean.filterCostItemAsse3}" />
+							</t:selectOneMenu>
+							
+							</td>
+					</tr>
+										<tr>
+					<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.location}:" /></td>
+						<td style="width: 25%;"><t:selectOneMenu
+								styleClass="DropDown"
+								value="#{durCompilationListBean.filterLocationId}">
+								<f:selectItems
+									value="#{durCompilationListBean.filterLocation}" />
+							</t:selectOneMenu></td>
+					</tr>
+					<tr>
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.durCompilationListCertifiedDUR}:" /></td>
+						<td class="ControlCell" style="width: 25%;"><t:selectBooleanCheckbox
+								value="#{durCompilationListBean.filterCertifiedDUR}" /></td>
+						<td style="width: 25%;"></td>
+						<td style="width: 25%;"></td>
+					</tr>
+
+
+					<tr>
+						<td colspan="4" class="btn_line"><h:commandButton
+								action="#{durCompilationListBean.search}" reRender="FormPanel"
+								styleClass="button2" value="#{msg.search}" id="search" /> <a4j:commandButton
+								value="#{msg.clear}" styleClass="button2" immediate="false"
+								reRender="FormPanel" id="clear"
+								action="#{durCompilationListBean.clear}" /></td>
+					</tr>
+
+				</table>
+
+			</fieldset>
+
+
+			<fieldset
+				style="margin: 10px; width: auto; display: #{durCompilationListBean.showAttention['ProtNumber']}">
+				<table width="100%" class="forms">
+					<tr>
+						<td style="text-align: center"><t:outputText
+								styleClass="RequiredFieldMarker"
+								value="#{msg.durCompilationListEnterProtNumber}"></t:outputText>
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+			
+			<fieldset
+				style="margin: 10px; width: auto; display: #{durCompilationListBean.showAttention['Moving']}">
+				<table width="100%" class="forms">
+					<tr>
+						<td style="text-align: center"><t:outputText
+								styleClass="RequiredFieldMarker"
+								value="#{msg.durCompilationListFinishCD}"></t:outputText>
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+
+			<div class="table_container">
+				<t:dataTable style="margin:0 auto; width: 80%;"
+					rows="#{durCompilationListBean.itemsPerPage}" id="table" var="item"
+					value="#{durCompilationListBean.listDurs}" styleClass="form_table"
+					rowClasses="row_table_n,row_table_g">
+
+					<f:facet name="header">
+						<t:column>
+
+							<a4j:commandLink styleClass="headerPanelLink"
+								rendered="#{durCompilationListBean.canAdd and !Session.projectLock}"
+								action="#{durCompilationListBean.addEntity}">#{msg.durCompilationListAddNew}
+							</a4j:commandLink>
+
+							<h:outputText value="#{msg.durCompilationListTableName}" />
+							<h:selectOneMenu id="itemPP" styleClass="headerPanelSelect"
+								value="#{durCompilationListBean.itemsPerPage}">
+								<f:selectItems
+									value="#{durCompilationListBean.itemsPerPageList}" />
+								<a4j:support event="onchange" reRender="FormPanel" />
+							</h:selectOneMenu>
+						</t:column>
+					</f:facet>
+					
+					
+ 
+					<f:facet name="footer">
+						<a4j:htmlCommandLink action="#{durCompilationListBean.export}"
+							styleClass="footerPanelExport">
+							<h:graphicImage alt="#{msg.exportXls}" value="/images/xls.png" />
+						</a4j:htmlCommandLink>
+					</f:facet>
+
+
+					<!-- Action columns -->
+					<sec:ifAnyGranted roles="ROLE_SUPER_ADMIN_W">
+						<t:column id="sendBack" styleClass="ActionColumn"
+							rendered="#{!empty durCompilationListBean.listDurs and !Session.projectLock and Session.superAdmin}">
+							<a4j:commandLink ajaxSingle="true" id="sendBacklink"
+								rendered="#{item.locked and (item.stateId==2 or item.stateId==3 or item.stateId==4)}" 
+								title="#{msg.durCompilationListSend}" reRender="table"
+								oncomplete="#{rich:component('movingMotivationDialog')}.show()">
+								<h:graphicImage alt="#{msg.movePrevStep}"
+									value="/images/sendBack.png" style="border:0" />
+								<f:setPropertyActionListener value="#{item.id}"
+									target="#{durCompilationListBean.entitySendId}" />
+							</a4j:commandLink>
+						</t:column>
+					</sec:ifAnyGranted>
+					<!-- Send column (Send to the next stage) -->
+
+					<t:column id="send"
+						rendered="#{!empty durCompilationListBean.listDurs and !Session.projectLock}"
+						styleClass="ActionColumn" headerstyleClass="ActionColumn">
+						<a4j:commandLink ajaxSingle="true" id="sendlink"
+							rendered="#{item.sendAvailable and !item.locked}"
+							title="#{msg.durCompilationListSend}" reRender="send"
+							oncomplete="#{rich:component('sendPanel')}.show()">
+							<h:graphicImage alt="#{msg.delete}" value="/images/status-on.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{item.id}"
+								target="#{durCompilationListBean.entitySendId}" />
+						</a4j:commandLink>
+					</t:column>
+
+
+					<!-- Deny column -->
+
+
+					<t:column id="deny" styleClass="ActionColumn"
+						rendered="#{!empty durCompilationListBean.listDurs and !Session.projectLock}"
+						headerstyleClass="ActionColumn">
+						<a4j:commandLink ajaxSingle="true" id="denylink"
+							rendered="#{item.denyAvailable and !item.locked}"
+							title="#{msg.durCompilationListDeny}"
+							oncomplete="#{rich:component('denyPanel')}.show()">
+							<h:graphicImage alt="#{msg.durCompilationListDeny}"
+								value="/images/status-off.png" style="border:0" />
+							<f:setPropertyActionListener value="#{item.id}"
+								target="#{durCompilationListBean.entityDenyId}" />
+						</a4j:commandLink>
+					</t:column>
+
+
+					<!-- Show column -->
+
+					<t:column id="show"
+						rendered="#{!empty durCompilationListBean.listDurs}"
+						styleClass="ActionColumn" headerstyleClass="ActionColumn">
+						<a4j:commandLink ajaxSingle="true" id="showlink"
+							rendered="#{item.showAvailable}" title="#{msg.show}"
+							action="#{durCompilationListBean.showItem}">
+							<h:graphicImage alt="#{msg.show}" value="/images/ok.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{item.id}"
+								target="#{durCompilationListBean.entityEditId}" />
+						</a4j:commandLink>
+					</t:column>
+
+
+					<!-- Edit column -->
+
+					<t:column id="edit"
+						rendered="#{!empty durCompilationListBean.listDurs and !Session.projectLock}"
+						styleClass="ActionColumn" headerstyleClass="ActionColumn">
+						<a4j:commandLink ajaxSingle="true" id="editlink"
+							rendered="#{item.editAvailable and ((!item.locked and !Session.superAdmin) or (Session.superAdmin and item.locked and (item.stateId==2 or item.stateId==3 or item.stateId==4)))}" title="#{msg.edit}"
+							action="#{durCompilationListBean.editEntity}">
+							<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{item.id}"
+								target="#{durCompilationListBean.entityEditId}" />
+						</a4j:commandLink>
+					</t:column>
+					
+					
+					<sec:ifAnyGranted roles="ROLE_SUPER_ADMIN_W">
+						<t:column id="lock" styleClass="ActionColumn" rendered="#{!Session.projectLock and Session.superAdmin}"
+							headerstyleClass="ActionColumn">
+							<a4j:commandLink ajaxSingle="true" id="locklink"
+								rendered="#{!item.locked}" title="#{msg.lock}"
+								action="#{durCompilationListBean.lockEntity}" reRender="table">
+								<h:graphicImage alt="#{msg.lock}" value="/images/lock.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{item.id}"
+									target="#{durCompilationListBean.entityEditId}" />
+							</a4j:commandLink>
+							<a4j:commandLink ajaxSingle="true" id="unlocklink"
+								rendered="#{item.locked}" title="#{msg.unlock}"
+								action="#{durCompilationListBean.unlockEntity}" reRender="table">
+								<h:graphicImage alt="#{msg.lock}" value="/images/unlock.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{item.id}"
+									target="#{durCompilationListBean.entityEditId}" />
+							</a4j:commandLink>
+						</t:column>
+					</sec:ifAnyGranted>
+
+					<!-- Info columns -->
+
+					<t:column styleClass="NumberColumn"
+						rendered="#{!empty durCompilationListBean.listDurs}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.durCompilationListHeaderNumber}" />
+						</f:facet>
+						<t:outputText value="#{item.number}" />
+					</t:column>
+					<t:column styleClass="DateColumn"
+						rendered="#{!empty durCompilationListBean.listDurs}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.durCompilationListHeaderCompilationDate}" />
+						</f:facet>
+						<t:outputText converter="dateTimeConverter"
+							value="#{item.compilationDate}" />
+					</t:column>
+					<t:column styleClass="NumberColumn"
+						rendered="#{!empty durCompilationListBean.listDurs}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.durCompilationListHeaderProtocolN}" />
+						</f:facet>
+						<t:outputText value="#{item.protocolNumber}" />
+					</t:column>
+					<t:column styleClass="NumberColumn"
+						rendered="#{!empty durCompilationListBean.listDurs}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.durCompilationListHeaderRowNumber}" />
+						</f:facet>
+						<t:outputText value="#{item.rowNumber}" />
+					</t:column>
+					<ui:remove>
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty durCompilationListBean.listDurs}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.durCompilationListHeaderSumAmount}"></t:outputText>
+						</f:facet>
+						<t:outputText converter="moneyConverter"
+							value="#{item.sumAmoutCertification}"></t:outputText>
+					</t:column>
+					</ui:remove>
+					
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty durCompilationListBean.listDurs}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.durCompilationListHeaderTotalAmountEligibleExpenditure}"></t:outputText>
+						</f:facet>
+						<t:outputText converter="moneyConverter"
+							value="#{item.totalAmountEligibleExpenditure}"></t:outputText>
+					</t:column>
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty durCompilationListBean.listDurs}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.durCompilationListHeaderTotalAmountPublicExpenditure}"></t:outputText>
+						</f:facet>
+						<t:outputText converter="moneyConverter"
+							value="#{item.totalAmountPublicExpenditure}"></t:outputText>
+					</t:column>
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty durCompilationListBean.listDurs}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.durCompilationListHeaderTotalAmountPrivateExpenditure}"></t:outputText>
+						</f:facet>
+						<t:outputText converter="moneyConverter"
+							value="#{item.totalAmountPrivateExpenditure}"></t:outputText>
+					</t:column>
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty durCompilationListBean.listDurs}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.durCompilationListHeaderTotalAFAmount}"></t:outputText>
+						</f:facet>
+						<t:outputText converter="moneyConverter"
+							value="#{item.totalAFAmount}"></t:outputText>
+					</t:column>
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty durCompilationListBean.listDurs}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.durCompilationListHeaderFesrReimbursementAmount}"></t:outputText>
+						</f:facet>
+						<t:outputText converter="moneyConverter"
+							value="#{item.totalReimbursement}"></t:outputText>
+					</t:column>
+					
+					
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty durCompilationListBean.listDurs}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.durCompilationListHeaderState}"></t:outputText>
+						</f:facet>
+						<t:outputText style="color: #{item.color}" value="#{item.state}"></t:outputText>
+					</t:column>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{empty durCompilationListBean.listDurs}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.noData}"></t:outputText>
+						</f:facet>
+					</t:column>
+
+				</t:dataTable>
+				<!-- End of info columns -->
+			</div>
+			<a4j:outputPanel styleClass="scrollerPanel">
+				<t:dataScroller id="scroll_1" styleClass="scroller" for="table"
+					fastStep="10" pageCountVar="pageCount" pageIndexVar="pageIndex"
+					paginator="true" paginatorMaxPages="5" paginatorColumnClass="page"
+					paginatorActiveColumnClass="page_active" immediate="true"
+					binding="#{durCompilationListBean.scroller}"
+					rendered="#{durCompilationListBean.showScroll}">
+					<f:facet name="first">
+						<t:graphicImage alt="#{msg.first}" url="../images/back_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="last">
+						<t:graphicImage alt="#{msg.last}" url="../images/forward_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="previous">
+						<t:graphicImage alt="#{msg.previous}" url="../images/back.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="next">
+						<t:graphicImage alt="#{msg.next}" url="../images/forward.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="fastforward">
+						<t:graphicImage alt="#{msg.fastforward}"
+							url="../images/all_forward.gif" border="1" />
+					</f:facet>
+					<f:facet name="fastrewind">
+						<t:graphicImage alt="#{msg.fastrewind}"
+							url="../images/all_back.gif" border="1" />
+					</f:facet>
+				</t:dataScroller>
+			</a4j:outputPanel>
+
+		</a4j:outputPanel>
+	</ui:define>
+
+	<ui:define name="delete_panels">
+		<rich:modalPanel id="movingMotivationDialog" autosized="true"
+			width="300" resizeable="false">
+			<f:facet name="header">
+				<h:outputText value="#{msg.validationFlowViewEnterMotivation}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<h:form id="movingForm">
+				<h:panelGrid columns="1">
+					<ui:fragment>
+						<h:outputText value="#{msg.motivation}" />
+						<h:panelGroup style="color:red;">*</h:panelGroup>
+					</ui:fragment>
+					<t:inputTextarea value="#{durCompilationListBean.actionMotivation}"
+						id="movingMotivation"
+						onkeypress="return textArea(this, 255, event)"
+						style="width: 350px; height: 130px; resize: none;" />
+				</h:panelGrid>
+				<center>
+					<h:commandButton value="#{msg.yes}"
+						action="#{durCompilationListBean.moveToPreviousStep}"
+						onclick="return validateMovingMotivation();" />
+					<a4j:commandButton value="#{msg.no}"
+						actionListener="#{durCompilationListBean.clearMotivation}"
+						oncomplete="#{rich:component('movingMotivationDialog')}.hide();"
+						reRender="movingMotivationDialog" />
+				</center>
+				<script language="JavaScript" type="text/javascript">
+                function validateMovingMotivation() {
+                    var textArea = document.getElementById('movingForm:movingMotivation');
+                    if (textArea != null) {
+                        if (textArea.value.trim().length > 0) {
+                            return true;
+                        } else {
+                            textArea.style.borderColor = 'red';
+                            return false;
+                        }
+                    }
+                    return false;
+                }
+            </script>
+			</h:form>
+		</rich:modalPanel>
+
+		<rich:modalPanel id="sendPanel" autosized="true" width="200">
+			<f:facet name="header">
+				<h:outputText value="#{msg.durCompilationListSendQuestion}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+			</f:facet>
+			<h:form>
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.yes}" ajaxSingle="true" styleClass="button"
+									action="#{durCompilationListBean.preSendItem}"
+									oncomplete="#{rich:component('sendPanel')}.hide();"
+									reRender="FormPanel" /></td>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.cancel}" styleClass="button"
+									onclick="#{rich:component('sendPanel')}.hide(); return false;" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</h:form>
+		</rich:modalPanel>
+
+		<rich:modalPanel id="denyPanel" autosized="true" width="200">
+			<f:facet name="header">
+				<h:outputText value="#{msg.durCompilationListDeny}?"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage alt="error" value="/images/close.png"
+						styleClass="hidelink" id="hidelink3" />
+					<rich:componentControl for="denyPanel" attachTo="hidelink3"
+						operation="hide" event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+			<h:form>
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.yes}" ajaxSingle="true" styleClass="button"
+									action="#{durCompilationListBean.denyItem}"
+									oncomplete="#{rich:component('denyPanel')}.hide();"
+									reRender="FormPanel" /></td>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.cancel}" styleClass="button"
+									onclick="#{rich:component('denyPanel')}.hide(); return false;" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</h:form>
+		</rich:modalPanel>
+
+		<rich:modalPanel id="deletePanel" autosized="true" width="200">
+			<f:facet name="header">
+				<h:outputText value="#{msg.delete}?" style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+
+			</f:facet>
+			<h:form>
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.yes}" ajaxSingle="true" styleClass="button"
+									action="#{durCompilationListBean.deleteEntity}"
+									oncomplete="#{rich:component('deletePanel')}.hide();"
+									reRender="FormPanel" /></td>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.cancel}" styleClass="button"
+									onclick="#{rich:component('deletePanel')}.hide();return false;" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</h:form>
+		</rich:modalPanel>
+	</ui:define>
+
+</ui:composition>
+</html>

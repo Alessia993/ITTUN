@@ -1,0 +1,695 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags">
+	<script type="text/javascript">
+		function switchMenu(obj) {
+			var el = document.getElementById(obj);
+			if (el.style.display != "none") {
+				el.style.display = 'none';
+			} else {
+				el.style.display = '';
+			}
+			SetCookie(obj);
+		}
+	//-->
+	</script>
+	<h:form id="Menu">
+
+
+		<div class="page_head">
+			<div class="header_left">
+				<div class="header_right">
+					<span><h:outputText value="#{msg.userMenu}" /></span>
+				</div>
+			</div>
+		</div>
+		<t:div styleClass="left_menu"
+			visibleOnUserRole="ROLE_APU_W,ROLE_APU_R,ROLE_USER">
+			<div class="menuhead" onclick="switchMenu('administration');"
+				style="cursor: pointer;">
+				<h:outputText value="#{msg.administration}" />
+			</div>
+			<div id="administration">
+				<div id="leftmenu">
+					<div id="nav" style="margin-left: 2px;">
+						<t:div styleClass="#{menuController.userList}"
+							visibleOnUserRole="ROLE_APU_W,ROLE_APU_R">
+							<a class="menu_link" href="../Acl/UserList.jsf">#{msg.createOrManageUsers}</a>
+						</t:div>
+						<t:div visibleOnUserRole="ROLE_APU_W,ROLE_APU_R"
+							styleClass="#{menuController.loginHistory}">
+							<a class="menu_link" href="../Acl/LoginHistory.jsf">#{msg.loginHistoryPageName}</a>
+						</t:div>
+						<t:div visibleOnUserRole="ROLE_USER"
+							styleClass="#{menuController.changePassword}">
+							<a class="menu_link" href="../Acl/ChangePassword.jsf">#{msg.changePassword}</a>
+						</t:div>
+						<t:div visibleOnUserRole="ROLE_STC_W, ROLE_STC_W"
+							styleClass="#{menuController.expirationDate}">
+							<a class="menu_link" href="../Acl/ExpirationDate.jsf">#{msg.expirationDate}</a>
+						</t:div>
+						<t:div visibleOnUserRole="ROLE_USER"
+							styleClass="#{menuController.legendView}"
+							rendered="#{!Session.CFP}">
+							<a class="menu_link" href="../ProgramMS/LegendView.jsf">#{msg.applicationLegend}</a>
+						</t:div>
+						<t:div visibleOnUserRole="ROLE_APU_W,ROLE_APU_R"
+							styleClass="#{menuController.mailSettingsEdit}">
+							<a class="menu_link" href="../Acl/MailSettingsList.jsf">#{msg.editMailSetting}</a>
+						</t:div>
+						<t:div visibleOnUserRole="ROLE_APU_W,ROLE_"
+							styleClass="#{menuController.mailManagmentView}">
+							<a class="menu_link" href="../Acl/MailManagmentView.jsf">#{msg.mailManagment}</a>
+						</t:div>
+						<t:div visibleOnUserRole="ROLE_APU_W"
+							styleClass="#{menuController.appSettings}">
+							<a class="menu_link" href="../Acl/AppSettings.jsf">#{msg.systemSetting}</a>
+						</t:div>
+						<t:div styleClass="#{menuController.thresholdControlCosts}"
+							visibleOnUserRole="ROLE_APU_W,ROLE_APU_R">
+							<a class="menu_link" href="../Acl/ThresholdControlCosts.jsf">#{msg.thresholdControlCosts}</a>
+						</t:div>
+						<t:div visibleOnUserRole="ROLE_USER"
+							styleClass="#{menuController.programReportings}"
+							rendered="#{!Session.CFP}">
+							<a class="menu_link"
+								href="../ProgramMS/ProgramReportingsView.jsf">#{msg.programReportings}</a>
+						</t:div>
+
+					</div>
+				</div>
+			</div>
+		</t:div>
+
+		<t:div styleClass="left_menu"
+			visibleOnUserRole="ROLE_STC_W, ROLE_STC_R, ROLE_CFP_R, ROLE_CFP_W">
+			<div class="menuhead" onclick="switchMenu('potentialProjects');"
+				style="cursor: pointer;">
+				<h:outputText value="#{msg.potentialProjects}" />
+			</div>
+			<div id="potentialProjects">
+				<div id="leftmenu">
+					<div id="nav" style="margin-left: 2px;">
+						<t:div styleClass="#{menuController.potentialProjectsList}"
+							visibleOnUserRole="ROLE_STC_W, ROLE_STC_R, ROLE_CFP_R, ROLE_CFP_W">
+							<a class="menu_link" href="../Acl/PotentialProjectsList.jsf">#{msg.potentialProjectsList}</a>
+						</t:div>
+					</div>
+				</div>
+			</div>
+		</t:div>
+
+		<t:div styleClass="left_menu"
+			visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_AGU_W,ROLE_AGU_R,ROLE_SUPER_ADMIN_W,ROLE_STC_W,ROLE_STC_R, ROLE_ACU_R, ROLE_ACU_W, ROLE_ANCM_W, ROLE_ANCM_R">
+			<div class="menuhead"
+				onclick="switchMenu('programManagementSectionName');"
+				style="cursor: pointer;">
+				<h:outputText value="#{msg.programManagementSectionName}" />
+			</div>
+			<div id="programManagementSectionName">
+				<div id="leftmenu">
+					<div id="nav" style="margin-left: 2px;">
+						<t:div styleClass="menu_item"
+							visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_AGU_W,ROLE_AGU_R,ROLE_STC_W,ROLE_STC_R, ROLE_ACU_R, ROLE_ACU_W,  ROLE_ANCM_W, ROLE_ANCM_R">
+							<t:outputText styleClass="menu_link_collapse"
+								onclick="switchMenu('programm');" style="cursor: pointer;"
+								value="#{msg.programm}">
+							</t:outputText>
+						</t:div>
+
+						<div id="programm">
+							<t:div styleClass="#{menuController.identificationDataView}"
+								visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_AGU_W,ROLE_AGU_R,ROLE_STC_W,ROLE_STC_R, ROLE_ACU_R, ROLE_ACU_W">
+								<a class="menu_item_top_level"
+									href="../ProgramMS/IdentificationDataView.jsf">#{msg.identificationData}</a>
+							</t:div>
+							<t:div styleClass="#{menuController.anagraphicalDataView}"
+								visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_AGU_W,ROLE_AGU_R,ROLE_STC_W,ROLE_STC_R, ROLE_ACU_R, ROLE_ACU_W">
+								<a class="menu_item_top_level"
+									href="../ProgramMS/AnagraphicalDataView.jsf">#{msg.anagraphicalData}</a>
+							</t:div>
+							<t:div styleClass="#{menuController.financialDataView}"
+								visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_AGU_W,ROLE_AGU_R,ROLE_STC_W,ROLE_STC_R, ROLE_ACU_R, ROLE_ACU_W">
+								<a class="menu_item_top_level"
+									href="../ProgramMS/FinancialDataView.jsf">#{msg.financialData}</a>
+							</t:div>
+							<t:div styleClass="#{menuController.prioritaryReasonsView}"
+								visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_AGU_W,ROLE_AGU_R,ROLE_STC_W,ROLE_STC_R, ROLE_ACU_R, ROLE_ACU_W">
+								<a class="menu_item_top_level"
+									href="../ProgramMS/PrioritaryReasonsView.jsf">#{msg.prioritaryReasons}</a>
+							</t:div>
+							<ui:remove>
+								<t:div styleClass="#{menuController.qsnGoalView}"
+									visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_AGU_W,ROLE_AGU_R,ROLE_STC_W,ROLE_STC_R, ROLE_ACU_R, ROLE_ACU_W">
+									<a class="menu_item_top_level"
+										href="../ProgramMS/QSNGoalView.jsf">#{msg.qsnGoal}</a>
+								</t:div>
+							</ui:remove>
+						</div>
+						<t:div styleClass="menu_item"
+							visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_AGU_W,ROLE_AGU_R,ROLE_STC_W,ROLE_STC_R">
+							<t:outputText styleClass="menu_link_collapse"
+								onclick="switchMenu('phisicalProgramClassification');"
+								style="cursor: pointer;"
+								value="#{msg.phisicalProgramClassification}">
+							</t:outputText>
+						</t:div>
+
+						<div id="phisicalProgramClassification">
+							<t:div
+								styleClass="#{menuController.phisicalClassificationPriorityThemaView}"
+								visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_AGU_W,ROLE_AGU_R,ROLE_STC_W,ROLE_STC_R, ROLE_ACU_R, ROLE_ACU_W">
+								<a class="menu_item_top_level"
+									href="../ProgramMS/PhisicalClassificationPriorityThemaView.jsf">#{msg.assigningPriorThemes}</a>
+							</t:div>
+							<ui:remove>
+								<t:div
+									visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_AGU_W,ROLE_AGU_R,ROLE_STC_W,ROLE_STC_R, ROLE_ACU_R, ROLE_ACU_W"
+									styleClass="#{menuController.phisicalClassificationQSNGoalView}">
+									<a class="menu_item_top_level"
+										href="../ProgramMS/PhisicalClassificationQSNGoalView.jsf">#{msg.assigningQSN}</a>
+								</t:div>
+							</ui:remove>
+							<t:div
+								visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_AGU_W,ROLE_AGU_R,ROLE_STC_W,ROLE_STC_R, ROLE_ACU_R, ROLE_ACU_W"
+								styleClass="#{menuController.indicatorsView}">
+								<a class="menu_item_top_level"
+									href="../ProgramMS/IndicatorsView.jsf">#{msg.indicators}</a>
+							</t:div>
+						</div>
+						<t:div styleClass="menu_item"
+							visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_STC_W,ROLE_STC_R,ROLE_AGU_R,ROLE_AGU_W,ROLE_STC_W,ROLE_STC_R"
+							rendered="#{menuController.inActualState}">
+							<t:outputText styleClass="menu_link_collapse"
+								onclick="switchMenu('activation');" style="cursor: pointer;"
+								value="#{msg.activation}">
+							</t:outputText>
+						</t:div>
+
+						<div id="activation">
+							<t:div styleClass="#{menuController.activationProcedureList}"
+								visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_SUPER_ADMIN_W,ROLE_STC_W,ROLE_STC_R,ROLE_AGU_R,ROLE_AGU_W, ROLE_ACU_R, ROLE_ACU_W"
+								rendered="#{menuController.inActualState}">
+								<a class="menu_item_top_level"
+									href="../ProgramMS/ActivationProcedureList.jsf">#{msg.activationProcedures}</a>
+							</t:div>
+							<t:div
+								visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_AGU_W,ROLE_AGU_R,ROLE_STC_W,ROLE_STC_R, ROLE_ACU_R, ROLE_ACU_W,  ROLE_ANCM_W, ROLE_ANCM_R"
+								styleClass="#{menuController.controllerUserAnagraphList}"
+								rendered="#{menuController.inActualState}">
+								<a class="menu_item_top_level"
+									href="../ProgramMS/ControllerUserAnagraphList.jsf">#{msg.controllerUserAnagraph}</a>
+							</t:div>
+						</div>
+
+						<div id="">
+							<t:div styleClass="#{menuController.projectList}"
+								visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_SUPER_ADMIN_W,ROLE_STC_W,ROLE_STC_R,ROLE_AGU_R,ROLE_AGU_W, ROLE_ACU_R, ROLE_ACU_W">
+								<a class="menu_link" href="../ProgramMS/CEPaymentRequestView.jsf">#{msg.paymentCESectionName}</a>
+							</t:div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</t:div>
+
+
+		<t:div styleClass="left_menu"
+			visibleOnUserRole="ROLE_AAU_W, ROLE_AAU_R, ROLE_ACU_W, ROLE_ACU_R,
+		ROLE_SUPER_ADMIN_W,ROLE_STC_W, ROLE_STC_R, ROLE_BP_W, ROLE_BP_R, ROLE_B_W, ROLE_B_R, ROLE_CIL_W, 
+		ROLE_CIL_R, ROLE_AGU_W, ROLE_AGU_R, ROLE_DAEC_W, ROLE_DAEC_R, ROLE_ACUM_W, ROLE_ACUM_R, ROLE_UC_W,ROLE_UC_R,
+		ROLE_ANCM_W, ROLE_ANCM_R"
+			rendered="#{menuController.inActualState}">
+			<div class="menuhead" onclick="switchMenu('projectSectionName');"
+				style="cursor: pointer;">
+				<h:outputText value="#{msg.projectSectionName}" />
+			</div>
+			<div id="projectSectionName">
+				<div id="leftmenu">
+					<div id="nav" style="margin-left: 2px;">
+						<t:div styleClass="#{menuController.projectList}"
+							visibleOnUserRole="ROLE_AAU_W, ROLE_AAU_R, ROLE_ACU_W, ROLE_ACU_R,
+				ROLE_SUPER_ADMIN_W,ROLE_STC_W, ROLE_STC_R, ROLE_BP_W, ROLE_BP_R, ROLE_B_W, ROLE_B_R, 
+				ROLE_CIL_W, ROLE_CIL_R, ROLE_AGU_W, ROLE_AGU_R, ROLE_DAEC_W, ROLE_DAEC_R, ROLE_ACUM_W, ROLE_ACUM_R, ROLE_ACU_R, ROLE_ACU_W, ROLE_UC_W,ROLE_UC_R,
+				ROLE_ANCM_W, ROLE_ANCM_R">
+							<a class="menu_link" href="../ProjectMS/ProjectList.jsf">#{msg.projectListPageName}</a>
+						</t:div>
+						<t:div styleClass="#{menuController.search}"
+							visibleOnUserRole="ROLE_AAU_W, ROLE_AAU_R, ROLE_ACU_W, ROLE_ACU_R,
+				ROLE_SUPER_ADMIN_W,ROLE_STC_W, ROLE_STC_R, ROLE_BP_W, ROLE_BP_R, ROLE_B_W, ROLE_B_R, 
+				ROLE_CIL_W, ROLE_CIL_R, ROLE_AGU_W, ROLE_AGU_R, ROLE_DAEC_W, ROLE_DAEC_R, ROLE_ACUM_W, ROLE_ACUM_R, ROLE_UC_W,ROLE_UC_R, ROLE_ANCM_W, ROLE_ANCM_R">
+							<a class="menu_link" href="../ProjectMS/Search.jsf">#{msg.projectSearch}</a>
+						</t:div>
+
+
+						<t:div styleClass="#{menuController.search}"
+							visibleOnUserRole="ROLE_AGU_W,ROLE_AGU_R, ROLE_ACU_R, ROLE_ACU_W">
+							<a class="menu_link"
+								href="../ProjectMS/ExpenditureDeclarationList.jsf">#{msg.expenditureDeclarationListName}</a>
+						</t:div>
+						<t:div styleClass="#{menuController.search}"
+							visibleOnUserRole="ROLE_SUPER_ADMIN_W,ROLE_ACUM_R, ROLE_ACUM_W, ROLE_ACU_R, ROLE_ACU_W">
+							<a class="menu_link"
+								href="../ProjectMS/PaymentApplicationList.jsf">#{msg.paymentApplicationListName}</a>
+						</t:div>
+						<t:div styleClass="#{menuController.search}"
+							visibleOnUserRole="ROLE_SUPER_ADMIN_W,ROLE_ACUM_R, ROLE_ACUM_W, ROLE_ACU_R, ROLE_ACU_W">
+							<a class="menu_link"
+								href="../ProjectMS/ClosingOfAccountsList.jsf">#{msg.closingOfAccountsListPageName}</a>
+						</t:div>
+
+						<t:div styleClass="#{menuController.search}"
+							visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_ACUM_R,ROLE_ACUM_W,ROLE_ACU_R,ROLE_ACU_W,ROLE_AGU_W,ROLE_AGU_R, ROLE_STC_R, ROLE_STC_W, ROLE_ANCM_W, ROLE_ANCM_R">
+							<a class="menu_link"
+								href="../ProjectMS/CostCertificationList.jsf">#{msg.costCertificationPageName}</a>
+						</t:div>
+
+
+
+
+						<t:div styleClass="menu_item"
+							visibleOnUserRole="ROLE_AAU_W, ROLE_AAU_R, ROLE_ACU_W, ROLE_ACU_R,
+				ROLE_SUPER_ADMIN_W,ROLE_STC_W, ROLE_STC_R, ROLE_BP_W, ROLE_BP_R, ROLE_B_W, ROLE_B_R, 
+				ROLE_CIL_W, ROLE_CIL_R, ROLE_AGU_W, ROLE_AGU_R, ROLE_DAEC_W, ROLE_DAEC_R, ROLE_ACUM_W, ROLE_ACUM_R, ROLE_ACU_R, ROLE_ACU_W, ROLE_UC_W,ROLE_UC_R"
+							rendered="#{menuController.projectSelected}">
+							<t:outputText styleClass="selectedProjectItem"
+								value="${msg.menuProject}: ${menuController.projectName}">
+							</t:outputText>
+						</t:div>
+						<t:div styleClass="#{menuController.stateManagment}"
+							visibleOnUserRole="ROLE_SUPER_ADMIN_W,ROLE_STC_W"
+							rendered="#{menuController.projectSelected}">
+							<a class="menu_link" href="../ProjectMS/StateManagment.jsf">#{msg.stateManagment}</a>
+						</t:div>
+						<t:div styleClass="#{menuController.stateChangesList}"
+							visibleOnUserRole="ROLE_AAU_W, ROLE_AAU_R, ROLE_ACU_W, ROLE_ACU_R,
+				ROLE_SUPER_ADMIN_W,ROLE_STC_W, ROLE_STC_R, ROLE_BP_W, ROLE_BP_R, ROLE_B_W, ROLE_B_R, 
+				ROLE_CIL_W, ROLE_CIL_R, ROLE_AGU_W, ROLE_AGU_R, ROLE_DAEC_W, ROLE_DAEC_R"
+							rendered="#{menuController.projectSelected}">
+							<a class="menu_link" href="../ProjectMS/StateChangesList.jsf">#{msg.stateChangeListPageName}</a>
+						</t:div>
+						<!--  -->
+						<ui:fragment rendered="#{menuController.canViewFoundingEligible}">
+							<t:div styleClass="menu_item"
+								visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_SUPER_ADMIN_W,ROLE_STC_W, ROLE_STC_R, ROLE_AGU_R, ROLE_AGU_W,
+					ROLE_BP_W, ROLE_BP_R, ROLE_B_R, ROLE_B_W, ROLE_ACU_W, ROLE_ACU_R, ROLE_ANCM_W, ROLE_ANCM_R"
+								rendered="#{menuController.projectSelected and !Session.isProjectClosed and menuController.canViewFoundingEligible}">
+								<t:outputText styleClass="menu_link_collapse"
+									onclick="switchMenu('foundingEligible');"
+									style="cursor: pointer;" value="#{msg.foundingEligible}">
+								</t:outputText>
+							</t:div>
+
+							<div id="foundingEligible">
+								<t:div styleClass="#{menuController.projectStart}"
+									visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_SUPER_ADMIN_W,ROLE_STC_W, ROLE_STC_R, ROLE_AGU_R, ROLE_AGU_W, ROLE_ACU_W, ROLE_ACU_R, ROLE_ANCM_W, ROLE_ANCM_R"
+									rendered="#{menuController.projectSelected and !Session.isProjectClosed}">
+									<t:commandLink styleClass="menu_item_top_level"
+										action="#{menuController.goToProjectStart}">#{msg.projectStartPageName}</t:commandLink>
+								</t:div>
+								<!-- -->
+
+								<t:div styleClass="menu_item"
+									visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_SUPER_ADMIN_W,ROLE_STC_W, ROLE_STC_R, ROLE_AGU_R, ROLE_AGU_W,
+					ROLE_BP_W, ROLE_BP_R,ROLE_B_W, ROLE_B_R, ROLE_ACU_W, ROLE_ACU_R, ROLE_ANCM_W, ROLE_ANCM_R"
+									rendered="#{menuController.projectSelected and !Session.isProjectClosed and (Session.CF or Session.STC or Session.AGU or Session.AAU or Session.ACU)}">
+									<t:outputText styleClass="menu_link_collapse_sub"
+										onclick="switchMenu('initializationmenu');"
+										style="cursor: pointer;" value="#{msg.initializationmenu}">
+									</t:outputText>
+								</t:div>
+
+								<div id="initializationmenu">
+									<t:div
+										styleClass="#{menuController.phisicalInitializationList}"
+										visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_SUPER_ADMIN_W,ROLE_STC_W, ROLE_STC_R, ROLE_AGU_R, ROLE_AGU_W, ROLE_BP_R, ROLE_BP_W,ROLE_B_W, ROLE_B_R, ROLE_ACU_W, ROLE_ACU_R, ROLE_ANCM_W, ROLE_ANCM_R"
+										rendered="#{menuController.projectSelected and menuController.aguAsse5 and !Session.isProjectClosed and (Session.CF or Session.STC or Session.AGU or Session.AAU or Session.ACU)}">
+										<a class="menu_link_sub"
+											href="../ProjectMS/PhisicalInitializationList.jsf">#{msg.phisicalInit}</a>
+									</t:div>
+
+									<t:div styleClass="#{menuController.cfPartnerList}"
+										visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_SUPER_ADMIN_W,ROLE_STC_W, ROLE_STC_R,ROLE_AGU_R,ROLE_AGU_W, ROLE_ACU_W, ROLE_ACU_R, ROLE_ANCM_W, ROLE_ANCM_R"
+										rendered="#{menuController.projectSelected and !Session.isProjectClosed}">
+										<a class="menu_link_sub" href="../ProjectMS/CFPartnerList.jsf">#{msg.cfPartnerPageName}</a>
+									</t:div>
+
+									<t:div styleClass="#{menuController.procedureInsertList}"
+										visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_BP_W, ROLE_BP_R, ROLE_AGU_R, ROLE_AGU_W, ROLE_B_W, ROLE_B_R, ROLE_ACU_W, ROLE_ACU_R, ROLE_STC_W,ROLE_STC_R, ROLE_ANCM_W, ROLE_ANCM_R"
+										rendered="#{menuController.projectSelected and !Session.isProjectClosed and (Session.CF or Session.AGU or Session.AAU or Session.ACU or Session.STC)}">
+										<a class="menu_link_sub"
+											href="../ProjectMS/ProcedureInsertList.jsf">#{msg.procedureInsertList}</a>
+									</t:div>
+								</div>
+								<!--  -->
+								<t:div styleClass="menu_item"
+									visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_SUPER_ADMIN_W,ROLE_STC_W, ROLE_STC_R, ROLE_AGU_R, ROLE_AGU_W, ROLE_BP_W, ROLE_BP_R, ROLE_B_R, ROLE_B_W, ROLE_ACU_W, ROLE_ACU_R, ROLE_ANCM_W, ROLE_ANCM_R"
+									rendered="#{menuController.projectSelected and !Session.isProjectClosed and menuController.canViewBudgetMenu}">
+									<t:outputText styleClass="menu_link_collapse_sub"
+										onclick="switchMenu('budgetmenu');" style="cursor: pointer;"
+										value="#{msg.budgetmenu}">
+									</t:outputText>
+								</t:div>
+
+								<div id="budgetmenu">
+									<t:div styleClass="#{menuController.budgetView}"
+										visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_SUPER_ADMIN_W,ROLE_STC_W, ROLE_STC_R, ROLE_AGU_R, ROLE_AGU_W, ROLE_ACU_W, ROLE_ACU_R, ROLE_ANCM_W, ROLE_ANCM_R, ROLE_BP_R, ROLE_BP_W"
+										rendered="#{menuController.projectSelected and !Session.isProjectClosed and menuController.canViewBudgetMenu}">
+										<a class="menu_link_sub" href="../ProjectMS/BudgetView.jsf">#{msg.budgetEdit}</a>
+									</t:div>
+									<t:div styleClass="#{menuController.generalBudgetView}"
+										visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_BP_W, ROLE_BP_R, ROLE_AGU_R, ROLE_AGU_W, ROLE_B_R, ROLE_B_W,ROLE_STC_W,ROLE_STC_R, ROLE_ACU_W, ROLE_ACU_R, ROLE_UC_W, ROLE_UC_R, ROLE_ANCM_W, ROLE_ANCM_R"
+										rendered="#{menuController.projectSelected and menuController.generalBudgetAvailable and !Session.isProjectClosed and menuController.canViewBudgetMenu}">
+										<a class="menu_link_sub"
+											href="../ProjectMS/GeneralBudgetView.jsf">#{msg.generalBudgetPageName}</a>
+									</t:div>
+									<t:div styleClass="#{menuController.partnerBudgetView}"
+										visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_BP_W, ROLE_BP_R, ROLE_AGU_R, ROLE_AGU_W, ROLE_B_R, ROLE_B_W,ROLE_STC_W,ROLE_STC_R, ROLE_ACU_W, ROLE_ACU_R, ROLE_UC_W, ROLE_UC_R, ROLE_ANCM_W, ROLE_ANCM_R"
+										rendered="#{menuController.projectSelected and menuController.generalBudgetFilled and !Session.isProjectClosed and menuController.canViewBudgetMenu}">
+										<a class="menu_link_sub"
+											href="../ProjectMS/PartnerBudgetView.jsf">#{msg.partnerBudgetPageName}</a>
+									</t:div>
+									<t:div styleClass="#{menuController.budgetList}"
+										visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_BP_W, ROLE_BP_R, ROLE_AGU_R, ROLE_AGU_W, ROLE_STC_R,ROLE_SUPER_ADMIN_W,ROLE_STC_W, ROLE_B_R, ROLE_B_W, ROLE_ACU_W, ROLE_ACU_R,ROLE_AGU_R, ROLE_AGU_W, ROLE_UC_W, ROLE_UC_R, ROLE_ANCM_W, ROLE_ANCM_R"
+										rendered="#{menuController.projectSelected and Session.isActualSate and !Session.isProjectClosed and menuController.canViewBudgetMenu}">
+										<a class="menu_link_sub" href="../ProjectMS/BudgetList.jsf">#{msg.budgetEditPageName}</a>
+									</t:div>
+								</div>
+								<!--  -->
+								<t:div styleClass="menu_item"
+									visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_AGU_R, ROLE_AGU_W,
+					ROLE_BP_W, ROLE_BP_R, ROLE_B_R, ROLE_B_W, ROLE_ACU_W, ROLE_ACU_R, ROLE_STC_R,ROLE_STC_W, ROLE_ANCM_W, ROLE_ANCM_R"
+									rendered="#{menuController.projectSelected and !Session.isProjectClosed}">
+									<t:outputText styleClass="menu_link_collapse_sub"
+										onclick="switchMenu('anagraphicmenu');"
+										style="cursor: pointer;" value="#{msg.anagraphicmenu}">
+									</t:outputText>
+								</t:div>
+
+								<div id="anagraphicmenu">
+									<t:div
+										styleClass="#{menuController.projectInformationCompletationView}"
+										visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_BP_W, ROLE_BP_R, ROLE_AGU_R, ROLE_AGU_W, ROLE_B_W, ROLE_B_R, ROLE_ACU_W, ROLE_ACU_R, ROLE_STC_R,ROLE_STC_W, ROLE_ANCM_W, ROLE_ANCM_R"
+										rendered="#{menuController.projectSelected and !Session.isProjectClosed and (Session.CF or Session.AGU or Session.AAU or Session.ACU or Session.STC)}">
+										<a class="menu_link_sub"
+											href="../ProjectMS/ProjectInformationCompletationView.jsf">#{msg.projectInformationCompletationView}</a>
+									</t:div>
+									<t:div
+										styleClass="#{menuController.cfPartnerAnagraphCompletationsList}"
+										visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_BP_W, ROLE_BP_R, ROLE_AGU_R, ROLE_AGU_W, ROLE_B_W, ROLE_B_R, ROLE_ACU_W, ROLE_ACU_R, ROLE_STC_R,ROLE_STC_W, ROLE_ANCM_W, ROLE_ANCM_R"
+										rendered="#{menuController.projectSelected and !Session.isProjectClosed}">
+										<a class="menu_link_sub"
+											href="../ProjectMS/CFPartnerAnagraphCompletationsList.jsf">#{msg.CFPartnerAnagraphCompletationsList}</a>
+									</t:div>
+								</div>
+								<!--  -->
+								<t:div styleClass="#{menuController.localizationList}"
+									visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_BP_W, ROLE_BP_R, ROLE_AGU_R, ROLE_AGU_W, ROLE_B_W, ROLE_B_R, ROLE_ACU_W, ROLE_ACU_R, ROLE_STC_W,ROLE_STC_R, ROLE_ANCM_W, ROLE_ANCM_R"
+									rendered="#{menuController.projectSelected and !Session.isProjectClosed and (Session.CF or Session.AGU or Session.AAU or Session.ACU or Session.STC)}">
+									<a class="menu_item_top_level"
+										href="../ProjectMS/LocalizationList.jsf">#{msg.localizationList}</a>
+								</t:div>
+
+								<t:div styleClass="#{menuController.annualProfileList}"
+									visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_BP_W, ROLE_BP_R, ROLE_AGU_R, ROLE_AGU_W, ROLE_ACU_W, ROLE_ACU_R, ROLE_STC_W,ROLE_STC_R, ROLE_ANCM_W, ROLE_ANCM_R"
+									rendered="#{menuController.projectSelected and !Session.isProjectClosed and (Session.CF or Session.AGU or Session.AAU or Session.ACU or Session.STC)}">
+									<a class="menu_item_top_level"
+										href="../ProjectMS/AnnualProfileList.jsf">#{msg.annualProfileList}</a>
+								</t:div>
+								<ui:remove>
+									<t:div styleClass="#{menuController.procedureInsertList}"
+										visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_BP_W, ROLE_BP_R, ROLE_AGU_R, ROLE_AGU_W, ROLE_B_W, ROLE_B_R, ROLE_ACU_W, ROLE_ACU_R, ROLE_STC_W,ROLE_STC_R, ROLE_ANCM_W, ROLE_ANCM_R"
+										rendered="#{menuController.projectSelected and !Session.isProjectClosed and (Session.CF or Session.AGU or Session.AAU or Session.ACU or Session.STC)}">
+										<a class="menu_item_top_level"
+											href="../ProjectMS/ProcedureInsertList.jsf">#{msg.procedureInsertList}</a>
+									</t:div>
+								</ui:remove>
+							</div>
+						</ui:fragment>
+						<!--end here  -->
+						<t:div styleClass="menu_item"
+							visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_BP_W,ROLE_BP_R,ROLE_AGU_R,ROLE_AGU_W,ROLE_B_R,ROLE_B_W,
+					ROLE_DAEC_W,ROLE_DAEC_R,ROLE_CIL_W,ROLE_CIL_R,ROLE_SUPER_ADMIN_W,ROLE_STC_W,ROLE_STC_R,ROLE_ACU_W,ROLE_ACU_R, ROLE_ACUM_W, ROLE_ACUM_R, ROLE_ACU_R, ROLE_ACU_W, ROLE_UC_W,ROLE_UC_R, ROLE_ANCM_W, ROLE_ANCM_R"
+							rendered="#{menuController.projectSelected and Session.isActualSate and !Session.isProjectClosed}">
+							<t:outputText styleClass="menu_link_collapse"
+								onclick="switchMenu('actualState');" style="cursor: pointer;"
+								value="#{msg.actualState}">
+							</t:outputText>
+						</t:div>
+
+						<div id="actualState">
+							<t:div styleClass="#{menuController.assignmentProcedureList}"
+								visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_BP_W, ROLE_BP_R, ROLE_AGU_R, ROLE_AGU_W, ROLE_B_W, ROLE_B_R, ROLE_ACUM_W, ROLE_ACUM_R, ROLE_STC_W, ROLE_STC_R, ROLE_ACU_R, ROLE_ACU_W, ROLE_UC_W,ROLE_UC_R, ROLE_CIL_R, ROLE_CIL_W"
+								rendered="#{menuController.projectSelected and Session.isActualSate and (Session.CF or Session.AGU or Session.AAU or Session.STC or Session.ACU or Session.CIL or Session.UC or (Session.partner and !Session.projectWithTechAsistType)) and !Session.isProjectClosed}">
+								<a class="menu_item_top_level"
+									href="../ProjectMS/AssignmentProcedureList.jsf">#{msg.assigmentProcedures}</a>
+							</t:div>
+							<t:div styleClass="#{menuController.juridicalEngageList}"
+								visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_STC_R, ROLE_SUPER_ADMIN_W,ROLE_STC_W,ROLE_AGU_W,ROLE_AGU_R,ROLE_ACU_R, ROLE_B_R, ROLE_B_W, ROLE_ACU_W, ROLE_BP_W, ROLE_BP_R, ROLE_CIL_W, ROLE_CIL_R, ROLE_UC_W, ROLE_UC_R"
+								rendered="#{menuController.projectSelected and Session.isActualSate and !Session.isProjectClosed}">
+								<a class="menu_item_top_level"
+									href="../ProjectMS/JuridicalEngageList.jsf">#{msg.juridicalEngage}</a>
+							</t:div>
+							<t:div styleClass="#{menuController.costDefinitionList}"
+								visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_BP_W, ROLE_BP_R, ROLE_AGU_R, ROLE_AGU_W, ROLE_B_R, ROLE_B_W, ROLE_ACU_R, ROLE_ACU_W, ROLE_SUPER_ADMIN_W,ROLE_STC_W, ROLE_STC_R"
+								rendered="#{menuController.projectSelected and Session.isActualSate and !Session.isProjectClosed and menuController.canViewCostDefinitionList}">
+								<a class="menu_item_top_level"
+									href="../ProjectMS/CostDefinitionList.jsf">#{msg.costDefinition}</a>
+							</t:div>
+
+							<t:div styleClass="#{menuController.validationFlowView}"
+								visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_BP_W,ROLE_BP_R,ROLE_AGU_R,ROLE_AGU_W,ROLE_B_R,ROLE_B_W,ROLE_DAEC_W,ROLE_DAEC_R,ROLE_CIL_W,ROLE_CIL_R, ROLE_SUPER_ADMIN_W,ROLE_STC_W, ROLE_STC_R, ROLE_ACU_R, ROLE_ACU_W"
+								rendered="#{menuController.projectSelected and Session.isActualSate and !Session.isProjectClosed}">
+								<a class="menu_item_top_level"
+									href="../ProjectMS/ValidationFlowView.jsf">#{msg.validationFlow}</a>
+							</t:div>
+
+
+							<t:div styleClass="#{menuController.durCompilationList}"
+								visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_BP_R, ROLE_BP_W, ROLE_AGU_R, ROLE_AGU_W, ROLE_ACU_R, ROLE_ACU_W, ROLE_STC_R, ROLE_SUPER_ADMIN_W,ROLE_STC_W, ROLE_ACUM_R, ROLE_ACUM_W,  ROLE_ACU_R, ROLE_ACU_W, ROLE_UC_W,ROLE_UC_R"
+								rendered="#{menuController.projectSelected and (Session.CF or Session.STC or Session.ACU or Session.AGU or Session.AAU or Session.ACUM or Session.superAdmin or Session.UC) and menuController.readyDurCompilation and !Session.isProjectClosed and menuController.durCompilationAvailable and Session.isActualSate}">
+								<a class="menu_item_top_level"
+									href="../ProjectMS/DURCompilationList.jsf">#{msg.durCompilationListName}</a>
+							</t:div>
+
+							<t:div styleClass="#{menuController.costManagementList}"
+								rendered="#{menuController.projectSelected and Session.isActualSate and !Session.isProjectClosed and menuController.durExists and menuController.projectAxis!='4' and  menuController.projectAxis!=''}"
+								visibleOnUserRole="ROLE_UC_W,ROLE_UC_R,ROLE_ACUM_R,ROLE_ACUM_W, ROLE_AGU_W,ROLE_AGU_R, ROLE_STC_R, ROLE_STC_W,ROLE_ACU_R, ROLE_ACU_W">
+								<a class="menu_item_top_level"
+									href="../ProjectMS/CostManagementList.jsf">#{msg.costManagementPageName}</a>
+							</t:div>
+
+							<t:div styleClass="#{menuController.superAdminChangeList}"
+								visibleOnUserRole="ROLE_AGU_R, ROLE_AGU_W, ROLE_ACU_R, ROLE_ACU_W, ROLE_STC_R, ROLE_SUPER_ADMIN_W,ROLE_STC_W"
+								rendered="#{menuController.projectSelected and (Session.STC or Session.ACU or Session.AGU or Session.superAdmin) and !Session.isProjectClosed and Session.isActualSate}">
+								<a class="menu_item_top_level"
+									href="../ProjectMS/SuperAdminChangeList.jsf">#{msg.superAdminMenu}</a>
+							</t:div>
+							<t:div styleClass="#{menuController.durReimbursementList}"
+								visibleOnUserRole="ROLE_BP_R, ROLE_BP_W, ROLE_AGU_R, ROLE_AGU_W, ROLE_STC_R, ROLE_STC_W, ROLE_ACU_R, ROLE_ACU_W, ROLE_AAU_R, ROLE_AAU_W, ROLE_ANCM_R, ROLE_ANCM_W"
+								rendered="#{menuController.projectSelected and (Session.CF or Session.STC or Session.ACU or Session.AGU or Session.AAU or Session.ANCM) and menuController.readyDurCompilation and !Session.isProjectClosed and menuController.durReimbursementAvailable and Session.isActualSate}">
+								<a class="menu_item_top_level"
+									href="../ProjectMS/AdditionalFesrInfoList.jsf">#{msg.durReimbListPageName}</a>
+							</t:div>
+
+							<t:div styleClass="#{menuController.durReimbursementList}"
+								visibleOnUserRole="ROLE_BP_R, ROLE_BP_W, ROLE_STC_R, ROLE_STC_W, ROLE_ACU_R, ROLE_ACU_W, ROLE_AAU_R, ROLE_AAU_W, ROLE_ANCM_R, ROLE_ANCM_W, ROLE_CIL_W, ROLE_CIL_R"
+								rendered="#{menuController.projectSelected and (Session.STC or Session.ACU or Session.CF or Session.AAU or Session.ANCM or Session.CIL) and menuController.readyDurCompilation and !Session.isProjectClosed and menuController.durReimbursementAvailable and Session.isActualSate}">
+								<a class="menu_item_top_level"
+									href="../ProjectMS/AdditionalFesrCFInfoList.jsf">#{msg.durReimbListPageNameCF}</a>
+							</t:div>
+
+							<t:div styleClass="#{menuController.notRegularDurList}"
+								visibleOnUserRole="ROLE_ANCM_W,ROLE_ANCM_R,ROLE_STC_W,ROLE_STC_R,ROLE_ACU_W,ROLE_ACU_R,ROLE_AGU_W,ROLE_AGU_R"
+								rendered="#{menuController.projectSelected and menuController.notRegularAvailable and Session.isActualSate and !Session.isProjectClosed}">
+								<a class="menu_item_top_level"
+									href="../ProjectMS/NotRegularDurList.jsf">#{msg.notRegularPageName}</a>
+							</t:div>
+							<!--<t:div styleClass="#{menuController.expenditureDeclarationList}"
+								visibleOnUserRole="ROLE_AGU_W,ROLE_AGU_R"
+								rendered="#{menuController.costCertificationAvailable}">
+								<a class="menu_item_top_level"
+									href="../ProjectMS/ExpenditureDeclarationList.jsf">#{msg.expenditureDeclarationListName}</a>
+							</t:div>  -->
+							<!-- <t:div styleClass="#{menuController.costCertificationList}"
+								visibleOnUserRole="ROLE_SUPER_ADMIN_W,ROLE_ACUM_R, ROLE_ACUM_W, ROLE_ACU_R, ROLE_ACU_W"
+								rendered="#{menuController.costCertificationAvailable}">
+								<a class="menu_item_top_level"
+									href="../ProjectMS/PaymentApplicationList.jsf">#{msg.paymentApplicationListName}</a>
+							</t:div>
+							<t:div styleClass="#{menuController.costCertificationList}"
+								visibleOnUserRole="ROLE_SUPER_ADMIN_W,ROLE_ACUM_R, ROLE_ACUM_W, ROLE_ACU_R, ROLE_ACU_W"
+								rendered="#{menuController.costCertificationAvailable}">
+								<a class="menu_item_top_level"
+									href="../ProjectMS/ClosingOfAccountsList.jsf">#{msg.closingOfAccountsListPageName}</a>
+							</t:div>
+							
+							 <t:div styleClass="#{menuController.costCertificationList}"
+								visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_ACUM_R,ROLE_ACUM_W,ROLE_ACU_R,ROLE_ACU_W,ROLE_AGU_W,ROLE_AGU_R, ROLE_STC_R, ROLE_STC_W, ROLE_ANCM_W, ROLE_ANCM_R"
+								rendered="#{menuController.costCertificationAvailable and !Session.isProjectClosed}">
+								<a class="menu_item_top_level"
+									href="../ProjectMS/CostCertificationList.jsf">#{msg.costCertificationPageName}</a>
+							</t:div>  -->
+
+							<t:div styleClass="#{menuController.suspensionManagementList}"
+								visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_STC_R, ROLE_SUPER_ADMIN_W,ROLE_STC_W ,ROLE_AGU_R, ROLE_AGU_W, ROLE_ACU_R, ROLE_ACU_W,ROLE_ACUM_R, ROLE_ACUM_W, ROLE_ACU_R, ROLE_ACU_W"
+								rendered="#{menuController.projectSelected and (Session.STC or Session.ACU or Session.ACUM or Session.AGU or Session.AAU or Session.superAdmin) and !Session.isProjectClosed and Session.isActualSate}">
+								<a class="menu_item_top_level"
+									href="../ProjectMS/SuspensionManagementList.jsf">#{msg.suspensionManagementListName}</a>
+							</t:div>
+							<ui:remove>
+								<t:div
+									styleClass="#{menuController.rectificationManagementList}"
+									visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_AGU_R, ROLE_AGU_W, ROLE_ACUM_R, ROLE_ACUM_W, ROLE_STC_R,ROLE_ACU_R, ROLE_ACU_W, ROLE_SUPER_ADMIN_W,ROLE_STC_W, ROLE_ACU_R, ROLE_ACU_W"
+									rendered="#{menuController.projectSelected and (Session.AAU or Session.ACU or Session.STC or Session.ACUM or Session.AGU or Session.superAdmin) and !Session.isProjectClosed and Session.isActualSate}">
+									<a class="menu_item_top_level"
+										href="../ProjectMS/RectificationManagementList.jsf">#{msg.rectificationManagementListName}</a>
+								</t:div>
+							</ui:remove>
+							<ui:remove>
+								<t:div styleClass="#{menuController.paymentRequestList}"
+									visibleOnUserRole="ROLE_ACUM_R,ROLE_ACUM_W,ROLE_AAU_R,ROLE_AAU_W,ROLE_STC_R, ROLE_STC_W,ROLE_AGU_R, ROLE_AGU_W, ROLE_ACU_R, ROLE_ACU_W"
+									rendered="#{menuController.projectSelected and !Session.isProjectClosed}">
+									<a class="menu_item_top_level"
+										href="../ProjectMS/PaymentRequestList.jsf">#{msg.paymentRequestListName}</a>
+								</t:div>
+							</ui:remove>
+
+							<ui:fragment rendered="#{menuController.canViewAvanzamenti}">
+								<t:div styleClass="menu_item"
+									visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_AGU_R, ROLE_AGU_W,ROLE_BP_W, ROLE_BP_R,ROLE_STC_R, ROLE_STC_W,ROLE_ACU_R, ROLE_ACU_W"
+									rendered="#{menuController.projectSelected}">
+									<t:outputText styleClass="menu_link_collapse_sub"
+										onclick="switchMenu('avanzamenti');" style="cursor: pointer;"
+										value="#{msg.avanzamenti}">
+									</t:outputText>
+								</t:div>
+
+								<div id="avanzamenti">
+									<t:div styleClass="#{menuController.phisicalProgressView}"
+										visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_BP_R, ROLE_BP_W, ROLE_AGU_R, ROLE_AGU_W, ROLE_B_W, ROLE_B_R, ROLE_STC_R, ROLE_STC_W,ROLE_ACU_R, ROLE_ACU_W"
+										rendered="#{menuController.projectSelected and (Session.CF or Session.AGU or Session.AAU or Session.STC or Session.ACU) and Session.isActualSate and !Session.isProjectClosed}">
+										<a class="menu_link_sub"
+											href="../ProjectMS/PhisicalProgressView.jsf">#{msg.physicalProgress}</a>
+									</t:div>
+									<t:div styleClass="#{menuController.financialProgressView}"
+										visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_BP_R, ROLE_BP_W, ROLE_AGU_R, ROLE_AGU_W, ROLE_B_W, ROLE_B_R, ROLE_STC_R, ROLE_STC_W,ROLE_ACU_R, ROLE_ACU_W"
+										rendered="#{menuController.projectSelected and (Session.CF or Session.AGU or Session.AAU or Session.STC or Session.ACU) and Session.isActualSate and !Session.isProjectClosed}">
+										<a class="menu_link_sub"
+											href="../ProjectMS/FinancialProgressView.jsf">#{msg.financialProgress}</a>
+									</t:div>
+									<t:div styleClass="#{menuController.procedureProgressList}">
+<!-- 										visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_BP_W, ROLE_BP_R, ROLE_AGU_R, ROLE_AGU_W, ROLE_B_W, ROLE_B_R, ROLE_STC_R, ROLE_STC_W,ROLE_ACU_R, ROLE_ACU_W" -->
+<!-- 										rendered="#{menuController.projectSelected and (Session.CF or Session.AGU or Session.AAU or Session.STC or Session.ACU) and Session.isActualSate and !Session.isProjectClosed}"> -->
+										<a class="menu_link_sub"
+											href="../ProjectMS/ProcedureProgressList.jsf">#{msg.procedureProgressList}</a>
+									</t:div>
+								</div>
+							</ui:fragment>
+							<t:div styleClass="#{menuController.progressValidationFlowView}"
+								visibleOnUserRole="ROLE_AAU_W,ROLE_AAU_R,ROLE_BP_R,ROLE_BP_W,ROLE_AGU_R,ROLE_AGU_W,ROLE_STC_R,ROLE_SUPER_ADMIN_W,ROLE_STC_W, ROLE_B_W, ROLE_B_R"
+								rendered="#{menuController.projectSelected and (Session.CF or Session.STC or Session.AGU or Session.AAU) and Session.isActualSate and !Session.isProjectClosed and menuController.progressValidationFlowAvailable}">
+								<a class="menu_item_top_level"
+									href="../ProjectMS/ProgressValidationFlowView.jsf">#{msg.progressValidationFlowViewPageName}</a>
+							</t:div>
+							
+							
+							
+						</div>
+						
+						<t:div styleClass="#{menuController.localCheckList}"
+							visibleOnUserRole="ROLE_AAU_W, ROLE_AAU_R, ROLE_ACU_W, ROLE_ACU_R,
+				ROLE_SUPER_ADMIN_W,ROLE_STC_W, ROLE_STC_R, ROLE_BP_W, ROLE_BP_R, ROLE_B_W, ROLE_B_R, 
+				ROLE_CIL_W, ROLE_CIL_R, ROLE_AGU_W, ROLE_AGU_R, ROLE_DAEC_W, ROLE_DAEC_R">
+							<!-- acagnoni MyAudit			rendered="#{menuController.projectSelected and Session.isActualSate and !Session.isProjectClosed}"> -->
+							<a class="menu_item_top_level"
+								href="../ProjectMS/LocalCheckList.jsf">#{msg.localChecks}</a>
+						</t:div>
+
+						<t:div styleClass="menu_item" visibleOnUserRole="ROLE_USER"
+							rendered="#{menuController.projectSelected and !Session.isProjectClosed}">
+							<h:outputText onclick="switchMenu('documentmanagement');"
+								style="cursor: pointer;" value="#{msg.documentManagement}"
+								styleClass="menu_link_collapse" />
+						</t:div>
+
+						<div id="documentmanagement">
+							<t:div styleClass="#{menuController.documentList}"
+								visibleOnUserRole="ROLE_USER"
+								rendered="#{menuController.projectSelected and !Session.isProjectClosed}">
+								<a class="menu_item_top_level"
+									href="../DocumentMS/DocumentList.jsf">#{msg.documentManagementPage}</a>
+							</t:div>
+						</div>
+						<t:div rendered="#{menuController.projectSelected}"
+							visibleOnUserRole="ROLE_USER"
+							styleClass="#{menuController.projectReportings}">
+							<a class="menu_item_top_level"
+								href="../ProjectMS/ProjectReportingsView.jsf">#{msg.programReportings}</a>
+						</t:div>
+						<t:div styleClass="left_menu"
+							visibleOnUserRole="ROLE_AdA_W, ROLE_AdA_R, ROLE_AdC_W, ROLE_AdC_R,
+							ROLE_SUPER_ADMIN_W,ROLE_STC_W, ROLE_STC_R, ROLE_BP_W, ROLE_BP_R, ROLE_B_W, ROLE_B_R, ROLE_AUD_W, 
+							ROLE_AUD_R, ROLE_AGC_W, ROLE_AGC_R, ROLE_DAEC_W, ROLE_DAEC_R, ROLE_AdCM_W, ROLE_AdCM_R, ROLE_AdP_W,ROLE_AdP_R"
+							rendered="#{menuController.inActualState}">
+							<div class="menuhead" onclick="switchMenu('reportSectionName');"
+								style="cursor: pointer;">
+								<h:outputText value="#{msg.reportSectionName}" />
+							</div>
+							<div id="reportSectionName">
+								<div id="leftmenu">
+									<div id="nav" style="margin-left: 2px;">
+										<t:div styleClass="#{menuController.search}"
+											visibleOnUserRole="ROLE_AdA_W, ROLE_AdA_R, ROLE_AdC_W, ROLE_AdC_R,
+											ROLE_SUPER_ADMIN_W,ROLE_STC_W, ROLE_STC_R, ROLE_BP_W, ROLE_BP_R, ROLE_B_W, ROLE_B_R, 
+											ROLE_AUD_W, ROLE_AUD_R, ROLE_AGC_W, ROLE_AGC_R, ROLE_DAEC_W, ROLE_DAEC_R, ROLE_AdCM_W, ROLE_AdCM_R, ROLE_AdP_W,ROLE_AdP_R">
+											<a class="menu_link" href="#"
+												onclick="document.getElementById('postMenuForm').submit()">#{msg.reportPage}</a>
+										</t:div>
+
+									</div>
+								</div>
+							</div>
+						</t:div>
+
+					</div>
+				</div>
+			</div>
+		</t:div>
+		<!-- Document management -->
+
+
+		<div class="bottom">
+			<div class="left_bottom">
+				<div class="right_bottom"></div>
+			</div>
+		</div>
+	</h:form>
+	<form action='#{msg.ip_host2}' method='post' target='_blank'
+		id="postMenuForm">
+		<input type='hidden' name='userid'
+			value='#{menuController.currentUser.login}' /> <input type='hidden'
+			name='password' value='#{menuController.currentUser.password}' />
+	</form>
+	<script type="text/javascript" defer="defer">
+		GetCookie("phisicalProgramClassification");
+		GetCookie("programm");
+		GetCookie("activation");
+		GetCookie("administration");
+		GetCookie("programManagementSectionName");
+		GetCookie("anagraphicmenu");
+		GetCookie("initializationmenu");
+		GetCookie("budgetmenu");
+		GetCookie("projectSectionName");
+		GetCookie("foundingEligible");
+		GetCookie("actualState");
+		GetCookie("avanzamenti");
+		GetCookie("documentmanagement");
+	//-->
+	</script>
+</ui:composition>

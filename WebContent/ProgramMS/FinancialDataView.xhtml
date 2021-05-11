@@ -1,0 +1,270 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ViewBase.xhtml">
+	<ui:param name="heading" value="#{msg.financialData}" />
+	<ui:define name="view_body">
+		
+		<div class="table_container"><t:dataTable width="90%"
+			style="margin:0 auto;" id="table" var="data"
+			 styleClass="form_table noBodyTable"
+			rowClasses="row_table_n,row_table_g">
+			<f:facet name="header">
+				<h:outputText style="text-align: center"
+					value="#{msg.programImplementation}" />
+			</f:facet>
+			
+			<t:column styleClass="StringColumn"
+				rendered="#{!empty financialDataViewController.progImplList}">
+				<f:facet name="header">
+					
+				</f:facet>
+			</t:column>
+			<t:column styleClass="NumberColumn" headerstyle="width:110px;"
+				rendered="#{!empty financialDataViewController.progImplList}">
+				<f:facet name="header">
+						<t:outputText value="#{msg.communityContribution}" />
+				</f:facet>
+			</t:column>
+			<ui:remove>
+			<t:column styleClass="NumberColumn" headerstyle="width:110px;"
+				rendered="#{!empty financialDataViewController.progImplList}">
+				<f:facet name="header">
+						<t:outputText value="#{msg.nationalCounterpart}" />
+				</f:facet>
+			</t:column>
+			<t:column styleClass="NumberColumn" headerstyle="width:225px;" 
+				rendered="#{!empty financialDataViewController.progImplList}">
+				<f:facet name="header">
+					<t:outputText value="#{msg.publicFunding}" />
+				</f:facet>
+			</t:column>
+			</ui:remove>
+			<t:column styleClass="NumberColumn" headerstyle="width:110px;"
+				rendered="#{!empty financialDataViewController.progImplList}">
+				<f:facet name="header">
+					<t:outputText value="#{msg.financing}" />
+				</f:facet>
+			</t:column>
+			<t:column styleClass="NumberColumn" headerstyle="width:110px;"
+				rendered="#{!empty financialDataViewController.progImplList}">
+				<f:facet name="header">
+					<t:outputText value="#{msg.financingRate}" />
+				</f:facet>
+			</t:column>
+		</t:dataTable>
+		<t:dataTable width="90%"
+			style="margin:auto;border-top:0;" id="table1" var="data"
+			value="#{financialDataViewController.progImplList}" styleClass="form_table"
+			rowClasses="row_table_n,row_table_g">
+			
+			<t:column styleClass="StringColumn"
+				rendered="#{!empty financialDataViewController.progImplList}">
+				<f:facet name="header">
+					<t:outputText value="#{msg.priorities}" />
+				</f:facet>
+				<t:outputText value="#{data.priorities}" />
+			</t:column>
+			<t:column styleClass="NumberColumn" style="width:110px;"
+				rendered="#{!empty financialDataViewController.progImplList}">
+				<f:facet name="header">
+					(EUR)
+				</f:facet>
+				
+				<t:outputText value="#{data.communityContribution}" />
+			</t:column>
+			<ui:remove>
+			<t:column styleClass="NumberColumn" style="width:110px;"
+				rendered="#{!empty financialDataViewController.progImplList}">
+				<f:facet name="header">
+					(b) = (c) + (d)
+				</f:facet>
+				<t:outputText value="#{data.nationalCounterpart}" />
+			</t:column>
+			<t:column styleClass="NumberColumn" style="width:110px;"
+				rendered="#{!empty financialDataViewController.progImplList}">
+				<f:facet name="header">
+				<t:column>
+				<t:outputText value="#{msg.publicFundingNationali}" />
+				<br />
+					(c)
+				</t:column>
+				</f:facet>
+				<t:outputText value="#{data.publicFunding}" />
+			</t:column>
+			<t:column styleClass="NumberColumn" style="width:110px;"
+				rendered="#{!empty financialDataViewController.progImplList}">
+				<f:facet name="header">
+				<t:column>
+				<t:outputText value="#{msg.privateFinancing}" />
+				<br />
+					(d)
+				</t:column>
+				</f:facet>
+				<t:outputText value="#{data.privateFinancing}" />
+			</t:column>
+			</ui:remove>
+			<t:column styleClass="NumberColumn" style="width:110px;"
+				rendered="#{!empty financialDataViewController.progImplList}">
+				<f:facet name="header">
+				(EUR)
+				</f:facet>
+				<t:outputText value="#{data.financing}" />
+			</t:column>
+			<t:column styleClass="NumberColumn" style="width:110px;"
+				rendered="#{!empty financialDataViewController.progImplList}">
+				<f:facet name="header">
+				(%)
+				</f:facet>
+				<t:outputText value="#{data.financingRate}" />
+			</t:column>
+			<t:column styleClass="StringColumn"
+				rendered="#{empty financialDataViewController.progImplList}">
+				<f:facet name="header">
+					<h:outputText value="#{msg.noData}" />
+				</f:facet>
+			</t:column>
+		</t:dataTable></div>
+		<br />
+		<div class="table_container">
+			<t:dataTable width="60%"
+			style="margin:auto;border-top:0;" id="table2" var="data"
+			value="#{financialDataViewController.listYearProfile}" styleClass="form_table"
+			rowClasses="row_table_n,row_table_g">
+			<f:facet name="header">
+				<h:outputText style="text-align: center"
+					value="#{msg.listYearProfile}" />
+			</f:facet>
+			
+			<t:column styleClass="NumberColumn" style="width:110px;"
+				rendered="#{!empty financialDataViewController.listYearProfile}">
+				<f:facet name="header">
+					<h:outputText value="#{msg.yearProfileYear}" />
+				</f:facet>
+				<t:outputText value="#{data.year}" />
+			</t:column>
+			<t:column styleClass="NumberColumn" style="width:110px;"
+				rendered="#{!empty financialDataViewController.listYearProfile}">
+				<f:facet name="header">
+					<h:outputText value="#{msg.yearProfileFesr}" />
+				</f:facet>
+				<t:outputText value="#{data.fesr}" />
+			</t:column>
+			<t:column styleClass="NumberColumn" style="width:110px;"
+				rendered="#{!empty financialDataViewController.listYearProfile}">
+				<f:facet name="header">
+					<h:outputText value="#{msg.yearProfileCpn}" />
+				</f:facet>
+				<t:outputText value="#{data.cpn}" />
+			</t:column>
+			
+			<t:column styleClass="NumberColumn" style="width:110px;"
+				rendered="#{!empty financialDataViewController.listYearProfile}">
+				<f:facet name="header">
+					<h:outputText value="#{msg.yearProfileTechAss}" />
+				</f:facet>
+				<t:outputText value="#{data.techass}" />
+			</t:column>
+			
+			<t:column styleClass="NumberColumn" style="width:110px;"
+				rendered="#{!empty financialDataViewController.listYearProfile}">
+				<f:facet name="header">
+					<h:outputText value="#{msg.yearProfilePayTechAss}" />
+				</f:facet>
+				<t:outputText value="#{data.paytechass}" />
+			</t:column>			
+			
+		</t:dataTable>
+		</div>
+		
+		<ui:remove>
+		<br />
+		<br />
+		<div class="table_container"><t:dataTable width="90%"
+			style="margin:0 auto;" id="table2" var="data"
+			value="#{financialDataViewController.list}"
+			styleClass="form_table" rowClasses="row_table_n,row_table_g">
+			<f:facet name="header">
+				<h:outputText style="text-align: center"
+					value="#{msg.financialData}" />
+			</f:facet>
+			<t:column styleClass="StringColumn"
+				rendered="#{!empty financialDataViewController.list}">
+				<f:facet name="header">
+					<t:outputText value="#{msg.code}" />
+				</f:facet>
+				<t:outputText value="#{data.code}" />
+			</t:column>
+			<t:column styleClass="StringColumn"
+				rendered="#{!empty financialDataViewController.list}">
+				<f:facet name="header">
+					<t:outputText value="#{msg.description}" />
+				</f:facet>
+				<t:outputText value="#{data.description}" />
+			</t:column>
+			<t:column styleClass="NumberColumn"
+				rendered="#{!empty financialDataViewController.list}">
+				<f:facet name="header">
+					<t:outputText value="#{msg.tipology}" />
+				</f:facet>
+				<t:outputText value="#{data.tipology}" />
+			</t:column>
+			<t:column styleClass="NumberColumn"
+				rendered="#{!empty financialDataViewController.list}">
+				<f:facet name="header">
+					<t:outputText value="#{msg.total}" />
+				</f:facet>
+				<t:outputText value="#{data.total}" />
+			</t:column>
+			<t:column styleClass="StringColumn"
+				rendered="#{empty financialDataViewController.list}">
+				<f:facet name="header">
+					<h:outputText value="#{msg.noData}" />
+				</f:facet>
+			</t:column>
+		</t:dataTable></div>
+		
+
+		
+		<br />
+		<br />
+		<div class="table_container"><t:dataTable width="90%"
+			style="margin:0 auto;" id="table3" var="data"
+			value="#{financialDataViewController.finPlan}"
+			styleClass="form_table" rowClasses="row_table_n,row_table_g">
+			<f:facet name="header">
+				<h:outputText style="text-align: center"
+					value="#{msg.financingPlanTable}" />
+			</f:facet>
+			<t:column styleClass="StringColumn" style="text-align:center;"
+				rendered="#{!empty financialDataViewController.finPlan}">
+				<f:facet name="header">
+					<t:outputText value="#{msg.financingPlanYear}" />
+				</f:facet>
+				<t:outputText value="#{data.year}" />
+			</t:column>
+			<t:column styleClass="NumberColumn"
+				rendered="#{!empty financialDataViewController.finPlan}">
+				<f:facet name="header">
+					<t:outputText value="#{msg.financingPlanContribution}" />
+				</f:facet>
+				<t:outputText value="#{data.contribution}" />
+			</t:column>
+			
+			<t:column styleClass="StringColumn"
+				rendered="#{empty financialDataViewController.finPlan}">
+				<f:facet name="header">
+					<h:outputText value="#{msg.noData}" />
+				</f:facet>
+			</t:column>
+		</t:dataTable></div>
+		</ui:remove>
+	</ui:define>
+</ui:composition>
+</html>

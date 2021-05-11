@@ -1,0 +1,56 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:security="http://www.springframework.org/security/tags">
+
+
+	<div class="topbar">
+	<div id="topmenu" class="paams">
+	<div class="top_menu_L">
+	<div class="top_menu_R">
+		<sec:ifAnyGranted roles="ROLE_USER">
+		<a class="logo_link" href="../ProjectMS/ProjectList.jsf" title="#{msg.paaMangmentSystem}"></a>
+		</sec:ifAnyGranted>
+	<div class="slogan">
+	<p>Ulysses - Sistema informatico bilingue di gestione, monitoraggio,
+	rendicontazione e controllo del Programma di Cooperazione Transfrontaliera</p>
+	</div>
+	<input type="hidden" value="#{local_values.value2}" />
+	<div class="right_top_main"><sec:ifAnyGranted roles="ROLE_USER">
+		<a4j:form id="shUiForm" prependId="false">
+			<div class="login"><h:outputText
+				style="color:#146F9D; margin:0 5px;"
+				value="#{LoginBean.authUsername}" /> <!-- <a4j:commandLink 
+								immediate="false"
+								reRender="ContentPanel"> 
+							</a4j:commandLink>--> <span style="font-weight:bold;">| </span> <a4j:commandLink
+				value="#{msg.logout}" action="#{LoginBean.doLogout}"
+				immediate="true">
+			</a4j:commandLink></div>
+		</a4j:form>
+	</sec:ifAnyGranted>
+	<div class="languages" style="right:0; width:74px;"><h:form>
+		<ul>
+			<li><h:commandButton action="#{LocalizeBean.doSetEnglishLocal}" rendered="false" title="#{msg.english}"
+				image="/images/us.png" class="en" /></li> 
+			<li><h:commandButton action="#{LocalizeBean.doSetItalianLocal}" title="#{msg.italian}"
+				image="/images/it.png" class="it" /></li>
+			<li><h:commandButton action="#{LocalizeBean.doSetFrenchLocal}" title="#{msg.french}"
+				image="/images/fr.png" class="fr" /></li>
+		</ul>
+	</h:form></div>
+	</div>
+	<div class="line"></div>
+	</div>
+	</div>
+	</div>
+	</div>
+
+</ui:composition>
+
+

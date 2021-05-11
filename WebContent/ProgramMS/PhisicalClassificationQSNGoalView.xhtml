@@ -1,0 +1,415 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/EditTabBase.xhtml">
+	<ui:param name="headWidth" value="900px" />
+	<ui:param name="heading" value="#{msg.assigningQSN}" />
+	<ui:param name="heading_top" value="#{msg.assigningQSN}" />
+	<ui:define name="edit_body">
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+			<t:panelTabbedPane serverSideTabSwitch="false">
+
+				<t:panelTab id="tabAsse1" label="#{msg.asse} 1" style="#{phisicalClassificationQSNGoalController.tab1Style}">
+					<div class="table_container"><t:dataTable width="100%"
+						style="margin:0 auto;" id="table1" var="data1"
+						value="#{phisicalClassificationQSNGoalController.qsnAsse1List}"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g">
+						<f:facet name="header">
+							<h:outputText style="text-align: center" value="#{msg.qsnGoal}" />
+						</f:facet>
+						<t:column styleClass="CodeColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse1List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.priorityCode}" />
+							</f:facet>
+							<t:outputText value="#{data1.priorityCode}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse1List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.priorityDescription}" />
+							</f:facet>
+							<t:outputText value="#{data1.priorityDescription}" />
+						</t:column>
+						<t:column styleClass="CodeColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse1List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.generalPurposeCode}" />
+							</f:facet>
+							<t:outputText value="#{data1.generalPurposeCode}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse1List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.descriptionDeneralPurpose}" />
+							</f:facet>
+							<t:outputText value="#{data1.descriptionDeneralPurpose}" />
+						</t:column>
+						<t:column styleClass="CodeColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse1List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.codeSpecificObjective}" />
+							</f:facet>
+							<t:outputText value="#{data1.codeSpecificObjective}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse1List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.specificObjectiveDescription}" />
+							</f:facet>
+							<t:outputText value="#{data1.specificObjectiveDescription}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse1List and Session.AGU}">
+							<f:facet name="header">
+								<t:outputText value="" />
+							</f:facet>
+							<t:selectBooleanCheckbox value="#{data1.selected}"
+								visibleOnUserRole="ROLE_AGU_W" />
+							<t:graphicImage alt="checked" rendered="#{data1.selected}"
+								visibleOnUserRole="ROLE_AGU_R" value="/images/check.png"
+								style="border:0" />
+							<t:graphicImage alt="not checked" rendered="#{!data1.selected}"
+								visibleOnUserRole="ROLE_AGU_R" value="/images/no-check.png"
+								style="border:0" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{empty phisicalClassificationQSNGoalController.qsnAsse1List}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+
+					</t:dataTable></div>
+				</t:panelTab>
+
+				<t:panelTab id="tabAsse2" label="#{msg.asse} 2" style="#{phisicalClassificationQSNGoalController.tab2Style}">
+					<div class="table_container"><t:dataTable width="100%"
+						style="margin:0 auto;" id="table2" var="data2"
+						value="#{phisicalClassificationQSNGoalController.qsnAsse2List}"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g">
+						<f:facet name="header">
+							<h:outputText style="text-align: center" value="#{msg.qsnGoal}" />
+						</f:facet>
+						<t:column styleClass="CodeColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse2List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.priorityCode}" />
+							</f:facet>
+							<t:outputText value="#{data2.priorityCode}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse2List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.priorityDescription}" />
+							</f:facet>
+							<t:outputText value="#{data2.priorityDescription}" />
+						</t:column>
+						<t:column styleClass="CodeColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse2List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.generalPurposeCode}" />
+							</f:facet>
+							<t:outputText value="#{data2.generalPurposeCode}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse2List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.descriptionDeneralPurpose}" />
+							</f:facet>
+							<t:outputText value="#{data2.descriptionDeneralPurpose}" />
+						</t:column>
+						<t:column styleClass="CodeColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse2List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.codeSpecificObjective}" />
+							</f:facet>
+							<t:outputText value="#{data2.codeSpecificObjective}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse2List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.specificObjectiveDescription}" />
+							</f:facet>
+							<t:outputText value="#{data2.specificObjectiveDescription}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse2List and Session.AGU}">
+							<f:facet name="header">
+								<t:outputText value="" />
+							</f:facet>
+							<t:selectBooleanCheckbox value="#{data2.selected}"
+								visibleOnUserRole="ROLE_AGU_W" />
+							<t:graphicImage alt="checked" rendered="#{data2.selected}"
+								visibleOnUserRole="ROLE_AGU_R" value="/images/check.png"
+								style="border:0" />
+							<t:graphicImage alt="not checked" rendered="#{!data2.selected}"
+								visibleOnUserRole="ROLE_AGU_R" value="/images/no-check.png"
+								style="border:0" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{empty phisicalClassificationQSNGoalController.qsnAsse2List}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+
+					</t:dataTable></div>
+				</t:panelTab>
+
+				<t:panelTab id="tabAsse3" label="#{msg.asse} 3" style="#{phisicalClassificationQSNGoalController.tab3Style}">
+					<div class="table_container"><t:dataTable width="100%"
+						style="margin:0 auto;" id="table" var="data3"
+						value="#{phisicalClassificationQSNGoalController.qsnAsse3List}"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g">
+						<f:facet name="header">
+							<h:outputText style="text-align: center" value="#{msg.qsnGoal}" />
+						</f:facet>
+						<t:column styleClass="CodeColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse3List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.priorityCode}" />
+							</f:facet>
+							<t:outputText value="#{data3.priorityCode}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse3List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.priorityDescription}" />
+							</f:facet>
+							<t:outputText value="#{data3.priorityDescription}" />
+						</t:column>
+						<t:column styleClass="CodeColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse3List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.generalPurposeCode}" />
+							</f:facet>
+							<t:outputText value="#{data3.generalPurposeCode}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse3List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.descriptionDeneralPurpose}" />
+							</f:facet>
+							<t:outputText value="#{data3.descriptionDeneralPurpose}" />
+						</t:column>
+						<t:column styleClass="CodeColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse3List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.codeSpecificObjective}" />
+							</f:facet>
+							<t:outputText value="#{data3.codeSpecificObjective}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse3List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.specificObjectiveDescription}" />
+							</f:facet>
+							<t:outputText value="#{data3.specificObjectiveDescription}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse3List and Session.AGU}">
+							<f:facet name="header">
+								<t:outputText value="" />
+							</f:facet>
+							<t:selectBooleanCheckbox value="#{data3.selected}"
+								visibleOnUserRole="ROLE_AGU_W" />
+							<t:graphicImage alt="checked" rendered="#{data3.selected}"
+								visibleOnUserRole="ROLE_AGU_R" value="/images/check.png"
+								style="border:0" />
+							<t:graphicImage alt="not checked" rendered="#{!data3.selected}"
+								visibleOnUserRole="ROLE_AGU_R" value="/images/no-check.png"
+								style="border:0" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{empty phisicalClassificationQSNGoalController.qsnAsse3List}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+
+					</t:dataTable></div>
+				</t:panelTab>
+			
+			<ui:remove>
+				<t:panelTab id="tabAsse4" label="#{msg.asse} 4" style="#{phisicalClassificationQSNGoalController.tab4Style}">
+					<div class="table_container"><t:dataTable width="100%"
+						style="margin:0 auto;" id="table" var="data4"
+						value="#{phisicalClassificationQSNGoalController.qsnAsse4List}"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g">
+						<f:facet name="header">
+							<h:outputText style="text-align: center" value="#{msg.qsnGoal}" />
+						</f:facet>
+						<t:column styleClass="CodeColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse4List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.priorityCode}" />
+							</f:facet>
+							<t:outputText value="#{data4.priorityCode}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse4List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.priorityDescription}" />
+							</f:facet>
+							<t:outputText value="#{data4.priorityDescription}" />
+						</t:column>
+						<t:column styleClass="CodeColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse4List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.generalPurposeCode}" />
+							</f:facet>
+							<t:outputText value="#{data4.generalPurposeCode}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse4List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.descriptionDeneralPurpose}" />
+							</f:facet>
+							<t:outputText value="#{data4.descriptionDeneralPurpose}" />
+						</t:column>
+						<t:column styleClass="CodeColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse4List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.codeSpecificObjective}" />
+							</f:facet>
+							<t:outputText value="#{data4.codeSpecificObjective}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse4List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.specificObjectiveDescription}" />
+							</f:facet>
+							<t:outputText value="#{data4.specificObjectiveDescription}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse4List and Session.AGU}">
+							<f:facet name="header">
+								<t:outputText value="" />
+							</f:facet>
+							<t:selectBooleanCheckbox value="#{data4.selected}"
+								visibleOnUserRole="ROLE_AGU_W" />
+							<t:graphicImage alt="checked" rendered="#{data4.selected}"
+								visibleOnUserRole="ROLE_AGU_R" value="/images/check.png"
+								style="border:0" />
+							<t:graphicImage alt="not checked" rendered="#{!data4.selected}"
+								visibleOnUserRole="ROLE_AGU_R" value="/images/no-check.png"
+								style="border:0" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{empty phisicalClassificationQSNGoalController.qsnAsse4List}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+
+					</t:dataTable></div>
+				</t:panelTab>
+
+				<t:panelTab id="tabAsse5" label="#{msg.asse} 5" style="#{phisicalClassificationQSNGoalController.tab5Style}">
+					<div class="table_container"><t:dataTable width="100%"
+						style="margin:0 auto;" id="table" var="data5"
+						value="#{phisicalClassificationQSNGoalController.qsnAsse5List}"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g">
+						<f:facet name="header">
+							<h:outputText style="text-align: center" value="#{msg.qsnGoal}" />
+						</f:facet>
+						<t:column styleClass="CodeColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse5List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.priorityCode}" />
+							</f:facet>
+							<t:outputText value="#{data5.priorityCode}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse5List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.priorityDescription}" />
+							</f:facet>
+							<t:outputText value="#{data5.priorityDescription}" />
+						</t:column>
+						<t:column styleClass="CodeColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse5List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.generalPurposeCode}" />
+							</f:facet>
+							<t:outputText value="#{data5.generalPurposeCode}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse5List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.descriptionDeneralPurpose}" />
+							</f:facet>
+							<t:outputText value="#{data5.descriptionDeneralPurpose}" />
+						</t:column>
+						<t:column styleClass="CodeColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse5List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.codeSpecificObjective}" />
+							</f:facet>
+							<t:outputText value="#{data5.codeSpecificObjective}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse5List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.specificObjectiveDescription}" />
+							</f:facet>
+							<t:outputText value="#{data5.specificObjectiveDescription}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty phisicalClassificationQSNGoalController.qsnAsse5List and Session.AGU}">
+							<f:facet name="header">
+								<t:outputText value="" />
+							</f:facet>
+							<t:selectBooleanCheckbox value="#{data5.selected}"
+								visibleOnUserRole="ROLE_AGU_W" />
+							<t:graphicImage alt="checked" rendered="#{data5.selected}"
+								visibleOnUserRole="ROLE_AGU_R" value="/images/check.png"
+								style="border:0" />
+							<t:graphicImage alt="not checked" rendered="#{!data5.selected}"
+								visibleOnUserRole="ROLE_AGU_R" value="/images/no-check.png"
+								style="border:0" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{empty phisicalClassificationQSNGoalController.qsnAsse5List}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+
+					</t:dataTable></div>
+				</t:panelTab>
+				</ui:remove>
+
+			</t:panelTabbedPane>
+
+			<table width="100%">
+				<tr>
+					<td colspan="2" class="btn_line"><sec:ifAnyGranted
+						roles="ROLE_AGU_W">
+						<a4j:commandButton immediate="false"
+							action="#{phisicalClassificationQSNGoalController.Page_Save}"
+							styleClass="button2" value="#{msg.save}" id="save" />
+					</sec:ifAnyGranted> <a4j:commandButton value="#{msg.cancel}" styleClass="button2"
+						immediate="true"
+						action="#{phisicalClassificationQSNGoalController.GoBack}" /></td>
+				</tr>
+			</table>
+			<table width="100%">
+				<tr>
+					<td align="center"><t:outputText
+						value="#{phisicalClassificationQSNGoalController.errorMessage}"
+						styleClass="RequiredFieldMarker" /></td>
+				</tr>
+			</table>
+
+		</a4j:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

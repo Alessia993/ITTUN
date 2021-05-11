@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/EditBase.xhtml">
+	<ui:param name="headWidth" value="650px" />
+	<ui:param name="heading" value="#{msg.systemSetting}" />
+	<ui:param name="heading_top" value="#{msg.systemSetting}" />
+	<ui:define name="edit_body">
+
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+			<table width="100%" class="forms" border="0" cellpadding="1"
+				cellspacing="1">
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.activityLogSize}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText maxlength="200"
+						styleClass="editbox_form2" 
+						required="true"
+						onkeypress="return numbersonly(this, event)"
+						onkeyup="checknumber(this)"
+						id="activityLogSize" 
+						value="#{applicationSettingsBean.activityLogSize}" />mb</td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.passwordExpirationTime}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText maxlength="200"
+						styleClass="editbox_form2" 
+						required="true"
+						onkeypress="return numbersonly(this, event)"
+						onkeyup="checknumber(this)"
+						id="passwordExpirationTime" 
+						value="#{applicationSettingsBean.passwordExpirationTime}" />#{msg.days}</td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.uploadDirectory}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText maxlength="250"
+						styleClass="editbox_form" 
+						required="true"
+						id="uploadDirectory" 
+						value="#{applicationSettingsBean.uploadFileParentDirectory}" /><br />#{msg.uploadDirectoryExp}<br /><span class="RequiredFieldMarker">#{applicationSettingsBean.fileDirectoryError}</span></td>
+				</tr>
+				<tr>
+					<td colspan="2" class="btn_line"><a4j:commandButton
+						immediate="false"
+						action="#{applicationSettingsBean.Page_Save}" styleClass="button2"
+						value="#{msg.save}" id="save" /> <a4j:commandButton
+						value="#{msg.cancel}" styleClass="button2" immediate="true"
+						action="#{applicationSettingsBean.GoBack}" /></td>
+				</tr>
+			</table>
+		</a4j:outputPanel>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/EditBase.xhtml">
+	<ui:param name="headWidth" value="600px" />
+	
+	<ui:define name="edit_body">
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+
+				<div class="table_container">
+						<t:dataTable width="80%" style="margin:0 auto;" id="table"
+							var="data" rowIndexVar="row"
+							value="#{phisicalProgressUploadEditBean.docList}"
+							styleClass="form_table" rowClasses="row_table_n,row_table_g">
+							<f:facet name="header">
+								<t:column rendered="#{!phisicalProgressUploadEditBean.view}">
+								<sec:ifAnyGranted roles="ROLE_AGU_W,ROLE_BP_W">
+									<a4j:commandLink styleClass="headerPanelLink"
+										action="#{phisicalProgressUploadEditBean.addDoc}"
+										reRender="documentPanel"
+										oncomplete="#{rich:component('documentPanel')}.show()">#{msg.documentListAdd}</a4j:commandLink>
+									<h:outputText style="text-align: center"
+										value="#{msg.documents}" />
+										</sec:ifAnyGranted>
+								</t:column>
+							</f:facet>
+							<t:column id="download" styleClass="ActionColumn"
+								rendered="#{!empty phisicalProgressUploadEditBean.docList}">
+								<a4j:htmlCommandLink id="downloadLink" title="#{msg.download}"
+									ajaxSingle="true" immediate="true"
+									action="#{phisicalProgressUploadEditBean.downloadDocFromList}">
+									<h:graphicImage alt="#{msg.download}"
+										value="/images/file-down.png" style="border:0" />
+									<f:setPropertyActionListener value="#{row}"
+										target="#{phisicalProgressUploadEditBean.entityDownloadId}" />
+								</a4j:htmlCommandLink>
+							</t:column>
+							<t:column id="show" styleClass="ActionColumn"
+								rendered="#{!empty phisicalProgressUploadEditBean.docList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.view}" />
+								</f:facet>
+								<a4j:commandLink id="showLink" title="#{msg.show}"
+									action="#{phisicalProgressUploadEditBean.showDocFromList}"
+									reRender="documentPanel"
+									oncomplete="#{rich:component('documentPanel')}.show()">
+									<h:graphicImage alt="#{msg.edit}" value="/images/ok.png"
+										style="border:0" />
+									<f:setPropertyActionListener value="#{row}"
+										target="#{phisicalProgressUploadEditBean.entityEditId}" />
+								</a4j:commandLink>
+							</t:column>
+							<sec:ifAnyGranted roles="ROLE_AGU_W,ROLE_BP_W">
+							<t:column id="edit" styleClass="ActionColumn"
+								rendered="#{!empty phisicalProgressUploadEditBean.docList and !phisicalProgressUploadEditBean.view}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.edit}" />
+								</f:facet>
+								<a4j:commandLink id="editLink" title="#{msg.edit}"
+									action="#{phisicalProgressUploadEditBean.editDocFromList}"
+									reRender="documentPanel"
+									oncomplete="#{rich:component('documentPanel')}.show()">
+									<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+										style="border:0" />
+									<f:setPropertyActionListener value="#{row}"
+										target="#{phisicalProgressUploadEditBean.entityEditId}" />
+								</a4j:commandLink>
+							</t:column>
+							<t:column id="delete" styleClass="ActionColumn"
+								rendered="#{!empty phisicalProgressUploadEditBean.docList and !phisicalProgressUploadEditBean.view}">
+								<a4j:commandLink id="deletelink" title="#{msg.delete}"
+									action="#{phisicalProgressUploadEditBean.deleteDocFromList}">
+									<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+										style="border:0" />
+									<f:setPropertyActionListener value="#{row}"
+										target="#{phisicalProgressUploadEditBean.entityDeleteId}" />
+								</a4j:commandLink>
+							</t:column>
+							</sec:ifAnyGranted>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressUploadEditBean.docList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.protocolNumber}" />
+								</f:facet>
+								<t:outputText value="#{data.protocolNumber}"
+									converter="longNameConverter" />
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressUploadEditBean.docList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.documentDescriptionShort}" />
+								</f:facet>
+								<t:outputText value="#{data.description}"
+									converter="longNameConverter" />
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressUploadEditBean.docList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.date}" />
+								</f:facet>
+								<t:outputText value="#{data.documentDate}"
+									converter="dateTimeConverter" />
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty phisicalProgressUploadEditBean.docList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.documentListDocReleaseFrom}" />
+								</f:facet>
+								<t:outputText
+									value="#{data.user != null ? data.user.fullName : ''}"
+									converter="longNameConverter" />
+							</t:column>
+						</t:dataTable>
+					</div>
+
+			<table width="100%">
+				<tr>
+					<td class="btn_line" colspan="3"><sec:ifAnyGranted roles="ROLE_AGU_W,ROLE_BP_W"><a4j:commandButton
+							rendered="#{!phisicalProgressUploadEditBean.view}" immediate="false"
+							action="#{phisicalProgressUploadEditBean.Page_Save}"
+							styleClass="button2" value="#{msg.save}" id="save" /> </sec:ifAnyGranted><a4j:commandButton
+							value="#{msg.cancel}" styleClass="button2" immediate="true"
+							action="#{phisicalProgressUploadEditBean.GoBack}" /></td>
+				</tr>
+			</table>
+
+		</a4j:outputPanel>
+	</ui:define>
+	<ui:define name="document_body">
+		<rich:modalPanel id="documentPanel" autosized="true" width="300">
+			<f:facet name="header">
+				<h:outputText value="#{msg.document}" style="padding-right:15px;" />
+			</f:facet>
+			<table>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.protocolNumber}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							style="width:216px;" maxlength="50"
+							value="#{phisicalProgressUploadEditBean.protocolNumber}"
+							rendered="#{!phisicalProgressUploadEditBean.showDoc}" /> <b><t:outputText
+								value="#{phisicalProgressUploadEditBean.protocolNumber}"
+								rendered="#{phisicalProgressUploadEditBean.showDoc}" /></b></td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentDescription}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							style="width:216px;" maxlength="50"
+							value="#{phisicalProgressUploadEditBean.description}"
+							rendered="#{!phisicalProgressUploadEditBean.showDoc}" /> <b><t:outputText
+								value="#{phisicalProgressUploadEditBean.description}"
+								rendered="#{phisicalProgressUploadEditBean.showDoc}" /></b></td>
+				</tr>
+				
+									<tr>
+						<td class="LabelCell"><t:outputText value="#{msg.date}:" /></td>
+						<td class="ControlCell"><rich:calendar
+								locale="#{LocalizeBean.currentLocaleValue}"
+								inputClass="editbox_form2" converter="dateTimeConverter"
+								disabled="false"
+								value="#{phisicalProgressUploadEditBean.documentDate}"
+								datePattern="dd/MM/yyyy">
+							</rich:calendar></td>
+					</tr>
+				
+				<ui:fragment
+					rendered="#{phisicalProgressUploadEditBean.entityEditId != null}">
+					<tr>
+						<td class="LabelCell"><t:outputText
+								value="#{msg.documentEditFile}:" /></td>
+						<td colspan="2"><a4j:htmlCommandLink id="downloadLinkFromDlg"
+								value="#{phisicalProgressUploadEditBean.editDocTitle}"
+								style="text-decoration: underline;"
+								action="#{phisicalProgressUploadEditBean.downloadDocFromList}">
+								<f:setPropertyActionListener
+									value="#{phisicalProgressUploadEditBean.entityEditId}"
+									target="#{phisicalProgressUploadEditBean.entityDownloadId}" />
+							</a4j:htmlCommandLink></td>
+					</tr>
+				</ui:fragment>
+				<ui:fragment rendered="#{!phisicalProgressUploadEditBean.showDoc}">
+					<tr>
+						<td class="LabelCell"><t:outputText
+								value="#{msg.uploadFile}:" /></td>
+						<td class="ControlCell"><t:inputFileUpload id="fileupload"
+								value="#{phisicalProgressUploadEditBean.newDocumentUpFile}"
+								storage="file" styleClass="fileUploadInput" maxlength="200000"
+								label="qwe1" title="qwe2" /></td>
+					</tr>
+					<tr>
+						<td align="center" colspan="2">#{msg.fileSize}</td>
+					</tr>
+				</ui:fragment>
+				<tr>
+					<td colspan="2" style="text-align: center;"><h:commandButton
+							value="#{phisicalProgressUploadEditBean.entityEditId != null ? msg.save : msg.uploadFile}"
+							styleClass="button3"
+							action="#{phisicalProgressUploadEditBean.addNewDocument}"
+							reRender="pagePanel"
+							rendered="#{!phisicalProgressUploadEditBean.showDoc}"
+							onclick="#{rich:component('documentPanel')}.hide();" /> <a4j:commandButton
+							value="#{msg.cancel}" styleClass="button" immediate="false"
+							onclick="#{rich:component('documentPanel')}.hide();return false;" /></td>
+				</tr>
+			</table>
+		</rich:modalPanel>
+	</ui:define>
+</ui:composition>

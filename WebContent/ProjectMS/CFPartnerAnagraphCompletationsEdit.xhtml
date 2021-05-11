@@ -1,0 +1,870 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/EditTabBase.xhtml">
+	<ui:param name="heading"
+		value="#{cFPartnerAnagraphCompletationsEditBean.partnerNameTitle}" />
+	<ui:param name="heading_top"
+		value="#{msg.CFPartnerAnagraphCompletationsEdit}" />
+	<ui:define name="edit_body">
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+			<t:panelTabbedPane serverSideTabSwitch="false">
+				<t:panelTab id="tabCFPartnerAnagraphCompletationsEdit1"
+					label="#{msg.CFPartnerAnagraphCompletationsEditTab1}">
+					<t:panelTabbedPane serverSideTabSwitch="false">
+						<t:panelTab id="tabCFPartnerAnagraphCompletationsCommon"
+							label="#{msg.GeneralInformation}">
+							<table class="forms" border="0" cellpadding="1" cellspacing="1"
+								width="60%">
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditNaming} 1:" />
+										<span class="RequiredFieldMarker">*</span></td>
+									<td class="ControlCell"><t:selectOneMenu id="naming1"
+											value="#{cFPartnerAnagraphCompletationsEditBean.naming1}"
+											required="true"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											styleClass="DropDown" onchange="submit()"
+											valueChangeListener="#{cFPartnerAnagraphCompletationsEditBean.naming1Change}">
+											<f:selectItems
+												value="#{cFPartnerAnagraphCompletationsEditBean.lstNaming1}" />
+										</t:selectOneMenu> <t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.naming1Title}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditNaming} 2:" />
+										<span class="RequiredFieldMarker">*</span></td>
+									<td class="ControlCell">
+										<div style="width: 252px; overflow: hidden;">
+											<t:selectOneMenu id="naming2" onmousedown="collapse(this);"
+												onblur="expand(this);"
+												value="#{cFPartnerAnagraphCompletationsEditBean.naming2}"
+												required="#{cFPartnerAnagraphCompletationsEditBean.naming1=='CFPartnerAnagraphCompletationsEditNamingNonApplicabile' ? 'false':'true'}"
+												style="width: 252px;"
+												disabled="#{cFPartnerAnagraphCompletationsEditBean.naming1=='CFPartnerAnagraphCompletationsEditNamingNonApplicabile' ? 'true':'false'}"
+												rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+												styleClass="DropDown" onchange="submit()"
+												valueChangeListener="#{cFPartnerAnagraphCompletationsEditBean.naming2Change}">
+												<f:selectItems
+													value="#{cFPartnerAnagraphCompletationsEditBean.lstNaming2}" />
+											</t:selectOneMenu>
+										</div>
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.naming2Title}"
+											style="font-weight:bold;" />
+									</td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditNaming} 3:" />
+										<span class="RequiredFieldMarker">*</span></td>
+									<td class="ControlCell">
+										<div style="width: 252px; overflow: hidden;">
+											<t:selectOneMenu id="naming3" onmousedown="collapse(this);"
+												onchange="expand(this);" onblur="expand(this);"
+												disabled="#{cFPartnerAnagraphCompletationsEditBean.naming1=='CFPartnerAnagraphCompletationsEditNamingNonApplicabile' or cFPartnerAnagraphCompletationsEditBean.naming2=='CFPartnerAnagraphCompletationsEditNamingNonApplicabile'  ? 'true':'false'}"
+												value="#{cFPartnerAnagraphCompletationsEditBean.naming3}"
+												required="#{cFPartnerAnagraphCompletationsEditBean.naming1=='CFPartnerAnagraphCompletationsEditNamingNonApplicabile' or cFPartnerAnagraphCompletationsEditBean.naming2=='CFPartnerAnagraphCompletationsEditNamingNonApplicabile'  ? 'false':'true'}"
+												rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+												styleClass="DropDown">
+												<f:selectItems
+													value="#{cFPartnerAnagraphCompletationsEditBean.lstNaming3}" />
+											</t:selectOneMenu>
+										</div> <t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.naming3Title}"
+											style="font-weight:bold;" />
+									</td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditATECOcode} 1:" /></td>
+										
+									<td class="ControlCell">
+										<div style="width: 252px; overflow: hidden;">
+											<t:selectOneMenu id="ATECOcode1"
+												onmousedown="collapse(this);" onblur="expand(this);"
+												value="#{cFPartnerAnagraphCompletationsEditBean.ATECOcode1}"
+												
+												rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+												styleClass="DropDown" onchange="submit()"
+												valueChangeListener="#{cFPartnerAnagraphCompletationsEditBean.ateco1Change}">
+												<f:selectItems
+													value="#{cFPartnerAnagraphCompletationsEditBean.lstATECOcode1}" />
+											</t:selectOneMenu>
+										</div>
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.ateco1Title}"
+											style="font-weight:bold;" />
+									</td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditATECOcode} 2:" /></td>
+										
+									<td class="ControlCell"><div
+											style="width: 252px; overflow: hidden;">
+											<t:selectOneMenu id="ATECOcode2"
+												onmousedown="collapse(this);" onblur="expand(this);"
+												value="#{cFPartnerAnagraphCompletationsEditBean.ATECOcode2}"
+												disabled="#{cFPartnerAnagraphCompletationsEditBean.ATECOcode1=='CFPartnerAnagraphCompletationsEditNamingNonApplicabile' ? 'true':'false'}"
+												required="#{cFPartnerAnagraphCompletationsEditBean.ATECOcode1=='CFPartnerAnagraphCompletationsEditNamingNonApplicabile' ? 'false':'true'}"
+												rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+												styleClass="DropDown" onchange="submit()"
+												valueChangeListener="#{cFPartnerAnagraphCompletationsEditBean.ateco2Change}">
+												<f:selectItems
+													value="#{cFPartnerAnagraphCompletationsEditBean.lstATECOcode2}" />
+											</t:selectOneMenu>
+										</div>
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.ateco2Title}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditATECOcode} 3:" /> </td>
+										
+									<td class="ControlCell"><div
+											style="width: 252px; overflow: hidden;">
+											<t:selectOneMenu id="ATECOcode3"
+												value="#{cFPartnerAnagraphCompletationsEditBean.ATECOcode3}"
+												disabled="#{cFPartnerAnagraphCompletationsEditBean.ATECOcode1=='CFPartnerAnagraphCompletationsEditNamingNonApplicabile' or cFPartnerAnagraphCompletationsEditBean.ATECOcode2=='CFPartnerAnagraphCompletationsEditNamingNonApplicabile' ? 'true':'false'}"
+												required="#{cFPartnerAnagraphCompletationsEditBean.ATECOcode1=='CFPartnerAnagraphCompletationsEditNamingNonApplicabile' or cFPartnerAnagraphCompletationsEditBean.ATECOcode2=='CFPartnerAnagraphCompletationsEditNamingNonApplicabile' ? 'false':'true'}"
+												onmousedown="collapse(this);" onblur="expand(this);"
+												rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+												styleClass="DropDown" onchange="submit()"
+												valueChangeListener="#{cFPartnerAnagraphCompletationsEditBean.ateco3Change}">
+												<f:selectItems
+													value="#{cFPartnerAnagraphCompletationsEditBean.lstATECOcode3}" />
+											</t:selectOneMenu>
+										</div>
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.ateco3Title}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditATECOcode} 4:" />
+										</td>
+									<td class="ControlCell"><div
+											style="width: 252px; overflow: hidden;">
+											<t:selectOneMenu id="ATECOcode4"
+												value="#{cFPartnerAnagraphCompletationsEditBean.ATECOcode4}"
+												disabled="#{cFPartnerAnagraphCompletationsEditBean.ATECOcode1=='CFPartnerAnagraphCompletationsEditNamingNonApplicabile' or cFPartnerAnagraphCompletationsEditBean.ATECOcode2=='CFPartnerAnagraphCompletationsEditNamingNonApplicabile' or cFPartnerAnagraphCompletationsEditBean.ATECOcode3=='CFPartnerAnagraphCompletationsEditNamingNonApplicabile' ? 'true':'false'}"
+												required="#{cFPartnerAnagraphCompletationsEditBean.ATECOcode1=='CFPartnerAnagraphCompletationsEditNamingNonApplicabile' or cFPartnerAnagraphCompletationsEditBean.ATECOcode2=='CFPartnerAnagraphCompletationsEditNamingNonApplicabile' or cFPartnerAnagraphCompletationsEditBean.ATECOcode3=='CFPartnerAnagraphCompletationsEditNamingNonApplicabile' ? 'false':'true'}"
+												onmousedown="collapse(this);" onchange="expand(this);"
+												onblur="expand(this);"
+												rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+												styleClass="DropDown">
+												<f:selectItems
+													value="#{cFPartnerAnagraphCompletationsEditBean.lstATECOcode4}" />
+											</t:selectOneMenu>
+										</div>
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.ateco4Title}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditRecoverableVAT}:" /></td>
+									<td class="ControlCell"><t:selectBooleanCheckbox
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.recoverableVAT}">
+										</t:selectBooleanCheckbox> <b><t:outputText value="#{msg.yes}"
+												rendered="#{cFPartnerAnagraphCompletationsEditBean.view and cFPartnerAnagraphCompletationsEditBean.recoverableVAT}" />
+											<t:outputText value="#{msg.no}"
+												rendered="#{cFPartnerAnagraphCompletationsEditBean.view and !cFPartnerAnagraphCompletationsEditBean.recoverableVAT}" /></b>
+									</td>
+								</tr>
+
+								<ui:remove>
+								<tr>
+								<td class="LabelCell"></td>
+									<td><t:selectOneRadio styleClass="pickTable" id="fesrCnValue"
+											value="#{cFPartnerAnagraphCompletationsEditBean.fesrCnValue}"
+											layout="pageDirection"
+											
+											disabled="#{cFPartnerAnagraphCompletationsEditBean.view}">
+											<f:selectItems value="#{cFPartnerAnagraphCompletationsEditBean.listFesrCnValue}"></f:selectItems>
+							
+										</t:selectOneRadio></td>
+								</tr>
+								</ui:remove>
+								
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditNote}:" /></td>
+									<td class="ControlCell"><t:inputText
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											styleClass="editbox_form" id="notes" maxlength="255"
+											required="false"
+											value="#{cFPartnerAnagraphCompletationsEditBean.notes}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.notes}"
+											style="font-weight:bold;" /></td>
+								</tr>
+							</table>
+						</t:panelTab>
+						<t:panelTab id="CFPartnerAnagraphCompletationsEditFirstAddress"
+							label="#{msg.CFPartnerAnagraphCompletationsEditFirstAddress}">
+							<table class="forms" border="0" cellpadding="1" cellspacing="1"
+								width="60%">
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditRegion}:" />
+										<span class="RequiredFieldMarker">*</span></td>
+									<td class="ControlCell"><t:selectOneMenu id="firstRegion"
+											value="#{cFPartnerAnagraphCompletationsEditBean.firstAddressRegion}"
+											required="true"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											styleClass="DropDown" immediate="false" onchange="submit()"
+											valueChangeListener="#{cFPartnerAnagraphCompletationsEditBean.firstRegionChange}">
+											<f:selectItems
+												value="#{cfPartnerEditBean.listCountries}" />
+										</t:selectOneMenu>
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.firstAddressRegionText}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditProvince}:" />
+									</td>
+									<td class="ControlCell"><t:selectOneMenu
+											id="firstProvince"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.firstAddressProvince}"
+											required="false" styleClass="DropDown" onchange="submit()"
+											immediate="true"
+											valueChangeListener="#{cFPartnerAnagraphCompletationsEditBean.firstProvinceChange}">
+											<f:selectItems
+												value="#{cFPartnerAnagraphCompletationsEditBean.lstFirstAddressProvince}" />
+										</t:selectOneMenu>
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.firstAddressProvinceText}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditCity}:" /></td>
+									<td class="ControlCell"><t:selectOneMenu id="firstCity"
+											value="#{cFPartnerAnagraphCompletationsEditBean.firstAddressCity}"
+											required="false"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											styleClass="DropDown" immediate="true">
+											<f:selectItems
+												value="#{cFPartnerAnagraphCompletationsEditBean.lstFirstAddressCity}" />
+										</t:selectOneMenu>
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.firstAddressCityText}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.address}:" /></td>
+									<td class="ControlCell"><t:inputText
+											styleClass="editbox_form"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											id="addressAddress1" required="false"
+											value="#{cFPartnerAnagraphCompletationsEditBean.firstAddressAddress}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.firstAddressAddress}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditEmail}:" /></td>
+									<td class="ControlCell"><t:inputText
+											styleClass="editbox_form"
+											validator="#{validator.checkIsEmail}" id="mail1"
+											required="false"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.firstAddressEmail}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.firstAddressEmail}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditPhoneNumber}:" />
+									</td>
+									<td class="ControlCell"><t:inputText
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											styleClass="editbox_form" id="phonenumber1" required="false"
+											value="#{cFPartnerAnagraphCompletationsEditBean.firstAddressPhoneNumber}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.firstAddressPhoneNumber}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditFaxNumber}:" />
+									</td>
+									<td class="ControlCell"><t:inputText
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											styleClass="editbox_form" id="faxnumber1" required="false"
+											value="#{cFPartnerAnagraphCompletationsEditBean.firstAddressFaxNumber}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.firstAddressFaxNumber}"
+											style="font-weight:bold;" /></td>
+								</tr>
+							</table>
+						</t:panelTab>
+						<t:panelTab id="CFPartnerAnagraphCompletationsEditSecondAddress"
+							label="#{msg.CFPartnerAnagraphCompletationsEditSecondAddress}">
+							<table class="forms" border="0" cellpadding="1" cellspacing="1"
+								width="60%">
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditRegion}:" /></td>
+									<td class="ControlCell"><t:selectOneMenu id="secondRegion"
+											value="#{cFPartnerAnagraphCompletationsEditBean.secondAddressRegion}"
+											required="false"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											styleClass="DropDown" immediate="true" onchange="submit()"
+											valueChangeListener="#{cFPartnerAnagraphCompletationsEditBean.secondRegionChange}">
+											<f:selectItems
+												value="#{cfPartnerEditBean.listCountries}" />
+										</t:selectOneMenu>
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.secondAddressRegionText}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditProvince}:" />
+									</td>
+									<td class="ControlCell"><t:selectOneMenu
+											id="secondProvince"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.secondAddressProvince}"
+											required="false" styleClass="DropDown" onchange="submit()"
+											immediate="true"
+											valueChangeListener="#{cFPartnerAnagraphCompletationsEditBean.secondProvinceChange}">
+											<f:selectItems
+												value="#{cFPartnerAnagraphCompletationsEditBean.lstSecondAddressProvince}" />
+										</t:selectOneMenu>
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.secondAddressProvinceText}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditCity}:" /></td>
+									<td class="ControlCell"><t:selectOneMenu id="secondCity"
+											value="#{cFPartnerAnagraphCompletationsEditBean.secondAddressCity}"
+											required="false"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											styleClass="DropDown" immediate="true">
+											<f:selectItems
+												value="#{cFPartnerAnagraphCompletationsEditBean.lstSecondAddressCity}" />
+										</t:selectOneMenu>
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.secondAddressCityText}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.address}:" /></td>
+									<td class="ControlCell"><t:inputText
+											styleClass="editbox_form"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											id="addressAddress2" required="false"
+											value="#{cFPartnerAnagraphCompletationsEditBean.secondAddressAddress}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.secondAddressAddress}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditEmail}:" /></td>
+									<td class="ControlCell"><t:inputText
+											styleClass="editbox_form"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											validator="#{validator.checkIsEmail}" id="mail2"
+											required="false"
+											value="#{cFPartnerAnagraphCompletationsEditBean.secondAddressEmail}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.secondAddressEmail}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditPhoneNumber}:" />
+									</td>
+									<td class="ControlCell"><t:inputText
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											styleClass="editbox_form" id="phonenumber2" required="false"
+											value="#{cFPartnerAnagraphCompletationsEditBean.secondAddressPhoneNumber}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.secondAddressPhoneNumber}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditFaxNumber}:" />
+									</td>
+									<td class="ControlCell"><t:inputText
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											styleClass="editbox_form" id="faxnumber2" required="false"
+											value="#{cFPartnerAnagraphCompletationsEditBean.secondAddressFaxNumber}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.secondAddressFaxNumber}"
+											style="font-weight:bold;" /></td>
+								</tr>
+							</table>
+						</t:panelTab>
+					</t:panelTabbedPane>
+				</t:panelTab>
+				<t:panelTab id="EditTabs"
+					label="#{msg.CFPartnerAnagraphCompletationsEditTab0}">
+					<t:panelTabbedPane serverSideTabSwitch="false">
+						<t:panelTab id="tabCFPartnerAnagraphCompletationsEdit2"
+							label="#{msg.CFPartnerAnagraphCompletationsEditTab2}">
+							<table class="forms" border="0" cellpadding="1" cellspacing="1"
+								width="60%">
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditFiscalCode}:" />
+									</td>
+									<td class="ControlCell"><t:inputText
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											styleClass="editbox_form" id="lsFiscalCode" maxlength="250"
+											required="false"
+											value="#{cFPartnerAnagraphCompletationsEditBean.lsFiscalCode}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.lsFiscalCode}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditName}:" /></td>
+									<td class="ControlCell"><t:inputText
+											styleClass="editbox_form" id="lsName" maxlength="250"
+											required="false"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.lsName}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.lsName}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditSurname}:" /></td>
+									<td class="ControlCell"><t:inputText
+											styleClass="editbox_form" id="lsSurName" maxlength="250"
+											required="false"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.lsSurname}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.lsSurname}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditRole}:" /></td>
+									<td class="ControlCell"><t:inputText
+											styleClass="editbox_form" id="lsRole" maxlength="250"
+											required="false"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.lsRole}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.lsRole}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditAddress}:" /></td>
+									<td class="ControlCell"><t:inputText
+											styleClass="editbox_form" id="lsAddress" maxlength="250"
+											required="false"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.lsAddress}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.lsAddress}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditEmail}:" /></td>
+									<td class="ControlCell"><t:inputText
+											styleClass="editbox_form" id="lsEmail" maxlength="250"
+											required="false"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.lsEmail}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.lsEmail}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditPhoneNumber}:" />
+									</td>
+									<td class="ControlCell"><t:inputText
+											styleClass="editbox_form" id="lsPhoneNumber" maxlength="250"
+											required="false"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.lsPhoneNumber}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.lsPhoneNumber}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditFaxNumber}:" />
+									</td>
+									<td class="ControlCell"><t:inputText
+											styleClass="editbox_form" id="lsFaxNumber" maxlength="250"
+											required="false"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.lsFaxNumber}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.lsFaxNumber}"
+											style="font-weight:bold;" /></td>
+								</tr>
+							</table>
+						</t:panelTab>
+						<t:panelTab id="tabCFPartnerAnagraphCompletationsEdit3"
+							label="#{msg.CFPartnerAnagraphCompletationsEditTab3}">
+							<table class="forms" border="0" cellpadding="1" cellspacing="1"
+								width="60%">
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditFiscalCode}:" />
+									</td>
+									<td class="ControlCell"><t:inputText
+											styleClass="editbox_form" id="rpFiscalCode" maxlength="250"
+											required="false"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.rpFiscalCode}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.rpFiscalCode}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditName}:" /></td>
+									<td class="ControlCell"><t:inputText
+											styleClass="editbox_form" id="rpName" maxlength="250"
+											required="false"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.rpName}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.rpName}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditSurname}:" /></td>
+									<td class="ControlCell"><t:inputText
+											styleClass="editbox_form" id="rpSurName" maxlength="250"
+											required="false"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.rpSurname}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.rpSurname}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditRole}:" /></td>
+									<td class="ControlCell"><t:inputText
+											styleClass="editbox_form" id="rpRole" maxlength="250"
+											required="false"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.rpRole}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.rpRole}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditAddress}:" /></td>
+									<td class="ControlCell"><t:inputText
+											styleClass="editbox_form" id="rpAddress" maxlength="250"
+											required="false"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.rpAddress}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.rpAddress}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditEmail}:" /></td>
+									<td class="ControlCell"><t:inputText
+											styleClass="editbox_form" id="rpEmail" maxlength="250"
+											required="false"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.rpEmail}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.rpEmail}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditPhoneNumber}:" />
+									</td>
+									<td class="ControlCell"><t:inputText
+											styleClass="editbox_form" id="rpPhoneNumber" maxlength="250"
+											required="false"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.rpPhoneNumber}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.rpPhoneNumber}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditFaxNumber}:" />
+									</td>
+									<td class="ControlCell"><t:inputText
+											styleClass="editbox_form" id="rpFaxNumber" maxlength="250"
+											required="false"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.rpFaxNumber}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.rpFaxNumber}"
+											style="font-weight:bold;" /></td>
+								</tr>
+							</table>
+						</t:panelTab>
+						<t:panelTab id="tabCFPartnerAnagraphCompletationsEdit4"
+							label="#{msg.CFPartnerAnagraphCompletationsEditTab4}">
+							<table class="forms" border="0" cellpadding="1" cellspacing="1"
+								width="60%">
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditFiscalCode}:" />
+									</td>
+									<td class="ControlCell"><t:inputText
+											styleClass="editbox_form" id="frFiscalCode" maxlength="250"
+											required="false"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.frFiscalCode}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.frFiscalCode}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditName}:" /></td>
+									<td class="ControlCell"><t:inputText
+											styleClass="editbox_form" id="frName" maxlength="250"
+											required="false"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.frName}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.frName}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditSurname}:" /></td>
+									<td class="ControlCell"><t:inputText
+											styleClass="editbox_form" id="frSurName" maxlength="250"
+											required="false"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.frSurname}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.frSurname}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditRole}:" /></td>
+									<td class="ControlCell"><t:inputText
+											styleClass="editbox_form" id="frRole" maxlength="250"
+											required="false"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.frRole}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.frRole}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditAddress}:" /></td>
+									<td class="ControlCell"><t:inputText
+											styleClass="editbox_form" id="frAddress" maxlength="250"
+											required="false"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.frAddress}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.frAddress}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditEmail}:" /></td>
+									<td class="ControlCell"><t:inputText
+											styleClass="editbox_form" id="frEmail" maxlength="250"
+											required="false"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.frEmail}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.frEmail}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditPhoneNumber}:" />
+									</td>
+									<td class="ControlCell"><t:inputText
+											styleClass="editbox_form" id="frPhoneNumber" maxlength="250"
+											required="false"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.frPhoneNumber}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.frPhoneNumber}"
+											style="font-weight:bold;" /></td>
+								</tr>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.CFPartnerAnagraphCompletationsEditFaxNumber}:" />
+									</td>
+									<td class="ControlCell"><t:inputText
+											styleClass="editbox_form" id="frFaxNumber" maxlength="250"
+											required="false"
+											rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.frFaxNumber}" />
+										<t:outputText
+											rendered="#{cFPartnerAnagraphCompletationsEditBean.view}"
+											value="#{cFPartnerAnagraphCompletationsEditBean.frFaxNumber}"
+											style="font-weight:bold;" /></td>
+								</tr>
+							</table>
+						</t:panelTab>
+					</t:panelTabbedPane>
+				</t:panelTab>
+				<t:panelTab id="tabCFPartnerAnagraphView"
+					label="#{cFPartnerAnagraphCompletationsEditBean.tabCFPartnerAnagraphViewHeader}">
+					<table class="forms" border="0" cellpadding="1" cellspacing="1"
+						width="60%">
+						<tr>
+							<!-- Country -->
+							<td class="ControlCell"><t:outputText
+									value="#{msg.cfPartnerListTableCountry}:" /></td>
+							<td><b>#{cFPartnerAnagraphCompletationsEditBean.partnerCountry}</b></td>
+						</tr>
+						<tr>
+							<!-- Partita -->
+							<td class="LabelCell"><t:outputText
+									value="#{msg.cfPartnerListTablePartita}:" /></td>
+							<td><b>#{cFPartnerAnagraphCompletationsEditBean.partnerPartita}</b></td>
+						</tr>
+						<tr>
+							<!-- Name -->
+							<td class="LabelCell"><t:outputText
+									value="#{msg.cfPartnerListTableName}:" /></td>
+							<td><b>#{cFPartnerAnagraphCompletationsEditBean.partnerName}</b></td>
+						</tr>
+						<tr>
+							<!-- CIL -->
+							<td class="ControlCell"><t:outputText
+									value="#{msg.cfPartnerListTableCIL}:" /></td>
+							<td><b>#{cFPartnerAnagraphCompletationsEditBean.partnerFirstLevelController}</b></td>
+						</tr>
+						<ui:remove>
+							<tr>
+								<!-- DAEC -->
+								<td class="ControlCell"><t:outputText
+										value="#{cfPartnerEditBean.daecLabel}:" /></td>
+								<td><b>#{cFPartnerAnagraphCompletationsEditBean.partnerDaec}</b></td>
+							</tr>
+						</ui:remove>
+						<tr>
+							<!-- Referent name -->
+							<td class="LabelCell"><t:outputText
+									value="#{msg.cfPartnerListTableOperatorName}:" /></td>
+							<td><b>#{cFPartnerAnagraphCompletationsEditBean.partnerReferentName}</b></td>
+						</tr>
+						<tr>
+							<!-- Referent surname -->
+							<td class="LabelCell"><t:outputText
+									value="#{msg.cfPartnerListTableOperatorSurname}:" /></td>
+							<td><b>#{cFPartnerAnagraphCompletationsEditBean.partnerReferentSurname}</b></td>
+						</tr>
+						<tr>
+							<!-- Referent fiscal code -->
+							<td class="LabelCell"><t:outputText
+									value="#{msg.cfPartnerListTableOperatorCFRef}:" /></td>
+							<td><b>#{cFPartnerAnagraphCompletationsEditBean.partnerCfReferent}</b></td>
+						</tr>
+						<tr>
+							<!-- Referent email -->
+							<td class="LabelCell"><t:outputText
+									value="#{msg.cfPartnerListTableOperatorEmailRef}:" /></td>
+							<td><b>#{cFPartnerAnagraphCompletationsEditBean.partnerEmailReferent}</b></td>
+						</tr>
+					</table>
+				</t:panelTab>
+			</t:panelTabbedPane>
+			<div class="btn_line">
+				<table>
+					<tr>
+						<td><a4j:commandButton immediate="false"
+								rendered="#{!cFPartnerAnagraphCompletationsEditBean.view}"
+								action="#{cFPartnerAnagraphCompletationsEditBean.Page_Save}"
+								reRender="pagePanel" styleClass="button2" value="#{msg.save}"
+								id="save" /></td>
+						<td><a4j:commandButton value="#{msg.cancel}"
+								styleClass="button2" immediate="true"
+								action="#{cFPartnerAnagraphCompletationsEditBean.GoBack}" /></td>
+					</tr>
+				</table>
+			</div>
+		</a4j:outputPanel>
+	</ui:define>
+</ui:composition>

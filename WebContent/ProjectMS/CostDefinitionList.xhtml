@@ -1,0 +1,950 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ListBase.xhtml">
+	<ui:param name="heading" value="#{msg.costDefinition}" />
+	<ui:define name="list_body">
+		<a4j:outputPanel styleClass="form_100" ajaxRendered="true"
+			id="FormPanel">
+
+			<fieldset style="margin: 10px; width: auto;">
+				<table width="100%">
+					<tr>
+						<td><t:selectOneRadio style="margin:auto;"
+								value="#{costDefinitionListBean.filterValue}">
+								<f:selectItem itemValue="1" itemLabel="#{msg.all}" />
+								<f:selectItem itemValue="2" itemLabel="#{msg.validate}" />
+								<f:selectItem itemValue="3" itemLabel="#{msg.assignToMe}" />
+								<f:selectItem itemValue="4" itemLabel="#{msg.assignToOthers}" />
+								<f:selectItem itemValue="5"
+									itemLabel="#{msg.canBeSendToAdaUser}" />
+								<a4j:support event="onclick" id="support" reRender="FormPanel" />
+							</t:selectOneRadio></td>
+					</tr>
+				</table>
+				<table width="100%" class="forms">
+
+					<tr>
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.costDefinitionValidationStatus}:" /></td>
+						<td style="width: 25%;"><t:selectOneMenu
+								styleClass="DropDown"
+								value="#{costDefinitionListBean.filterValidationStatus}">
+								<f:selectItems
+									value="#{costDefinitionListBean.filterValidationStatusValues}" />
+							</t:selectOneMenu></td>
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.documentDate}:" /></td>
+						<td class="ControlCell" style="width: 25%;"><rich:calendar
+								locale="#{LocalizeBean.currentLocaleValue}" id="createFrom"
+								inputClass="editbox_form2" converter="dateTimeConverter"
+								value="#{costDefinitionListBean.documentDate}"
+								datePattern="dd/MM/yyyy">
+							</rich:calendar></td>
+					</tr>
+					<tr>
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.costItem}:" /></td>
+						<td style="width: 25%;"><t:selectOneMenu
+								rendered="#{!costDefinitionListBean.asse3Mode}"
+								styleClass="DropDown"
+								value="#{costDefinitionListBean.filterCostItem}">
+								<f:selectItems
+									value="#{costDefinitionListBean.filterCostItemValues}" />
+							</t:selectOneMenu> <t:selectOneMenu rendered="#{costDefinitionListBean.asse3Mode}"
+								styleClass="DropDown"
+								value="#{costDefinitionListBean.selectedCostItemAsse3}">
+								<f:selectItems
+									value="#{costDefinitionListBean.filterCostItemAsse3}" />
+							</t:selectOneMenu></td>
+
+
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.numberReport}:" /></td>
+						<td class="ControlCell" style="width: 25%;"><t:inputText
+								onkeypress="return decimalonly(this, event)"
+								onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+								maxlength="8" styleClass="editbox_form" id="reportNumber"
+								value="#{costDefinitionListBean.reportNumber}" /></td>
+
+
+
+						<ui:remove>
+							<td class="LabelCell" style="width: 25%;"><t:outputText
+									value="#{msg.costDefinitionIdPartner}:" /></td>
+							<td class="ControlCell" style="width: 25%;"><t:inputText
+									maxlength="8" styleClass="editbox_form" id="idPartner"
+									value="#{costDefinitionListBean.partnerID}" /></td>
+						</ui:remove>
+
+					</tr>
+					<tr>
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.costDefinitionIdCostDefinition}:" /></td>
+						<td class="ControlCell" style="width: 25%;"><t:inputText
+								maxlength="8" styleClass="editbox_form" id="idCostDefID"
+								value="#{costDefinitionListBean.costDefID}" /></td>
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.costDefinitionDURNumber}:" /></td>
+						<td class="ControlCell" style="width: 25%;"><t:inputText
+								maxlength="8" styleClass="editbox_form" id="idDurNumber"
+								value="#{costDefinitionListBean.durNumber}" /></td>
+					</tr>
+
+
+					<tr>
+
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.costDefinitionPartner}:" /></td>
+						<td style="width: 25%;"><t:selectOneMenu
+								styleClass="DropDown"
+								value="#{costDefinitionListBean.filterPartner}">
+								<f:selectItems
+									value="#{costDefinitionListBean.filterPartnerValues}" />
+							</t:selectOneMenu></td>
+
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.costDefinitionPhase}:" /></td>
+						<td style="width: 25%;"><t:selectOneMenu
+								rendered="#{!costDefinitionListBean.asse3Mode}"
+								styleClass="DropDown"
+								value="#{costDefinitionListBean.filterPhase}">
+								<f:selectItems value="#{costDefinitionListBean.filterPhases}" />
+							</t:selectOneMenu> <t:selectOneMenu rendered="#{costDefinitionListBean.asse3Mode}"
+								styleClass="DropDown"
+								value="#{costDefinitionListBean.selectedCostPhaseAsse3}"
+								valueChangeListener="#{costDefinitionListBean.asse3PhaseChange}"
+								onchange="submit()">
+								<f:selectItems
+									value="#{costDefinitionListBean.filterCostPhaseAsse3}" />
+							</t:selectOneMenu></td>
+
+
+
+
+
+
+					</tr>
+
+
+					<tr>
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.costDefinitionListCeritificateByFilter}:" /></td>
+						<td style="width: 25%;"><t:selectOneMenu
+								styleClass="DropDown"
+								value="#{costDefinitionListBean.certificatedByTypeFiltered}">
+								<f:selectItems
+									value="#{costDefinitionListBean.filterCertificatedBy}" />
+							</t:selectOneMenu></td>
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.finansingFilter}:" /></td>
+						<td class="ControlCell" style="width: 25%;"><t:selectBooleanCheckbox
+								value="#{costDefinitionListBean.additionalFinansing}">
+							</t:selectBooleanCheckbox></td>
+					</tr>
+					<tr>
+						<td colspan="4" class="btn_line"><a4j:commandButton
+								immediate="false" action="#{costDefinitionListBean.search}"
+								reRender="FormPanel" styleClass="button2" value="#{msg.search}"
+								id="search" /> <a4j:commandButton value="#{msg.clear}"
+								styleClass="button2" immediate="false" reRender="FormPanel"
+								id="clear" action="#{costDefinitionListBean.clear}" /></td>
+					</tr>
+
+				</table>
+			</fieldset>
+
+			<div class="table_container">
+				<t:dataTable width="99%" style="margin:0 auto;"
+					rows="#{costDefinitionListBean.itemsPerPage}" id="table" var="data"
+					first="#{costDefinitionListBean.tableFirstRow}"
+					value="#{costDefinitionListBean.costDefinitionsList}"
+					styleClass="form_table" rowClasses="row_table_n,row_table_g">
+					<f:facet name="header">
+						<t:column>
+							<sec:ifAnyGranted roles="ROLE_AGU_W,ROLE_B_W,ROLE_BP_W"
+								rendered="#{!Session.isAguRead and !Session.projectLock}">
+								<a class="headerPanelLink" id="addnew"
+									href="#{costDefinitionListBean.editPage}">#{msg.addCostDefinition}
+								</a>
+							</sec:ifAnyGranted>
+							<h:outputText style="text-align: center"
+								value="#{msg.costDefinition}" />
+
+							<h:selectOneMenu id="itemPP" styleClass="headerPanelSelect"
+								value="#{costDefinitionListBean.itemsPerPage}">
+								<f:selectItems
+									value="#{costDefinitionListBean.itemsPerPageList}" />
+								<a4j:support event="onchange" reRender="FormPanel" />
+							</h:selectOneMenu>
+						</t:column>
+					</f:facet>
+
+
+					<f:facet name="footer">
+						<a4j:htmlCommandLink action="#{costDefinitionListBean.export}"
+							styleClass="headerPanelExport">
+							<h:graphicImage alt="#{msg.exportXls}" value="/images/xls.png" />
+						</a4j:htmlCommandLink>
+					</f:facet>
+
+
+					<sec:ifAnyGranted
+						roles="ROLE_AGU_W, ROLE_AAU_W, ROLE_BP_W,ROLE_B_W">
+						<t:column id="select" styleClass="ActionColumn"
+							style="#{data.dismiss?'background: #fadacf':''}"
+							rendered="#{!(empty costDefinitionListBean.costDefinitionsList and costDefinitionListBean.canSendToDur
+              and (Session.CF or Session.AGU)) or costDefinitionListBean.canSendToAda}">
+							<f:facet name="header">
+								<h:selectBooleanCheckbox
+									rendered="#{costDefinitionListBean.displaySelectAll}"
+									value="#{costDefinitionListBean.selectAll}">
+									<a4j:support event="onclick" id="doSelectAll"
+										action="#{costDefinitionListBean.doSelectAll}" />
+								</h:selectBooleanCheckbox>
+							</f:facet>
+							<t:selectBooleanCheckbox
+								rendered="#{(data.costStateId == '6'  and !data.locked) or ((data.isSentToAAU == null or data.isSentToAAU == false) and costDefinitionListBean.canSendToAda and data.ACUSertified)}"
+								value="#{data.selected}">
+								<a4j:support event="onclick" id="addToCache"
+									action="#{costDefinitionListBean.Page_Load}" />
+							</t:selectBooleanCheckbox>
+						</t:column>
+					</sec:ifAnyGranted>
+
+					<t:column id="view" styleClass="ActionColumn"
+						style="#{data.dismiss?'background: #fadacf':''}"
+						rendered="#{!empty costDefinitionListBean.costDefinitionsList}">
+						<a title="#{msg.show}"
+							href="#{costDefinitionListBean.editPage}?view=#{data.id}"> <h:graphicImage
+								alt="#{msg.edit}" value="/images/ok.png" style="border:0" />
+						</a>
+					</t:column>
+					<sec:ifAnyGranted
+						roles="ROLE_AGU_W,ROLE_B_W,ROLE_BP_W, ROLE_SUPER_ADMIN_W, ROLE_AAU_W">
+						<t:column id="sendBack" styleClass="ActionColumn"
+							style="#{data.dismiss?'background: #fadacf':''}"
+							rendered="#{!empty costDefinitionListBean.costDefinitionsList and !Session.projectLock and Session.superAdmin}">
+							<a4j:commandLink ajaxSingle="true" id="sendBacklink"
+								rendered="#{(data.costStateId=='3' or data.costStateId=='4' or data.costStateId=='5' or data.costStateId=='6' or data.costStateId=='7') and data.locked}"
+								title="#{msg.movePrevStep}" reRender="table"
+								oncomplete="#{rich:component('movingMotivationDialog')}.show()">
+								<h:graphicImage alt="#{msg.movePrevStep}"
+									value="/images/sendBack.png" style="border:0" />
+								<f:setPropertyActionListener value="#{data.id}"
+									target="#{costDefinitionListBean.entitySendId}" />
+							</a4j:commandLink>
+						</t:column>
+						<t:column id="edit" styleClass="ActionColumn"
+							style="#{data.dismiss?'background: #fadacf':''}"
+							rendered="#{!empty costDefinitionListBean.costDefinitionsList and !Session.isAguRead and !Session.projectLock}">
+
+
+
+							<h:column
+								rendered="#{(data.costStateId=='1' or data.costStateId=='9'  or data.costStateId=='13' or Session.superAdmin and 
+								(data.costStateId=='3' or data.costStateId=='4' or data.costStateId=='5' or data.costStateId=='6' or data.costStateId=='7')) and
+								 !data.dismiss and ((!data.locked and !Session.superAdmin) or (Session.superAdmin and data.locked)) or (Session.AAU and data.isSentToAAU != null and data.isSentToAAU == true and (data.validateByAAU == null or data.validateByAAU == false) )}">
+								<a title="#{msg.edit}"
+									href="#{costDefinitionListBean.editPage}?edit=#{data.id}">
+									<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+										style="border:0" />
+								</a>
+							</h:column>
+
+
+
+						</t:column>
+						<t:column id="delete" styleClass="ActionColumn"
+							style="#{data.dismiss?'background: #fadacf':''}"
+							rendered="#{!empty costDefinitionListBean.costDefinitionsList and !Session.isAguRead and !Session.superAdmin and !Session.projectLock}">
+							<a4j:commandLink id="deletelink" title="#{msg.delete}"
+								rendered="#{(data.costStateId=='1' or (data.costStateId=='9') or (data.costStateId=='13')) and !data.locked}"
+								oncomplete="#{rich:component('deletePanel')}.show()">
+								<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{data.id}"
+									target="#{costDefinitionListBean.entityDeleteId}" />
+							</a4j:commandLink>
+						</t:column>
+
+						<ui:remove>
+							<t:column id="dismiss" styleClass="ActionColumn"
+								style="#{data.dismiss?'background: #fadacf':''}"
+								rendered="#{!empty costDefinitionListBean.costDefinitionsList and !Session.isAguRead and (Session.CF or Session.AGUASSE5 or Session.superAdmin) and !Session.projectLock}">
+								<a4j:commandLink id="dismisslink" title="#{msg.dismissCost}"
+									rendered="#{(data.costStateId=='1' or data.costStateId=='7' or (data.costStateId=='6') or (data.costStateId=='9')) and !data.dismiss and !Session.superAdmin}"
+									oncomplete="#{rich:component('dismissPanel')}.show()">
+									<h:graphicImage alt="#{msg.dismissCost}"
+										value="/images/status-off.png" style="border:0" />
+									<f:setPropertyActionListener value="#{data.id}"
+										target="#{costDefinitionListBean.entityDeleteId}" />
+								</a4j:commandLink>
+								<a4j:commandLink id="dismissAdminLink"
+									title="#{msg.dismissCost}"
+									rendered="#{data.costStateId!='8' and !data.dismiss and Session.superAdmin}"
+									oncomplete="#{rich:component('dismissMotivationDialog')}.show()">
+									<h:graphicImage alt="#{msg.dismissCost}"
+										value="/images/status-off.png" style="border:0" />
+									<f:setPropertyActionListener value="#{data.id}"
+										target="#{costDefinitionListBean.entityDeleteId}" />
+								</a4j:commandLink>
+							</t:column>
+						</ui:remove>
+
+						<t:column id="clone" styleClass="ActionColumn"
+							style="#{data.dismiss?'background: #fadacf':''}"
+							rendered="#{!empty costDefinitionListBean.costDefinitionsList and !Session.isAguRead and !Session.projectLock}">
+							<h:column
+								rendered="#{(!data.locked and !Session.superAdmin) or (Session.superAdmin and data.locked)}">
+								<a title="#{msg.clone}"
+									href="#{costDefinitionListBean.editPage}?clone=#{data.id}">
+									<h:graphicImage alt="#{msg.clone}" value="/images/clone.png"
+										style="border:0" />
+								</a>
+							</h:column>
+						</t:column>
+
+					</sec:ifAnyGranted>
+					<sec:ifAnyGranted roles="ROLE_SUPER_ADMIN_W">
+						<t:column id="lock" styleClass="ActionColumn"
+							style="#{data.dismiss?'background: #fadacf':''}"
+							headerstyleClass="ActionColumn"
+							rendered="#{!Session.projectLock and Session.superAdmin}">
+							<a4j:commandLink ajaxSingle="true" id="locklink"
+								rendered="#{!data.locked and data.costStateId!='8'}"
+								title="#{msg.lock}"
+								action="#{costDefinitionListBean.lockEntity}" reRender="table">
+								<h:graphicImage alt="#{msg.lock}" value="/images/lock.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{data.id}"
+									target="#{costDefinitionListBean.entityEditId}" />
+							</a4j:commandLink>
+							<a4j:commandLink ajaxSingle="true" id="unlocklink"
+								rendered="#{data.locked and data.costStateId!='8'}"
+								title="#{msg.unlock}"
+								action="#{costDefinitionListBean.unlockEntity}" reRender="table">
+								<h:graphicImage alt="#{msg.lock}" value="/images/unlock.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{data.id}"
+									target="#{costDefinitionListBean.entityEditId}" />
+							</a4j:commandLink>
+						</t:column>
+					</sec:ifAnyGranted>
+					<t:column styleClass="StringColumn"
+						style="#{data.dismiss?'background: #fadacf':''}"
+						rendered="#{!empty costDefinitionListBean.costDefinitionsList}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.costDefinitionInsertedBy}" />
+						</f:facet>
+						<b><t:outputText value="#{data.userInsertedName}" /> </b>
+					</t:column>
+					<t:column styleClass="StringColumn"
+						style="#{data.dismiss?'background: #fadacf':''}"
+						rendered="#{!empty costDefinitionListBean.costDefinitionsList}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.costDefinition}" />
+						</f:facet>
+						<table>
+							<tr>
+								<td><t:outputText value="#{msg.costId}:" /></td>
+								<td><b><t:outputText value="#{data.progressiveId}" />
+								</b></td>
+							</tr>
+							<tr>
+								<td><t:outputText value="#{msg.motivation}:" /></td>
+								<td><b><t:outputText value="#{data.motivations}" /> </b></td>
+							</tr>
+							<tr>
+								<td><t:outputText value="#{msg.number}:" /></td>
+								<td><b><t:outputText value="#{data.documentNumber}" />
+								</b></td>
+							</tr>
+							<tr>
+								<td><t:outputText value="#{msg.date}:" /></td>
+								<td><b><t:outputText value="#{data.documentDate}"
+											converter="dateTimeConverter" /> </b></td>
+							</tr>
+							<tr>
+								<td><t:outputText value="#{msg.issuesNames}:" /></td>
+								<td><b><t:outputText value="#{data.issuesNames}" /> </b></td>
+							</tr>
+							<tr>
+								<td><t:outputText value="#{msg.amount}:" /></td>
+								<td><b><t:outputText converter="moneyConverter"
+											value="#{data.documentAmount}" /> </b></td>
+							</tr>
+							<tr>
+								<td><t:outputText value="#{msg.costCostItem}:" /></td>
+								<td><b><t:outputText value="#{data.costItem.value}"
+											rendered="#{!costDefinitionListBean.asse3Mode}" /> <t:outputText
+											value="#{data.costItemPhaseAsse3}"
+											rendered="#{costDefinitionListBean.asse3Mode}" /> </b></td>
+							</tr>
+							<tr>
+								<td><t:outputText value="#{msg.additionalFinansing}:" /></td>
+								<td><b><t:outputText converter="moneyConverter"
+											value="#{data.additionalFinansingAmount}" /> </b></td>
+
+							</tr>
+							<tr>
+								<td><t:outputText value="#{msg.stateAid}:" /></td>
+								<td><b> <t:outputText value="#{msg.yes}"
+											rendered="#{data.stateAid}" /> <t:outputText
+											value="#{msg.no}" rendered="#{!data.stateAid}" />
+								</b></td>
+							</tr>
+							<tr>
+								<td><t:outputText
+										value="#{msg.amountToCoverAdvanceStateAid}:"></t:outputText></td>
+								<td><b><t:outputText converter="moneyConverter"
+											value="#{data.amountToCoverAdvanceStateAid}" /> </b></td>
+							</tr>
+
+							<tr>
+								<td><t:outputText
+										value="#{msg.expenditureOutsideEligibleAreas}:" /></td>
+								<td><b><t:outputText converter="moneyConverter"
+											value="#{data.expenditureOutsideEligibleAreasAmount}" /> </b></td>
+							</tr>
+
+							<ui:remove>
+							<tr>
+								<td><t:outputText value="#{msg.inkindContributions}:" /></td>
+								<td><b><t:outputText converter="moneyConverter"
+											value="#{data.inkindContributionsAmount}" /> </b></td>
+							</tr>
+							</ui:remove>
+
+						</table>
+					</t:column>
+					<t:column styleClass="StringColumn"
+						style="#{data.dismiss?'background: #fadacf':''}"
+						rendered="#{!empty costDefinitionListBean.costDefinitionsList}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.paymentDocument}" />
+						</f:facet>
+						<table>
+							<tr>
+								<td><t:outputText value="#{msg.number}:" /></td>
+								<td><b><t:outputText value="#{data.paymentNumber}" />
+								</b></td>
+							</tr>
+							<tr>
+								<td><t:outputText value="#{msg.date}:" /></td>
+								<td><b><t:outputText value="#{data.paymentDate}"
+											converter="dateTimeConverter" /> </b></td>
+							</tr>
+							<tr>
+								<td><t:outputText value="#{msg.amount}:" /></td>
+								<td><b><t:outputText converter="moneyConverter"
+											value="#{data.paymentAmount}" /> </b></td>
+							</tr>
+						</table>
+					</t:column>
+					<t:column styleClass="StringColumn"
+						style="#{data.dismiss?'background: #fadacf':''}"
+						rendered="#{!empty costDefinitionListBean.costDefinitionsList}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.report}" />
+						</f:facet>
+						<table>
+							<tr>
+								<td><t:outputText value="#{msg.amount}:" /></td>
+								<td><b><t:outputText converter="moneyConverter"
+											value="#{data.amountReport}" /> </b></td>
+							</tr>
+							<tr>
+								<td><t:outputText value="#{msg.numberReport}:" /></td>
+								<td><b><t:outputText value="#{data.reportNumber}" /> </b></td>
+
+							</tr>
+
+
+						</table>
+					</t:column>
+					<t:column styleClass="StringColumn"
+						style="#{data.dismiss?'background: #fadacf':''}; width: 280px;"
+						rendered="#{!empty costDefinitionListBean.costDefinitionsList}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.check}" />
+						</f:facet>
+						<div class="flex-table">
+							<t:div styleClass="flex-row-collapse flex-row" onclick="switchCostTableRow('cost-table-row-reviser-#{data.progressiveId}')">
+								<t:div styleClass="flex-row-collapse-icon"></t:div>
+								<t:div styleClass="flex-cell"><t:outputText value="#{msg.cfPartnerListTableCIL}" /></t:div>										
+							</t:div>
+							<t:div styleClass="cost-table-row-reviser-#{data.progressiveId} flex-row flex-row-indent" style="display: none;">
+								<t:div styleClass="flex-cell">
+									<t:outputText value="#{msg.certifiedAmount}:" />
+								</t:div>			
+								<t:div styleClass="flex-cell">
+									<b><t:outputText value="#{data.cilCheck}" converter="moneyConverter" /></b>
+								</t:div>																				
+							</t:div>
+							<t:div styleClass="cost-table-row-reviser-#{data.progressiveId} flex-row flex-row-indent" style="display: none;">
+								<t:div styleClass="flex-cell">
+									<t:outputText value="#{msg.date}:" />
+								</t:div>			
+								<t:div styleClass="flex-cell">
+									<b><t:outputText converter="dateTimeConverter" value="#{data.cilDate}" /></b>
+								</t:div>																				
+							</t:div>
+							<t:div styleClass="cost-table-row-reviser-#{data.progressiveId} flex-row flex-row-indent" style="display: none;">
+								<t:div styleClass="flex-cell">
+									<t:outputText value="#{msg.certifiedAmountCfPublicAmount}:" />
+								</t:div>			
+								<t:div styleClass="flex-cell">
+									<b><t:outputText value="#{data.cilCheckPublicAmount}" converter="moneyConverter" /></b>
+								</t:div>																				
+							</t:div>
+							
+							<ui:remove>
+							<t:div styleClass="cost-table-row-reviser-#{data.progressiveId} flex-row flex-row-indent" style="display: none;">
+								<t:div styleClass="flex-cell">
+									<t:outputText value="#{msg.certifiedAmountCfPrivateAmount}:" />
+								</t:div>			
+								<t:div styleClass="flex-cell">
+									<b><t:outputText value="#{data.cilCheckPrivateAmount}" converter="moneyConverter" /></b>
+								</t:div>																				
+							</t:div>
+							</ui:remove>
+							
+							<t:div styleClass="cost-table-row-reviser-#{data.progressiveId} flex-row flex-row-indent" style="display: none;">
+								<t:div styleClass="flex-cell">
+									<t:outputText value="#{msg.certifiedAmountCfAdditionaFinansingAmount}:" />
+								</t:div>			
+								<t:div styleClass="flex-cell">
+									<b><t:outputText value="#{data.cilCheckAdditionalFinansingAmount}" converter="moneyConverter" /></b>
+								</t:div>																				
+							</t:div>
+							<t:div styleClass="cost-table-row-reviser-#{data.progressiveId} flex-row flex-row-indent" style="display: none;">
+								<t:div styleClass="flex-cell">
+									<t:outputText value="#{msg.certifiedAmountCfStateAidAmount}:" />
+								</t:div>			
+								<t:div styleClass="flex-cell">
+									<b><t:outputText value="#{data.cilCheckStateAidAmount}" converter="moneyConverter" /></b>
+								</t:div>																				
+							</t:div>
+							<t:div styleClass="cost-table-row-reviser-#{data.progressiveId} flex-row flex-row-indent" style="display: none;">
+								<t:div styleClass="flex-cell">
+									<t:outputText value="#{msg.certifiedAmountCfAmountOutsideEligibleAreas}:" />
+								</t:div>			
+								<t:div styleClass="flex-cell">
+									<b><t:outputText value="#{data.cilCheckOutsideEligibleAreas}" converter="moneyConverter" /></b>
+								</t:div>																				
+							</t:div>
+							
+							<ui:remove>
+							<t:div styleClass="cost-table-row-reviser-#{data.progressiveId} flex-row flex-row-indent" style="display: none;">
+								<t:div styleClass="flex-cell">
+									<t:outputText value="#{msg.certifiedAmountCfInkindContributions}:" />
+								</t:div>			
+								<t:div styleClass="flex-cell">
+									<b><t:outputText value="#{data.cilCheckInkindContributions}" converter="moneyConverter" /></b>
+								</t:div>																				
+							</t:div>
+							</ui:remove>
+							
+							<t:div styleClass="flex-row-collapse flex-row" onclick="switchCostTableRow('cost-table-row-leader-#{data.progressiveId}')">
+								<t:div styleClass="flex-row-collapse-icon"></t:div>										
+								<t:div styleClass="flex-cell"><t:outputText value="#{msg.leader}" /></t:div>	
+								<t:div rendered="#{data.costStateId == '6' and costDefinitionListBean.canSendToDur and !data.locked}" styleClass="flex-row-approve-icon"></t:div>								
+							</t:div>
+							<t:div styleClass="cost-table-row-leader-#{data.progressiveId} flex-row flex-row-indent" style="display: none;">
+								<t:div styleClass="flex-cell">
+									<t:outputText value="#{msg.certifiedAmountCf}:" />
+								</t:div>			
+								<t:div styleClass="flex-cell">
+									<t:inputText value="#{data.cfCheck}" converter="floatConverter"
+										rendered="#{data.costStateId == '6' and costDefinitionListBean.canSendToDur and !data.locked}" />
+									<b><t:outputText value="#{data.cfCheck}" converter="moneyConverter"
+										rendered="#{data.costStateId == '7' or data.costStateId == '8'}" /></b>
+								</t:div>																				
+							</t:div>									
+							<t:div styleClass="cost-table-row-leader-#{data.progressiveId} flex-row flex-row-indent" style="display: none;">
+								<t:div styleClass="flex-cell">
+									<t:outputText value="#{msg.certifiedAmountCfPublicAmount}:" />
+								</t:div>			
+								<t:div styleClass="flex-cell">
+									<t:inputText value="#{data.cfCheckPublicAmount}" converter="floatConverter"
+										rendered="#{data.costStateId == '6' and costDefinitionListBean.canSendToDur and !data.locked}" />
+									<b><t:outputText value="#{data.cfCheckPublicAmount}" converter="moneyConverter"
+										rendered="#{data.costStateId == '7' or data.costStateId == '8'}" /></b>
+								</t:div>																				
+							</t:div>
+							
+							<ui:remove>
+							<t:div styleClass="cost-table-row-leader-#{data.progressiveId} flex-row flex-row-indent" style="display: none;">
+								<t:div styleClass="flex-cell">
+									<t:outputText value="#{msg.certifiedAmountCfPrivateAmount}:" />
+								</t:div>			
+								<t:div styleClass="flex-cell">
+									<t:inputText value="#{data.cfCheckPrivateAmount}" converter="floatConverter"
+										rendered="#{data.costStateId == '6' and costDefinitionListBean.canSendToDur and !data.locked}" />
+									<b><t:outputText value="#{data.cfCheckPrivateAmount}" converter="moneyConverter"
+										rendered="#{data.costStateId == '7' or data.costStateId == '8'}" /></b>
+								</t:div>																				
+							</t:div>
+							</ui:remove>
+							
+							<t:div styleClass="cost-table-row-leader-#{data.progressiveId} flex-row flex-row-indent" style="display: none;">
+								<t:div styleClass="flex-cell">
+									<t:outputText value="#{msg.certifiedAmountCfAdditionaFinansingAmount}:" />
+								</t:div>			
+								<t:div styleClass="flex-cell">
+									<t:inputText value="#{data.cfCheckAdditionalFinansingAmount}" converter="floatConverter"
+										rendered="#{data.costStateId == '6' and costDefinitionListBean.canSendToDur and !data.locked}" />
+									<b><t:outputText value="#{data.cfCheckAdditionalFinansingAmount}" converter="moneyConverter"
+										rendered="#{data.costStateId == '7' or data.costStateId == '8'}" /></b>
+								</t:div>																				
+							</t:div>
+							<t:div styleClass="cost-table-row-leader-#{data.progressiveId} flex-row flex-row-indent" style="display: none;">
+								<t:div styleClass="flex-cell">
+									<t:outputText value="#{msg.certifiedAmountCfStateAidAmount}:" />
+								</t:div>			
+								<t:div styleClass="flex-cell">
+									<t:inputText value="#{data.cfCheckStateAidAmount}" converter="floatConverter"
+										rendered="#{data.costStateId == '6' and costDefinitionListBean.canSendToDur and !data.locked}" />
+									<b><t:outputText value="#{data.cfCheckStateAidAmount}" converter="moneyConverter"
+										rendered="#{data.costStateId == '7' or data.costStateId == '8'}" /></b>
+								</t:div>																				
+							</t:div>
+							<t:div styleClass="cost-table-row-leader-#{data.progressiveId} flex-row flex-row-indent" style="display: none;">
+								<t:div styleClass="flex-cell">
+									<t:outputText value="#{msg.certifiedAmountCfAmountOutsideEligibleAreas}:" />
+								</t:div>			
+								<t:div styleClass="flex-cell">
+									<t:inputText value="#{data.cfCheckOutsideEligibleAreas}" converter="floatConverter"
+										rendered="#{data.costStateId == '6' and costDefinitionListBean.canSendToDur and !data.locked}" />
+									<b><t:outputText value="#{data.cfCheckOutsideEligibleAreas}" converter="moneyConverter"
+										rendered="#{data.costStateId == '7' or data.costStateId == '8'}" /></b>
+								</t:div>																				
+							</t:div>
+							
+							<ui:remove>
+							<t:div styleClass="cost-table-row-leader-#{data.progressiveId} flex-row flex-row-indent" style="display: none;">
+								<t:div styleClass="flex-cell">
+									<t:outputText value="#{msg.certifiedAmountCfInkindContributions}:" />
+								</t:div>			
+								<t:div styleClass="flex-cell">
+									<t:inputText value="#{data.cfCheckInkindContributions}" converter="floatConverter"
+										rendered="#{data.costStateId == '6' and costDefinitionListBean.canSendToDur and !data.locked}" />
+									<b><t:outputText value="#{data.cfCheckInkindContributions}" converter="moneyConverter"
+										rendered="#{data.costStateId == '7' or data.costStateId == '8'}" /></b>
+								</t:div>																				
+							</t:div>
+							</ui:remove>
+							
+							<t:div styleClass="cost-table-row-leader-#{data.progressiveId} flex-row flex-row-indent" style="display: none;">
+								<t:div styleClass="flex-cell">
+									<t:outputText value=" #{msg.durCompilationEditCFCertNote}:"></t:outputText>
+								</t:div>			
+								<t:div styleClass="flex-cell">
+									<t:inputText rendered="#{data.costStateId == '6' and costDefinitionListBean.canSendToDur and !data.locked}"
+										styleClass="editbox_form5" value="#{data.cfCertificationNote}"></t:inputText>
+									<b><t:outputText value="#{data.cfCertificationNote}"
+										rendered="#{data.costStateId == '7' or data.costStateId == '8'}"></t:outputText></b>
+								</t:div>																				
+							</t:div>							
+						</div>
+					</t:column>
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty costDefinitionListBean.costDefinitionsList}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.costDefinitionReimbrNumber}" />
+						</f:facet>
+						<b><t:outputText value="#{data.durNumberTransient}" /></b>
+					</t:column>
+					<t:column styleClass="StringColumn"
+						style="#{data.dismiss?'background: #fadacf':''}"
+						rendered="#{!empty costDefinitionListBean.costDefinitionsList}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.costDefinitionListCeritifications}" />
+						</f:facet>
+						<table>
+							<tr>
+								<td><t:outputText value="#{msg.stcCertification}:" /></td>
+								<td><b><t:outputText converter="floatConverter"
+											value="#{data.stcCertification}" /></b></td>
+							</tr>
+							<tr>
+								<td><t:outputText value="#{msg.aguCertification}:" /></td>
+								<td><b><t:outputText converter="floatConverter"
+											value="#{data.aguCertification}" /></b></td>
+							</tr>
+							<tr>
+								<td><t:outputText value="#{msg.acuCertification}:" /></td>
+								<td><b><t:outputText converter="floatConverter"
+											value="#{data.acuCertification}" /></b></td>
+							</tr>
+							<tr>
+								<td><t:outputText value="#{msg.validateByAdA}:" /></td>
+								<td><t:outputText
+										value="#{(data.validateByAAU == null or data.validateByAAU == false) ? msg.no : msg.yes}" /></td>
+							</tr>
+							<tr>
+								<td><t:outputText value="#{msg.importAdA}:" /></td>
+								<td><t:outputText converter="floatConverter"
+										value="#{data.importAda}" /></td>
+							</tr>
+							<tr>
+								<td><t:outputText value="#{msg.documentNote}:" /></td>
+							</tr>
+							<tr>
+								<td><t:outputText styleClass="editbox_form"
+										value="#{data.aauNote}" /></td>
+							</tr>
+						</table>
+					</t:column>
+					<t:column styleClass="StringColumn"
+						style="#{data.dismiss?'background: #fadacf':''}"
+						rendered="#{!empty costDefinitionListBean.costDefinitionsList}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.durCompilationEditCostTableHeaderAssign}" />
+						</f:facet>
+						<b><t:outputText value="#{data.costState.value}" /></b>
+					</t:column>
+					<t:column styleClass="StringColumn"
+						style="#{data.dismiss?'background: #fadacf':''}"
+						rendered="#{!empty costDefinitionListBean.costDefinitionsList}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.costDefinitionIsSendToAda}" />
+						</f:facet>
+						<b><t:outputText
+								value="#{(data.isSentToAAU == null or data.isSentToAAU == false) ? msg.costDefinitionNotSentToAda : msg.costDefinitionSentToAda}" />
+						</b>
+					</t:column>
+					<t:column styleClass="StringColumn"
+						rendered="#{empty costDefinitionListBean.costDefinitionsList}">
+						<f:facet name="header">
+							<h:outputText value="#{msg.noData}" />
+						</f:facet>
+					</t:column>
+				</t:dataTable>
+			</div>
+			<a4j:outputPanel styleClass="scrollerPanel">
+				<t:dataScroller id="scroll" styleClass="scroller" for="table"
+					rendered="#{costDefinitionListBean.showScroll}" paginator="true"
+					paginatorMaxPages="5" fastStep="5" paginatorColumnClass="page"
+					paginatorActiveColumnClass="page_active" immediate="true"
+					binding="#{costDefinitionListBean.scroller}">
+					<f:facet name="first">
+						<t:graphicImage alt="#{msg.first}" url="../images/back_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="last">
+						<t:graphicImage alt="#{msg.last}" url="../images/forward_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="previous">
+						<t:graphicImage alt="#{msg.previous}" url="../images/back.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="next">
+						<t:graphicImage alt="#{msg.next}" url="../images/forward.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="fastforward">
+						<t:graphicImage alt="#{msg.fastforward}"
+							url="../images/all_forward.gif" border="1" />
+					</f:facet>
+					<f:facet name="fastrewind">
+						<t:graphicImage alt="#{msg.fastrewind}"
+							url="../images/all_back.gif" border="1" />
+					</f:facet>
+				</t:dataScroller>
+			</a4j:outputPanel>
+
+			<table width="100%">
+				<tr>
+					<td align="center"><t:outputText
+							styleClass="RequiredFieldMarker"
+							value="#{costDefinitionListBean.errorMessage}" /></td>
+				</tr>
+				<tr>
+					<td class="btn_line"><a4j:commandButton
+							value="#{msg.costDefinitionSendToDur}" styleClass="button"
+							rendered="#{costDefinitionListBean.canSendToDur and !empty costDefinitionListBean.costDefinitionsList and !Session.isAguRead}"
+							action="#{costDefinitionListBean.sendToDur}" reRender="FormPanel" />
+					</td>
+				</tr>
+			</table>
+
+			<table width="100%">
+				<tr>
+					<td class="btn_line"><a4j:commandButton
+							value="#{msg.sendToAda}" styleClass="button"
+							rendered="#{costDefinitionListBean.selectedToSend}"
+							action="#{costDefinitionListBean.doSendToAda}"
+							reRender="FormPanel" /></td>
+				</tr>
+			</table>
+
+		</a4j:outputPanel>
+
+	</ui:define>
+
+	<ui:define name="delete_panels">
+		<rich:modalPanel id="deletePanel" autosized="true" width="200">
+			<f:facet name="header">
+				<h:outputText value="#{msg.delete}?" style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+
+			</f:facet>
+			<h:form>
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.yes}" ajaxSingle="true" styleClass="button"
+									action="#{costDefinitionListBean.deleteEntity}"
+									oncomplete="#{rich:component('deletePanel')}.hide();"
+									reRender="FormPanel" /></td>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.cancel}" styleClass="button"
+									onclick="#{rich:component('deletePanel')}.hide();return false;" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</h:form>
+		</rich:modalPanel>
+		<rich:modalPanel id="dismissPanel" autosized="true" width="200">
+			<f:facet name="header">
+				<h:outputText value="#{msg.dismissCost}?"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+
+			</f:facet>
+			<h:form>
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.yes}" ajaxSingle="true" styleClass="button"
+									action="#{costDefinitionListBean.dismissEntity}"
+									oncomplete="#{rich:component('dismissPanel')}.hide();"
+									reRender="FormPanel" /></td>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.cancel}" styleClass="button"
+									onclick="#{rich:component('dismissPanel')}.hide();return false;" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</h:form>
+		</rich:modalPanel>
+		<rich:modalPanel id="dismissMotivationDialog" autosized="true"
+			width="300" resizeable="false">
+			<f:facet name="header">
+				<h:outputText value="#{msg.validationFlowViewEnterMotivation}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<h:form id="updateForm">
+				<h:panelGrid columns="1">
+					<ui:fragment>
+						<h:outputText value="#{msg.motivation}" />
+						<h:panelGroup style="color:red;">*</h:panelGroup>
+					</ui:fragment>
+					<t:inputTextarea value="#{costDefinitionListBean.actionMotivation}"
+						id="updateMotivation"
+						onkeypress="return textArea(this, 255, event)"
+						style="width: 350px; height: 130px; resize: none;" />
+				</h:panelGrid>
+				<center>
+					<h:commandButton value="#{msg.yes}"
+						action="#{costDefinitionListBean.dismissSuperAdmin}"
+						onclick="return validateUpdateMotivation();" />
+					<a4j:commandButton value="#{msg.no}"
+						actionListener="#{costDefinitionListBean.clearMotivation}"
+						oncomplete="#{rich:component('dismissMotivationDialog')}.hide();"
+						reRender="updateMotivation" />
+				</center>
+				<script language="JavaScript" type="text/javascript">
+                function validateUpdateMotivation() {
+                    var textArea = document.getElementById('updateForm:updateMotivation');
+                    if (textArea != null) {
+                        if (textArea.value.trim().length > 0) {
+                            return true;
+                        } else {
+                            textArea.style.borderColor = 'red';
+                            return false;
+                        }
+                    }
+                    return false;
+                }
+            </script>
+			</h:form>
+		</rich:modalPanel>
+		<rich:modalPanel id="movingMotivationDialog" autosized="true"
+			width="300" resizeable="false">
+			<f:facet name="header">
+				<h:outputText value="#{msg.validationFlowViewEnterMotivation}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<h:form id="movingForm">
+				<h:panelGrid columns="1">
+					<ui:fragment>
+						<h:outputText value="#{msg.motivation}" />
+						<h:panelGroup style="color:red;">*</h:panelGroup>
+					</ui:fragment>
+					<t:inputTextarea value="#{costDefinitionListBean.actionMotivation}"
+						id="movingMotivation"
+						onkeypress="return textArea(this, 255, event)"
+						style="width: 350px; height: 130px; resize: none;" />
+				</h:panelGrid>
+				<center>
+					<h:commandButton value="#{msg.yes}"
+						action="#{costDefinitionListBean.movePrevStep}"
+						onclick="return validateMovingMotivation();" />
+					<a4j:commandButton value="#{msg.no}"
+						actionListener="#{costDefinitionListBean.clearMotivation}"
+						oncomplete="#{rich:component('movingMotivationDialog')}.hide();"
+						reRender="movingMotivationDialog" />
+				</center>
+				<script language="JavaScript" type="text/javascript">
+	                function validateMovingMotivation() {
+	                    var textArea = document.getElementById('movingForm:movingMotivation');
+	                    if (textArea != null) {
+	                        if (textArea.value.trim().length > 0) {
+	                            return true;
+	                        } else {
+	                            textArea.style.borderColor = 'red';
+	                            return false;
+	                        }
+	                    }
+	                    return false;
+	                }
+	            </script>
+			</h:form>
+		</rich:modalPanel>
+
+	</ui:define>
+	<ui:define name="script_body">
+		<script type="text/javascript">			
+			function switchCostTableRow(rowClass) {
+				var rowElements = document.getElementsByClassName(rowClass);
+				for (index = 0; index &lt; rowElements.length; index++) {
+					var currentRowElement = rowElements[index];
+					if (currentRowElement.style.display != 'flex') {
+						currentRowElement.style.display = 'flex';
+					} else {
+						currentRowElement.style.display = 'none';
+					}
+				}
+			}
+		</script>
+	</ui:define>
+</ui:composition>
+</html>

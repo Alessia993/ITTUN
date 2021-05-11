@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ListBase.xhtml">
+	<ui:param name="heading" value="#{msg.paymentRequestViewName}" />
+	<ui:define name="list_body">
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+			<div class="table_container">
+				<t:dataTable style="margin:0 auto; width: 80%;"
+					rows="#{paymentRequestViewBean.itemsPerPage}" id="table" var="item"
+					value="#{paymentRequestViewBean.list}" styleClass="form_table"
+					rowClasses="row_table_n,row_table_g">
+
+					<t:column rendered="#{!empty paymentRequestViewBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.paymentRequestProjectAsse}" />
+						</f:facet>
+						<t:outputText value="#{item.projectAsse}" />
+					</t:column>
+
+					<t:column rendered="#{!empty paymentRequestViewBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.paymentRequestProjectName}" />
+						</f:facet>
+						<t:outputText value="#{item.projectName}" />
+					</t:column>
+
+					<t:column rendered="#{!empty paymentRequestViewBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.paymentRequestViewPaymentRequest}" />
+						</f:facet>
+						<t:outputText value="#{item.paymentRequest.number}" />
+					</t:column>
+
+					<t:column rendered="#{!empty paymentRequestViewBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.paymentRequestViewDurNumber}" />
+						</f:facet>
+						<t:outputText value="#{item.durNumber}" />
+					</t:column>
+
+					<t:column rendered="#{!empty paymentRequestViewBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.paymentRequestListTotalAmount}" />
+						</f:facet>
+						<t:outputText value="#{item.transientTotalAmount}"
+							converter="moneyConverter" />
+					</t:column>
+
+					<t:column rendered="#{!empty paymentRequestViewBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.paymentRequestViewAmountAnnuled}" />
+						</f:facet>
+						<t:outputText value="#{item.annuledAmount}"
+							converter="moneyConverter" />
+					</t:column>
+
+					<t:column rendered="#{!empty paymentRequestViewBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.paymentRequestViewAmountRectified}" />
+						</f:facet>
+						<t:outputText value="#{item.rectifiedAmount}"
+							converter="moneyConverter" />
+					</t:column>
+
+
+
+				</t:dataTable>
+			</div>
+			<a4j:outputPanel styleClass="scrollerPanel">
+				<sec:ifAnyGranted roles="ROLE_STC_W,ROLE_AGU_W,ROLE_ACU_W">
+					<t:dataScroller id="scroll_1" styleClass="scroller" for="table"
+						fastStep="10" pageCountVar="pageCount" pageIndexVar="pageIndex"
+						paginator="true" paginatorMaxPages="5" paginatorColumnClass="page"
+						paginatorActiveColumnClass="page_active" immediate="true"
+						rendered="#{paymentRequestViewBean.showScroll}">
+						<f:facet name="first">
+							<t:graphicImage alt="#{msg.first}" url="../images/back_end.gif"
+								border="1" />
+						</f:facet>
+						<f:facet name="last">
+							<t:graphicImage alt="#{msg.last}" url="../images/forward_end.gif"
+								border="1" />
+						</f:facet>
+						<f:facet name="previous">
+							<t:graphicImage alt="#{msg.previous}" url="../images/back.gif"
+								border="1" />
+						</f:facet>
+						<f:facet name="next">
+							<t:graphicImage alt="#{msg.next}" url="../images/forward.gif"
+								border="1" />
+						</f:facet>
+						<f:facet name="fastforward">
+							<t:graphicImage alt="#{msg.fastforward}"
+								url="../images/all_forward.gif" border="1" />
+						</f:facet>
+						<f:facet name="fastrewind">
+							<t:graphicImage alt="#{msg.fastrewind}"
+								url="../images/all_back.gif" border="1" />
+						</f:facet>
+					</t:dataScroller>
+				</sec:ifAnyGranted>
+			</a4j:outputPanel>
+
+			<div class="btn_line">
+				<table>
+					<tr>
+						<td><a4j:commandButton value="#{msg.cancel}"
+								styleClass="button2" immediate="true"
+								action="#{paymentRequestViewBean.goBack}" /></td>
+					</tr>
+				</table>
+			</div>
+
+		</a4j:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

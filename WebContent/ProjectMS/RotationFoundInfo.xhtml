@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/EditBase.xhtml">
+	<ui:param name="headWidth" value="800px" />
+	<ui:param name="heading" value="#{msg.durReimbTab2}" />
+	<ui:param name="heading_top" value="#{msg.durReimbTab2}" />
+	<ui:define name="edit_body">
+
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+
+			<table class="forms" border="0" cellpadding="1" cellspacing="1"
+				width="60%">
+				<tr>
+					<td class="LabelCell"><t:outputText
+						value="#{msg.durReimbNumber}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText
+						styleClass="editbox_form2" required="true" id="rotationReimbursmentNumber"
+						onkeypress="return numbersonly(this, event)"
+						onkeyup="checknumber(this)"
+						value="#{rotationFoundInfoEditBean.number}"
+						readonly="true"
+						 />
+					</td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+						value="#{msg.durReimbPartnerName}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:selectOneMenu id="partners" required="true"
+						value="#{rotationFoundInfoEditBean.partner}" styleClass="DropDown">
+						<f:selectItems value="#{rotationFoundInfoEditBean.listPartners}" />
+					</t:selectOneMenu> </td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+						value="#{msg.durReimbRotFTotalAmount}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText
+						styleClass="editbox_form2" required="true" id="rotationTotalAmount"
+						value="#{rotationFoundInfoEditBean.entity.rotationTotalAmount}"
+						converter="floatConverter" validator="#{validator.isFloat92}"
+						onkeypress="return decimalonly(this, event)"
+						onkeyup="checkdecimal(this)" maxlength="12" /></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+						value="#{msg.durReimbRotFPartnerIban}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+						required="true" id="rotationPartnerIban"
+						value="#{rotationFoundInfoEditBean.entity.rotationPartnerIban}"
+						validator="#{validator.CheckIBAN}" maxlength="27" /></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+						value="#{msg.durReimbRotFLiquidationDate}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" id="rotationPaymentAct"
+						required="true" inputClass="editbox_form2"
+						converter="dateTimeConverter"
+						value="#{rotationFoundInfoEditBean.entity.rotationPaymentAct}"
+						datePattern="dd/MM/yyyy">
+					</rich:calendar></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+						value="#{msg.durReimbRotFDate}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" id="rotationDate"
+						required="true" inputClass="editbox_form2"
+						converter="dateTimeConverter"
+						value="#{rotationFoundInfoEditBean.entity.rotationDate}"
+						datePattern="dd/MM/yyyy">
+					</rich:calendar></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+						value="#{msg.durReimbCRO}:" /> <span class="RequiredFieldMarker">*</span>
+					</td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+						required="true" id="rptationCro"
+						value="#{rotationFoundInfoEditBean.entity.rptationCro}"
+						maxlength="11" /></td>
+				</tr>
+
+			</table>
+
+			<div class="btn_line">
+			<table>
+				<tr>
+					<td><a4j:commandButton immediate="false"
+						action="#{rotationFoundInfoEditBean.Page_Save}" reRender="pagePanel"
+						styleClass="button2" value="#{msg.save}" id="save" /></td>
+					<td><a4j:commandButton value="#{msg.cancel}"
+						styleClass="button2" immediate="true"
+						action="#{rotationFoundInfoEditBean.GoBack}" /></td>
+				</tr>
+			</table>
+			</div>
+
+
+		</a4j:outputPanel>
+	</ui:define>
+</ui:composition>

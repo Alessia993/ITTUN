@@ -1,0 +1,14 @@
+.page a
+{
+
+}
+
+.scroller td
+{
+padding-top:3px;
+padding-bottom:3px;
+}
+*:first-child+html .headerPanelSelect {
+	margin-top:-15px;
+
+}

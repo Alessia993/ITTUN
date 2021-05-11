@@ -1,0 +1,297 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/EditTabBase.xhtml">
+	<!--  <ui:param name="headWidth" value="600px" />-->
+	<ui:param name="heading" value="#{msg.activationProcedure}" />
+	<ui:param name="heading_top"
+		value="#{msg.createOrManageActivationProcs}" />
+	<ui:define name="edit_body">
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+
+			<!-- Stores form values -->
+			<t:saveState id="tabStateSaverCode" value="#{code}" />
+
+			<t:panelTabbedPane serverSideTabSwitch="false">
+				<t:panelTab id="tabSet1"
+					label="#{msg.createOrManageActivationProcs}" style="#{activationProcedureEditBean.tab1Style}">
+
+					<table class="forms" border="0" cellpadding="1" cellspacing="1"
+						width="60%">
+						<tr>
+							<td class="LabelCell"><t:outputText
+								value="#{msg.activateProcedureListTableHeaderCode}:" /> <span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><t:inputText
+								styleClass="editbox_form"
+								enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+								rendered="#{!activationProcedureEditBean.isViewOnly}"
+								required="true" id="code"
+								value="#{activationProcedureEditBean.code}"
+								validator="#{validator.checkActProcCode}" maxlength="50" /> 
+								<b><t:outputText 
+									value="#{activationProcedureEditBean.code}"
+									rendered="#{activationProcedureEditBean.isViewOnly}" >
+								</t:outputText></b>
+							</td>
+						</tr>
+						<tr>
+							<td class="ControlCell"><t:outputText
+								value="#{msg.activateProcedureListTableHeaderType}:" /> <span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell">
+								<t:selectOneMenu id="types"
+									value="#{activationProcedureEditBean.selectedType}"
+									enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+									rendered="#{!activationProcedureEditBean.isViewOnly}"
+									required="true" styleClass="DropDown">
+									<f:selectItems value="#{activationProcedureEditBean.listTypes}" />
+								</t:selectOneMenu>
+								<b><t:outputText 
+									value="#{activationProcedureEditBean.type.value}"
+									rendered="#{activationProcedureEditBean.isViewOnly}" >
+								</t:outputText></b>
+							</td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+								value="#{msg.activateProcedureListTableHeaderDescription}:" />
+								<span
+								class="RequiredFieldMarker">*</span>
+								</td>
+							<td class="ControlCell"><t:inputText
+								styleClass="editbox_form"
+								enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+								rendered="#{!activationProcedureEditBean.isViewOnly}"
+								id="description" required="true"
+								value="#{activationProcedureEditBean.description}"
+								maxlength="250" />
+								<b><t:outputText 
+									value="#{activationProcedureEditBean.description}"
+									rendered="#{activationProcedureEditBean.isViewOnly}" >
+								</t:outputText></b>
+								</td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+								value="#{msg.activateProcedureListTableHeaderRespUser}:" /> <span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell">
+								<t:selectOneMenu
+									styleClass="DropDown"
+									value="#{activationProcedureEditBean.selectedUser}"
+									enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+									rendered="#{!activationProcedureEditBean.isViewOnly}"
+									id="responsible_user" required="true">
+									<f:selectItems
+										value="#{activationProcedureEditBean.listRespUsers}" />
+								</t:selectOneMenu>
+								<b><t:outputText 
+									value="#{activationProcedureEditBean.responsible_user.value}"
+									rendered="#{activationProcedureEditBean.isViewOnly}" >
+								</t:outputText></b>
+							</td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+								value="#{msg.activateProcedureListTableHeaderRespUserName}:" />
+								<span
+								class="RequiredFieldMarker">*</span>
+							</td>
+							<td class="ControlCell"><t:inputText
+								styleClass="editbox_form" maxlength="100"
+								enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+								rendered="#{!activationProcedureEditBean.isViewOnly}"
+								required="true" id="responsible_user_name"
+								value="#{activationProcedureEditBean.responsible_user_name}" />
+								<b><t:outputText 
+									value="#{activationProcedureEditBean.responsible_user_name}"
+									rendered="#{activationProcedureEditBean.isViewOnly}" >
+								</t:outputText></b>
+							</td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+								value="#{msg.activateProcedureListTableHeaderAmount}:" />
+								<span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell">
+								<t:inputText
+									enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+									rendered="#{!activationProcedureEditBean.isViewOnly}"
+									styleClass="editbox_form" converter="floatConverter"
+									onkeypress="return decimalonly(this, event)"
+									onkeyup="checkdecimal(this)"
+									value="#{activationProcedureEditBean.amount}" required="true"
+									id="amount" maxlength="12" validator="#{validator.isFloat92}">
+								</t:inputText>
+								<b><t:outputText 
+									value="#{activationProcedureEditBean.amount}"
+									converter="moneyConverter"
+									rendered="#{activationProcedureEditBean.isViewOnly}" >
+								</t:outputText></b>
+							</td>
+						</tr>
+						<tr
+							style="display: #{ activationProcedureEditBean.fullAmountFieldVisibility}">
+							<td class="LabelCell"><t:outputText
+								value="#{msg.viewActivationFullAmount}:" /> <span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell">
+								<t:inputText
+									enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+									rendered="#{!activationProcedureEditBean.isViewOnly}"
+									styleClass="editbox_form"
+									onkeypress="return decimalonly(this, event)"
+									onkeyup="checkdecimal(this)" style="#{activationProcedureEditBean.tab1Style}"
+									value="#{activationProcedureEditBean.fullAmount}"
+									required="#{!empty activationProcedureEditBean.tab1Style}" id="full_amount" maxlength="12"
+									converter="floatConverter" validator="#{validator.isFloat92}">
+								</t:inputText>
+								<b><t:outputText 
+									converter="moneyConverter"
+									value="#{activationProcedureEditBean.fullAmount}"
+									rendered="#{activationProcedureEditBean.isViewOnly}" >
+								</t:outputText></b>
+							</td>
+						</tr>
+					</table>
+				</t:panelTab>
+				<t:panelTab id="tabSet2" label="#{msg.viewActivationProcs}" style="#{activationProcedureEditBean.tab2Style}">
+
+					<div class="table_container">
+					<t:dataTable id="table"
+						value="#{activationProcedureEditBean.listActProcInfo}"
+						var="actProcInfo" styleClass="form_table"
+						rowClasses="row_table_n,row_table_g">
+						<f:facet name="header">
+							<t:column>
+								<h:outputText style="text-align: center"
+									value="#{msg.viewActivationProcs}" />
+							</t:column>
+						</f:facet>
+						<t:column styleClass="NumberColumn"
+							rendered="#{!empty activationProcedureEditBean.listActProcInfo}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.viewInfoTableStep}" />
+							</f:facet>
+							<b><t:outputText value="#{actProcInfo.step}"
+								enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" /></b>
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty activationProcedureEditBean.listActProcInfo}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.viewInfoTableDescription}" />
+							</f:facet>
+							<b><t:outputText value="#{actProcInfo.description}"
+								enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"/></b>
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty activationProcedureEditBean.listActProcInfo}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.viewInfoTableDateExpected}" />
+							</f:facet>
+							<t:div enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+								styleClass="CalendarCell">
+								<rich:calendar locale="#{LocalizeBean.currentLocaleValue}" id="dateExpected"
+									rendered="#{!activationProcedureEditBean.isViewOnly}"
+									converter="dateTimeConverter"
+									inputStyle="#{actProcInfo.style}"
+									title="#{actProcInfo.title}"
+									value="#{actProcInfo.dateExpected}" datePattern="dd/MM/yyyy">								
+								</rich:calendar>
+								<t:outputText rendered="#{!activationProcedureEditBean.isViewOnly}" styleClass="RequiredFieldMarker" value="*"></t:outputText>
+								<b><t:outputText 
+									value="#{actProcInfo.dateExpected}"
+									converter="dateTimeConverter"
+									rendered="#{activationProcedureEditBean.isViewOnly}" >
+								</t:outputText></b>
+							</t:div>
+						</t:column>
+						<t:column styleClass="StringColumn"
+							enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+							rendered="#{!empty activationProcedureEditBean.listActProcInfo}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.viewInfoTableDateEffective}" />
+							</f:facet>
+							<t:div enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+								styleClass="CalendarCell">
+								<rich:calendar locale="#{LocalizeBean.currentLocaleValue}" id="dateEffective"
+									rendered="#{!activationProcedureEditBean.isViewOnly}"
+									converter="dateTimeConverter"
+									inputStyle="#{actProcInfo.style2}"
+									title="#{actProcInfo.title2}"
+									value="#{actProcInfo.dateEffective}" datePattern="dd/MM/yyyy">
+								</rich:calendar>
+								<b><t:outputText 
+									value="#{actProcInfo.dateEffective}"
+									converter="dateTimeConverter"
+									rendered="#{activationProcedureEditBean.isViewOnly}" >
+								</t:outputText></b>
+							</t:div>
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty activationProcedureEditBean.listActProcInfo}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.viewInfoTableReasonForDelay}" />
+							</f:facet>
+							<t:selectOneMenu id="reasons" value="#{actProcInfo.listDelay}" style="width: 180px;"
+								enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+								rendered="#{!activationProcedureEditBean.isViewOnly}"
+								styleClass="DropDown" required="false">
+								<f:selectItems
+									value="#{activationProcedureEditBean.listReasonsDelay}" />
+							</t:selectOneMenu>
+							<b><t:outputText 
+									value="#{actProcInfo.value}"
+									rendered="#{activationProcedureEditBean.isViewOnly}" >
+								</t:outputText></b>
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty activationProcedureEditBean.listActProcInfo}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.notes}" />
+							</f:facet>
+							<t:inputTextarea style="width: 180px;" rows="3" cols="30" styleClass="editbox_form2"
+								value="#{actProcInfo.note}" rendered="#{!activationProcedureEditBean.isViewOnly}"
+								onkeypress="return textArea(this, 255, event )" />
+							<b><t:outputText value="#{actProcInfo.note}"
+									rendered="#{activationProcedureEditBean.isViewOnly}" >
+								</t:outputText></b>
+						</t:column>
+					</t:dataTable></div>
+				</t:panelTab>
+
+				<div class="btn_line">
+				<table width="100%">
+					<tr
+						style="display: #{activationProcedureEditBean.fullAmountSpanVisibility}">
+						<td colspan="2"><span class="RequiredFieldMarker">#{msg.actProcFullAmountSpan}</span>
+						</td>
+						</tr>
+			<tr>
+				<td align="center">
+				<t:outputText styleClass="RequiredFieldMarker" value="#{activationProcedureEditBean.errorMessage}" />
+				</td>
+			</tr>		
+					<tr>
+						<td class="btn_line" colspan="2"><a4j:commandButton immediate="false"
+							action="#{activationProcedureEditBean.Page_Save}"
+							reRender="pagePanel"
+							rendered="#{!activationProcedureEditBean.isViewOnly}"
+							styleClass="button2" value="#{msg.save}" id="save" />
+						<a4j:commandButton value="#{msg.cancel}"
+							styleClass="button2" immediate="true"
+							action="#{activationProcedureEditBean.GoBack}" /></td>
+					</tr>
+				</table>
+				</div>
+			</t:panelTabbedPane>
+		</a4j:outputPanel>
+	</ui:define>
+</ui:composition>

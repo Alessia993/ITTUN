@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	template="/Templates/EditTabBase.xhtml">
+	<ui:param name="headWidth" value="650px" />
+	<ui:param name="heading" value="#{msg.user}" />
+	<ui:param name="heading_top" value="#{msg.createOrManageUsers}" />
+
+	<ui:define name="script_body">
+		<script type="text/javascript">
+	function func()
+	{
+		document.getElementById('EditForm:tab1:user_password').value = document.getElementById('EditForm:tab1:hiddenpassword').value;
+		document.getElementById('EditForm:tab1:confirmationPassword').value = document.getElementById('EditForm:tab1:hiddenconfirmpassword').value;
+		
+	}
+	</script>
+	</ui:define>
+	
+	<ui:define name="edit_body">
+
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+			<t:panelTabbedPane serverSideTabSwitch="false">
+				<t:panelTab id="tab1" label="#{msg.commonSettings}">
+					<table width="50%" class="forms" border="0" cellpadding="1"
+						cellspacing="1">
+						<tr>
+							<td class="LabelCell"><t:outputText value="#{msg.name}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><t:inputText maxlength="200"
+								autocomplete="off" styleClass="editbox_form" required="true"
+								id="name" validator="#{validator.checkEmpty}"
+								value="#{userEditController.name}" /></td>
+						</tr>				
+						<tr>
+							<td class="LabelCell"><t:outputText value="#{msg.surname}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><t:inputText maxlength="200"
+								autocomplete="off" validator="#{validator.checkEmpty}"
+								styleClass="editbox_form" id="surname" required="true"
+								value="#{userEditController.surname}" /></td>
+						</tr>
+						
+						<tr>
+							<td class="LabelCell"><t:outputText value="#{msg.country}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><t:selectOneMenu id="country"
+									onmousedown="collapse(this);" 
+									onblur="expand(this);"
+									value="#{userEditController.currentCountry}"
+									styleClass="DropDown"
+									onchange="submit()"
+									valueChangeListener="#{userEditController.countryChange}"
+									>
+									<f:selectItems
+										value="#{userEditController.countries}" />
+								</t:selectOneMenu></td>
+						</tr>
+						
+
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.fiscalCode}:" /></td>
+							<td class="ControlCell">
+							<t:inputText autocomplete="off" id="CodeIt" rendered="#{userEditController.currentCountry=='Italy'}"
+									styleClass="editbox_form" required="false"
+									value="#{userEditController.fiscalCode}" maxlength="20"
+									validator="#{validator.checkFiscalLength16}" /> 
+							<t:inputText autocomplete="off" id="CodeMal" rendered="#{userEditController.currentCountry=='Tunisia'}"
+									styleClass="editbox_form" required="false" 
+									value="#{userEditController.fiscalCode}" maxlength="20"
+									validator="#{validator.checkFiscalCode}" /></td>
+						</tr>
+
+						<tr>
+							<td class="LabelCell"><t:outputText value="#{msg.email}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><t:inputText
+								styleClass="editbox_form" maxlength="200" autocomplete="off"
+								validator="#{validator.checkMailUnique}" id="mail"
+								required="true" value="#{userEditController.mail}" /></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText value="#{msg.emailValidation}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><t:inputText
+									styleClass="editbox_form" maxlength="200" autocomplete="off"
+									validator="#{validator.checkMailEquals}" id="mailconfirm"
+									required="true" value="#{userEditController.mail}" >
+									<f:attribute name="mailId"
+									value="EditForm:tab1:mail" /></t:inputText></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText value="#{msg.userName}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><t:inputText autocomplete="off"
+								styleClass="editbox_form" id="user_Name" maxlength="32"
+								validator="#{validator.checkUserName}" required="true"
+								value="#{userEditController.userName}" /></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText value="#{msg.password}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><t:inputSecret
+								styleClass="editbox_form" value="#{userEditController.pwd}"
+								validator="#{validator.checkEmpty}" autocomplete="off"
+								onkeyup="document.getElementById('EditForm:tab1:hiddenpassword').value = this.value"
+								required="#{empty userEditController.password}"
+								id="user_password" maxlength="32" /></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+								value="#{msg.confirmPassword}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><t:inputSecret
+								validator="#{validator.checkPasswordEquals}" autocomplete="off"
+								value="#{userEditController.confirmPwd}"
+								onkeyup="document.getElementById('EditForm:tab1:hiddenconfirmpassword').value = this.value"
+								styleClass="editbox_form"
+								required="#{!empty param['EditForm:tab1:user_password'] or empty userEditController.password}"
+								id="confirmationPassword" maxlength="32">
+								<f:attribute name="passwordId"
+									value="EditForm:tab1:user_password" />
+							</t:inputSecret> <t:inputHidden id="hiddenpassword"></t:inputHidden> <t:inputHidden
+								id="hiddenconfirmpassword"></t:inputHidden></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText value="#{msg.active}:" /></td>
+							<td class="ControlCell"><t:selectBooleanCheckbox
+								value="#{userEditController.active}">
+							</t:selectBooleanCheckbox></td>
+						</tr>
+					</table>
+				</t:panelTab>
+				<t:panelTab id="tab2" label="#{msg.chooseRole}">
+					<table class="forms" border="0" cellpadding="1" cellspacing="1"
+						width="100%">
+						<tr>
+							<td class="ControlCell">
+							<div class="table_container" style="width: auto;"><t:dataTable
+								style="margin:0 auto;" rows="13" id="table" var="role"
+								value="#{userEditController.list}"
+								rowClasses="row_table_n,row_table_g" styleClass="form_table">
+								<t:column styleClass="CenterColumn">
+									<f:facet name="header">
+										<t:column>
+											<h:outputText value="#{msg.writeAccess}" />
+											<span style="font-size: 19px; font-weight: normal;">/</span>
+											<h:outputText value="#{msg.readAccess}" />
+										</t:column>
+									</f:facet>
+									<t:selectOneRadio value="#{role.writeAccess}"
+										style="width: 100%; text-align: center;"
+										styleClass="rolesInsideTale">
+										<f:selectItem itemLabel="#{msg.write}" itemValue="true" />
+										<f:selectItem itemLabel="#{msg.read}" itemValue="false" />
+										<f:selectItem itemLabel="#{msg.noAccess}" itemValue="null" />
+									</t:selectOneRadio>
+								</t:column>
+
+								<t:column styleClass="StringColumn"
+									style="vertical-align: middle;">
+									<f:facet name="header">
+							#{msg.role}
+							</f:facet>
+									<t:outputText value="#{role.role}" />
+								</t:column>
+							</t:dataTable></div>
+							</td>
+						</tr>
+
+					</table>
+				</t:panelTab>
+				<table class="forms" border="0" cellpadding="1" cellspacing="1"
+					width="100%">
+					<tr>
+						<td colspan="2" class="btn_line"><a4j:commandButton
+							oncomplete="func();" immediate="false"
+							action="#{userEditController.Page_Save}" styleClass="button2"
+							value="#{msg.save}" id="save" /> <a4j:commandButton
+							value="#{msg.cancel}" styleClass="button2" immediate="true"
+							action="#{userEditController.GoBack}" /></td>
+					</tr>
+				</table>
+			</t:panelTabbedPane>
+			
+		</a4j:outputPanel>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,18 @@
+webapp.name=ITTUN
+paamns.dir=.
+wa.lib.dir=./WebContent/WEB-INF/lib
+ittun.war=ITTUN.war
+file.deploy.dir=${TOMCAT_HOME_DIRECTORY}/webapps
+file.deploy.dir.bak=.
+file.tomcat.lib=${TOMCAT_HOME_DIRECTORY}/lib
+file.tomcat.home=${TOMCAT_HOME_DIRECTORY}
+
+#Parametri connessione db
+ittun.db.host=${DB_HOST}
+ittun.db.port=${DB_PORT}
+ittun.db.name=${DB_NAME}
+ittun.db.username=${DB_USERNAME}
+ittun.db.password=${DB_PASSWORD}
+
+#Versione applicativo Italia-Tunisia
+itmal.version=@versione.applicativo@

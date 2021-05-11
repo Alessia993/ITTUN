@@ -1,0 +1,1643 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/EditTabBase.xhtml">
+	<ui:param name="heading" value="#{msg.costDefinition}" />
+	<ui:define name="edit_body">
+		<script language="javascript" type="text/javascript">
+            function viewAmountToCoverAdvanceStateAidFieldfunction(){
+            	if(document.getElementById("EditForm:tab3:stateAid").checked!=null){
+            		var lfckv = document.getElementById("EditForm:tab3:stateAid").checked;
+                    console.log(lfckv);
+                    var ed;
+                    if(lfckv){
+                    document.getElementById("EditForm:tab3:amountToCoverAdvanceStateAid").setAttribute("type","text");
+                    document.getElementById("EditForm:tab3:amountToCoverAdvanceStateAidLabel").setAttribute("style","");
+                    
+                    document.getElementById("EditForm:tab3:transfer").setAttribute("type","text");
+                    document.getElementById("EditForm:tab3:transferLabel").setAttribute("style","");
+                    
+                    }else{
+                    	 document.getElementById("EditForm:tab3:amountToCoverAdvanceStateAid").setAttribute("type","hidden");
+                    	 document.getElementById("EditForm:tab3:amountToCoverAdvanceStateAidLabel").setAttribute("style","display: none"); 
+                    	 document.getElementById("EditForm:tab3:transfer").setAttribute("type","hidden");
+                    	 document.getElementById("EditForm:tab3:transferLabel").setAttribute("style","display: none");
+                    }
+                    ed=document.getElementById("EditForm:tab3:amountToCoverAdvanceStateAid").getAttribute("rendered");
+                    console.log(ed);
+            	}
+                
+            }
+        </script>
+		<a4j:outputPanel ajaxRendered="true" id="FormPanel">
+			<t:panelTabbedPane serverSideTabSwitch="false"
+				selectedIndex="#{costDefinitionEditBean.selectTab}">
+				<t:panelTab id="tab1" label="#{msg.costDocumentData}">
+					<div id="valuta2">
+						<t:outputText value="#{msg.costDefinitionValuta}:" />
+						<select>
+							<option value="euro">EURO</option>
+							<option value="dinaro">DINARO</option>
+						</select>
+						<!--qui altri list-item -->
+					</div>
+					<t:div rendered="#{!costDefinitionEditBean.isDocView}">
+						<table width="50%" class="forms" border="0" cellpadding="1"
+							cellspacing="1">
+
+
+							<tr>
+								<td class="LabelCell"><t:outputText
+										value="#{msg.documentType}:" /><span
+									class="RequiredFieldMarker">*</span></td>
+								<td class="ControlCell"><t:selectOneMenu id="doctypes"
+										rendered="#{costDefinitionEditBean.isEdit}"
+										value="#{costDefinitionEditBean.docType}"
+										styleClass="DropDown">
+										<f:selectItems value="#{costDefinitionEditBean.docTypes}" />
+									</t:selectOneMenu> <b><t:outputText
+											value="#{costDefinitionEditBean.docTitle}"
+											rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+							</tr>
+
+							<ui:remove>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.costDefinitionValuta}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td class="ControlCell"><t:selectOneMenu id="valuta"
+											rendered="#{costDefinitionEditBean.isEdit}"
+											value="#{costDefinitionEditBean.selectedLocale}"
+											styleClass="DropDown">
+											<f:selectItems value="#{costDefinitionEditBean.locales}" />
+										</t:selectOneMenu> <b><t:outputText
+												value="	#{costDefinitionEditBean.entity.currencyType}"
+												rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+								</tr>
+							</ui:remove>
+
+
+
+							<ui:remove>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.costDefinitionValuta}:" /></td>
+									<td><t:selectOneMenu id="valuta2"
+											value="- Non Selezionati -"
+											rendered="#{costDefinitionEditBean.isEdit}"
+											styleClass="DropDown">
+											<f:selectItem itemvalue="- Non Selezionati -"
+												itemLabel="- Non Selezionati -" />
+											<f:selectItem itemvalue="EURO" itemLabel="EURO" />
+											<f:selectItem itemvalue="DINARO" itemLabel="DINARO" />
+										</t:selectOneMenu></td>
+								</tr>	
+                            ></ui:remove>
+
+							<ui:remove>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.costDefinitionValuta}:" /> <span
+										class="RequiredFieldMarker">*</span></td>
+									<td class="ControlCell"><t:selectOneMenu id="currencies"
+											value="#{costDefinitionEditBean.currencyCode}"
+											rendered="#{costDefinitionEditBean.isEdit}" required="true"
+											styleClass="DropDown">
+											<f:selectItems value="#{costDefinitionEditBean.listCurrency}" />
+										</t:selectOneMenu> <b> <t:outputText
+												rendered="#{!costDefinitionEditBean.isEdit}"
+												value="#{costDefinitionEditBean.currencyDescription}">
+											</t:outputText>
+									</b></td>
+								</tr>
+							</ui:remove>
+
+							<tr>
+								<td class="LabelCell"><t:outputText
+										value="#{msg.motivation}:" /><span
+									class="RequiredFieldMarker">*</span></td>
+								<td class="ControlCell"><h:inputText maxlength="200"
+										rendered="#{costDefinitionEditBean.isEdit}"
+										styleClass="editbox_form" id="motivations"
+										value="#{costDefinitionEditBean.entity.motivations}" /> <b><t:outputText
+											value="#{costDefinitionEditBean.entity.motivations}"
+											rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+							</tr>
+							<tr>
+								<td class="LabelCell"><t:outputText
+										value="#{msg.documentNumber}:" /><span
+									class="RequiredFieldMarker">*</span></td>
+								<td class="ControlCell"><h:inputText maxlength="200"
+										rendered="#{costDefinitionEditBean.isEdit}"
+										styleClass="editbox_form" id="documentNumber"
+										value="#{costDefinitionEditBean.entity.documentNumber}" /> <b><t:outputText
+											value="#{costDefinitionEditBean.entity.documentNumber}"
+											rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+							</tr>
+							<tr>
+								<td class="LabelCell"><t:outputText
+										value="#{msg.documentDate}:" /><span
+									class="RequiredFieldMarker">*</span></td>
+								<td class="ControlCell"><rich:calendar
+										locale="#{LocalizeBean.currentLocaleValue}" id="documentDate"
+										inputClass="editbox_form2"
+										rendered="#{costDefinitionEditBean.isEdit}"
+										converter="dateTimeConverter"
+										value="#{costDefinitionEditBean.entity.documentDate}"
+										datePattern="dd/MM/yyyy">
+									</rich:calendar> <b><t:outputText converter="dateTimeConverter"
+											value="#{costDefinitionEditBean.entity.documentDate}"
+											rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+							</tr>
+
+							<tr>
+								<td class="LabelCell"><t:outputText
+										value="#{msg.location}:" /><span class="RequiredFieldMarker">*</span></td>
+								<td class="ControlCell"><t:selectOneMenu id="locations"
+										rendered="#{costDefinitionEditBean.isEdit}"
+										value="#{costDefinitionEditBean.selectedLocationId}"
+										styleClass="DropDown">
+										<f:selectItems value="#{costDefinitionEditBean.locations}" />
+									</t:selectOneMenu> <b><t:outputText
+											value="#{costDefinitionEditBean.selectedLocation}"
+											rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+							</tr>
+
+							<tr>
+								<td class="LabelCell"><t:outputText
+										value="#{msg.documentCode}:" /><span
+									class="RequiredFieldMarker">*</span></td>
+								<td class="ControlCell"><h:inputText maxlength="16"
+										rendered="#{costDefinitionEditBean.isEdit}"
+										styleClass="editbox_form" id="documentCode"
+										value="#{costDefinitionEditBean.entity.cfPivaVta}" /> <b><t:outputText
+											value="#{costDefinitionEditBean.entity.cfPivaVta}"
+											rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+							</tr>
+							<tr>
+								<td class="LabelCell"><t:outputText
+										value="#{msg.issuesNames}:" /><span
+									class="RequiredFieldMarker">*</span></td>
+								<td class="ControlCell"><h:inputText maxlength="200"
+										rendered="#{costDefinitionEditBean.isEdit}"
+										styleClass="editbox_form" id="issuesNames"
+										value="#{costDefinitionEditBean.entity.issuesNames}" /> <b><t:outputText
+											value="#{costDefinitionEditBean.entity.issuesNames}"
+											rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+							</tr>
+							<tr>
+								<td class="LabelCell"><t:outputText
+										value="#{msg.documentAmount}:" /><span
+									class="RequiredFieldMarker">*</span></td>
+								<td class="ControlCell"><h:inputText maxlength="12"
+										rendered="#{costDefinitionEditBean.isEdit}"
+										converter="floatConverter" styleClass="editbox_form2"
+										id="documentAmount"
+										onkeypress="return decimalonly(this, event)"
+										onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+										value="#{costDefinitionEditBean.entity.documentAmount}" /> <b><t:outputText
+											value="#{costDefinitionEditBean.entity.documentAmount}"
+											converter="moneyConverter"
+											rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+							</tr>
+							<tr>
+								<td class="LabelCell"><t:outputText value="#{msg.iva}:" /></td>
+								<td class="ControlCell"><h:inputText maxlength="12"
+										rendered="#{costDefinitionEditBean.isEdit}"
+										onkeypress="return decimalonly(this, event)"
+										onblur="checkdecimal(this)" onkeyup="checkdecimal(this)"
+										converter="floatConverter" styleClass="editbox_form2" id="iva"
+										value="#{costDefinitionEditBean.entity.iva}" /> <b><t:outputText
+											value="#{costDefinitionEditBean.entity.iva}"
+											converter="moneyConverter"
+											rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+							</tr>
+							<tr>
+								<td class="LabelCell"><t:outputText
+										value="#{msg.totalAmount}:" /></td>
+								<td class="ControlCell"><b><h:outputText
+											id="totalAmount" converter="moneyConverter"
+											value="#{costDefinitionEditBean.entity.total}" /></b></td>
+							</tr>
+							<tr>
+								<td class="LabelCell"><t:outputText value="#{msg.retain}:" /></td>
+								<td class="ControlCell"><h:inputText maxlength="12"
+										rendered="#{costDefinitionEditBean.isEdit}"
+										onkeypress="return decimalonly(this, event)"
+										onblur="checkdecimal(this)" onkeyup="checkdecimal(this)"
+										converter="floatConverter" styleClass="editbox_form2"
+										id="retain" value="#{costDefinitionEditBean.entity.retain}" />
+									<b><t:outputText
+											value="#{costDefinitionEditBean.entity.retain}"
+											converter="moneyConverter"
+											rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+							</tr>
+							<tr>
+								<td class="LabelCell"><t:outputText value="#{msg.toPay}:" /></td>
+								<td class="ControlCell"><b><h:outputText id="toPay"
+											converter="moneyConverter"
+											value="#{costDefinitionEditBean.entity.toPay}" /></b></td>
+							</tr>
+							<tr>
+								<td class="LabelCell"><t:outputText
+										value="#{msg.amountProjectRelate}:" /><span
+									class="RequiredFieldMarker">*</span></td>
+								<td class="ControlCell"><h:inputText maxlength="12"
+										rendered="#{costDefinitionEditBean.isEdit}"
+										onkeypress="return decimalonly(this, event)"
+										onblur="checkdecimal(this)" onkeyup="checkdecimal(this)"
+										converter="floatConverter" styleClass="editbox_form2"
+										id="amountProjectRelate"
+										value="#{costDefinitionEditBean.entity.amountProjectRelate}" />
+									<b><t:outputText
+											value="#{costDefinitionEditBean.entity.amountProjectRelate}"
+											converter="moneyConverter"
+											rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+							</tr>
+							<tr>
+								<td class="LabelCell"><t:outputText value="#{msg.notes}:" /></td>
+								<td class="ControlCell"><h:inputText maxlength="255"
+										rendered="#{costDefinitionEditBean.isEdit}"
+										styleClass="editbox_form" id="costNote"
+										value="#{costDefinitionEditBean.entity.costNote}" /> <b><t:outputText
+											value="#{costDefinitionEditBean.entity.costNote}"
+											rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+							</tr>
+							<tr>
+								<td class="LabelCell"><t:outputText
+										value="#{msg.costDefinitionImpegno}:" /><span
+									class="RequiredFieldMarker">*</span></td>
+								<td class="ControlCell"><t:selectOneMenu id="impegno"
+										rendered="#{costDefinitionEditBean.isEdit}"
+										value="#{costDefinitionEditBean.selectedGiuridicalEngagesId}"
+										styleClass="DropDown">
+										<f:selectItems
+											value="#{costDefinitionEditBean.giuridicalEngagesList}" />
+									</t:selectOneMenu> <b><t:outputText
+											value="#{costDefinitionEditBean.selectedGiuridicalEngages}"
+											rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+							</tr>
+						</table>
+
+					</t:div>
+					<table width="50%" class="forms" border="0" cellpadding="1"
+						cellspacing="1">
+
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.attachment}:" /><span class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><a4j:htmlCommandLink
+									id="costDocLink" action="#{costDefinitionEditBean.getCostDoc}"
+									style="text-decoration: underline; float:left;"
+									immediate="true" value="#{costDefinitionEditBean.costDocTitle}" />
+								<a4j:commandLink
+									rendered="#{!empty costDefinitionEditBean.costDocTitle and costDefinitionEditBean.isEdit and !costDefinitionEditBean.isDocView}"
+									id="doc1deletelink" immediate="true" reRender="FormPanel"
+									action="#{costDefinitionEditBean.deleteCostDoc}">
+									<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+										style="border:0; float:right;" />
+								</a4j:commandLink> <a4j:commandLink
+									rendered="#{empty costDefinitionEditBean.costDocTitle and costDefinitionEditBean.isEdit and !costDefinitionEditBean.isDocView}"
+									id="doc1link"
+									onclick="#{rich:component('documentPanel1')}.show();  javascript:return false;">
+									<h:graphicImage alt="#{msg.delete}" value="/images/plus.png"
+										style="border:0;" />
+									<span>#{msg.uploadFile}</span>
+								</a4j:commandLink></td>
+						</tr>
+
+					</table>
+
+				</t:panelTab>
+				<t:panelTab id="tab2" label="#{msg.paymentDocumentData}">
+					<t:div rendered="#{!costDefinitionEditBean.isDocView}">
+						<table width="50%" class="forms" border="0" cellpadding="1"
+							cellspacing="1">
+							<tr>
+								<td class="LabelCell"><t:outputText
+										value="#{msg.paymentWay}:" /><span
+									class="RequiredFieldMarker">*</span></td>
+								<td class="ControlCell"><t:selectOneMenu id="paymentWay"
+										rendered="#{costDefinitionEditBean.isEdit}"
+										value="#{costDefinitionEditBean.paymentWay}"
+										styleClass="DropDown">
+										<f:selectItems value="#{costDefinitionEditBean.paymentWays}" />
+									</t:selectOneMenu> <b><t:outputText
+											value="#{costDefinitionEditBean.paymentWayTitle}"
+											rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+							</tr>
+							<ui:remove>
+								<tr>
+									<td class="LabelCell"><t:outputText
+											value="#{msg.paymentType}:" /><span
+										class="RequiredFieldMarker">*</span></td>
+									<td class="ControlCell"><t:selectOneMenu id="paymentType"
+											rendered="#{costDefinitionEditBean.isEdit}"
+											value="#{costDefinitionEditBean.paymentType}"
+											styleClass="DropDown">
+											<f:selectItems value="#{costDefinitionEditBean.paymentTypes}" />
+										</t:selectOneMenu> <b><t:outputText
+												value="#{costDefinitionEditBean.paymentTypeTitle}"
+												rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+								</tr>
+							</ui:remove>
+							<tr>
+								<td class="LabelCell"><t:outputText
+										value="#{msg.paymentNumber}:" /><span
+									class="RequiredFieldMarker">*</span></td>
+								<td class="ControlCell"><h:inputText maxlength="200"
+										rendered="#{costDefinitionEditBean.isEdit}"
+										styleClass="editbox_form" id="paymentNumber"
+										value="#{costDefinitionEditBean.entity.paymentNumber}" /><b><t:outputText
+											value="#{costDefinitionEditBean.entity.paymentNumber}"
+											rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+							</tr>
+
+
+							<tr>
+								<td class="LabelCell"><t:outputText
+										value="#{msg.paymentDate}:" /><span
+									class="RequiredFieldMarker">*</span></td>
+								<td class="ControlCell"><rich:calendar
+										locale="#{LocalizeBean.currentLocaleValue}" id="paymentDate"
+										inputClass="editbox_form2"
+										rendered="#{costDefinitionEditBean.isEdit}"
+										converter="dateTimeConverter"
+										value="#{costDefinitionEditBean.entity.paymentDate}"
+										datePattern="dd/MM/yyyy">
+									</rich:calendar><b><t:outputText converter="dateTimeConverter"
+											value="#{costDefinitionEditBean.entity.paymentDate}"
+											rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+							</tr>
+							<tr>
+								<td class="LabelCell"><t:outputText
+										value="#{msg.paymentAmount}:" /><span
+									class="RequiredFieldMarker">*</span></td>
+								<td class="ControlCell"><h:inputText maxlength="12"
+										onblur="checkdecimal(this)"
+										onkeypress="return decimalonly(this, event)"
+										onkeyup="checkdecimal(this)"
+										rendered="#{costDefinitionEditBean.isEdit}"
+										styleClass="editbox_form2" id="paymentAmount"
+										value="#{costDefinitionEditBean.paymentAmount}" /><b><t:outputText
+											value="#{costDefinitionEditBean.entity.paymentAmount}"
+											converter="moneyConverter"
+											rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+							</tr>
+							<tr>
+								<td class="LabelCell"><t:outputText
+										value="#{msg.paymentReciveDate}:" /><span
+									class="RequiredFieldMarker">*</span></td>
+								<td class="ControlCell"><rich:calendar
+										locale="#{LocalizeBean.currentLocaleValue}"
+										id="paymentReciveDate" inputClass="editbox_form2"
+										rendered="#{costDefinitionEditBean.isEdit}"
+										converter="dateTimeConverter"
+										value="#{costDefinitionEditBean.entity.paymentReciveDate}"
+										datePattern="dd/MM/yyyy">
+									</rich:calendar><b><t:outputText converter="dateTimeConverter"
+											value="#{costDefinitionEditBean.entity.paymentReciveDate}"
+											rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+							</tr>
+
+							<!-- <tr>
+								<td class="LabelCell"><t:outputText
+										value="#{msg.externalCosts}:" /></td>
+								<td class="ControlCell"><t:selectBooleanCheckbox
+										disabled="#{!costDefinitionEditBean.isEdit}"
+										value="#{costDefinitionEditBean.entity.externalCosts}">
+									</t:selectBooleanCheckbox></td>
+							</tr> -->
+							<tr>
+								<td class="LabelCell"><t:outputText value="#{msg.notes}:" /></td>
+								<td class="ControlCell"><h:inputText maxlength="255"
+										rendered="#{costDefinitionEditBean.isEdit}"
+										styleClass="editbox_form" id="paymentNotes"
+										value="#{costDefinitionEditBean.entity.paymentNotes}" /><b><t:outputText
+											value="#{costDefinitionEditBean.entity.paymentNotes}"
+											rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+							</tr>
+						</table>
+					</t:div>
+
+					<table width="50%" class="forms" border="0" cellpadding="1"
+						cellspacing="1">
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.paymentAttachmentNote}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><a4j:htmlCommandLink
+									id="paymentAttachmentLink" immediate="true"
+									action="#{costDefinitionEditBean.getPaymentAttachmentDoc}"
+									style="text-decoration: underline; float:left;"
+									value="#{costDefinitionEditBean.paymentAttachmentDocTitle}" />
+								<a4j:commandLink
+									rendered="#{!empty costDefinitionEditBean.paymentAttachmentDocTitle and costDefinitionEditBean.isEdit and !costDefinitionEditBean.isDocView}"
+									id="doc3deletelink" immediate="true" reRender="EditForm1"
+									action="#{costDefinitionEditBean.deletePaymentAttachmentDoc}">
+									<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+										style="border:0; float:right;" />
+								</a4j:commandLink> <a4j:commandLink
+									rendered="#{empty costDefinitionEditBean.paymentAttachmentDocTitle and costDefinitionEditBean.isEdit and !costDefinitionEditBean.isDocView}"
+									id="doc4link"
+									onclick="#{rich:component('documentPanel4')}.show(); javascript:return false;">
+									<h:graphicImage alt="#{msg.delete}" value="/images/plus.png"
+										style="border:0;" />
+									<span>#{msg.uploadFile}</span>
+								</a4j:commandLink></td>
+						</tr>
+					</table>
+
+					<table width="50%" class="forms" border="0" cellpadding="1"
+						cellspacing="1">
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.attachmentCD}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><a4j:htmlCommandLink
+									id="paymentDocLink" immediate="true"
+									action="#{costDefinitionEditBean.getPaymentDoc}"
+									style="text-decoration: underline; float:left;"
+									value="#{costDefinitionEditBean.paymentDocTitle}" /> <a4j:commandLink
+									rendered="#{!empty costDefinitionEditBean.paymentDocTitle and costDefinitionEditBean.isEdit and !costDefinitionEditBean.isDocView}"
+									id="doc2deletelink" immediate="true" reRender="EditForm1"
+									action="#{costDefinitionEditBean.deletePaymentDoc}">
+									<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+										style="border:0; float:right;" />
+								</a4j:commandLink> <a4j:commandLink
+									rendered="#{empty costDefinitionEditBean.paymentDocTitle and costDefinitionEditBean.isEdit and !costDefinitionEditBean.isDocView}"
+									id="doc2link"
+									onclick="#{rich:component('documentPanel2')}.show(); javascript:return false;">
+									<h:graphicImage alt="#{msg.delete}" value="/images/plus.png"
+										style="border:0;" />
+									<span>#{msg.uploadFile}</span>
+								</a4j:commandLink></td>
+						</tr>
+					</table>
+				</t:panelTab>
+				<t:panelTab id="tab3" label="#{msg.accountedData}"
+					rendered="#{!costDefinitionEditBean.isDocView}">
+					<table width="50%" class="forms" border="0" cellpadding="1"
+						cellspacing="1">
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.numberReport}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><h:inputText maxlength="12"
+									rendered="#{costDefinitionEditBean.isEdit}"
+									onkeypress="return numbersonly(this, event)"
+									onkeyup="checknumber(this)" styleClass="editbox_form2"
+									id="numberReport"
+									value="#{costDefinitionEditBean.entity.reportNumber}" /><b><t:outputText
+										value="#{costDefinitionEditBean.entity.reportNumber}"
+										rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.dateReport}:" /><span class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><rich:calendar
+									locale="#{LocalizeBean.currentLocaleValue}" id="reportDate"
+									inputClass="editbox_form2"
+									rendered="#{costDefinitionEditBean.isEdit}"
+									converter="dateTimeConverter"
+									value="#{costDefinitionEditBean.entity.reportDate}"
+									datePattern="dd/MM/yyyy">
+								</rich:calendar> <b><t:outputText converter="dateTimeConverter"
+										value="#{costDefinitionEditBean.entity.reportDate}"
+										rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+						</tr>
+
+
+
+						<tr>
+							<td class="LabelCell"><t:outputText value="#{msg.phase}:"
+									rendered="#{!costDefinitionEditBean.asse3Mode and !costDefinitionEditBean.typology3Mode}" />
+								<t:outputText value="#{msg.typeExpense}:"
+									rendered="#{costDefinitionEditBean.asse3Mode}" /> <t:outputText
+									value="#{msg.macrocategories}:"
+									rendered="#{costDefinitionEditBean.typology3Mode}" /><span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><t:selectOneMenu id="phase"
+									rendered="#{costDefinitionEditBean.isEdit and !costDefinitionEditBean.asse3Mode and !costDefinitionEditBean.typology3Mode}"
+									value="#{costDefinitionEditBean.phase}" styleClass="DropDown">
+									<f:selectItems value="#{costDefinitionEditBean.phases}" />
+								</t:selectOneMenu> <t:selectOneMenu id="phaseAsse3"
+									rendered="#{costDefinitionEditBean.isEdit and costDefinitionEditBean.asse3Mode}"
+									value="#{costDefinitionEditBean.selectedPhaseAsse3}"
+									styleClass="DropDown"
+									valueChangeListener="#{costDefinitionEditBean.asse3PhaseChange}"
+									onchange="submit()">
+									<f:selectItems
+										value="#{costDefinitionEditBean.costPhasesAsse3}" />
+								</t:selectOneMenu> <t:selectOneMenu id="phaseTypology3"
+									rendered="#{costDefinitionEditBean.isEdit and costDefinitionEditBean.typology3Mode}"
+									value="#{costDefinitionEditBean.selectedPhaseTypology3}"
+									styleClass="DropDown">
+									<f:selectItems
+										value="#{costDefinitionEditBean.costPhasesTypology3}" />
+								</t:selectOneMenu> <b><t:outputText
+										value="#{costDefinitionEditBean.phasesTitle}"
+										rendered="#{!costDefinitionEditBean.isEdit and !costDefinitionEditBean.asse3Mode and !costDefinitionEditBean.typology3Mode}" />
+									<t:outputText value="#{costDefinitionEditBean.asse3PhaseTitle}"
+										rendered="#{!costDefinitionEditBean.isEdit and costDefinitionEditBean.asse3Mode}" />
+							</b></td>
+
+
+
+
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText value="#{msg.costItem}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><t:selectOneMenu id="costItem"
+									rendered="#{costDefinitionEditBean.isEdit and !costDefinitionEditBean.asse3Mode and !costDefinitionEditBean.typology3Mode}"
+									value="#{costDefinitionEditBean.costItem}"
+									styleClass="DropDown">
+									<f:selectItems value="#{costDefinitionEditBean.costItems}" />
+								</t:selectOneMenu> <t:selectOneMenu id="costItemAsse3"
+									rendered="#{costDefinitionEditBean.isEdit and costDefinitionEditBean.asse3Mode}"
+									value="#{costDefinitionEditBean.selectedCostItemAsse3}"
+									styleClass="DropDown">
+									<f:selectItems value="#{costDefinitionEditBean.costItemsAsse3}" />
+								</t:selectOneMenu> <t:selectOneMenu id="costItemTypology3"
+									rendered="#{costDefinitionEditBean.isEdit and costDefinitionEditBean.typology3Mode}"
+									value="#{costDefinitionEditBean.selectedCostItemTypology3}"
+									styleClass="DropDown">
+									<f:selectItems
+										value="#{costDefinitionEditBean.costItemsTypology3}" />
+								</t:selectOneMenu> <b><t:outputText
+										value="#{costDefinitionEditBean.costTitle}"
+										rendered="#{!costDefinitionEditBean.isEdit and !costDefinitionEditBean.asse3Mode and !costDefinitionEditBean.typology3Mode}" />
+									<t:outputText
+										value="#{costDefinitionEditBean.asse3CostItemsTitle}"
+										rendered="#{!costDefinitionEditBean.isEdit and costDefinitionEditBean.asse3Mode}" /></b></td>
+
+
+
+
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.amountReport}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><t:inputText maxlength="12"
+									rendered="#{costDefinitionEditBean.isEdit}"
+									reRender="EditForm:tab3"
+									onkeypress="return decimalonly(this, event)"
+									onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+									styleClass="editbox_form2" id="amountReport"
+									value="#{costDefinitionEditBean.amountReport}">
+									<a4j:support event="onchange" id="amountReportChange"
+										reRender="FormPanel,FormPanelValidate"
+										action="#{costDefinitionEditBean.amountReportChange}" />
+								</t:inputText><b><t:outputText
+										value="#{costDefinitionEditBean.entity.amountReport}"
+										converter="moneyConverter"
+										rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+						</tr>
+
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.publicAmountReport}:" /><span
+								class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><t:inputText maxlength="12"
+									rendered="#{costDefinitionEditBean.isEdit}"
+									onkeypress="return decimalonly(this, event)"
+									onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+									styleClass="editbox_form2" id="publicAmountReport"
+									value="#{costDefinitionEditBean.publicAmountReport}"
+									disabled="true">
+								</t:inputText><b><t:outputText
+										value="#{costDefinitionEditBean.entity.publicAmountReport}"
+										converter="moneyConverter"
+										rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+						</tr>
+
+						<ui:remove>
+							<tr>
+								<td class="LabelCell"><t:outputText
+										value="#{msg.privateAmountReport}:" /><span
+									class="RequiredFieldMarker">*</span></td>
+								<td class="ControlCell"><h:inputText maxlength="12"
+										rendered="#{costDefinitionEditBean.isEdit}"
+										onkeypress="return decimalonly(this, event)"
+										onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+										styleClass="editbox_form2" id="privateAmountReport"
+										value="#{costDefinitionEditBean.privateAmountReport}"
+										disabled="true" /><b><t:outputText
+											value="#{costDefinitionEditBean.entity.privateAmountReport}"
+											converter="moneyConverter"
+											rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+							</tr>
+						</ui:remove>
+
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.additionalFinansing}:" /></td>
+							<td class="ControlCell"><h:inputText maxlength="12"
+									rendered="#{costDefinitionEditBean.isEdit}"
+									onkeypress="return decimalonly(this, event)"
+									onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+									styleClass="editbox_form2" id="additionalFinansingAmount"
+									value="#{costDefinitionEditBean.additionalFinansingAmount}">
+									<a4j:support event="onchange"
+										id="additionalFinansingAmountChange"
+										reRender="FormPanel,FormPanelValidate"
+										action="#{costDefinitionEditBean.additionalFinansingAmountChange}" />
+								</h:inputText><b><t:outputText
+										value="#{costDefinitionEditBean.entity.additionalFinansingAmount}"
+										converter="moneyConverter"
+										rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+						</tr>
+
+						<tr>
+							<td class="LabelCell"><t:outputText value="#{msg.stateAid}:" /></td>
+							<td class="ControlCell"><t:selectBooleanCheckbox
+									value="#{costDefinitionEditBean.stateAid}"
+									rendered="#{costDefinitionEditBean.isEdit}" onclick="submit()"
+									onchange="submit()"
+									valueChangeListener="#{costDefinitionEditBean.selectStateAid}">
+								</t:selectBooleanCheckbox> <b><t:outputText value="#{msg.yes}"
+										rendered="#{!costDefinitionEditBean.isEdit and costDefinitionEditBean.entity.stateAid}" />
+									<t:outputText value="#{msg.no}"
+										rendered="#{!costDefinitionEditBean.isEdit and !costDefinitionEditBean.entity.stateAid}" /></b>
+							</td>
+						</tr>
+
+						<tr id="amount">
+							<td class="LabelCell"><t:outputText
+									value="#{msg.amountToCoverAdvanceStateAid}:"
+									id="amountToCoverAdvanceStateAidLabel"
+									rendered="#{costDefinitionEditBean.stateAid and costDefinitionEditBean.isEdit}"></t:outputText>
+								<t:outputText value="#{msg.amountToCoverAdvanceStateAid}:"
+									id="amountToCoverAdvanceStateAidLabel2"
+									rendered="#{!costDefinitionEditBean.isEdit}"></t:outputText></td>
+							<td class="ControlCell"><t:inputText maxlength="12"
+									id="amountToCoverAdvanceStateAid"
+									rendered="#{costDefinitionEditBean.stateAid and costDefinitionEditBean.isEdit}"
+									onkeypress="return decimalonly(this, event)"
+									onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+									styleClass="editbox_form2"
+									value="#{costDefinitionEditBean.amountToCoverAdvanceStateAid}" /><b><t:outputText
+										value="#{costDefinitionEditBean.entity.amountToCoverAdvanceStateAid}"
+										converter="moneyConverter"
+										rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+						</tr>
+
+						<tr id="transferMenu">
+							<td class="LabelCell"><t:outputText
+									value="#{msg.transfers}:" id="transferLabel"
+									rendered="#{costDefinitionEditBean.stateAid and costDefinitionEditBean.isEdit}"></t:outputText>
+								<t:outputText value="#{msg.transfers}:"
+									rendered="#{!costDefinitionEditBean.isEdit}"></t:outputText></td>
+							<td class="ControlCell"><t:selectOneMenu id="transfer"
+									rendered="#{costDefinitionEditBean.stateAid and costDefinitionEditBean.isEdit}"
+									value="#{costDefinitionEditBean.transfersId}"
+									styleClass="DropDown">
+									<f:selectItems value="#{costDefinitionEditBean.transfers}" />
+								</t:selectOneMenu> <b><t:outputText
+										value="#{costDefinitionEditBean.transfersId}"
+										rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+						</tr>
+
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.expenditureOutsideEligibleAreas}:" /></td>
+							<td class="ControlCell"><h:inputText maxlength="12"
+									rendered="#{costDefinitionEditBean.isEdit}"
+									onkeypress="return decimalonly(this, event)"
+									onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+									styleClass="editbox_form2"
+									id="expenditureOutsideEligibleAreasAmount"
+									value="#{costDefinitionEditBean.expenditureOutsideEligibleAreasAmount}" /><b><t:outputText
+										value="#{costDefinitionEditBean.entity.expenditureOutsideEligibleAreasAmount}"
+										converter="moneyConverter"
+										rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+						</tr>
+
+						<ui:remove>
+							<tr>
+								<td class="LabelCell"><t:outputText
+										value="#{msg.inkindContributions}:" /></td>
+								<td class="ControlCell"><h:inputText maxlength="12"
+										rendered="#{costDefinitionEditBean.isEdit}"
+										onkeypress="return decimalonly(this, event)"
+										onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+										styleClass="editbox_form2" id="inkindContributionsAmount"
+										value="#{costDefinitionEditBean.inkindContributionsAmount}" /><b><t:outputText
+											value="#{costDefinitionEditBean.entity.inkindContributionsAmount}"
+											converter="moneyConverter"
+											rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+							</tr>
+						</ui:remove>
+
+						<tr>
+							<td class="LabelCell"><t:outputText value="#{msg.notes}:" /></td>
+							<td class="ControlCell"><h:inputText maxlength="255"
+									rendered="#{costDefinitionEditBean.isEdit}"
+									styleClass="editbox_form" id="paymentNotes"
+									value="#{costDefinitionEditBean.entity.amountNotes}" /><b><t:outputText
+										value="#{costDefinitionEditBean.entity.amountNotes}"
+										rendered="#{!costDefinitionEditBean.isEdit}" /></b></td>
+						</tr>
+					</table>
+				</t:panelTab>
+				<t:panelTab id="tab5" label="#{msg.documents}">
+					<div class="table_container">
+						<t:dataTable width="80%" style="margin:0 auto;" id="table"
+							var="data" rowIndexVar="row"
+							value="#{costDefinitionEditBean.docList}" styleClass="form_table"
+							rowClasses="row_table_n,row_table_g">
+							<f:facet name="header">
+								<t:column>
+									<sec:ifAnyGranted
+										roles="ROLE_STC_W,ROLE_AGU_W,ROLE_AAU_W,ROLE_CIL_W,ROLE_DAEC_W,ROLE_BP_W,ROLE_B_W,ROLE_ACU_W">
+										<a4j:commandLink styleClass="headerPanelLink"
+											onclick="#{rich:component('documentPanel3')}.show(); javascript:return false;">#{msg.uploadFile}</a4j:commandLink>
+									</sec:ifAnyGranted>
+									<h:outputText style="text-align: center"
+										value="#{msg.documents}" />
+								</t:column>
+							</f:facet>
+							<t:column id="download" styleClass="ActionColumn"
+								rendered="#{!empty costDefinitionEditBean.docList}">
+								<a4j:htmlCommandLink id="downloadLink" title="#{msg.download}"
+									ajaxSingle="true" immediate="true"
+									action="#{costDefinitionEditBean.downloadDocFromList}">
+									<h:graphicImage alt="#{msg.download}"
+										value="/images/file-down.png" style="border:0" />
+									<f:setPropertyActionListener value="#{row}"
+										target="#{costDefinitionEditBean.entityDownloadId}" />
+								</a4j:htmlCommandLink>
+							</t:column>
+
+							<t:column id="delete" styleClass="ActionColumn"
+								rendered="#{!empty costDefinitionEditBean.docList and costDefinitionEditBean.isEdit}">
+								<a4j:commandLink id="deletelink24" title="#{msg.delete}"
+									ajaxSingle="true"
+									action="#{costDefinitionEditBean.deleteDocFromList}">
+									<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+										style="border:0" />
+									<f:setPropertyActionListener value="#{row}"
+										target="#{costDefinitionEditBean.entityDeleteId}" />
+								</a4j:commandLink>
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty costDefinitionEditBean.docList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.documentTitle}" />
+								</f:facet>
+								<t:outputText value="#{data.title}"
+									converter="longNameConverter" />
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty costDefinitionEditBean.docList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.protocolNumber}" />
+								</f:facet>
+								<t:outputText value="#{data.protocolNumber}" />
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty costDefinitionEditBean.docList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.documentDate}" />
+								</f:facet>
+								<t:outputText value="#{data.documentDate}"
+									converter="dateTimeConverter" />
+							</t:column>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty costDefinitionEditBean.docList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.documentListDocReleaseFrom}" />
+								</f:facet>
+								<t:outputText value="#{empty data.user ? '' : data.user}" />
+							</t:column>
+
+
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty costDefinitionEditBean.docList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.documentCategory}" />
+								</f:facet>
+								<t:outputText
+									value="#{empty data.category ? '' : data.category}" />
+							</t:column>
+
+							<t:column styleClass="StringColumn"
+								rendered="#{empty costDefinitionEditBean.docList}">
+								<f:facet name="header">
+									<h:outputText value="#{msg.noData}" />
+								</f:facet>
+							</t:column>
+						</t:dataTable>
+					</div>
+				</t:panelTab>
+				<t:panelTab id="tab7" label="#{msg.notes}"
+					rendered="#{!costDefinitionEditBean.isDocView}">
+					<div class="table_container">
+						<t:dataTable width="80%" style="margin:0 auto;" id="table"
+							var="data" rowIndexVar="row"
+							value="#{costDefinitionEditBean.notesList}"
+							styleClass="form_table" rowClasses="row_table_n,row_table_g">
+							<f:facet name="header">
+								<t:column>
+									<sec:ifAnyGranted
+										roles="ROLE_STC_W,ROLE_AGU_W,ROLE_AAU_W,ROLE_CIL_W,ROLE_DAEC_W,ROLE_BP_W,ROLE_B_W,ROLE_ACU_W">
+										<a4j:commandLink styleClass="headerPanelLink" immediate="true"
+											onclick="#{rich:component('addNotePanel')}.show(); javascript:return false;">#{msg.procedureInsertAddNote}</a4j:commandLink>
+									</sec:ifAnyGranted>
+									<h:outputText style="text-align: center" value="#{msg.notes}" />
+								</t:column>
+							</f:facet>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty costDefinitionEditBean.notesList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.notes}" />
+								</f:facet>
+								<t:outputText value="#{data.note}" />
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty costDefinitionEditBean.notesList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.costNoteUser}" />
+								</f:facet>
+								<t:outputText value="#{data.userName}" />
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty costDefinitionEditBean.notesList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.costNoteUserRole}" />
+								</f:facet>
+								<t:outputText
+									value="#{empty data.user ? '' : data.user.rolesNames}" />
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty costDefinitionEditBean.notesList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.costNoteUserId}" />
+								</f:facet>
+								<t:outputText
+									value="#{empty data.user ? '' : data.user.progressiveId}" />
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{!empty costDefinitionEditBean.notesList}">
+								<f:facet name="header">
+									<t:outputText value="#{msg.costNoteDate}" />
+								</f:facet>
+								<t:outputText value="#{data.insertedDate}"
+									converter="dateTimeConverter" />
+							</t:column>
+							<t:column styleClass="StringColumn"
+								rendered="#{empty costDefinitionEditBean.notesList}">
+								<f:facet name="header">
+									<h:outputText value="#{msg.noData}" />
+								</f:facet>
+							</t:column>
+						</t:dataTable>
+					</div>
+				</t:panelTab>
+				<t:panelTab id="tab4" label="#{msg.certification}"
+					rendered="#{!costDefinitionEditBean.isDocView}">
+					<table width="50%" class="forms" border="0" cellpadding="1"
+						cellspacing="1">
+						<tr>
+							<td><t:outputText value="#{msg.stcCertification}:" /></td>
+							<td><b><t:outputText
+										value="#{costDefinitionEditBean.entity.stcCertification}" /></b></td>
+						</tr>
+						<tr>
+							<td><t:outputText value="#{msg.aguCertification}:" /></td>
+							<td><b><t:outputText
+										value="#{costDefinitionEditBean.entity.aguCertification}" /></b></td>
+						</tr>
+						<tr>
+							<td><t:outputText value="#{msg.acuCertification}:" /></td>
+							<td><b><t:outputText
+										value="#{costDefinitionEditBean.entity.acuCertification}" /></b></td>
+						</tr>
+						<tr>
+							<td><t:outputText rendered="#{Session.AAU}"
+									value="#{msg.validateByAdA}:" /></td>
+							<td><t:selectBooleanCheckbox rendered="#{Session.AAU}"
+									value="#{costDefinitionEditBean.entity.validateByAAU}"
+									disabled="#{!costDefinitionEditBean.AAUvalidation}"></t:selectBooleanCheckbox></td>
+						</tr>
+						<tr>
+							<td><t:outputText rendered="#{Session.AAU}"
+									value="#{msg.importAdA}:" /></td>
+							<td><t:inputText rendered="#{Session.AAU}"
+									value="#{costDefinitionEditBean.entity.importAda}"
+									onkeypress="return decimalonly(this, event)"
+									onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+									disabled="#{!costDefinitionEditBean.AAUvalidation}" /></td>
+						</tr>
+						<tr>
+							<td><h:outputText rendered="#{Session.AAU}"
+									value="#{msg.notes}:" /></td>
+							<td><t:inputTextarea rendered="#{Session.AAU}"
+									styleClass="editbox_form" id="tbnote" rows="6" cols="40"
+									onkeypress="return textArea(this, 255)"
+									value="#{costDefinitionEditBean.entity.aauNote}"
+									disabled="#{!costDefinitionEditBean.AAUvalidation}" /></td>
+						</tr>
+					</table>
+				</t:panelTab>
+			</t:panelTabbedPane>
+			<table width="100%">
+				<tr>
+					<td align="center"><t:outputText
+							styleClass="RequiredFieldMarker"
+							value="#{costDefinitionEditBean.error}" /></td>
+				</tr>
+				<tr>
+					<td class="btn_line" colspan="3"><a4j:commandButton
+							value="#{msg.save}" styleClass="button3"
+							onclick="#{rich:component('updateMotivationDialog')}.show(); javascript:return false;"
+							rendered="#{costDefinitionEditBean.isEdit and Session.superAdmin}"
+							reRender="FormPanel" /> <a4j:commandButton
+							rendered="#{costDefinitionEditBean.isEdit and !Session.superAdmin}"
+							immediate="false" action="#{costDefinitionEditBean.Page_Save}"
+							styleClass="button2" value="#{msg.save}"
+							oncomplete="showMessage()" reRender="errorMsgType" id="save" />
+						<a4j:commandButton
+							rendered="#{costDefinitionEditBean.AAUvalidation}"
+							immediate="false" action="#{costDefinitionEditBean.aauValidate}"
+							styleClass="button2" value="#{msg.validate}"></a4j:commandButton>
+						<a4j:commandButton
+							rendered="#{costDefinitionEditBean.canSaveAsDraft}"
+							immediate="false" action="#{costDefinitionEditBean.Page_Save}"
+							styleClass="button2" value="#{msg.costDefinitionSaveDraft}"
+							id="saveDraft">
+							<f:setPropertyActionListener value="#{true}"
+								target="#{costDefinitionEditBean.saveAsDraft}" />
+						</a4j:commandButton> <a4j:commandButton value="#{msg.cancel}" styleClass="button2"
+							immediate="true" action="#{costDefinitionEditBean.GoBack}" /></td>
+				</tr>
+			</table>
+			<input id="errorMsgType" type="hidden"
+				value="#{costDefinitionEditBean.locationLimitsErrorType}" />
+			<script language="JavaScript" type="text/javascript">
+                    function showMessage() {
+                    	if(document.getElementById('errorMsgType').value == 'PROHIBITING') {
+                    		Richfaces.showModalPanel('prohibitingMessagePanel');                    			
+                    	} else if(document.getElementById("errorMsgType").value == 'WARNING') {
+                    		Richfaces.showModalPanel('warnningMessagePanel');
+                    		}
+                    	}
+                </script>
+			<rich:modalPanel id="documentPanel1" autosized="true" width="300">
+				<f:facet name="header">
+					<h:outputText value="Document" style="padding-right:15px;" />
+				</f:facet>
+
+				<table>
+					<tr>
+						<td class="LabelCell"><t:outputText
+								value="#{msg.protocolNumber}:" /></td>
+						<td class="ControlCell"><t:inputText
+								styleClass="editbox_form" style="width:216px;" maxlength="50"
+								value="#{costDefinitionEditBean.costDocument.protocolNumber}" /></td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText
+								value="#{msg.documentDescription}:" /></td>
+						<td class="ControlCell"><t:inputText
+								styleClass="editbox_form" style="width:216px;" maxlength="50"
+								value="#{costDefinitionEditBean.costDocument.description}" /></td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText value="#{msg.date}:" /></td>
+						<td class="ControlCell"><rich:calendar
+								locale="#{LocalizeBean.currentLocaleValue}" disabled="false"
+								inputClass="editbox_form2" converter="dateTimeConverter"
+								value="#{costDefinitionEditBean.costDocument.documentDate}"
+								datePattern="dd/MM/yyyy">
+							</rich:calendar></td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText
+								value="#{msg.documentPublic}:" /></td>
+						<td class="ControlCell"><t:selectBooleanCheckbox
+								value="#{costDefinitionEditBean.costDocument.isPublic}">
+							</t:selectBooleanCheckbox></td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText
+								value="#{msg.documentUploadRole}:" /></td>
+						<td class="ControlCell"><t:selectOneMenu
+								onmousedown="collapse(this);" onchange="expand(this);"
+								onblur="expand(this);"
+								value="#{costDefinitionEditBean.costDocRole}" required="false"
+								styleClass="DropDown">
+								<f:selectItems value="#{costDefinitionEditBean.listSelectRoles}" />
+							</t:selectOneMenu></td>
+					</tr>
+					<ui:remove>
+						<tr class="tempDisplay">
+							<td class="LabelCell"><t:outputText
+									value="#{msg.documentCategory}:" /></td>
+							<td class="ControlCell"><t:selectOneMenu
+									onmousedown="collapse(this);" onchange="expand(this);"
+									onblur="expand(this);"
+									value="#{costDefinitionEditBean.selectedCategory}"
+									required="false" styleClass="DropDown">
+									<f:selectItems value="#{costDefinitionEditBean.categories}" />
+								</t:selectOneMenu></td>
+						</tr>
+					</ui:remove>
+					<ui:remove>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.documentNumberField}:" /></td>
+							<td class="ControlCell"><t:inputText
+									styleClass="editbox_form2"
+									value="#{costDefinitionEditBean.costDocument.documentNumber}"
+									onkeypress="return numbersonly(this, event)"
+									onkeyup="checknumber(this)" maxlength="10" /></td>
+						</tr>
+
+						<tr>
+							<td class="LabelCell"><t:outputText value="#{msg.date}:" /></td>
+							<td class="ControlCell"><rich:calendar
+									locale="#{LocalizeBean.currentLocaleValue}"
+									inputClass="editbox_form2" converter="dateTimeConverter"
+									value="#{costDefinitionEditBean.costDocument.editableDate}"
+									datePattern="dd/MM/yyyy">
+								</rich:calendar></td>
+						</tr>
+					</ui:remove>
+
+					<tr>
+						<td class="LabelCell"><t:outputText
+								value="#{msg.uploadFile}:" /></td>
+						<td class="ControlCell"><t:inputFileUpload id="fileupload2"
+								value="#{costDefinitionEditBean.costDocumentUpFile}"
+								storage="file" styleClass="fileUploadInput" maxlength="200000" /></td>
+					</tr>
+					<tr>
+						<td align="center" colspan="2">#{msg.fileSize}</td>
+					</tr>
+
+					<ui:remove>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.documentNote}:" /></td>
+							<td class="ControlCell"><t:inputTextarea maxlength="255"
+									rows="6" cols="40"
+									value="#{costDefinitionEditBean.costDocument.note}"
+									onkeypress="return textArea(this, 255)"
+									styleClass="editbox_form2" /></td>
+						</tr>
+					</ui:remove>
+
+					<tr>
+						<td colspan="2" style="text-align: center;"><h:commandButton
+								value="#{msg.uploadFile}" styleClass="button3"
+								action="#{costDefinitionEditBean.SaveCostDocument}"
+								reRender="FormPanel"
+								onclick="#{rich:component('documentPanel1')}.hide();" /> <a4j:commandButton
+								value="#{msg.cancel}" styleClass="button" immediate="false"
+								onclick="#{rich:component('documentPanel1')}.hide();return false;" /></td>
+					</tr>
+				</table>
+			</rich:modalPanel>
+
+			<rich:modalPanel id="documentPanel2" autosized="true" width="300">
+				<f:facet name="header">
+					<h:outputText value="#{msg.document}" style="padding-right:15px;" />
+				</f:facet>
+
+				<table>
+
+
+					<tr>
+						<td class="LabelCell"><t:outputText
+								value="#{msg.protocolNumber}:" /></td>
+						<td class="ControlCell"><t:inputText
+								styleClass="editbox_form" maxlength="50" style="width:216px;"
+								value="#{costDefinitionEditBean.paymentDocument.protocolNumber}" /></td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText
+								value="#{msg.documentDescription}:" /></td>
+						<td class="ControlCell"><t:inputText
+								styleClass="editbox_form" style="width:216px;" maxlength="50"
+								value="#{costDefinitionEditBean.paymentDocument.description}" /></td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText value="#{msg.date}:" /></td>
+						<td class="ControlCell"><rich:calendar
+								locale="#{LocalizeBean.currentLocaleValue}"
+								inputClass="editbox_form2" converter="dateTimeConverter"
+								disabled="false"
+								value="#{costDefinitionEditBean.paymentDocument.documentDate}"
+								datePattern="dd/MM/yyyy">
+							</rich:calendar></td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText
+								value="#{msg.documentPublic}:" /></td>
+						<td class="ControlCell"><t:selectBooleanCheckbox
+								value="#{costDefinitionEditBean.paymentDocument.isPublic}">
+							</t:selectBooleanCheckbox></td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText
+								value="#{msg.documentUploadRole}:" /></td>
+						<td class="ControlCell"><t:selectOneMenu
+								onmousedown="collapse(this);" onchange="expand(this);"
+								onblur="expand(this);"
+								value="#{costDefinitionEditBean.paymentDocRole}"
+								required="false" styleClass="DropDown">
+								<f:selectItems value="#{costDefinitionEditBean.listSelectRoles}" />
+							</t:selectOneMenu></td>
+					</tr>
+					<ui:remove>
+						<tr class="tempDisplay">
+							<td class="LabelCell"><t:outputText
+									value="#{msg.documentCategory}:" /></td>
+							<td class="ControlCell"><t:selectOneMenu
+									onmousedown="collapse(this);" onchange="expand(this);"
+									onblur="expand(this);"
+									value="#{costDefinitionEditBean.selectedCategory}"
+									required="false" styleClass="DropDown">
+									<f:selectItems value="#{costDefinitionEditBean.categories}" />
+								</t:selectOneMenu></td>
+						</tr>
+					</ui:remove>
+					<ui:remove>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.documentNumberField}:" /></td>
+							<td class="ControlCell"><t:inputText
+									styleClass="editbox_form2"
+									value="#{costDefinitionEditBean.paymentDocument.documentNumber}"
+									onkeypress="return numbersonly(this, event)"
+									onkeyup="checknumber(this)" maxlength="10" /></td>
+						</tr>
+
+
+						<tr>
+							<td class="LabelCell"><t:outputText value="#{msg.date}:" /></td>
+							<td class="ControlCell"><rich:calendar
+									locale="#{LocalizeBean.currentLocaleValue}"
+									inputClass="editbox_form2" converter="dateTimeConverter"
+									value="#{costDefinitionEditBean.paymentDocument.editableDate}"
+									datePattern="dd/MM/yyyy">
+								</rich:calendar></td>
+						</tr>
+					</ui:remove>
+
+					<tr>
+						<td class="LabelCell"><t:outputText
+								value="#{msg.uploadFile}:" /></td>
+						<td class="ControlCell"><t:inputFileUpload id="fileupload"
+								value="#{costDefinitionEditBean.paymentDocumentUpFile}"
+								storage="file" styleClass="fileUploadInput" maxlength="200000" /></td>
+					</tr>
+					<tr>
+						<td align="center" colspan="2">#{msg.fileSize}</td>
+					</tr>
+
+					<ui:remove>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.documentNote}:" /></td>
+							<td class="ControlCell"><t:inputTextarea maxlength="255"
+									rows="6" cols="40"
+									value="#{costDefinitionEditBean.paymentDocument.note}"
+									onkeypress="return textArea(this, 255)"
+									styleClass="editbox_form2" /></td>
+						</tr>
+					</ui:remove>
+
+					<tr>
+						<td colspan="2" style="text-align: center;"><h:commandButton
+								value="#{msg.uploadFile}" styleClass="button3"
+								action="#{costDefinitionEditBean.SavePaymentDocument}"
+								reRender="FormPanel"
+								onclick="#{rich:component('documentPanel2')}.hide();" /> <a4j:commandButton
+								value="#{msg.cancel}" styleClass="button" immediate="false"
+								onclick="#{rich:component('documentPanel2')}.hide();return false;" /></td>
+					</tr>
+				</table>
+
+			</rich:modalPanel>
+
+			<rich:modalPanel id="documentPanel3" autosized="true" width="300">
+				<f:facet name="header">
+					<h:outputText value="#{msg.document}" style="padding-right:15px;" />
+				</f:facet>
+
+				<table>
+
+					<tr>
+						<td class="LabelCell"><t:outputText
+								value="#{msg.protocolNumber}:" /></td>
+						<td class="ControlCell"><t:inputText
+								styleClass="editbox_form" maxlength="50" style="width:216px;"
+								value="#{costDefinitionEditBean.newDocument.protocolNumber}" /></td>
+					</tr>
+
+					<tr>
+						<td class="LabelCell"><t:outputText
+								value="#{msg.documentDescription}:" /></td>
+						<td class="ControlCell"><t:inputText
+								styleClass="editbox_form" style="width:216px;" maxlength="50"
+								value="#{costDefinitionEditBean.newDocument.description}" /></td>
+					</tr>
+
+					<tr>
+						<td class="LabelCell"><t:outputText value="#{msg.date}:" /></td>
+						<td class="ControlCell"><rich:calendar
+								locale="#{LocalizeBean.currentLocaleValue}"
+								inputClass="editbox_form2" converter="dateTimeConverter"
+								disabled="false"
+								value="#{costDefinitionEditBean.newDocument.documentDate}"
+								datePattern="dd/MM/yyyy">
+							</rich:calendar></td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText
+								value="#{msg.documentPublic}:" /></td>
+						<td class="ControlCell"><t:selectBooleanCheckbox
+								value="#{costDefinitionEditBean.newDocument.isPublic}">
+							</t:selectBooleanCheckbox></td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText
+								value="#{msg.documentUploadRole}:" /></td>
+						<td class="ControlCell"><t:selectOneMenu
+								onmousedown="collapse(this);" onchange="expand(this);"
+								onblur="expand(this);"
+								value="#{costDefinitionEditBean.newDocRole}" required="false"
+								styleClass="DropDown">
+								<f:selectItems value="#{costDefinitionEditBean.listSelectRoles}" />
+							</t:selectOneMenu></td>
+					</tr>
+					<ui:remove>
+						<tr class="tempDisplay">
+							<td class="LabelCell"><t:outputText
+									value="#{msg.documentCategory}:" /></td>
+							<td class="ControlCell"><t:selectOneMenu
+									onmousedown="collapse(this);" onchange="expand(this);"
+									onblur="expand(this);"
+									value="#{costDefinitionEditBean.selectedCategory}"
+									required="false" styleClass="DropDown">
+									<f:selectItems value="#{costDefinitionEditBean.categories}" />
+								</t:selectOneMenu></td>
+						</tr>
+					</ui:remove>
+					<ui:remove>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.documentNumberField}:" /></td>
+							<td class="ControlCell"><t:inputText
+									styleClass="editbox_form2" id="docNumber"
+									value="#{costDefinitionEditBean.newDocument.documentNumber}"
+									onkeypress="return numbersonly(this, event)"
+									onkeyup="checknumber(this)" maxlength="10" /></td>
+						</tr>
+					</ui:remove>
+
+					<tr>
+						<td class="LabelCell"><t:outputText
+								value="#{msg.uploadFile}:" /></td>
+						<td class="ControlCell"><t:inputFileUpload id="fileupload3"
+								value="#{costDefinitionEditBean.newDocumentUpFile}"
+								storage="file" styleClass="fileUploadInput" maxlength="200000" /></td>
+					</tr>
+					<tr>
+						<td align="center" colspan="2">#{msg.fileSize}</td>
+					</tr>
+
+					<ui:remove>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.documentNote}:" /></td>
+							<td class="ControlCell"><t:inputTextarea maxlength="255"
+									rows="6" cols="40"
+									value="#{costDefinitionEditBean.newDocument.note}"
+									onkeypress="return textArea(this, 255)"
+									styleClass="editbox_form2" id="note" /></td>
+						</tr>
+					</ui:remove>
+
+					<tr>
+						<td colspan="2" style="text-align: center;"><h:commandButton
+								value="#{msg.uploadFile}" styleClass="button3"
+								action="#{costDefinitionEditBean.addNewDocument}"
+								reRender="FormPanel"
+								onclick="#{rich:component('documentPanel3')}.hide();" /> <a4j:commandButton
+								value="#{msg.cancel}" styleClass="button" immediate="false"
+								onclick="#{rich:component('documentPanel3')}.hide();return false;" /></td>
+					</tr>
+				</table>
+			</rich:modalPanel>
+			<rich:modalPanel id="documentPanel4" autosized="true" width="300">
+				<f:facet name="header">
+					<h:outputText value="#{msg.document}" style="padding-right:15px;" />
+				</f:facet>
+
+				<table>
+
+
+					<tr>
+						<td class="LabelCell"><t:outputText
+								value="#{msg.protocolNumber}:" /></td>
+						<td class="ControlCell"><t:inputText
+								styleClass="editbox_form" maxlength="50" style="width:216px;"
+								value="#{costDefinitionEditBean.paymentAttachmentDocument.protocolNumber}" /></td>
+					</tr>
+
+					<tr>
+						<td class="LabelCell"><t:outputText
+								value="#{msg.documentDescription}:" /></td>
+						<td class="ControlCell"><t:inputText
+								styleClass="editbox_form" style="width:216px;" maxlength="50"
+								value="#{costDefinitionEditBean.paymentAttachmentDocument.description}" /></td>
+					</tr>
+
+					<tr>
+						<td class="LabelCell"><t:outputText value="#{msg.date}:" /></td>
+						<td class="ControlCell"><rich:calendar
+								locale="#{LocalizeBean.currentLocaleValue}"
+								inputClass="editbox_form2" converter="dateTimeConverter"
+								disabled="false"
+								value="#{costDefinitionEditBean.paymentAttachmentDocument.documentDate}"
+								datePattern="dd/MM/yyyy">
+							</rich:calendar></td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText
+								value="#{msg.documentPublic}:" /></td>
+						<td class="ControlCell"><t:selectBooleanCheckbox
+								value="#{costDefinitionEditBean.paymentAttachmentDocument.isPublic}">
+							</t:selectBooleanCheckbox></td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText
+								value="#{msg.documentUploadRole}:" /></td>
+						<td class="ControlCell"><t:selectOneMenu
+								onmousedown="collapse(this);" onchange="expand(this);"
+								onblur="expand(this);"
+								value="#{costDefinitionEditBean.paymentAttachmentDocRole}"
+								required="false" styleClass="DropDown">
+								<f:selectItems value="#{costDefinitionEditBean.listSelectRoles}" />
+							</t:selectOneMenu></td>
+					</tr>
+					<ui:remove>
+						<tr class="tempDisplay">
+							<td class="LabelCell"><t:outputText
+									value="#{msg.documentCategory}:" /></td>
+							<td class="ControlCell"><t:selectOneMenu
+									onmousedown="collapse(this);" onchange="expand(this);"
+									onblur="expand(this);"
+									value="#{costDefinitionEditBean.selectedCategory}"
+									required="false" styleClass="DropDown">
+									<f:selectItems value="#{costDefinitionEditBean.categories}" />
+								</t:selectOneMenu></td>
+						</tr>
+					</ui:remove>
+					<tr>
+						<td class="LabelCell"><t:outputText
+								value="#{msg.uploadFile}:" /></td>
+						<td class="ControlCell"><t:inputFileUpload id="fileupload4"
+								value="#{costDefinitionEditBean.paymentAttachmentDocumentUpFile}"
+								storage="file" styleClass="fileUploadInput4" maxlength="200000" /></td>
+					</tr>
+					<tr>
+						<td align="center" colspan="2">#{msg.fileSize}</td>
+					</tr>
+
+
+					<tr>
+						<td colspan="2" style="text-align: center;"><h:commandButton
+								value="#{msg.uploadFile}" styleClass="button3"
+								action="#{costDefinitionEditBean.SavePaymentAttachmentDocument}"
+								reRender="FormPanel"
+								onclick="#{rich:component('documentPanel4')}.hide();" /> <a4j:commandButton
+								value="#{msg.cancel}" styleClass="button" immediate="false"
+								onclick="#{rich:component('documentPanel4')}.hide();return false;" /></td>
+					</tr>
+				</table>
+
+			</rich:modalPanel>
+
+			<rich:modalPanel id="addNotePanel" autosized="true" width="200">
+				<f:facet name="header">
+					<h:outputText value="#{msg.notes}" style="padding-right:15px;" />
+				</f:facet>
+
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td><h:outputText value="#{msg.notes}:" /></td>
+							<td><t:inputTextarea styleClass="editbox_form" id="tbnote"
+									rows="6" cols="40" onkeypress="return textArea(this, 255)"
+									value="#{costDefinitionEditBean.noteAdd}" /></td>
+						</tr>
+						<tr>
+							<td align="center" colspan="2" style="text-align: center;"
+								width="50%"><a4j:commandButton value="#{msg.save}"
+									action="#{costDefinitionEditBean.addNote}"
+									onclick="#{rich:component('addNotePanel')}.hide();"
+									styleClass="button2" reRender="FormPanel" /> <a4j:commandButton
+									value="#{msg.cancel}"
+									onclick="#{rich:component('addNotePanel')}.hide();return false;"
+									immediate="false" styleClass="button2" /></td>
+						</tr>
+					</tbody>
+				</table>
+
+			</rich:modalPanel>
+
+			<script type="text/javascript">
+			if(#{costDefinitionEditBean.showAlert}){
+				document.getElementById('savePanel').component.show();
+			}
+		</script>
+
+		</a4j:outputPanel>
+	</ui:define>
+	<ui:define name="document_body">
+
+	</ui:define>
+	<ui:define name="script_body">
+
+
+	</ui:define>
+
+
+	<ui:define name="delete_panels">
+
+		<rich:modalPanel id="savePanel" autosized="true" width="200">
+			<f:facet name="header">
+				<h:outputText value="#{msg.sumCostDefinitionsLessAlert}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+
+			</f:facet>
+			<h:form>
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.yes}" ajaxSingle="true" styleClass="button"
+									action="#{costDefinitionEditBean.Page_Save}"
+									oncomplete="#{rich:component('savePanel')}.hide();"
+									reRender="FormPanel" /></td>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.cancel}" styleClass="button" ajaxSingle="true"
+									action="#{costDefinitionEditBean.cancelWarningDialog}"
+									onclick="#{rich:component('savePanel')}.hide();"
+									reRender="FormPanel" /></td>
+						</tr>
+					</tbody>
+				</table>
+			</h:form>
+		</rich:modalPanel>
+
+
+
+		<rich:modalPanel id="updateMotivationDialog" autosized="true"
+			width="300" resizeable="false">
+			<f:facet name="header">
+				<h:outputText value="#{msg.validationFlowViewEnterMotivation}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<h:form id="updateForm">
+				<h:panelGrid columns="1">
+					<ui:fragment>
+						<h:outputText value="#{msg.motivation}" />
+						<h:panelGroup style="color:red;">*</h:panelGroup>
+					</ui:fragment>
+					<t:inputTextarea value="#{costDefinitionEditBean.actionMotivation}"
+						id="updateMotivation"
+						onkeypress="return textArea(this, 255, event)"
+						style="width: 350px; height: 130px; resize: none;" />
+				</h:panelGrid>
+				<center>
+					<h:commandButton value="#{msg.yes}"
+						action="#{costDefinitionEditBean.saveSuperAdmin}"
+						onclick="return validateUpdateMotivation();" />
+					<a4j:commandButton value="#{msg.no}"
+						actionListener="#{costDefinitionEditBean.clearMotivation}"
+						oncomplete="#{rich:component('updateMotivationDialog')}.hide();"
+						reRender="updateMotivation" />
+				</center>
+				<script language="JavaScript" type="text/javascript">
+                    function validateUpdateMotivation() {
+                        var textArea = document.getElementById('updateForm:updateMotivation');
+                        if (textArea != null) {
+                            if (textArea.value.trim().length > 0) {
+                                return true;
+                            } else {
+                                textArea.style.borderColor = 'red';
+                                return false;
+                            }
+                        }
+                        return false;
+                    }
+                </script>
+			</h:form>
+		</rich:modalPanel>
+
+
+		<rich:modalPanel id="prohibitingMessagePanel" autosized="true"
+			width="300">
+			<f:facet name="header">
+				<h:outputText value="#{msg.limitExceeded}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<h:form>
+				<a4j:outputPanel ajaxRendered="true" id="notePanel">
+					<table width="100%">
+						<tbody>
+							<tr>
+								<td><span class="RequiredFieldMarker"><h:outputText
+											value="#{costDefinitionEditBean.locationSumLimitsError}" /><br />#{msg.prohibitingSavingMessage}</span></td>
+							</tr>
+							<tr>
+								<td align="center" colspan="2" style="text-align: center;"
+									width="50%"><a4j:commandButton value="#{msg.cancel}"
+										onclick="#{rich:component('prohibitingMessagePanel')}.hide();"
+										styleClass="button2" /></td>
+							</tr>
+						</tbody>
+					</table>
+				</a4j:outputPanel>
+			</h:form>
+		</rich:modalPanel>
+
+
+		<rich:modalPanel id="warnningMessagePanel" autosized="true"
+			width="300">
+			<f:facet name="header">
+				<h:outputText value="#{msg.limitExceeded}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<h:form>
+				<a4j:outputPanel ajaxRendered="true" id="notePanel">
+					<table width="100%">
+						<tbody>
+							<tr>
+								<td><span class="RequiredFieldMarker"><h:outputText
+											value="#{costDefinitionEditBean.locationSumLimitsError}" /><br />#{msg.contunuationMessage}</span></td>
+							</tr>
+							<tr>
+								<td align="center" colspan="2" style="text-align: center;"
+									width="50%"><a4j:commandButton value="#{msg.save}"
+										id="save_warning"
+										onclick="#{rich:component('warnningMessagePanel')}.hide();"
+										action="#{costDefinitionEditBean.saveIgnorelocationSumLimits}"
+										styleClass="button2" /></td>
+
+								<td align="center" colspan="2" style="text-align: center;"
+									width="50%"><a4j:commandButton value="#{msg.cancel}"
+										onclick="#{rich:component('warnningMessagePanel')}.hide();"
+										styleClass="button2" /></td>
+							</tr>
+						</tbody>
+					</table>
+				</a4j:outputPanel>
+			</h:form>
+		</rich:modalPanel>
+
+		<rich:modalPanel id="deletePanel" autosized="true" width="200">
+			<f:facet name="header">
+				<h:outputText value="#{msg.delete}?" style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+
+			</f:facet>
+			<h:form>
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.yes}" ajaxSingle="true" styleClass="button"
+									action="#{costDefinitionEditBean.deleteDocFromList}"
+									immediate="false"
+									oncomplete="#{rich:component('deletePanel')}.hide();"
+									reRender="FormPanel" /></td>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.cancel}" styleClass="button"
+									onclick="#{rich:component('deletePanel')}.hide();return false;" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</h:form>
+		</rich:modalPanel>
+	</ui:define>
+</ui:composition>
+</html>

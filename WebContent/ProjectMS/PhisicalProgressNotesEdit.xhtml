@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ListBase.xhtml">
+	<ui:param name="heading" value="#{msg.notes}" />
+	<ui:define name="script_body">
+	</ui:define>
+	<ui:define name="list_body">
+		<a4j:outputPanel ajaxRendered="false" id="FormPanel">
+			<div class="table_container"><t:dataTable
+				style="margin:0 auto; width: 80%;" id="tableNotes"
+				var="note" value="#{phisicalProgressNotesEditBean.list}"
+				styleClass="form_table" rowClasses="row_table_n,row_table_g">
+				<f:facet name="header">
+					<t:column>
+						<sec:ifAnyGranted roles="ROLE_AGU_W,ROLE_BP_W">
+							<a4j:commandLink styleClass="headerPanelLink" rendered="#{(!Session.isActualSate or phisicalProgressNotesEditBean.addEnable) and !Session.isAguRead}"
+								oncomplete="#{rich:component('addNotePanel')}.show()" reRender="addNotePanel">
+								#{msg.procedureInsertAddNote}
+							</a4j:commandLink>
+							<h:outputText value="#{msg.notes}" />
+						</sec:ifAnyGranted>
+
+					</t:column>
+				</f:facet>
+				<!-- Action columns -->
+
+				<sec:ifAnyGranted roles="ROLE_AGU_W,ROLE_BP_W">
+					<t:column id="edit" styleClass="ActionColumn"
+						rendered="#{!empty phisicalProgressNotesEditBean.list and (!Session.isActualSate or phisicalProgressNotesEditBean.addEnable) and !Session.isAguRead}">
+						<a4j:commandLink ajaxSingle="true" id="editlink"
+							reRender="FormPanel" title="#{msg.edit}"
+							action="#{phisicalProgressNotesEditBean.editEntity}">
+							<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{note.id}"
+								target="#{phisicalProgressNotesEditBean.noteEditId}" />
+						</a4j:commandLink>
+					</t:column>
+					<t:column id="delete"
+						rendered="#{!empty phisicalProgressNotesEditBean.list and (!Session.isActualSate or phisicalProgressNotesEditBean.addEnable) and !Session.isAguRead}"
+						styleClass="ActionColumn" headerstyleClass="ActionColumn">
+						<a4j:commandLink ajaxSingle="true" id="deletelink"
+							title="#{msg.delete}"
+							oncomplete="#{rich:component('deletePanel')}.show()">
+							<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{note.id}"
+								target="#{phisicalProgressNotesEditBean.entityDeleteId}" />
+						</a4j:commandLink>
+					</t:column>
+				</sec:ifAnyGranted>
+				<t:column styleClass="StringColumn"
+					rendered="#{!empty phisicalProgressNotesEditBean.list}">
+					<f:facet name="header">
+						<h:outputText value="#{msg.notes}" />
+					</f:facet>
+					<t:outputText value="#{note.note}" 
+						rendered="#{!phisicalProgressNotesEditBean.isEdit}" />
+
+					<t:inputText required="true" styleClass="editbox_form"
+						value="#{phisicalProgressNotesEditBean.noteEdit}" maxlength="250"
+						rendered="#{phisicalProgressNotesEditBean.isEdit and phisicalProgressNotesEditBean.noteEditId == note.id}" />
+				</t:column>
+				
+				<t:column styleClass="StringColumn"
+					rendered="#{!empty phisicalProgressNotesEditBean.list}">
+					<f:facet name="header">
+						<h:outputText value="#{msg.userName}" />
+					</f:facet>
+					<t:outputText value="#{note.userName}" 
+						rendered="#{!phisicalProgressNotesEditBean.isEdit}" />
+
+					
+				</t:column>
+				
+				<t:column styleClass="StringColumn"
+					rendered="#{!empty phisicalProgressNotesEditBean.list}">
+					<f:facet name="header">
+						<h:outputText value="#{msg.phisicalProgressNotesInsertDate}" />
+					</f:facet>
+					<t:outputText value="#{note.insertedDate}" 
+						rendered="#{!phisicalProgressNotesEditBean.isEdit}" />
+
+					
+				</t:column>
+
+				<t:column styleClass="StringColumn"
+					rendered="#{empty phisicalProgressNotesEditBean.list}">
+					<f:facet name="header">
+						<h:outputText value="#{msg.noData}" />
+					</f:facet>
+				</t:column>
+			</t:dataTable></div>			
+			<div class="btn_line">
+			<table>
+				<tr>
+					<td><a4j:commandButton
+						value="#{msg.save}" styleClass="button2" immediate="false" id="save"
+						reRender="FormPanel"
+						action="#{phisicalProgressNotesEditBean.updateNote}"
+						rendered="#{phisicalProgressNotesEditBean.isEdit}" /></td>
+					<td><a4j:commandButton
+						value="#{msg.cancel}" styleClass="button2" immediate="true" id="cancel"
+						action="#{phisicalProgressNotesEditBean.updateNoteCancel}"
+						reRender="FormPanel"
+						rendered="#{phisicalProgressNotesEditBean.isEdit}" /></td>
+				</tr>
+			</table>
+			</div>
+			<div class="btn_line">
+			<table>
+				<tr>
+					<td><a4j:commandButton value="#{msg.back}" id="back"
+						styleClass="button2" immediate="true" rendered="#{!phisicalProgressNotesEditBean.isEdit}"
+						action="#{phisicalProgressNotesEditBean.goBack}" /></td>
+				</tr>
+			</table>
+			</div>
+		</a4j:outputPanel>
+	</ui:define>
+	<ui:define name="delete_panels">
+		<rich:modalPanel id="addNotePanel" autosized="true" width="200">
+			<f:facet name="header">
+				<h:outputText value="#{msg.procedureInsertAddNote}" style="padding-right:15px;" />
+			</f:facet>
+			<h:form>
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td><h:outputText value="#{msg.notes}:" /></td>
+							<td><t:inputText maxlength="250" required="true"
+								styleClass="editbox_form" id="tbnote"
+								value="#{phisicalProgressNotesEditBean.noteAdd}" /></td>
+						</tr>
+						<tr>
+							<td align="center" colspan="2" style="text-align:center;" width="50%"><a4j:commandButton
+								value="#{msg.save}" immediate="false"
+								action="#{phisicalProgressNotesEditBean.addNote}"
+								oncomplete="#{rich:component('addNotePanel')}.hide();"
+								styleClass="button2" reRender="FormPanel" /><a4j:commandButton value="#{msg.cancel}"
+								onclick="#{rich:component('addNotePanel')}.hide();return false;"
+								immediate="true" styleClass="button2" /></td>
+						</tr>
+					</tbody>
+				</table>
+			</h:form>
+		</rich:modalPanel>
+		<rich:modalPanel id="deletePanel" autosized="true" width="200">
+			<f:facet name="header">
+				<h:outputText value="#{msg.delete}?" style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+			</f:facet>
+			<h:form>
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td align="center" width="50%"><a4j:commandButton
+								value="#{msg.yes}" ajaxSingle="true" styleClass="button"
+								action="#{phisicalProgressNotesEditBean.deleteEntity}"
+								oncomplete="#{rich:component('deletePanel')}.hide();"
+								reRender="FormPanel" /></td>
+							<td align="center" width="50%"><a4j:commandButton
+								value="#{msg.cancel}" styleClass="button"
+								onclick="#{rich:component('deletePanel')}.hide();return false;" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</h:form>
+		</rich:modalPanel>
+	</ui:define>
+</ui:composition>
+</html>

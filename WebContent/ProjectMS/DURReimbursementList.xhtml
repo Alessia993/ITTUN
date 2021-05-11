@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ListBase.xhtml">
+	<ui:param name="heading" value="#{msg.durReimbListPageName}" />
+
+	<ui:define name="list_body">
+		<a4j:outputPanel ajaxRendered="false" id="FormPanel">
+
+			<div class="table_container">
+				<t:dataTable
+					style="margin:0 auto; width: 80%;"
+					rows="#{durReimbursementListBean.itemsPerPage}" id="table" var="item"
+					value="#{durReimbursementListBean.list}" styleClass="form_table"
+					rowClasses="row_table_n,row_table_g">
+
+				<f:facet name="header">
+					<t:column>
+						<h:outputText value="#{msg.durReimbListTableName}" />
+						<h:selectOneMenu id="itemPP" styleClass="headerPanelSelect"
+							value="#{durReimbursementListBean.itemsPerPage}">
+							<f:selectItems value="#{durReimbursementListBean.itemsPerPageList}" />
+							<a4j:support event="onchange" reRender="FormPanel" />
+						</h:selectOneMenu>
+					</t:column>
+				</f:facet>
+
+				<!-- Action columns -->
+
+				<sec:ifAnyGranted
+					roles="ROLE_BP_R,ROLE_BP_W,ROLE_AGU_R,ROLE_AGU_W,ROLE_ACU_R,ROLE_ACU_W,ROLE_STC_R,ROLE_STC_W,ROLE_DAEC_R,ROLE_DAEC_W">
+					<t:column id="show" styleClass="ActionColumn"
+						headerstyleClass="ActionColumn"
+						rendered="#{!empty durReimbursementListBean.list}">
+						<a4j:commandLink ajaxSingle="true" id="showlink"
+							title="#{msg.show}" action="#{durReimbursementListBean.showEntity}">
+							<h:graphicImage alt="#{msg.show}" value="/images/ok.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{item.id}"
+								target="#{durReimbursementListBean.entityEditId}" />
+						</a4j:commandLink>
+					</t:column>
+				</sec:ifAnyGranted>
+
+				<sec:ifAnyGranted roles="ROLE_AGU_W">
+					<t:column id="edit" styleClass="ActionColumn"
+						rendered="#{!empty durReimbursementListBean.list and !Session.projectLock}"
+						headerstyleClass="ActionColumn">
+						<a4j:commandLink ajaxSingle="true" id="editlink" rendered="#{!item.durCompilation.locked}"
+							title="#{msg.edit}" action="#{durReimbursementListBean.editEntity}">
+							<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{item.id}"
+								target="#{durReimbursementListBean.entityEditId}" />
+						</a4j:commandLink>
+					</t:column>					
+				</sec:ifAnyGranted>
+
+				<!-- Info columns -->
+				<t:column styleClass="StringColumn" rendered="#{!empty durReimbursementListBean.list}">
+					<f:facet name="header">						
+							<h:outputText value="#{msg.durCompilationListHeaderRowNumber}" />							
+					</f:facet>
+					<t:outputText value="#{item.number}" />
+				</t:column>
+				<t:column styleClass="DateColumn" rendered="#{!empty durReimbursementListBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.durCompilationListHeaderCompilationDate}" />
+					</f:facet>
+					<t:outputText converter="dateTimeConverter" value="#{item.compDate}" />
+				</t:column>
+				<t:column styleClass="StringColumn" rendered="#{!empty durReimbursementListBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.durCompilationListHeaderProtocolN}" />
+					</f:facet>
+					<t:outputText value="#{item.protocolNumber}" />
+				</t:column>
+				
+				<t:column styleClass="StringColumn" rendered="#{empty durReimbursementListBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.noData}"></t:outputText>
+					</f:facet>					
+				</t:column>
+				
+		</t:dataTable>
+				<!-- End of info columns -->
+	</div>
+			 <a4j:outputPanel styleClass="scrollerPanel">
+				<t:dataScroller id="scroll" styleClass="scroller" for="table"
+					rendered="#{durReimbursementListBean.showScroll}" paginator="true"
+					paginatorMaxPages="5" fastStep="5" paginatorColumnClass="page"
+					paginatorActiveColumnClass="page_active" immediate="true">
+					<f:facet name="first">
+						<t:graphicImage url="../images/back_end.gif" border="1" />
+					</f:facet>
+					<f:facet name="last">
+						<t:graphicImage url="../images/forward_end.gif" border="1" />
+					</f:facet>
+					<f:facet name="previous">
+						<t:graphicImage url="../images/back.gif" border="1" />
+					</f:facet>
+					<f:facet name="next">
+						<t:graphicImage url="../images/forward.gif" border="1" />
+					</f:facet>
+					<f:facet name="fastforward">
+						<t:graphicImage url="../images/all_forward.gif" border="1" />
+					</f:facet>
+					<f:facet name="fastrewind">
+						<t:graphicImage url="../images/all_back.gif" border="1" />
+					</f:facet>
+				</t:dataScroller>
+			</a4j:outputPanel>
+		</a4j:outputPanel>
+	</ui:define>	
+
+</ui:composition>
+</html>

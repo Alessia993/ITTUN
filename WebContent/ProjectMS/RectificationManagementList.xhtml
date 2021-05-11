@@ -1,0 +1,485 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ListBase.xhtml">
+	<ui:param name="heading" value="#{msg.rectificationManagementListName}" />
+
+	<ui:define name="list_body">
+
+		<a4j:outputPanel ajaxRendered="false" id="FormPanel">
+
+			<div class="table_container">
+				<sec:ifAnyGranted roles="ROLE_AAU_W,ROLE_STC_W,ROLE_AGU_W,ROLE_ACU_R, ROLE_ACU_W,ROLE_ACUM_W,ROLE_SUPER_ADMIN_W">
+					<t:dataTable style="margin:0 auto; width: 80%;"
+						rows="#{rectificationManagementListBean.itemsPerPage}" id="table"
+						var="item" value="#{rectificationManagementListBean.list}"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g">
+						<f:facet name="header">
+							<t:column>
+								<h:outputText style="text-align: center"
+									value="#{msg.rectificationManagementListName}" />
+								<h:selectOneMenu id="itemPP" styleClass="headerPanelSelect"
+									value="#{rectificationManagementListBean.itemsPerPage}">
+									<f:selectItems
+										value="#{rectificationManagementListBean.itemsPerPageList}" />
+									<a4j:support event="onchange" reRender="FormPanel" />
+								</h:selectOneMenu>
+							</t:column>
+						</f:facet>
+						
+
+						<f:facet name="footer">
+							<a4j:htmlCommandLink action="#{rectificationManagementListBean.export}" 
+								styleClass="footerPanelExport">
+    							<h:graphicImage alt="#{msg.exportXls}" value="/images/xls.png" />
+							</a4j:htmlCommandLink>
+						</f:facet>
+
+						<!--  -->
+						<t:column id="select" styleClass="ActionColumn"
+							rendered="#{!empty rectificationManagementListBean.list and !Session.projectLock}">
+							<f:facet name="header">
+								<t:selectBooleanCheckbox
+									disabled="#{rectificationManagementListBean.selectRefused || !rectificationManagementListBean.canSelectAll}"
+									value="#{rectificationManagementListBean.selectAll}">
+									<a4j:support event="onclick" id="selectAll"
+										onclick="Richfaces.showModalPanel('waitPopup')"
+										oncomplete="Richfaces.hideModalPanel('waitPopup')"
+										reRender="FormPanel"
+										action="#{rectificationManagementListBean.doSelectAll}" />
+								</t:selectBooleanCheckbox>
+							</f:facet>
+							<t:selectBooleanCheckbox
+								disabled="#{!item.canEditFlow or rectificationManagementListBean.selectRefused}"
+								value="#{item.selected}">
+								<a4j:support event="onclick" reRender="FormPanel"
+									onclick="Richfaces.showModalPanel('waitPopup')"
+									oncomplete="Richfaces.hideModalPanel('waitPopup')"
+									id="doSelectItem"
+									action="#{rectificationManagementListBean.doSelectItem}" />
+							</t:selectBooleanCheckbox>
+						</t:column>
+
+						<t:column id="selectRefused" styleClass="ActionColumn"
+							rendered="#{!empty rectificationManagementListBean.list and !Session.projectLock}">
+							<f:facet name="header">
+								<t:selectBooleanCheckbox immediate="true"
+									disabled="#{rectificationManagementListBean.selectNormal || !rectificationManagementListBean.canSelectAllResend}"
+									value="#{rectificationManagementListBean.selectAllRefused}">
+									<a4j:support event="onclick" id="selectAllRefused"
+										onclick="Richfaces.showModalPanel('waitPopup')"
+										oncomplete="Richfaces.hideModalPanel('waitPopup')"
+										reRender="FormPanel"
+										action="#{rectificationManagementListBean.doSelectAllRefused}" />
+								</t:selectBooleanCheckbox>
+							</f:facet>
+							<t:selectBooleanCheckbox
+								disabled="#{!item.canResend or rectificationManagementListBean.selectNormal}"
+								value="#{item.selectedResend}">
+								<a4j:support event="onclick" reRender="FormPanel"
+									onclick="Richfaces.showModalPanel('waitPopup')"
+									oncomplete="Richfaces.hideModalPanel('waitPopup')"
+									id="doSelectItemRefused"
+									action="#{rectificationManagementListBean.doSelectItemRefused}" />
+							</t:selectBooleanCheckbox>
+						</t:column>
+						<!--  -->
+						<t:column id="show" styleClass="ActionColumn"
+							rendered="#{!empty rectificationManagementListBean.list}"
+							headerstyleClass="ActionColumn">
+							<a4j:commandLink ajaxSingle="true" id="showlink"
+								title="#{msg.show}"
+								action="#{rectificationManagementListBean.showItem}">
+								<h:graphicImage alt="#{msg.show}" value="/images/ok.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{item.id}"
+									target="#{rectificationManagementListBean.entityEditId}" />
+							</a4j:commandLink>
+						</t:column>
+
+						<t:column id="edit" styleClass="ActionColumn"
+							rendered="#{!empty rectificationManagementListBean.list and !Session.superAdmin  and !Session.projectLock}"
+							headerstyleClass="ActionColumn">
+							<a4j:commandLink ajaxSingle="true" id="editlink"
+								title="#{msg.edit}"
+								action="#{rectificationManagementListBean.editEntity}">
+								<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{item.id}"
+									target="#{rectificationManagementListBean.entityEditId}" />
+							</a4j:commandLink>
+						</t:column>
+
+
+						<t:column id="durNumber" styleClass="ActionColumn"
+							headerstyleClass="ActionColumn"
+							rendered="#{!empty rectificationManagementListBean.list}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.rectificationManagementListDurNumber}" />
+							</f:facet>
+							<t:outputText value="#{item.durNumberTransient}" />
+						</t:column>
+						<t:column id="costDefId" styleClass="ActionColumn"
+							rendered="#{!empty rectificationManagementListBean.list}"
+							headerstyleClass="ActionColumn">
+							<f:facet name="header" styleClass="ActionColumn"
+								rendered="#{!empty rectificationManagementListBean.list}"
+								headerstyleClass="ActionColumn">
+								<t:outputText
+									value="#{msg.rectificationManagementListIDCostDef}" />
+							</f:facet>
+							<t:outputText value="#{item.progressiveId}" />
+						</t:column>
+						<t:column id="costItem" styleClass="ActionColumn"
+							rendered="#{!empty rectificationManagementListBean.list}">
+							<f:facet name="header" styleClass="ActionColumn"
+								rendered="#{!empty rectificationManagementListBean.list}"
+								headerstyleClass="ActionColumn">
+								<t:outputText value="#{msg.costItem}" />
+							</f:facet>
+							<t:outputText value="#{item.costItem}" />
+						</t:column>
+						<t:column id="certificateAmount" styleClass="ActionColumn"
+							rendered="#{!empty rectificationManagementListBean.list}"
+							headerstyleClass="ActionColumn">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.rectificationManagementListAmountCertificate}" />
+							</f:facet>
+							<t:outputText rendered="#{item.rectifiedBySTC}"
+								value="#{item.cilCheck}" converter="moneyConverter" />
+							<t:outputText rendered="#{item.rectifiedByAGU}"
+								value="#{item.stcCertification}" converter="moneyConverter" />
+							<t:outputText rendered="#{item.rectifiedByACU}"
+								value="#{item.aguCertification}" converter="moneyConverter" />
+						</t:column>
+						<t:column id="amountRectified" styleClass="ActionColumn"
+							rendered="#{!empty rectificationManagementListBean.list}"
+							headerstyleClass="ActionColumn">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.rectificationManagementListAmountRectified}" />
+							</f:facet>
+							<t:outputText value="#{item.rectificationAmount}"
+								rendered="#{(!item.canResend and !Session.superAdmin) or Session.projectLock}" converter="moneyConverter" />
+							<t:inputText maxlength="12" validator="#{validator.isFloat92}"
+								converter="floatConverter" size="8"
+								onkeypress="return decimalonly(this, event)"
+								onkeyup="checkdecimal(this)"
+								rendered="#{((item.rectificationRefused and item.canResend ) or Session.superAdmin) and !Session.projectLock}"
+								value="#{item.rectificationAmount}" />
+						</t:column>
+						<t:column id="rectDate"
+							rendered="#{!empty rectificationManagementListBean.list}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.rectificationManagementListDateRectification}" />
+							</f:facet>
+							<t:outputText rendered="#{!empty item.rectificationDate}"
+								converter="dateTimeConverter" value="#{item.rectificationDate}" />
+
+						</t:column>
+
+						<t:column id="acuManagerConfirm"
+							rendered="#{!empty rectificationManagementListBean.list}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.rectificationManagementListConfirmationACUManager}" />
+							</f:facet>
+							<table>
+								<tr>
+									<td><t:outputText
+											rendered="#{!empty item.rectificationDateAcuManager}"
+											value="#{item.rectificationDateAcuManager}"
+											converter="dateTimeConverter" />
+									</td>
+								</tr>
+							</table>
+						</t:column>
+
+						<t:column id="reason" style="min-width: 200px;"
+							rendered="#{!empty rectificationManagementListBean.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.rectificationManagementListReason}" />
+							</f:facet>
+							<t:outputText value="#{item.rectificationReason}" />
+						</t:column>
+
+						<t:column id="state"
+							rendered="#{!empty rectificationManagementListBean.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.rectificationManagementListState}" />
+							</f:facet>
+							<t:outputText value="#{item.rectificationStateName}" />
+						</t:column>
+
+						<t:column id="recovered"
+							rendered="#{!empty rectificationManagementListBean.list}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.rectificationManagementAmountRecovered}" />
+							</f:facet>
+							<t:outputText value="#{item.recoveryAmount}"
+								converter="moneyConverter" />
+						</t:column>
+
+						<t:column id="stillBeRecovered"
+							rendered="#{!empty rectificationManagementListBean.list}">
+							<f:facet name="header">
+								<t:outputText
+									value="#{msg.rectificationManagementAmountStillBeRecovered}" />
+							</f:facet>
+							<t:outputText value="#{item.stillBeRecovered}"
+								converter="moneyConverter" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{empty rectificationManagementListBean.list}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+						
+						<t:column id="saveBtns"
+							rendered="#{!empty rectificationManagementListBean.list and Session.superAdmin and !Session.projectLock}">
+
+							<table>
+								<tr>
+									<td>
+                                        <a4j:commandButton
+                                                value="#{msg.save}" styleClass="button"
+                                                onclick="#{rich:component('updateMotivationDialog')}.show();"
+                                                reRender="FormPanel">
+                                            <f:setPropertyActionListener value="#{item.id}"
+                                                                         target="#{rectificationManagementListBean.selectedSave}"/>
+                                        </a4j:commandButton>
+                                    </td>
+                                </tr>
+							</table>
+						</t:column>
+						
+					</t:dataTable>
+				</sec:ifAnyGranted>
+			</div>
+			<a4j:outputPanel styleClass="scrollerPanel">
+				<sec:ifAnyGranted roles="ROLE_AAU_W,ROLE_STC_W,ROLE_AGU_W,ROLE_ACUM_W,ROLE_ACU_R, ROLE_ACU_W,ROLE_SUPER_ADMIN_W">
+					<t:dataScroller id="scroll_1" styleClass="scroller" for="table"
+						fastStep="10" pageCountVar="pageCount" pageIndexVar="pageIndex"
+						paginator="true" paginatorMaxPages="5" paginatorColumnClass="page"
+						paginatorActiveColumnClass="page_active" immediate="true"
+						rendered="#{rectificationManagementListBean.showScroll}">
+						<f:facet name="first">
+							<t:graphicImage alt="#{msg.first}" url="../images/back_end.gif"
+								border="1" />
+						</f:facet>
+						<f:facet name="last">
+							<t:graphicImage alt="#{msg.last}" url="../images/forward_end.gif"
+								border="1" />
+						</f:facet>
+						<f:facet name="previous">
+							<t:graphicImage alt="#{msg.previous}" url="../images/back.gif"
+								border="1" />
+						</f:facet>
+						<f:facet name="next">
+							<t:graphicImage alt="#{msg.next}" url="../images/forward.gif"
+								border="1" />
+						</f:facet>
+						<f:facet name="fastforward">
+							<t:graphicImage alt="#{msg.fastforward}"
+								url="../images/all_forward.gif" border="1" />
+						</f:facet>
+						<f:facet name="fastrewind">
+							<t:graphicImage alt="#{msg.fastrewind}"
+								url="../images/all_back.gif" border="1" />
+						</f:facet>
+					</t:dataScroller>
+				</sec:ifAnyGranted>
+			</a4j:outputPanel>
+
+			<sec:ifAnyGranted roles="ROLE_STC_W,ROLE_AGU_W,ROLE_ACUM_W">
+				<div class="btn_line">
+
+					<table>
+						<tr>
+							<td colspan="2" style="text-align: center;"><t:outputText
+									rendered="#{rectificationManagementListBean.errorAmount}"
+									styleClass="RequiredFieldMarker"
+									value="#{msg.rectificationManagementListAmountError}"></t:outputText>
+							</td>
+
+						</tr>
+						<tr>
+							<td colspan="2" style="text-align: center;"><t:outputText
+									rendered="#{rectificationManagementListBean.errorRefuse}"
+									styleClass="RequiredFieldMarker"
+									value="#{msg.rectificationManagementListRefuseError}"></t:outputText>
+							</td>
+						</tr>
+					</table>
+					<table>
+
+						<tr>
+						<h:panelGroup rendered="#{!Session.projectLock}">
+							<sec:ifAnyGranted roles="ROLE_STC_W,ROLE_AGU_W">
+								<td><a4j:commandButton immediate="false"
+										reRender="FormPanel"
+										action="#{rectificationManagementListBean.send}"
+										rendered="#{!empty rectificationManagementListBean.list and !rectificationManagementListBean.selectRefused}"
+										styleClass="button4"
+										value="#{msg.rectificationManagementListSendBtn}" id="sendBtn" />
+								</td>
+
+							</sec:ifAnyGranted>
+							<td><a4j:commandButton immediate="false"
+									oncomplete="Richfaces.showModalPanel('popupRectDate');"
+									rendered="#{!empty rectificationManagementListBean.list and rectificationManagementListBean.selectRefused}"
+									styleClass="button4"
+									value="#{msg.rectificationManagementListSendBtn}"
+									id="sendBtnRefusedAll" />
+							</td>
+
+							<sec:ifAnyGranted roles="ROLE_ACUM_W">
+								<td><a4j:commandButton immediate="false"
+										reRender="FormPanel"
+										onclick="Richfaces.showModalPanel('popupRectDate');"
+										rendered="#{!empty rectificationManagementListBean.list and !rectificationManagementListBean.selectRefused}"
+										styleClass="button4"
+										value="#{msg.rectificationManagementListSendBtn}" id="sendBtn2" />
+								</td>
+
+							</sec:ifAnyGranted>
+							<sec:ifAnyGranted roles="ROLE_AGU_W,ROLE_ACUM_W">
+								<td><a4j:commandButton immediate="false"
+										reRender="FormPanel"
+										action="#{rectificationManagementListBean.refuse}"
+										rendered="#{!empty rectificationManagementListBean.list}"
+										styleClass="button4"
+										value="#{msg.rectificationManagementListRefuseBtn}"
+										id="refuseBtn" /></td>
+							</sec:ifAnyGranted>
+							<sec:ifAnyGranted roles="ROLE_STC_W,ROLE_AGU_W,ROLE_ACUM_W">
+								<td><a4j:commandButton immediate="false"
+										reRender="FormPanel"
+										action="#{rectificationManagementListBean.annul}"
+										rendered="#{!empty rectificationManagementListBean.list}"
+										styleClass="button4"
+										value="#{msg.rectificationManagementListAnnulBtn}" id="annulBtn" />
+								</td>
+							</sec:ifAnyGranted></h:panelGroup>
+						</tr>
+					</table>
+				</div>
+			</sec:ifAnyGranted>
+
+
+		</a4j:outputPanel>
+
+		<rich:modalPanel id="popupRectDate" autosized="true" width="300"
+			resizeable="false">
+			<f:facet name="header">
+				<h:outputText rendered="#{!Session.ACUM}"
+					value="#{msg.rectificationManagementListNewRectificationDate}"
+					style="padding-right:15px;" />
+				<h:outputText rendered="#{Session.ACUM}"
+					value="#{msg.rectificationManagementListConfirmDate}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<a4j:outputPanel>
+				<table>
+					<tr>
+						<td><t:outputText rendered="#{!Session.ACUM}"
+								value="#{msg.rectificationManagementListNewRectificationDate}:" />
+							<t:outputText rendered="#{Session.ACUM}"
+								value="#{msg.rectificationManagementListConfirmDate}:" /></td>
+						<td><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" inputClass="editbox_form2"
+								id="rectificationDateId" converter="dateTimeConverter"
+								value="#{rectificationManagementListBean.rectificationDate}"
+								datePattern="dd/MM/yyyy">
+							</rich:calendar></td>
+					</tr>
+				</table>
+				<table style="width: 100%;">
+					<tr>
+						<td align="center" width="50%"><h:commandButton
+								value="#{msg.save}" styleClass="button"
+								action="#{rectificationManagementListBean.send}"
+								reRender="FormPanel"
+								onclick="if(hideRectDateDialog()){Richfaces.hideModalPanel('popupRectDate');}"></h:commandButton>
+						</td>
+						<td><a4j:commandButton value="#{msg.cancel}"
+								styleClass="button"
+								onclick="#{rich:component('popupRectDate')}.hide();" />
+						</td>
+					</tr>
+				</table>
+			</a4j:outputPanel>
+		</rich:modalPanel>
+
+		<rich:modalPanel id="waitPopup" autosized="true" width="300"
+			resizeable="false">
+			<center>#{msg.rectificationManagementWaiting}</center>
+
+		</rich:modalPanel>
+	</ui:define>
+    <ui:define name="delete_panels">
+
+        <rich:modalPanel id="updateMotivationDialog" autosized="true" width="300" resizeable="false">
+            <f:facet name="header">
+                <h:outputText value="#{msg.validationFlowViewEnterMotivation}" style="padding-right:15px;"/>
+            </f:facet>
+            <h:form id="updateForm">
+                <h:panelGrid columns="1">
+                    <ui:fragment>
+                        <h:outputText value="#{msg.motivation}"/><h:panelGroup
+                            style="color:red;">*</h:panelGroup>
+                    </ui:fragment>
+                    <t:inputTextarea value="#{rectificationManagementListBean.actionMotivation}" id="updateMotivation"
+                                     onkeypress="return textArea(this, 255, event)"
+                                     style="width: 350px; height: 130px; resize: none;"/>
+                </h:panelGrid>
+                <center>
+                    <h:commandButton value="#{msg.yes}" action="#{rectificationManagementListBean.updateSelectedBySuperAdmin}"
+                                     onclick="return validateUpdateMotivation();"/>
+                    <a4j:commandButton value="#{msg.no}" actionListener="#{rectificationManagementListBean.clearMotivation}"
+                                       oncomplete="#{rich:component('updateMotivationDialog')}.hide();"
+                                       reRender="updateMotivation"/>
+                </center>
+                <script language="JavaScript" type="text/javascript">
+                    function validateUpdateMotivation() {
+                        var textArea = document.getElementById('updateForm:updateMotivation');
+                        if (textArea != null) {
+                            if (textArea.value.trim().length > 0) {
+                                return true;
+                            } else {
+                                textArea.style.borderColor = 'red';
+                                return false;
+                            }
+                        }
+                        return false;
+                    }
+                </script>
+            </h:form>
+        </rich:modalPanel>
+    </ui:define>
+
+    <ui:define name="script_body">
+		<script type="text/javascript">			
+			function hideRectDateDialog()
+			{
+				var dateValue = document.getElementById('FormList:rectificationDateIdInputDate').value;				
+				if (dateValue == null || dateValue.empty())
+				{
+					 return false;
+				}
+				return true;				
+			}	
+		</script>
+	</ui:define>
+</ui:composition>
+</html>

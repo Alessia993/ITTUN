@@ -1,0 +1,415 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ListBase.xhtml">
+	<ui:param name="heading" value="#{msg.documentListPageName}" />
+
+	<ui:define name="list_body">
+		<a4j:outputPanel ajaxRendered="true" id="FormPanel">
+
+			<!-- Search module -->
+			<div align="center" style="margin-top: 10px; margin-bottom: 10px;">
+				<fieldset style="width: 72%;">
+					<table width="100%" class="forms">
+						<tr>
+							<td><t:outputText value="#{msg.documentListDocTitle}:"></t:outputText>
+							</td>
+							<td><t:inputText value="#{documentListBean.titlePattern}"
+									styleClass="editbox_form"></t:inputText></td>
+							<td><t:outputText value="#{msg.documentListDocSection}:"></t:outputText>
+							</td>
+							<td><t:selectOneMenu value="#{documentListBean.section}"
+									styleClass="DropDown">
+									<f:selectItems value="#{documentListBean.listSections}" />
+								</t:selectOneMenu></td>
+						</tr>
+						<tr>
+							<td><t:outputText value="#{msg.documentListPartnerId}:"></t:outputText>
+							</td>
+							<td><t:selectOneMenu value="#{documentListBean.partnerId}"
+									styleClass="DropDown">
+									<f:selectItems value="#{documentListBean.partners}" />
+								</t:selectOneMenu></td>
+	
+							<td><t:outputText value="#{msg.documentListUserRole}:"></t:outputText>
+							</td>
+							<td><t:selectOneMenu value="#{documentListBean.userRole}"
+									styleClass="DropDown">
+									<f:selectItems value="#{documentListBean.listUserRoles}" />
+								</t:selectOneMenu></td>
+						</tr>
+						
+										<ui:remove><tr>
+						</tr>
+																		<tr><td/><td/>
+													<td><t:outputText value="#{msg.documentCategory}:" /></td>
+							<td><t:selectOneMenu styleClass="DropDown"
+									value="#{documentListBean.selectedCategory}">
+									<f:selectItems value="#{documentListBean.listCategories}" />
+								</t:selectOneMenu></td>
+						</tr>
+		</ui:remove>
+						
+						<tr>
+							<td><t:outputText value="#{msg.documentListDocReleaseFrom}:"></t:outputText>
+							</td>
+							<td><t:inputText value="#{documentListBean.user}"
+									styleClass="editbox_form"></t:inputText></td>
+									
+							<td><t:outputText value="#{msg.documentListDocDateFrom}:"/></td>		
+									
+							<td><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" id="startDate" inputClass="editbox_form2"
+									converter="dateTimeConverter"
+									value="#{documentListBean.dateFrom}" datePattern="dd/MM/yyyy">
+								</rich:calendar></td>
+								
+								
+						</tr>
+
+										<tr>
+							<td><t:outputText value="#{msg.documentListDocProtNumber}:"></t:outputText>
+							</td>
+							<td><t:inputText value="#{documentListBean.protocolNumber}"
+									styleClass="editbox_form"></t:inputText></td>
+							<td><t:outputText value="#{msg.documentListDocDateTo}: " /></td>
+							<td><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" id="endDate" inputClass="editbox_form2"
+									converter="dateTimeConverter"
+									value="#{documentListBean.dateTo}" datePattern="dd/MM/yyyy" /></td>		
+							
+							<ui:remove><td><t:outputText value="#{msg.documentNumberField}:" style="width:50px;display: inline-block;"/>
+							<t:inputText styleClass="editbox_form" id="docNumber"
+									value="#{documentListBean.documentNumber}"
+									onkeypress="return numbersonly(this, event)"
+									onkeyup="checknumber(this)" maxlength="10" style="width:200px"/></td></ui:remove>
+									
+						</tr>
+						
+						
+						<ui:remove>
+						<tr>
+							<td><t:outputText value="#{msg.denomination}:" /></td>
+							<td><t:inputText value="#{documentListBean.denomination}"
+									styleClass="editbox_form"></t:inputText></td>
+							<td/><td><t:outputText value="#{msg.documentListDocDate}: " style="width:50px;display: inline-block;"/>
+							<rich:calendar locale="#{LocalizeBean.currentLocaleValue}" id="docEditableDate"
+									inputClass="editbox_form2" converter="dateTimeConverter"
+									value="#{documentListBean.editableDate}"
+									datePattern="dd/MM/yyyy" /></td>
+						</tr>
+						</ui:remove>
+						
+						<ui:remove>
+						<tr>
+							<td><t:outputText
+									value="#{msg.costDefinitionIdCostDefinition}:" /></td>
+							<td><t:inputText
+									value="#{documentListBean.costDefinitionId}"
+									styleClass="editbox_form"
+									onkeypress="return numbersonly(this, event)"
+									onkeyup="checknumber(this)" maxlength="10"></t:inputText></td>
+							<td><t:outputText value="#{msg.costDefinitionPhase}:" /></td>
+							<td><t:selectOneMenu styleClass="DropDown"
+									value="#{documentListBean.costDefinitionPhase}">
+									<f:selectItems value="#{documentListBean.costDefinitionPhases}" /></t:selectOneMenu></td>
+						</tr>
+						
+	
+						<tr>
+							<td colspan="2"/>
+								<td><t:outputText value="#{msg.documentListOnlyDocument}: "></t:outputText>
+								</td>
+								<td><t:selectBooleanCheckbox
+										value="#{documentListBean.onlyDocument}" /></td>
+							<td><t:outputText value="#{msg.documentListDocDateFrom}: "></t:outputText>
+							</td>
+							<td><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" id="startDate" inputClass="editbox_form2"
+									converter="dateTimeConverter"
+									value="#{documentListBean.dateFrom}" datePattern="dd/MM/yyyy">
+								</rich:calendar></td>
+						</tr>
+						<tr>
+							<td />
+							<td />
+							<td><t:outputText value="#{msg.documentListDocDateTo}: " />
+							</td>
+							<td><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" id="endDate" inputClass="editbox_form2"
+									converter="dateTimeConverter"
+									value="#{documentListBean.dateTo}" datePattern="dd/MM/yyyy" />
+							</td>
+						</tr>
+						</ui:remove>						
+						
+						<tr>
+						</tr>
+					</table>
+					<table style="margin-bottom: 7px;">
+						<tr>
+							<td style="text-align: right;"><a4j:commandButton
+									immediate="false" action="#{documentListBean.doSearch}"
+									reRender="FormPanel" styleClass="button7"
+									value="#{msg.costCertificationSearch}" id="search" /></td>
+							<td><a4j:commandButton immediate="false"
+									action="#{documentListBean.clear}" reRender="FormPanel"
+									styleClass="button2" value="#{msg.costCertificationClear}"
+									id="clear" /></td>
+						</tr>
+					</table>
+				</fieldset>
+			</div>
+
+			<div class="table_container">
+				<t:dataTable style="margin:0 auto; width: 80%;"
+					rows="#{documentListBean.itemsPerPage}" id="table" var="doc"
+					value="#{documentListBean.list}" styleClass="form_table"
+					rowClasses="row_table_n,row_table_g"
+					>
+
+					<f:facet name="header">
+						<t:column>
+							<sec:ifAnyGranted
+								roles="ROLE_STC_W,ROLE_AGU_W,ROLE_AAU_W,ROLE_CIL_W,ROLE_DAEC_W,ROLE_BP_W,ROLE_B_W,ROLE_ACU_W">
+								<a4j:commandLink styleClass="headerPanelLink" rendered="#{!Session.projectLock}"
+									action="#{documentListBean.addEntity}">#{msg.documentListAdd}
+							</a4j:commandLink>
+							</sec:ifAnyGranted>
+							<h:outputText value="#{msg.documentListTableName}" />
+							<h:selectOneMenu id="itemPP" styleClass="headerPanelSelect"
+								value="#{documentListBean.itemsPerPage}">
+								<f:selectItems value="#{documentListBean.itemsPerPageList}" />
+								<a4j:support event="onchange" reRender="FormPanel" />
+							</h:selectOneMenu>
+						</t:column>
+					</f:facet>
+
+					<!-- Action columns -->
+
+					<!-- Download column -->
+
+					<t:column id="donwload" styleClass="ActionColumn"
+						headerstyleClass="ActionColumn"
+						rendered="#{!empty documentListBean.list}">
+						<a4j:htmlCommandLink ajaxSingle="true" id="downloadlink"
+							title="#{msg.show}" action="#{documentListBean.downloadEntity}">
+							<h:graphicImage alt="#{msg.documentListDownload}"
+								value="/images/file-down.png" style="border:0" />
+							<f:setPropertyActionListener value="#{doc.id}"
+								target="#{documentListBean.entityDownloadId}" />
+						</a4j:htmlCommandLink>
+					</t:column>
+
+					<!-- Show column -->
+					<t:column id="show" styleClass="ActionColumn"
+						headerstyleClass="ActionColumn"
+						rendered="#{!empty documentListBean.list}">
+						<a4j:commandLink ajaxSingle="true" id="showlink"
+							title="#{msg.show}" action="#{documentListBean.showEntity}">
+							<h:graphicImage alt="#{msg.show}" value="/images/ok.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{doc.id}"
+								target="#{documentListBean.entityEditId}" />
+						</a4j:commandLink>
+					</t:column>
+					<sec:ifAnyGranted
+						roles="ROLE_STC_W,ROLE_AGU_W,ROLE_AAU_W,ROLE_CIL_W,ROLE_DAEC_W,ROLE_BP_W,ROLE_B_W,ROLE_ACU_W, ROLE_ACUM_W">
+						<t:column id="edit" styleClass="ActionColumn"
+							rendered="#{!empty documentListBean.list and !Session.projectLock}"
+							headerstyleClass="ActionColumn">
+							<a4j:commandLink ajaxSingle="true" id="editlink"
+								rendered="#{doc.editable}" title="#{msg.edit}"
+								action="#{documentListBean.editEntity}">
+								<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{doc.id}"
+									target="#{documentListBean.entityEditId}" />
+							</a4j:commandLink>
+						</t:column>
+						<t:column id="delete" rendered="#{!empty documentListBean.list and !Session.projectLock}"
+							styleClass="ActionColumn" headerstyleClass="ActionColumn">
+							<a4j:commandLink ajaxSingle="true" id="deletelink"
+								rendered="#{doc.editable or Session.ACUM}" title="#{msg.delete}"
+								oncomplete="#{rich:component('deletePanel')}.show()">
+								<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{doc.id}"
+									target="#{documentListBean.entityDeleteId}" />
+							</a4j:commandLink>
+						</t:column>
+					</sec:ifAnyGranted>
+					<!-- Info columns -->
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty documentListBean.list}">
+						<f:facet name="header">
+							<h:outputText value="#{msg.documentListDocTitle}" />
+						</f:facet>
+						<t:outputText value="#{doc.title}" converter="longNameConverter" />
+					</t:column>
+					<t:column styleClass="StringColumn" rendered="false">
+						<f:facet name="header">
+							<h:outputText value="#{msg.documentListDocName}" />
+						</f:facet>
+						<t:outputText value="#{doc.name}" converter="longNameConverter" />
+					</t:column>
+					<t:column styleClass="StringColumn">
+						<f:facet name="header">
+							<h:outputText value="#{msg.denomination}" />
+						</f:facet>
+						<t:outputText
+							value="#{empty doc.partnerAnagraph?'':doc.partnerAnagraph.naming}"
+							converter="longNameConverter" />
+					</t:column>
+					<t:column styleClass="DateColumn"
+						rendered="#{!empty documentListBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.documentListDocDate}" />
+						</f:facet>
+						<t:outputText value="#{doc.documentDate}"
+							converter="dateTimeConverter" />
+					</t:column>
+					<t:column styleClass="DateColumn"
+						rendered="#{!empty documentListBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.documentListLoadingDate}" />
+						</f:facet>
+						<t:outputText value="#{doc.loadingDate}"
+							converter="dateTimeConverter" />
+					</t:column>
+					
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty documentListBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.documentListDocReleaseFrom}" />
+						</f:facet>
+						<t:outputText value="#{empty doc.user ? '' : doc.user}" />
+					</t:column>
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty documentListBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.documentListDocReleaseFromRole}" />
+						</f:facet>
+						<t:outputText
+							value="#{empty doc.uploadRole? empty doc.user ? '' : doc.userRoles : doc.uploadRoleType}" />
+					</t:column>
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty documentListBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.documentListDocProtNumber}" />
+						</f:facet>
+						<t:outputText value="#{doc.protocolNumber}" />
+					</t:column>
+					<t:column styleClass="DateColumn"
+						rendered="#{!empty documentListBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.documentListDocSection}" />
+						</f:facet>
+						<t:outputText
+							value="#{empty doc.section ? '' : doc.section.value}" />
+					</t:column>
+					
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty documentListBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.documentListDocSign}" />
+						</f:facet>
+						<t:outputText value="#{doc.signflag}" />
+					</t:column>
+										
+<ui:remove>
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty  documentListBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.documentCategory}" />
+						</f:facet>
+						<t:outputText
+							value="#{empty doc.category ? '' : doc.category.name}" />
+					</t:column>
+
+					
+					<t:column styleClass="StringColumn">
+						<f:facet name="header">
+							<h:outputText value="#{msg.documentNumberField}" />
+						</f:facet>
+						<t:outputText value="#{doc.documentNumber}" />
+					</t:column>
+					</ui:remove>
+					
+					<t:column styleClass="StringColumn"
+						rendered="#{empty documentListBean.list}">
+						<f:facet name="header">
+							<h:outputText value="#{msg.noData}" />
+						</f:facet>
+					</t:column>
+
+				</t:dataTable>
+				<!-- End of info columns -->
+			</div>
+			<a4j:outputPanel styleClass="scrollerPanel">
+				<t:dataScroller id="scroll_1" styleClass="scroller" for="table"
+					fastStep="10" pageCountVar="pageCount" pageIndexVar="pageIndex"
+					paginator="true" paginatorMaxPages="5" paginatorColumnClass="page"
+					paginatorActiveColumnClass="page_active" immediate="true"
+					rendered="#{documentListBean.showScroll}">
+					<f:facet name="first">
+						<t:graphicImage alt="#{msg.first}" url="../images/back_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="last">
+						<t:graphicImage alt="#{msg.last}" url="../images/forward_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="previous">
+						<t:graphicImage alt="#{msg.previous}" url="../images/back.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="next">
+						<t:graphicImage alt="#{msg.next}" url="../images/forward.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="fastforward">
+						<t:graphicImage alt="#{msg.fastforward}"
+							url="../images/all_forward.gif" border="1" />
+					</f:facet>
+					<f:facet name="fastrewind">
+						<t:graphicImage alt="#{msg.fastrewind}"
+							url="../images/all_back.gif" border="1" />
+					</f:facet>
+				</t:dataScroller>
+			</a4j:outputPanel>
+		</a4j:outputPanel>
+	</ui:define>
+
+	<ui:define name="delete_panels">
+		<rich:modalPanel id="deletePanel" autosized="true" width="200">
+			<f:facet name="header">
+				<h:outputText value="#{msg.delete}?" style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+			</f:facet>
+			<h:form>
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.yes}" ajaxSingle="true" styleClass="button"
+									action="#{documentListBean.deleteEntity}"
+									oncomplete="#{rich:component('deletePanel')}.hide();"
+									reRender="FormPanel" /></td>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.cancel}" styleClass="button"
+									onclick="#{rich:component('deletePanel')}.hide();return false;" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</h:form>
+		</rich:modalPanel>
+	</ui:define>
+
+</ui:composition>
+</html>

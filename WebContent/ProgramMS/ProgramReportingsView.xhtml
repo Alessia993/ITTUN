@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+ xmlns:ui="http://java.sun.com/jsf/facelets"
+ xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+ xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/Main.xhtml">
+	<ui:param name="heading" value="#{msg.programReportings}" />
+ <ui:define name="body">
+  <div class="page_head">
+  <div class="header_left">
+  <div class="header_right"><span>#{heading}</span>
+  <a4j:status onstop="addTooltips();">
+                <f:facet name="start">
+	   				<h:panelGroup layout="block" style="top: 0px; left: 0px; position: fixed;  right: 0px; bottom: 0px;  z-index: 100000000;text-align: center;">
+                    	<h:panelGroup layout="block" style="background-color: gray;opacity: 0.4;filter: alpha(opacity=40);height:100%;width:100%;"/>
+                    	<h:panelGroup layout="block" style="background-color: white; position: absolute; top: 35%; left: 47%; padding: 20px;">
+	                    	<h:graphicImage alt="loader"  value="../images/loader.gif"/>
+	                    	<h:outputText value="#{msg.wait}" />
+                    	</h:panelGroup>
+	   				</h:panelGroup>
+                </f:facet>
+            </a4j:status>
+  </div>
+  </div>
+  </div>
+  <div class="page_content">
+
+		
+
+				<table class="forms staticForm" border="0" cellpadding="1"
+					cellspacing="1">
+					<tr>
+						<td style="text-align: right; width: 50%;">#{msg.reportingsAction}:</td>
+						<td>	<a4j:outputPanel ajaxRendered="true" id="pagePanel"><h:form id="FormView">
+								<t:selectOneMenu id="types" align="center"
+									value="#{programReportingsViewBean.selectedReporting}"
+									 onchange="submit()"
+									required="true" styleClass="DropDown"
+									valueChangeListener="#{programReportingsViewBean.reportingChange}">
+									<f:selectItems value="#{programReportingsViewBean.reportings}" />
+
+								</t:selectOneMenu>
+							</h:form>
+										</a4j:outputPanel></td>
+					</tr>
+					<tr>
+
+						<td style="text-align: right; width: 50%;"></td>
+						<td>
+						
+									<form action='#{msg.ip_host}' method='post' target='_blank' 
+			id="postForm">
+			<input type='hidden' name='userid'
+				value='#{programReportingsViewBean.currentUser.login}' />
+
+			<input type='hidden' name='password'
+				value='#{programReportingsViewBean.currentUser.password}' />
+
+			<input type='hidden' name='solution' value='#{msg.solution}' /> <input
+				type='hidden' name='path' value='#{msg.path}' /> <input
+				type='hidden' name='action' value='#{programReportingsViewBean.currentAction}' /> 
+				 <h:column > 
+								<div style="display:#{programReportingsViewBean.currentAction!=null ?'':'none'}">
+							 	<input id="postLink" type="button"
+									onclick="document.getElementById('postForm').submit()"
+									value="#{msg.sendreport}" />
+									</div>
+							</h:column> 
+		</form></td>
+					</tr>
+
+				</table>
+
+
+
+
+
+  
+  </div>
+  <div class="bottom">
+  <div class="left_bottom">
+  <div class="right_bottom"></div>
+  </div>
+  </div>
+  <ui:insert name="delete_panels"></ui:insert>
+  <ui:insert name="delete_panels_all"></ui:insert>
+ </ui:define>
+</ui:composition>
+</html>
+

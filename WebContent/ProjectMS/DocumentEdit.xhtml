@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/EditBase.xhtml">
+	<ui:param name="headWidth" value="800px" />
+	<ui:define name="edit_body">
+		<t:outputText value="#{msg.documentTitle}:" />
+	</ui:define>
+	<ui:define name="document_body">
+		<h:form id="form1" enctype="multipart/form-data">
+			<a4j:commandLink id="deletelink"
+				oncomplete="#{rich:component('documentPanel')}.show()">
+				<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+					style="border:0" />
+			</a4j:commandLink>
+
+			<h:commandButton value="#{msg.save}" styleClass="button"
+				action="#{documentBean.Page_Save}"/>
+			<rich:modalPanel id="documentPanel" autosized="true" width="200">
+				<f:facet name="header">
+					<h:outputText value="Document" style="padding-right:15px;" />
+				</f:facet>
+				<f:facet name="controls">
+					<h:panelGroup>
+						<h:graphicImage alt="error" styleClass="error_image" value="/images/close.png"
+							styleClass="hidelink" id="hidelink1" />
+						<rich:componentControl for="deletePanel" attachTo="hidelink1"
+							operation="hide" event="onclick" />
+					</h:panelGroup>
+				</f:facet>
+				<table>
+					 <tr>
+						<td class="LabelCell"><t:outputText
+							value="#{msg.documentTitle}:" /><span
+							class="RequiredFieldMarker">*</span></td>
+						<td class="ControlCell"><t:inputText
+							styleClass="editbox_form" maxlength="200" id="doctitle"
+							required="true" value="#{documentBean.entity.title}" /> 
+						</td>
+					</tr>
+					
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentDescription}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							style="width:216px;" maxlength="50"
+							value="#{documentBean.entity.description}" /></td>
+				</tr>					
+					
+					<tr>
+						<td class="LabelCell"><t:outputText
+							value="#{msg.releaseFrom}:" /><span class="RequiredFieldMarker">*</span></td>
+						<td class="ControlCell"><t:inputText
+							styleClass="editbox_form" maxlength="200" id="releaseFrom"
+							required="true" value="#{documentBean.entity.releaseFrom}" /> 
+						</td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText
+							value="#{msg.protocolNumber}:" /></td>
+						<td class="ControlCell"><t:inputText
+							styleClass="editbox_form" maxlength="10"
+							value="#{documentBean.entity.protocolNumber}" /></td>
+					</tr>
+					<tr>
+						<td class="LabelCell"><t:outputText
+							value="#{msg.uploadFile}:" /><span class="RequiredFieldMarker">*</span></td>
+						<td class="ControlCell"><t:inputFileUpload id="fileupload"
+							accept="image/*" value="#{documentBean.upFile}" storage="file"
+							styleClass="fileUploadInput" required="true" maxlength="200000" />
+						</td>
+					</tr>
+					<tr>
+						<td><a4j:commandButton value="ok" styleClass="button" 
+							onclick="#{rich:component('documentPanel')}.hide();" /></td>
+						<td align="center" width="50%"><a4j:commandButton
+							value="#{msg.cancel}" styleClass="button"
+							onclick="#{rich:component('documentPanel')}.hide();return false;" /></td>
+					</tr>
+				</table>
+			</rich:modalPanel>
+		</h:form>
+	</ui:define>
+</ui:composition>

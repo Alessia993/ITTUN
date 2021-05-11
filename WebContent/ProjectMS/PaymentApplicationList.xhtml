@@ -1,0 +1,285 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ListFormsBase.xhtml">
+	<ui:param name="heading" value="#{msg.paymentApplicationListName}" />
+	<ui:param name="requireValidation" value="false" />
+	 <ui:define name="list_body_non_validate">
+		<h:outputText id="requiredMessage" style="display: none"
+			value="#{msg.validatorMessage}"></h:outputText>
+		<h:outputText id="checkFields" style="display: none"
+			value="#{msg.validatorCheckAllFields}"></h:outputText>
+
+		<a4j:outputPanel ajaxRendered="false" id="FormPanelNonValidate">
+			<div align="center">
+				<fieldset style="width: 90%;">
+					<table width="100%" class="forms">
+						<tr>
+							<td style="width: 25%;"><t:outputText
+									value="#{msg.paymentApplicationListNumber}: "></t:outputText>
+							</td>
+							<td style="width: 25%;"><t:inputText
+									value="#{paymentApplicationListBean.paymentApplicationNumber}"
+									styleClass="editbox_form" maxlength="50"
+									onkeypress="return numbersonly(this, event)"
+									onkeyup="checknumber(this)"></t:inputText></td>
+							<td style="width: 25%;"><t:outputText
+									value="#{msg.paymentApplicationListProtocolN}: "></t:outputText>
+							</td>
+							<td style="width: 25%;"><t:inputText
+									value="#{paymentApplicationListBean.protocolNumber}"
+									styleClass="editbox_form" maxlength="50"></t:inputText></td>
+						</tr>
+						<tr>
+							<td style="width: 25%;"><t:outputText
+									value="#{msg.paymentApplicationListDate}: "></t:outputText></td>
+							<td style="width: 25%;"><rich:calendar
+									locale="#{LocalizeBean.currentLocaleValue}" id="startDate"
+									inputClass="editbox_form2" converter="dateTimeConverter"
+									value="#{paymentApplicationListBean.compilationDate}"
+									datePattern="dd/MM/yyyy">
+								</rich:calendar></td>
+							
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+									value="#{msg.paymentApplicationListStatus}:" /> </td>
+							<td class="ControlCell" style="width: 25%;"><t:selectOneMenu
+									id="type" value="#{paymentApplicationListBean.paType}"
+									 styleClass="DropDown"
+									valueChangeListener="#{paymentApplicationListBean.typeChange}">
+									<f:selectItems value="#{paymentApplicationListBean.types}" />
+								</t:selectOneMenu></td>
+						</tr>
+						
+					</table>
+					<table>
+						<tr>
+							<td style="text-align: right;"><a4j:commandButton
+									immediate="false"
+									action="#{paymentApplicationListBean.doSearch}"
+									reRender="FormPanel,FormPanelNonValidate" styleClass="button7"
+									value="#{msg.costCertificationSearch}" id="search" /></td>
+							<td><a4j:commandButton immediate="false"
+									action="#{paymentApplicationListBean.clear}"
+									reRender="FormPanel,FormPanelNonValidate" styleClass="button2"
+									value="#{msg.costCertificationClear}" id="clear" /></td>
+						</tr>
+					</table>
+				</fieldset>
+			</div>
+
+		</a4j:outputPanel>
+	</ui:define> 
+
+	<ui:define name="common">
+		<a4j:outputPanel ajaxRendered="true">
+			<h:inputHidden id="maximumSeverity"
+				value="#{facesContext.maximumSeverity.ordinal}" />
+		</a4j:outputPanel>
+	</ui:define>
+
+	<ui:define name="list_body">
+		<a4j:outputPanel ajaxRendered="false" id="FormPanel">
+
+			<div class="table_container">
+				<t:dataTable style="margin:0 auto; width: 100%;" id="table" var="ds"
+					value="#{paymentApplicationListBean.list}"
+					styleClass="form_table"
+					rows="#{paymentApplicationListBean.itemsPerPage}"
+					rowClasses="row_table_n,row_table_g">
+
+					<f:facet name="header">
+						<t:column>
+							<sec:ifAnyGranted  roles="ROLE_ACUM_W, ROLE_ACUM_R, ROLE_ACU_W, ROLE_ACU_R">
+								<a4j:commandLink styleClass="headerPanelLink" rendered="true"
+									action="#{paymentApplicationListBean.pageEdit}">#{msg.paymentApplicationListAddNew}
+							</a4j:commandLink>
+							</sec:ifAnyGranted>
+							<h:outputText value="#{msg.paymentApplicationListTableName}" />
+						</t:column>
+					</f:facet>
+
+
+
+					<!-- <f:facet name="footer">
+						<a4j:htmlCommandLink action="#{expenditureDeclarationListBean.export}"
+							styleClass="footerPanelExport">
+							<h:graphicImage alt="#{msg.exportXls}" value="/images/xls.png" />
+						</a4j:htmlCommandLink>
+					</f:facet> -->
+
+
+					<!-- Show column -->
+
+					<!-- <sec:ifAnyGranted roles="ROLE_ACUM_R,ROLE_ACUM_W"> -->
+					<!-- <t:column id="send" styleClass="ActionColumn"
+						headerstyleClass="ActionColumn">
+						<a4j:commandLink ajaxSingle="true" id="sendlink"
+							rendered="#{ds.expenditureDeclarationState.code =='submitted' and !ds.deleted and !ds.toBeTrasmitted}"
+							title="#{msg.durCompilationListSend}" 
+							action="#{paymentApplicationListBean.sendItem}"
+							reRender="FormPanel">
+							<h:graphicImage alt="#{msg.delete}" value="/images/status-on.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{ds.id}"
+								target="#{paymentApplicationListBean.entitySendId}" />
+						</a4j:commandLink>
+					</t:column> -->
+
+					<t:column id="edit" styleClass="ActionColumn"
+						rendered="#{!empty paymentApplicationListBean.list}">
+						<a4j:commandLink ajaxSingle="true" id="editlink"
+							rendered="#{!ds.deleted}" title="#{msg.edit}"
+							action="#{paymentApplicationListBean.editItem}">
+							<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{ds.id}"
+								target="#{paymentApplicationListBean.entityEditId}" />
+						</a4j:commandLink>
+					</t:column>
+					<t:column id="show"
+						rendered="#{!empty paymentApplicationListBean.list}"
+						styleClass="ActionColumn" headerstyleClass="ActionColumn">
+						<a4j:commandLink ajaxSingle="true" id="showlink"
+							rendered="#{!ds.deleted}" title="#{msg.show}"
+							action="#{paymentApplicationListBean.showItem}">
+							<h:graphicImage alt="#{msg.show}" value="/images/ok.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{ds.id}"
+								target="#{paymentApplicationListBean.entityEditId}" />
+						</a4j:commandLink>
+					</t:column>
+					<t:column id="deleteED"
+						rendered="#{!empty paymentApplicationListBean.list}"
+						styleClass="ActionColumn" headerstyleClass="ActionColumn">
+						<a4j:commandLink ajaxSingle="true" id="deletelink"
+							rendered="#{ds.paymentApplicationState.code !='submitted' and !ds.deleted}"
+							title="#{msg.delete}"
+							action="#{paymentApplicationListBean.delete}"
+							reRender="FormPanel">
+							<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{ds.id}"
+								target="#{paymentApplicationListBean.entityDeleteId}" />
+						</a4j:commandLink>
+					</t:column>
+					<!-- <t:column id="deleteED" styleClass="ActionColumn" style="background-color: #{user.deleted?'#FA7878':''}">
+							<a4j:commandLink ajaxSingle="true" id="deletelink" title="#{msg.delete}"
+								rendered="#{ds.expenditureDeclarationState.code !='submitted'}" 
+								action="{expenditureDeclarationListBean.prova}">
+								<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{ds.id}"
+									target="#{expenditureDeclarationListBean.entityDeleteId}" />
+							</a4j:commandLink>
+						</t:column> -->
+					<!-- </sec:ifAnyGranted> -->
+
+					<!-- Info columns -->
+
+
+					<t:column styleClass="NumberColumn"
+						rendered="#{!empty paymentApplicationListBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.paymentApplicationListNumber}" />
+						</f:facet>
+						<t:outputText value="#{ds.id}" rendered="#{!ds.deleted}" />
+					</t:column>
+					<t:column styleClass="DateColumn"
+						rendered="#{!empty paymentApplicationListBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.paymentApplicationListDate}" />
+						</f:facet>
+						<t:outputText converter="dateTimeConverter"
+							value="#{ds.compilationDate}" rendered="#{!ds.deleted}" />
+					</t:column>
+					<t:column styleClass="NumberColumn"
+						rendered="#{!empty paymentApplicationListBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.paymentApplicationListProtocolN}" />
+						</f:facet>
+						<t:outputText value="#{ds.protocolNumber}"
+							rendered="#{!ds.deleted}" />
+					</t:column>
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty paymentApplicationListBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.paymentApplicationListAmountStateAidInPaymentApplication}"></t:outputText>
+						</f:facet>
+						<t:outputText converter="moneyConverter"
+							value="#{ds.amountStateAidInPaymentApplication}" rendered="#{!ds.deleted}"></t:outputText>
+					</t:column>
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty paymentApplicationListBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.paymentApplicationAmountEligibleExpenses}"></t:outputText>
+						</f:facet>
+						<t:outputText converter="moneyConverter"
+							value="#{ds.amountEligibleExpenses}" rendered="#{!ds.deleted}"></t:outputText>
+					</t:column>
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty paymentApplicationListBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.paymentApplicationTotalAmountOfPublicExpenditure}"></t:outputText>
+						</f:facet>
+						<t:outputText converter="moneyConverter"
+							value="#{ds.totalAmountOfPublicExpenditure}" rendered="#{!ds.deleted}"></t:outputText>
+					</t:column>
+
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty paymentApplicationListBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.paymentApplicationListStatus}"></t:outputText>
+						</f:facet>
+						<t:outputText value="#{ds.paymentApplicationState.value}"
+							rendered="#{!ds.deleted}"></t:outputText>
+					</t:column>
+
+				</t:dataTable>
+			</div>
+			<a4j:outputPanel styleClass="scrollerPanel">
+				<t:dataScroller id="scroll_1"
+					styleClass="scroller" for="table" fastStep="10"
+					pageCountVar="pageCount" pageIndexVar="pageIndex" paginator="true"
+					paginatorMaxPages="5" paginatorColumnClass="page"
+					paginatorActiveColumnClass="page_active" immediate="true"
+					rendered="#{paymentApplicationListBean.showScroll}">
+					<f:facet name="first">
+						<t:graphicImage alt="#{msg.first}" url="../images/back_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="last">
+						<t:graphicImage alt="#{msg.last}" url="../images/forward_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="previous">
+						<t:graphicImage alt="#{msg.previous}" url="../images/back.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="next">
+						<t:graphicImage alt="#{msg.next}" url="../images/forward.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="fastforward">
+						<t:graphicImage alt="#{msg.fastforward}"
+							url="../images/all_forward.gif" border="1" />
+					</f:facet>
+					<f:facet name="fastrewind">
+						<t:graphicImage alt="#{msg.fastrewind}"
+							url="../images/all_back.gif" border="1" />
+					</f:facet>
+				</t:dataScroller>
+			</a4j:outputPanel>
+
+		</a4j:outputPanel>
+	</ui:define>
+
+
+</ui:composition>
+</html>

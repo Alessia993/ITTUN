@@ -1,0 +1,350 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/EditTabBase.xhtml">
+	<ui:param name="headWidth" value="900px" />
+	<ui:param name="heading" value="#{msg.assigningPriorThemes}" />
+	<ui:param name="heading_top" value="#{msg.assigningPriorThemes}" />
+	<ui:define name="edit_body">
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+			<t:panelTabbedPane serverSideTabSwitch="false">
+
+				
+					<div class="table_container">
+
+					
+					
+					
+					<t:dataTable width="100%"
+						style="margin:0 auto;" id="table1" var="data1"
+						value="#{phisicalClassificationPriorityThemaController.prAsse1List}"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g" rendered="#{!empty phisicalClassificationPriorityThemaController.prAsse1List}">
+						<f:facet name="header">
+							<h:outputText style="text-align: center"
+								value="#{msg.prioritaryReasons}" />
+						</f:facet>
+						<t:column styleClass="CodeColumn"
+							rendered="#{!empty phisicalClassificationPriorityThemaController.prAsse1List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.code}" />
+							</f:facet>
+							<t:outputText value="#{data1.code}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty phisicalClassificationPriorityThemaController.prAsse1List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.assigningPriorThemes}" />
+							</f:facet>
+							<t:outputText value="#{data1.priorityIssues}" />
+						</t:column>
+						<t:column styleClass="AmountColumn"
+							rendered="#{!empty phisicalClassificationPriorityThemaController.prAsse1List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.amount}" />
+							</f:facet>
+							<t:outputText value="#{data1.amount}" />
+						</t:column>
+						<t:column styleClass="ActionColumn"
+							rendered="#{!empty phisicalClassificationPriorityThemaController.prAsse1List and Session.AGU}">
+							<f:facet name="header">
+								<t:selectBooleanCheckbox visibleOnUserRole="ROLE_AGU_W"
+									value="#{phisicalClassificationPriorityThemaController.selectAll1}">
+									<a4j:support event="onclick" id="doSelectAll"
+										action="#{phisicalClassificationPriorityThemaController.doSelectAll1}" />
+								</t:selectBooleanCheckbox>
+							</f:facet>
+							<t:selectBooleanCheckbox value="#{data1.selected}"
+								visibleOnUserRole="ROLE_AGU_W">
+								<a4j:support event="onclick" id="selectOne"
+									action="#{phisicalClassificationPriorityThemaController.selectOne1}" />
+							</t:selectBooleanCheckbox>
+							<t:graphicImage alt="checked" rendered="#{data1.selected}"
+								visibleOnUserRole="ROLE_AGU_R" value="/images/check.png"
+								style="border:0" />
+							<t:graphicImage alt="not checked" rendered="#{!data1.selected}"
+								visibleOnUserRole="ROLE_AGU_R" value="/images/no-check.png"
+								style="border:0" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{empty phisicalClassificationPriorityThemaController.prAsse1List}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+					</t:dataTable></div>
+
+				
+				
+				<ui:remove>
+				<t:panelTab id="tab2" label="#{msg.asse} 2"
+					style="#{phisicalClassificationPriorityThemaController.tab2Style}">
+					<div class="table_container"><t:dataTable width="100%"
+						style="margin:0 auto;" id="table2" var="data2"
+						value="#{phisicalClassificationPriorityThemaController.prAsse2List}"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g">
+						<f:facet name="header">
+							<h:outputText style="text-align: center"
+								value="#{msg.prioritaryReasons}" />
+						</f:facet>
+						<t:column styleClass="CodeColumn"
+							rendered="#{!empty phisicalClassificationPriorityThemaController.prAsse2List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.code}" />
+							</f:facet>
+							<t:outputText value="#{data2.code}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty phisicalClassificationPriorityThemaController.prAsse2List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.assigningPriorThemes}" />
+							</f:facet>
+							<t:outputText value="#{data2.priorityIssues}" />
+						</t:column>
+						<t:column styleClass="AmountColumn"
+							rendered="#{!empty phisicalClassificationPriorityThemaController.prAsse2List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.amount}" />
+							</f:facet>
+							<t:outputText value="#{data2.amount}" />
+						</t:column>
+						<t:column styleClass="ActionColumn" 
+							rendered="#{!empty phisicalClassificationPriorityThemaController.prAsse2List and Session.AGU}">
+							<f:facet name="header">
+								<t:selectBooleanCheckbox visibleOnUserRole="ROLE_AGU_W"
+									value="#{phisicalClassificationPriorityThemaController.selectAll2}">
+									<a4j:support event="onclick" id="doSelectAll"
+										action="#{phisicalClassificationPriorityThemaController.doSelectAll2}" />
+								</t:selectBooleanCheckbox>
+							</f:facet>
+							<t:selectBooleanCheckbox value="#{data2.selected}"
+								visibleOnUserRole="ROLE_AGU_W">
+								<a4j:support event="onclick" id="selectOne"
+									action="#{phisicalClassificationPriorityThemaController.selectOne2}" />
+							</t:selectBooleanCheckbox>
+							<t:graphicImage alt="checked" rendered="#{data2.selected}"
+								visibleOnUserRole="ROLE_AGU_R" value="/images/check.png"
+								style="border:0" />
+							<t:graphicImage alt="not checked" rendered="#{!data2.selected}"
+								visibleOnUserRole="ROLE_AGU_R" value="/images/no-check.png"
+								style="border:0" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{empty phisicalClassificationPriorityThemaController.prAsse2List}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+					</t:dataTable></div>
+				</t:panelTab>
+				</ui:remove>
+				<ui:remove>
+				<t:panelTab id="tab3" label="#{msg.asse} 3"
+					style="#{phisicalClassificationPriorityThemaController.tab3Style}">
+					<div class="table_container"><t:dataTable width="100%"
+						style="margin:0 auto;" id="table3" var="data3"
+						value="#{phisicalClassificationPriorityThemaController.prAsse3List}"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g">
+						<f:facet name="header">
+							<h:outputText style="text-align: center"
+								value="#{msg.prioritaryReasons}" />
+						</f:facet>
+						<t:column styleClass="CodeColumn"
+							rendered="#{!empty phisicalClassificationPriorityThemaController.prAsse3List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.code}" />
+							</f:facet>
+							<t:outputText value="#{data3.code}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty phisicalClassificationPriorityThemaController.prAsse3List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.assigningPriorThemes}" />
+							</f:facet>
+							<t:outputText value="#{data3.priorityIssues}" />
+						</t:column>
+						<t:column styleClass="AmountColumn"
+							rendered="#{!empty phisicalClassificationPriorityThemaController.prAsse3List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.amount}" />
+							</f:facet>
+							<t:outputText value="#{data3.amount}" />
+						</t:column>
+						<t:column styleClass="ActionColumn" 
+							rendered="#{!empty phisicalClassificationPriorityThemaController.prAsse3List and Session.AGU}">
+							<f:facet name="header">
+								<t:selectBooleanCheckbox visibleOnUserRole="ROLE_AGU_W"
+									value="#{phisicalClassificationPriorityThemaController.selectAll3}">
+									<a4j:support event="onclick" id="doSelectAll"
+										action="#{phisicalClassificationPriorityThemaController.doSelectAll3}" />
+								</t:selectBooleanCheckbox>
+							</f:facet>
+							<t:selectBooleanCheckbox value="#{data3.selected}"
+								visibleOnUserRole="ROLE_AGU_W">
+								<a4j:support event="onclick" id="selectOne"
+									action="#{phisicalClassificationPriorityThemaController.selectOne3}" />
+							</t:selectBooleanCheckbox>
+							<t:graphicImage alt="checked" rendered="#{data3.selected}"
+								visibleOnUserRole="ROLE_AGU_R" value="/images/check.png"
+								style="border:0" />
+							<t:graphicImage alt="not checked" rendered="#{!data3.selected}"
+								visibleOnUserRole="ROLE_AGU_R" value="/images/no-check.png"
+								style="border:0" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{empty phisicalClassificationPriorityThemaController.prAsse3List}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+					</t:dataTable></div>
+				</t:panelTab>
+				</ui:remove>
+				<ui:remove>
+				<t:panelTab id="tab4" label="#{msg.asse} 4"
+					style="#{phisicalClassificationPriorityThemaController.tab4Style}">
+					<div class="table_container"><t:dataTable width="100%"
+						style="margin:0 auto;" id="table4" var="data4"
+						value="#{phisicalClassificationPriorityThemaController.prAsse4List}"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g">
+						<f:facet name="header">
+							<h:outputText style="text-align: center"
+								value="#{msg.prioritaryReasons}" />
+						</f:facet>
+						<t:column styleClass="CodeColumn"
+							rendered="#{!empty phisicalClassificationPriorityThemaController.prAsse4List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.code}" />
+							</f:facet>
+							<t:outputText value="#{data4.code}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty phisicalClassificationPriorityThemaController.prAsse4List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.assigningPriorThemes}" />
+							</f:facet>
+							<t:outputText value="#{data4.priorityIssues}" />
+						</t:column>
+						<t:column styleClass="AmountColumn"
+							rendered="#{!empty phisicalClassificationPriorityThemaController.prAsse4List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.amount}" />
+							</f:facet>
+							<t:outputText value="#{data4.amount}" />
+						</t:column>
+						<t:column styleClass="ActionColumn" 
+							rendered="#{!empty phisicalClassificationPriorityThemaController.prAsse4List and Session.AGU}">
+							<f:facet name="header">
+								<t:selectBooleanCheckbox visibleOnUserRole="ROLE_AGU_W"
+									value="#{phisicalClassificationPriorityThemaController.selectAll4}">
+									<a4j:support event="onclick" id="doSelectAll"
+										action="#{phisicalClassificationPriorityThemaController.doSelectAll4}" />
+								</t:selectBooleanCheckbox>
+							</f:facet>
+							<t:selectBooleanCheckbox value="#{data4.selected}"
+								visibleOnUserRole="ROLE_AGU_W">
+								<a4j:support event="onclick" id="selectOne"
+									action="#{phisicalClassificationPriorityThemaController.selectOne4}" />
+							</t:selectBooleanCheckbox>
+							<t:graphicImage alt="checked" rendered="#{data4.selected}"
+								visibleOnUserRole="ROLE_AGU_R" value="/images/check.png"
+								style="border:0" />
+							<t:graphicImage alt="not checked" rendered="#{!data4.selected}"
+								visibleOnUserRole="ROLE_AGU_R" value="/images/no-check.png"
+								style="border:0" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{empty phisicalClassificationPriorityThemaController.prAsse4List}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+					</t:dataTable></div>
+				</t:panelTab>
+				</ui:remove>
+				<ui:remove>
+				<t:panelTab id="tab5" label="#{msg.asse} 5"
+					style="#{phisicalClassificationPriorityThemaController.tab5Style}">
+					<div class="table_container"><t:dataTable width="100%"
+						style="margin:0 auto;" id="table5" var="data5"
+						value="#{phisicalClassificationPriorityThemaController.prAsse5List}"
+						styleClass="form_table" rowClasses="row_table_n,row_table_g">
+						<f:facet name="header">
+							<h:outputText style="text-align: center"
+								value="#{msg.prioritaryReasons}" />
+						</f:facet>
+						<t:column styleClass="CodeColumn"
+							rendered="#{!empty phisicalClassificationPriorityThemaController.prAsse5List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.code}" />
+							</f:facet>
+							<t:outputText value="#{data5.code}" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{!empty phisicalClassificationPriorityThemaController.prAsse5List}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.assigningPriorThemes}" />
+							</f:facet>
+							<t:outputText value="#{data5.priorityIssues}" />
+						</t:column>
+						<t:column styleClass="ActionColumn" 
+							rendered="#{!empty phisicalClassificationPriorityThemaController.prAsse5List and Session.AGU}">
+							<f:facet name="header">
+								<t:selectBooleanCheckbox visibleOnUserRole="ROLE_AGU_W"
+									value="#{phisicalClassificationPriorityThemaController.selectAll5}">
+									<a4j:support event="onclick" id="doSelectAll"
+										action="#{phisicalClassificationPriorityThemaController.doSelectAll5}" />
+								</t:selectBooleanCheckbox>
+							</f:facet>
+							<t:selectBooleanCheckbox value="#{data5.selected}"
+								visibleOnUserRole="ROLE_AGU_W">
+								<a4j:support event="onclick" id="selectOne"
+									action="#{phisicalClassificationPriorityThemaController.selectOne5}" />
+							</t:selectBooleanCheckbox>
+							<t:graphicImage alt="checked" rendered="#{data5.selected}"
+								visibleOnUserRole="ROLE_AGU_R" value="/images/check.png"
+								style="border:0" />
+							<t:graphicImage alt="not checked" rendered="#{!data5.selected}"
+								visibleOnUserRole="ROLE_AGU_R" value="/images/no-check.png"
+								style="border:0" />
+						</t:column>
+						<t:column styleClass="StringColumn"
+							rendered="#{empty phisicalClassificationPriorityThemaController.prAsse5List}">
+							<f:facet name="header">
+								<h:outputText value="#{msg.noData}" />
+							</f:facet>
+						</t:column>
+					</t:dataTable></div>
+				</t:panelTab>
+				</ui:remove>
+			</t:panelTabbedPane>
+
+			<table width="100%">
+				<tr>
+					<td colspan="2" class="btn_line"><sec:ifAnyGranted
+						roles="ROLE_AGU_W">
+						<a4j:commandButton immediate="false"
+							action="#{phisicalClassificationPriorityThemaController.Page_Save}"
+							styleClass="button2" value="#{msg.save}" id="save" />
+							<a4j:commandButton value="#{msg.cancel}" styleClass="button2"
+						immediate="true"
+						action="#{phisicalClassificationPriorityThemaController.GoBack}" />
+					</sec:ifAnyGranted></td>
+				</tr>
+			</table>
+			<table width="100%">
+				<tr>
+					<td align="center"><t:outputText
+						value="#{phisicalClassificationPriorityThemaController.errorMessage}"
+						styleClass="RequiredFieldMarker" /></td>
+				</tr>
+			</table>
+		</a4j:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

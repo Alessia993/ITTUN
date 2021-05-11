@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+	<ui:composition template="/Templates/ListBase.xhtml">
+		<ui:param name="heading" value="#{msg.localizationList}"/>
+		<ui:define name="script_body">
+    	</ui:define>    	
+		<ui:define name="list_body">
+			<a4j:outputPanel ajaxRendered="false" id="FormPanel">
+				<div class="table_container">
+					<t:dataTable style="margin:0 auto; width: 80%;" 
+					rows="#{localizationListBean.itemsPerPage}" id="table" var="localization"
+					value="#{localizationListBean.list}" styleClass="form_table" rowClasses="row_table_n,row_table_g">
+						<f:facet name="header">										
+						<t:column>						
+						<sec:ifAnyGranted roles="ROLE_STC_W, ROLE_AGU_W">
+							<a4j:commandLink styleClass="headerPanelLink" rendered="#{localizationListBean.newLocalizationAvailable and !Session.isActualSateAndAguRead}"
+								action="#{localizationListBean.addLocalization}">#{msg.localizationListAddLocalization}
+							</a4j:commandLink>
+						</sec:ifAnyGranted>						
+						<h:outputText value="#{msg.localizationListTableName}" />
+						<h:selectOneMenu id="itemPP" styleClass="headerPanelSelect" rendered="#{!empty localizationListBean.list}"
+							value="#{localizationListBean.itemsPerPage}">
+							<f:selectItems value="#{localizationListBean.itemsPerPageList}" />
+							<a4j:support event="onchange" reRender="FormPanel" />
+						</h:selectOneMenu>
+						</t:column>										
+					</f:facet>
+					
+					<!-- Action columns -->
+					<sec:ifAnyGranted roles="ROLE_STC_W,ROLE_AGU_W">
+					<t:column id="edit" styleClass="ActionColumn" rendered="#{!empty localizationListBean.list and menuController.aguAsse5}" headerstyleClass="ActionColumn">
+						<a4j:commandLink ajaxSingle="true" id="editlink"
+							title="#{msg.edit}" action="#{localizationListBean.editLocalization}">
+							<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{localization.id}"
+								target="#{localizationListBean.entityEditId}" />
+						</a4j:commandLink>
+					</t:column>					
+					<t:column id="delete" rendered="#{!empty localizationListBean.list and !Session.isActualSateAndAguRead}"
+							styleClass="ActionColumn" headerstyleClass="ActionColumn">							
+							<a4j:commandLink ajaxSingle="true" id="deletelink" title="#{msg.delete}"
+								oncomplete="#{rich:component('deletePanel')}.show()"
+								rendered="#{!localization.main}">
+								<h:graphicImage alt="#{msg.delete}" value="/images/delete.png" style="border:0" />
+								<f:setPropertyActionListener value="#{localization.id}"
+									target="#{localizationListBean.entityDeleteId}" />
+							</a4j:commandLink>
+					</t:column>
+					</sec:ifAnyGranted>
+					
+					<!-- Info columns -->
+					
+					<t:column styleClass="StringColumn" rendered="#{!empty localizationListBean.list}">
+						<f:facet name="header" >
+							<t:outputText value="#{msg.localizationListCountry}" />
+						</f:facet>
+						<t:outputText value="#{localization.country.value}" />						
+					</t:column>
+					
+					<t:column styleClass="StringColumn" rendered="#{!empty localizationListBean.list}">
+						<f:facet name="header" >
+							<t:outputText value="#{msg.localizationListRegion}" />
+						</f:facet>
+						<t:outputText value="#{localization.region.value}" />						
+					</t:column>
+					
+					<t:column styleClass="StringColumn" rendered="#{!empty localizationListBean.list}">
+						<f:facet name="header" >
+							<t:outputText value="#{msg.localizationListAddress}" />
+						</f:facet>
+						<t:outputText value="#{localization.address}" />						
+					</t:column>
+					
+					<t:column styleClass="StringColumn" rendered="#{!empty localizationListBean.list}">
+						<f:facet name="header" >
+							<t:outputText value="#{msg.localizationListCoordinateX}" />
+						</f:facet>
+						<t:outputText value="#{localization.coordinateX}" />						
+					</t:column>
+					
+					<t:column styleClass="StringColumn" rendered="#{!empty localizationListBean.list}">
+						<f:facet name="header" >
+							<t:outputText value="#{msg.localizationListCoordinateY}" />
+						</f:facet>
+						<t:outputText value="#{localization.coordinateY}" />
+					</t:column>
+					<t:column styleClass="StringColumn"
+					rendered="#{empty localizationListBean.list}">
+					<f:facet name="header">
+						<h:outputText value="#{msg.noData}" />
+					</f:facet>
+				</t:column>
+					</t:dataTable>
+				</div><a4j:outputPanel styleClass="scrollerPanel">
+				<t:dataScroller id="scroll" styleClass="scroller" for="table"
+					rendered="#{localizationListBean.showScroll}" paginator="true"
+					paginatorMaxPages="5" fastStep="5" paginatorColumnClass="page"
+					paginatorActiveColumnClass="page_active" immediate="true">
+					<f:facet name="first">
+						<t:graphicImage alt="#{msg.first}" url="../images/back_end.gif"  border="1" />
+					</f:facet>
+					<f:facet name="last">
+						<t:graphicImage alt="#{msg.last}" url="../images/forward_end.gif" border="1" />
+					</f:facet>
+					<f:facet name="previous">
+						<t:graphicImage alt="#{msg.previous}" url="../images/back.gif" border="1" />
+					</f:facet>
+					<f:facet name="next">
+						<t:graphicImage alt="#{msg.next}" url="../images/forward.gif" border="1" />
+					</f:facet>
+					<f:facet name="fastforward">
+						<t:graphicImage alt="#{msg.fastforward}" url="../images/all_forward.gif" border="1" />
+					</f:facet>
+					<f:facet name="fastrewind">
+						<t:graphicImage alt="#{msg.fastrewind}" url="../images/all_back.gif" border="1" />
+					</f:facet>
+				</t:dataScroller>
+			</a4j:outputPanel>
+			</a4j:outputPanel>
+	</ui:define>
+	<ui:define name="delete_panels">
+			<rich:modalPanel id="deletePanel" autosized="true" width="200">
+		<f:facet name="header">
+			<h:outputText value="#{msg.delete}?" style="padding-right:15px;" />
+		</f:facet>
+		<f:facet name="controls">
+		</f:facet>
+		<h:form>
+			<table width="100%">
+				<tbody>
+					<tr>
+						<td align="center" width="50%">
+						<a4j:commandButton
+							value="#{msg.yes}" ajaxSingle="true" styleClass="button"
+							action="#{localizationListBean.deleteItem}"
+							oncomplete="#{rich:component('deletePanel')}.hide();"
+							reRender="FormPanel" />
+						</td>
+						<td align="center" width="50%">
+						<a4j:commandButton
+							value="#{msg.cancel}" styleClass="button"
+							onclick="#{rich:component('deletePanel')}.hide();return false;" />
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</h:form>
+	</rich:modalPanel>
+	</ui:define>
+	</ui:composition>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/EditBase.xhtml">
+	<ui:param name="heading" value="#{msg.editingJuridicalEngage}" />
+	<ui:param name="heading_top" value="#{msg.juridicalEngage}" />
+	<ui:define name="script_body">
+
+	</ui:define>
+	<ui:define name="edit_body">
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+			<table class="forms" border="0" cellpadding="1" cellspacing="1">
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.actType}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:selectOneMenu id="actTypes"
+						value="#{juridicalEngageEditBean.entityWrapperForStoreInViewState.actType}" required="true"
+						styleClass="DropDown">
+						<f:selectItems value="#{juridicalEngageEditBean.actTypes}" />
+					</t:selectOneMenu></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+						value="#{msg.juridicalEngageDate}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" id="date"
+						inputClass="editbox_form2" converter="dateTimeConverter"
+						value="#{juridicalEngageEditBean.entityWrapperForStoreInViewState.date}" required="true"
+						datePattern="dd/MM/yyyy">
+					</rich:calendar></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+						value="#{msg.juridicalEngageNumber}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><h:inputText styleClass="editbox_form2"
+						id="jurnumber" maxlength="9" 
+						required="true"
+						value="#{juridicalEngageEditBean.entityWrapperForStoreInViewState.number}" /></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+						value="#{msg.juridicalEngageAmount}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><h:inputText styleClass="editbox_form2"
+						id="amount" maxlength="12" converter="floatConverter"
+						validator="#{validator.isFloat92}" required="true"
+						onkeypress="return decimalonly(this, event)"
+						onkeyup="checkdecimal(this)"
+						value="#{juridicalEngageEditBean.entityWrapperForStoreInViewState.amount}" /></td>
+				</tr>
+			
+				<tr>
+					<td class="LabelCell">
+						<t:outputText value="#{msg.assigmentProcedures}:" />
+					</td>
+					<td class="ControlCell">
+						<t:selectOneMenu id="assigmentProcedures"
+							value="#{juridicalEngageEditBean.entityWrapperForStoreInViewState.assigmentProcedure}"
+							styleClass="DropDown"
+							>
+							<f:selectItems value="#{juridicalEngageEditBean.listAssigmentProcedures}" />
+						</t:selectOneMenu>
+					</td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.notes}:" /></td>
+					<td class="ControlCell"><h:inputText styleClass="editbox_form"
+						id="note" maxlength="255"
+						value="#{juridicalEngageEditBean.entityWrapperForStoreInViewState.text}" /></td>
+				</tr>
+				<tr>
+					<td colspan="2" class="btn_line"><a4j:commandButton
+						oncomplete="func();" immediate="false"
+						action="#{juridicalEngageEditBean.Page_Save}" styleClass="button2"
+						value="#{msg.save}" id="save" /> <a4j:commandButton
+						value="#{msg.cancel}" styleClass="button2" immediate="true"
+						action="#{juridicalEngageEditBean.GoBack}" /></td>
+				</tr>
+				<tr>
+				<td colspan="2" class="btn_line">
+							<t:div
+								style="margin:auto; padding-bottom:5px; width:250px; text-align:left;">
+								<a4j:htmlCommandLink id="newDocLink"
+									action="#{juridicalEngageEditBean.getNewDoc}"
+									rendered="#{!empty juridicalEngageEditBean.newDocTitle}"
+									style="text-decoration: underline;" immediate="true"
+									value="#{juridicalEngageEditBean.newDocTitle}" />
+								<a4j:commandLink
+									rendered="#{!empty juridicalEngageEditBean.newDocTitle}"
+									id="doc1deletelink" immediate="true" reRender="pagePanel"
+									action="#{juridicalEngageEditBean.deleteNewDoc}">
+									<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"/>
+								</a4j:commandLink>
+								<center>
+								<span
+									class="RequiredFieldMarker">*</span>
+								<a4j:commandLink
+									rendered="#{empty juridicalEngageEditBean.newDocTitle}"
+									id="doc1link" value="#{msg.uploadFile}"
+									oncomplete="#{rich:component('documentPanel')}.show()">
+									<h:graphicImage alt="#{msg.delete}" value="/images/plus.png"/>
+								</a4j:commandLink>
+								</center>
+							</t:div>
+						</td>
+				</tr>
+			</table>
+		</a4j:outputPanel>
+		<rich:modalPanel id="documentPanel" autosized="true" width="300">
+			<f:facet name="header">
+				<h:outputText value="#{msg.document}" style="padding-right:15px;" />
+			</f:facet>
+
+			<table>
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.date}:" /></td>
+					<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+							inputClass="editbox_form2" converter="dateTimeConverter"
+							value="#{juridicalEngageEditBean.newDocument.documentDate}"
+							datePattern="dd/MM/yyyy">
+						</rich:calendar></td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentDescription}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							style="width:216px;" maxlength="50"
+							value="#{juridicalEngageEditBean.newDocument.description}" /></td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentPublic}:" /></td>
+					<td class="ControlCell"><t:selectBooleanCheckbox
+							value="#{juridicalEngageEditBean.newDocument.isPublic}">
+						</t:selectBooleanCheckbox></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.protocolNumber}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							maxlength="50" style="width:216px;"
+							value="#{juridicalEngageEditBean.newDocument.protocolNumber}" /></td>
+				</tr>
+				<ui:remove>
+				<tr class="tempDisplay">
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentCategory}:" /></td>
+					<td class="ControlCell"><t:selectOneMenu
+							onmousedown="collapse(this);" onchange="expand(this);"
+							onblur="expand(this);"
+							value="#{juridicalEngageEditBean.selectedCategory}"
+							required="false"
+							styleClass="DropDown">
+							<f:selectItems value="#{juridicalEngageEditBean.categories}" />
+						</t:selectOneMenu></td>
+				</tr>
+				</ui:remove>
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.uploadFile}:" /></td>
+					<td class="ControlCell"><t:inputFileUpload id="fileupload3"
+							value="#{juridicalEngageEditBean.newDocumentUpFile}"
+							storage="file" styleClass="fileUploadInput" maxlength="200000" /></td>
+				</tr>
+				<tr>
+					<td align="center" colspan="2">#{msg.fileSize}</td>
+				</tr>
+				<tr>
+					<td colspan="2" style="text-align: center;"><h:commandButton
+							value="#{msg.uploadFile}" styleClass="button3"
+							action="#{juridicalEngageEditBean.SaveNewDocument}"
+							onclick="#{rich:component('documentPanel')}.hide();" /> <a4j:commandButton
+							value="#{msg.cancel}" styleClass="button" immediate="false"
+							onclick="#{rich:component('documentPanel')}.hide();return false;" /></td>
+				</tr>
+			</table>
+		</rich:modalPanel>
+		<rich:modalPanel id="waitPopup" autosized="true" width="300"
+			resizeable="false">
+			<center>#{msg.suspensionManagementWaiting}</center>
+		</rich:modalPanel>
+	</ui:define>
+</ui:composition>

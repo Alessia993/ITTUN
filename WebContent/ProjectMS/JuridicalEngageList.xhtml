@@ -1,0 +1,277 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ListBase.xhtml">
+	<ui:param name="heading" value="#{msg.juridicalEngage}" />
+	
+		<ui:define name="script_body">
+		<a4j:jsFunction name="updateProcessesSearchDate" reRender="FormPanel" eventsQueue="queueSD">
+				<a4j:actionparam name="param1" converter="dateTimeConverter"
+					assignTo="#{juridicalEngageListBean.searchDatePattern}" />
+			</a4j:jsFunction>
+			
+		<a4j:jsFunction name="updateProcessesSearchNumber" reRender="FormPanel" eventsQueue="queueSN" 
+			requestDelay="2000" oncomplete="SetFocusToNumber()">
+				<a4j:actionparam name="param1" 
+					assignTo="#{juridicalEngageListBean.searchNumberPattern}"/>
+			</a4j:jsFunction>
+
+		
+					<a4j:jsFunction name="updateProcessesSearchImport" reRender="FormPanel" eventsQueue="queueSI" 
+			requestDelay="2000" oncomplete="SetFocusToImport()">
+				<a4j:actionparam name="param2" 
+					assignTo="#{juridicalEngageListBean.searchImportPattern}" />
+			</a4j:jsFunction>
+			
+			<script type="text/javascript">
+			
+				function SetFocusToNumber(){
+					var field = document.getElementById('FormList:table:searchNumber');
+					field.focus();
+					var val = field.value; 
+					field.value = ''; 
+					field.value = val;
+				}
+				
+				function SetFocusToImport(){
+					var field = document.getElementById('FormList:table:searchImport');
+					field.focus();
+					var val = field.value; 
+					field.value = ''; 
+					field.value = val;
+				}
+
+				
+			
+			</script>
+	</ui:define>
+	
+	
+	<ui:define name="list_body">
+		<a4j:outputPanel ajaxRendered="false" id="FormPanel">
+			<div class="table_container"><t:dataTable width="80%"
+				style="margin:0 auto;"
+				rows="#{juridicalEngageListBean.itemsPerPage}" id="table" var="data"
+				value="#{juridicalEngageListBean.list}" styleClass="form_table"
+				rowClasses="row_table_n,row_table_g">
+				
+				
+				
+				<f:facet name="header">
+					<t:column>
+						<sec:ifAnyGranted roles="ROLE_STC_W, ROLE_B_W, ROLE_BP_W">
+							<a4j:commandLink styleClass="headerPanelLink" rendered="#{!Session.isAguRead and !Session.projectLock}"
+								action="#{juridicalEngageListBean.addEntity}">#{msg.addjuridicalEngage}</a4j:commandLink>
+						</sec:ifAnyGranted>
+						<h:outputText style="text-align: center" value="#{msg.juridicalEngage}" />
+						<h:selectOneMenu id="itemPP" styleClass="headerPanelSelect"
+							value="#{juridicalEngageListBean.itemsPerPage}">
+							<f:selectItems
+								value="#{juridicalEngageListBean.itemsPerPageList}" />
+							<a4j:support event="onchange" reRender="FormPanel" />
+						</h:selectOneMenu>
+					</t:column>
+				</f:facet>
+				
+				
+				<f:facet name="footer">
+						<a4j:htmlCommandLink action="#{juridicalEngageListBean.export}"
+							styleClass="footerPanelExport">
+							<h:graphicImage alt="#{msg.exportXls}" value="/images/xls.png" />
+						</a4j:htmlCommandLink>
+				</f:facet>
+				<sec:ifAnyGranted roles="ROLE_STC_W, ROLE_B_W, ROLE_BP_W">
+					<t:column id="edit" styleClass="ActionColumn"
+						rendered="#{!Session.projectLock}">
+						<a4j:commandLink ajaxSingle="true" id="editlink"
+							title="#{msg.edit}"
+							action="#{juridicalEngageListBean.editEntity}">
+							<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{data.id}"
+								target="#{juridicalEngageListBean.entityEditId}" />
+						</a4j:commandLink>
+					</t:column>
+					<t:column id="delete" styleClass="ActionColumn"
+						rendered="#{!Session.projectLock}">
+						<a4j:commandLink id="deletelink" title="#{msg.delete}"
+							oncomplete="#{rich:component('deletePanel')}.show()">
+							<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{data.id}"
+								target="#{juridicalEngageListBean.entityDeleteId}" />
+						</a4j:commandLink>
+					</t:column>
+				</sec:ifAnyGranted>
+				<t:column styleClass="StringColumn">
+					<f:facet name="header">
+						<t:outputText value="#{msg.actType}" />
+					</f:facet>
+					<t:outputText value="#{data.actType.value}" />
+				</t:column>
+				<t:column styleClass="DateColumn">
+					<f:facet name="header">
+					
+							<a4j:outputPanel ajaxRendered="false">
+					
+						<t:outputText value="#{msg.juridicalEngageDate}" />
+								<br />
+								
+								<rich:calendar locale="#{LocalizeBean.currentLocaleValue}"  id="searchDate"
+						inputClass="editbox_form2" converter="dateTimeConverter"
+						value="#{juridicalEngageListBean.searchDatePattern}" onchanged="updateProcessesSearchDate(this.value);"
+						datePattern="dd/MM/yyyy"/> 
+					
+							</a4j:outputPanel>
+
+					</f:facet>
+					<t:outputText value="#{data.date}" converter="dateTimeConverter" />
+				</t:column>
+				
+				
+				<t:column styleClass="NumberColumn">
+					<f:facet name="header">
+						<a4j:outputPanel ajaxRendered="false">
+					
+						<t:outputText value="#{msg.juridicalEngageNumber}" />
+						<br />
+						<h:inputText 
+						id="searchNumber" maxlength="12"	
+						value="#{juridicalEngageListBean.searchNumberPattern}" onkeyup="updateProcessesSearchNumber(this.value)" />
+						
+						</a4j:outputPanel>
+					</f:facet>
+					<t:outputText value="#{data.number}" />
+				</t:column>
+												<t:column styleClass="StringColumn">
+					<f:facet name="header">
+					
+
+					
+					<t:outputText value="#{msg.juridicalEngageNote}" />
+
+
+						
+					</f:facet>
+					<t:outputText value="#{data.text}"/>
+				</t:column>
+				<t:column styleClass="NumberColumn">
+					<f:facet name="header">
+					
+											<a4j:outputPanel ajaxRendered="false">
+					
+						<t:outputText value="#{msg.juridicalEngageAmount}" />
+						<br />
+						<h:inputText 
+						id="searchImport" maxlength="12"	
+						value="#{juridicalEngageListBean.searchImportPattern}" 
+												onkeypress="return decimalonly(this, event)"
+						onkeyup="checkdecimal(this); updateProcessesSearchImport(this.value)" />
+						
+						</a4j:outputPanel>
+					
+						
+					</f:facet>
+					<t:outputText value="#{data.amount}" converter="moneyConverter" />
+				</t:column>
+				
+				<t:column styleClass="NumberColumn">
+					<f:facet name="header">
+					
+
+					
+					<t:outputText value="#{msg.juridicalEngageResiaudalAmount}" />
+
+
+						
+					</f:facet>
+					<t:outputText value="#{data.residualAmount}" converter="moneyConverter" />
+				</t:column>
+				
+				<t:column styleClass="StringColumn">
+					<f:facet name="header">
+					
+
+					
+					<t:outputText value="#{msg.juridicalEngageReportNumber}" />
+
+
+						
+					</f:facet>
+					<t:outputText value="#{data.reportNumber}"/>
+				</t:column>
+				
+
+				
+			</t:dataTable></div>
+			<a4j:outputPanel styleClass="scrollerPanel">
+				<t:dataScroller id="scroll_1" styleClass="scroller" for="table"
+					fastStep="10" pageCountVar="pageCount" pageIndexVar="pageIndex"
+					paginator="true" paginatorMaxPages="5" paginatorColumnClass="page"
+					paginatorActiveColumnClass="page_active" immediate="true"
+					binding="#{juridicalEngageListBean.scroller}"
+					rendered="#{juridicalEngageListBean.showScroll}">
+					<f:facet name="first">
+						<t:graphicImage alt="#{msg.first}" url="../images/back_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="last">
+						<t:graphicImage alt="#{msg.last}" url="../images/forward_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="previous">
+						<t:graphicImage alt="#{msg.previous}" url="../images/back.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="next">
+						<t:graphicImage alt="#{msg.next}" url="../images/forward.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="fastforward">
+						<t:graphicImage alt="#{msg.fastforward}"
+							url="../images/all_forward.gif" border="1" />
+					</f:facet>
+					<f:facet name="fastrewind">
+						<t:graphicImage alt="#{msg.fastrewind}"
+							url="../images/all_back.gif" border="1" />
+					</f:facet>
+				</t:dataScroller>
+			</a4j:outputPanel>
+		</a4j:outputPanel>
+
+	</ui:define>
+
+	<ui:define name="delete_panels">
+		<rich:modalPanel id="deletePanel" autosized="true" width="200">
+			<f:facet name="header">
+				<h:outputText value="#{msg.delete}?" style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+			</f:facet>
+			<h:form>
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td align="center" width="50%"><a4j:commandButton
+								value="#{msg.yes}" ajaxSingle="true" styleClass="button"
+								action="#{juridicalEngageListBean.deleteEntity}"
+								oncomplete="#{rich:component('deletePanel')}.hide();"
+								reRender="FormPanel" /></td>
+							<td align="center" width="50%"><a4j:commandButton
+								value="#{msg.cancel}" styleClass="button"
+								onclick="#{rich:component('deletePanel')}.hide();return false;" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</h:form>
+		</rich:modalPanel>
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,773 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	template="/Templates/EditTabBase.xhtml">
+	<ui:param name="heading"
+		value="#{msg.projectInformationCompletationView}" />
+	<ui:param name="heading_top"
+		value="#{msg.projectInformationCompletationView}" />
+	<ui:define name="edit_body">
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+			<t:panelTabbedPane serverSideTabSwitch="false">
+				<t:panelTab id="tab1"
+					label="#{msg.projectInformationCompletationViewProjectStart}">
+					<table class="forms staticForm" border="0" cellpadding="1"
+						cellspacing="1">
+						<tr>
+							<td style="text-align: right; width: 50%;">#{msg.projectCode}:</td>
+							<td><b>#{projectInformationCompletationViewBean.code}</b></td>
+						</tr>
+						<tr>
+							<td style="text-align: right; width: 50%;">#{msg.projectTitle}:</td>
+							<td><b>#{projectInformationCompletationViewBean.title}</b></td>
+						</tr>
+						<tr>
+							<td style="text-align: right; width: 50%;">#{msg.projectTypology}:</td>
+							<td><b>#{projectInformationCompletationViewBean.projectTypology}</b></td>
+						</tr>
+						<tr>
+							<td style="text-align: right; width: 50%;">#{msg.projectAsse}:</td>
+							<td><b>#{projectInformationCompletationViewBean.asse}</b></td>
+						</tr>
+						<tr>
+							<td style="text-align: right; width: 50%;">#{msg.projectSpecificGoal}:</td>
+							<td><b>#{projectInformationCompletationViewBean.specificGoal}</b></td>
+						</tr>
+						<ui:remove>
+						<tr>
+							<td style="text-align: right; width: 50%;">#{msg.projectProirityThema}:</td>
+							<td><b>#{projectInformationCompletationViewBean.priorReasons}</b></td>
+						</tr>
+						</ui:remove>
+						<tr>
+							<td style="text-align: right; width: 50%;">#{msg.projectActivationProcedure}:</td>
+							<td><b>#{projectInformationCompletationViewBean.activationProcedure}</b></td>
+						</tr>
+						<tr>
+							<td style="text-align: right; width: 50%;">#{msg.projectCUP}:</td>
+							<td><b>#{projectInformationCompletationViewBean.cup}</b></td>
+						</tr>
+						<tr>
+							<td style="text-align: right; width: 50%;">#{msg.projectCPT}:</td>
+							<td><b>#{projectInformationCompletationViewBean.cpt}</b></td>
+						</tr>
+					</table>
+				</t:panelTab>
+				<t:panelTab id="tab2"
+					label="#{msg.projectInformationCompletationViewProjectCompletation}">
+					<table class="forms" border="0" cellpadding="1" cellspacing="1"
+						width="50%">
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.projectInformationCompletationViewProjectDescription}:" />
+								<span class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><t:inputText
+									styleClass="editbox_form"
+									enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="true"
+									id="picDescription"
+									value="#{projectInformationCompletationViewBean.picDescription}"
+									maxlength="250" /></td>
+						</tr>
+						
+						<ui:remove>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.projectInformationCompletationViewProjectDescriptionEng}:" />
+								<span class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><t:inputText
+									styleClass="editbox_form"
+									enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="true"
+									id="picDescriptionEng"
+									value="#{projectInformationCompletationViewBean.picDescriptionEng}"
+									maxlength="250" /></td>
+						</tr>	
+						</ui:remove>					
+						
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.projectInformationCompletationViewAdmittedToFinancing}:" /> <span
+								class="RequiredFieldMarker">*</span></td>
+							<td><t:div
+									>
+									<rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+										id="picateAdmissionToFinancing" required="true" inputClass="editbox_form2"
+										converter="dateTimeConverter"
+										value="#{projectInformationCompletationViewBean.dateAdmissionToFinancing}"
+										datePattern="dd/MM/yyyy">
+									</rich:calendar>
+								</t:div> <b> <t:outputText rendered="#{!projectInformationCompletationViewBean.canEdit}"
+										value="#{projectInformationCompletationViewBean.dateAdmissionToFinancing}"
+										converter="dateTimeConverter" />
+							</b></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.projectInformationCompletationViewDateOfSubmission}:" /> <span
+								class="RequiredFieldMarker">*</span></td>
+							<td><t:div
+									>
+									<rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+										id="dateSubmission" required="true" inputClass="editbox_form2"
+										converter="dateTimeConverter"
+										value="#{projectInformationCompletationViewBean.dateSubmission}"
+										datePattern="dd/MM/yyyy">
+									</rich:calendar>
+								</t:div> <b> <t:outputText rendered="#{!projectInformationCompletationViewBean.canEdit}"
+										value="#{projectInformationCompletationViewBean.dateSubmission}"
+										converter="dateTimeConverter" />
+							</b></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.projectInformationCompletationViewStartYear}:" /> <span
+								class="RequiredFieldMarker">*</span></td>
+							<td><t:div
+									>
+									<rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+										id="picStartYear" required="true" inputClass="editbox_form2"
+										converter="dateTimeConverter"
+										value="#{projectInformationCompletationViewBean.startYear}"
+										datePattern="dd/MM/yyyy">
+									</rich:calendar>
+								</t:div> <b> <t:outputText rendered="#{!projectInformationCompletationViewBean.canEdit}"
+										value="#{projectInformationCompletationViewBean.startYear}"
+										converter="dateTimeConverter" />
+							</b></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.projectInformationCompletationViewDurationInYear}:" />
+								<span class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><t:selectOneMenu
+									id="picYearDuration"
+									value="#{projectInformationCompletationViewBean.picYearDuration}"
+									enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="true"
+									styleClass="DropDown"
+									validator="#{projectInformationCompletationViewBean.checkYearDuration}">
+									<f:selectItems
+										value="#{projectInformationCompletationViewBean.listYearDuration}" />
+								</t:selectOneMenu></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.projectInformationCompletationViewEndYear}:" /> <span
+								class="RequiredFieldMarker">*</span></td>
+							<td><t:div
+									>
+									<rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+										id="picEndYear" required="true" inputClass="editbox_form2"
+										converter="dateTimeConverter"
+										value="#{projectInformationCompletationViewBean.endYear}"
+										datePattern="dd/MM/yyyy">
+									</rich:calendar>
+								</t:div> <b> <t:outputText rendered="#{!projectInformationCompletationViewBean.canEdit}"
+										value="#{projectInformationCompletationViewBean.endYear}"
+										converter="dateTimeConverter" />
+							</b></td>
+						</tr>
+						
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.projectInformationCompletationViewMonthDuration}:" />
+								<span class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><t:inputText
+									styleClass="editbox_form"
+									onkeypress="return numbersonly(this, event)"
+									onkeyup="checknumber(this)"
+									enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="true"
+									id="picMonthDuration"
+									value="#{projectInformationCompletationViewBean.picMonthDuration}"
+									maxlength="3"
+									validator="#{projectInformationCompletationViewBean.checkMonthDuration}" />
+							</td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.projectInformationCompletationViewDefinitiveCUPCode}:" />
+								<span class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell"><t:inputText
+									styleClass="editbox_form"
+									enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="true"
+									id="picCUPcode" validator="#{validator.length15}"
+									onkeyup="makeUppercase(this)"
+									value="#{projectInformationCompletationViewBean.picCUPcode}"
+									maxlength="15" /></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.projectInformationCompletationViewCUPAttachment}:" />
+							</td>
+							<td class="ControlCell"><a4j:htmlCommandLink id="picDocLink"
+									action="#{projectInformationCompletationViewBean.getPicDoc}"
+									style="text-decoration: underline; float:left;"
+									immediate="true"
+									value="#{projectInformationCompletationViewBean.picDocTitle}" />
+								<a4j:commandLink
+									rendered="#{!empty projectInformationCompletationViewBean.picDocTitle and projectInformationCompletationViewBean.canEdit}"
+									id="doc1deletelink" immediate="true" reRender="FormPanel"
+									action="#{projectInformationCompletationViewBean.deletePicDoc}">
+									<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+										style="border:0; padding-left: 20px;" />
+								</a4j:commandLink> <a4j:commandLink
+									rendered="#{empty projectInformationCompletationViewBean.picDocTitle and projectInformationCompletationViewBean.canEdit}"
+									id="doc1link" immediate="true"
+									oncomplete="#{rich:component('documentPanel1')}.show()">
+									<h:graphicImage alt="#{msg.delete}" value="/images/plus.png"
+										style="border:0;" />
+									<span>#{msg.uploadFile}</span>
+								</a4j:commandLink></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.projectInformationCompletationViewEconomicActivity}:" />
+								<span class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell">
+								<div style="width: 252px; overflow: hidden;">
+									<t:selectOneMenu onmousedown="collapse(this);"
+										onchange="expand(this);" onblur="expand(this);"
+										id="picEconomicActivity"
+										value="#{projectInformationCompletationViewBean.picEconomicActivity}"
+										enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="true"
+										styleClass="DropDown">
+										<f:selectItems
+											value="#{projectInformationCompletationViewBean.listEconomicActivity}" />
+									</t:selectOneMenu>
+								</div>
+							</td>
+						</tr>
+						
+						<ui:remove>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.projectInformationCompletationViewFormeFinanziamento}:" />
+								<span class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell">
+								<div style="width: 252px; overflow: hidden;">
+									<t:selectOneMenu onmousedown="collapse(this);"
+										onchange="expand(this);" onblur="expand(this);"
+										id="picfinancingForm"
+										value="#{projectInformationCompletationViewBean.financingForm}"
+										enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="true"
+										styleClass="DropDown">
+										<f:selectItems
+											value="#{projectInformationCompletationViewBean.listFinancingForms}" />
+									</t:selectOneMenu>
+								</div>
+							</td>
+						</tr>
+						</ui:remove>
+						
+						<ui:remove>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.projectInformationCompletationViewFinancingCode}:" />
+								<span class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell">
+								<div style="width: 252px; overflow: hidden;">
+									<t:selectOneMenu onmousedown="collapse(this);"
+										onchange="expand(this);" onblur="expand(this);"
+										id="picFinancingCode"
+										value="#{projectInformationCompletationViewBean.picFinancingCode}"
+										enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="true"
+										styleClass="DropDown">
+										<f:selectItems
+											value="#{projectInformationCompletationViewBean.listFinancingCode}" />
+									</t:selectOneMenu>
+								</div>
+							</td>
+						</tr>
+						</ui:remove>
+						<ui:remove>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.projectInformationCompletationViewTerritorialCode}:" />
+								<span class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell">
+								<div style="width: 252px; overflow: hidden;">
+									<t:selectOneMenu onmousedown="collapse(this);"
+										onchange="expand(this);" onblur="expand(this);"
+										id="picTerritorialCode"
+										value="#{projectInformationCompletationViewBean.picTerritorialCode}"
+										enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="true"
+										styleClass="DropDown">
+										<f:selectItems
+											value="#{projectInformationCompletationViewBean.listTerritorialCode}" />
+									</t:selectOneMenu>
+								</div>
+							</td>
+						</tr>
+						</ui:remove>
+						
+						<ui:remove>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.projectInformationCompletationViewActualCode}:" />
+								<span class="RequiredFieldMarker">*</span></td>
+							<td class="ControlCell">
+								<div style="width: 252px; overflow: hidden;">
+									<t:selectOneMenu onmousedown="collapse(this);"
+										onchange="expand(this);" onblur="expand(this);"
+										id="picActualCode"
+										value="#{projectInformationCompletationViewBean.picActualCode}"
+										enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="true"
+										styleClass="DropDown">
+										<f:selectItems
+											value="#{projectInformationCompletationViewBean.listActualCode}" />
+									</t:selectOneMenu>
+								</div>
+							</td>
+						</tr>
+						</ui:remove>
+						
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.projectInformationCompletationViewUrl}:" /></td>
+							<td class="ControlCell"><t:inputText
+									styleClass="editbox_form"
+									enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" id="picUrl"
+									value="#{projectInformationCompletationViewBean.picUrl}"
+									maxlength="250" /></td>
+						</tr>
+						
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.projectInformationCompletationViewNote}:" /></td>
+							<td class="ControlCell"><t:inputText
+									styleClass="editbox_form"
+									enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" id="picNote"
+									value="#{projectInformationCompletationViewBean.picNote}"
+									maxlength="250" /></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.projectInformationCompletationViewResults}:" /></td>
+							<td class="ControlCell"><t:inputText
+									styleClass="editbox_form"
+									enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" id="picResults"
+									value="#{projectInformationCompletationViewBean.picResults}"
+									maxlength="250" /></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.projectInformationCompletationViewEngResults}:" /></td>
+							<td class="ControlCell"><t:inputText
+									styleClass="editbox_form"
+									enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" id="picEngResults"
+									value="#{projectInformationCompletationViewBean.picEngResults}"
+									maxlength="250" /></td>
+						</tr>
+						<tr>
+							<td class="LabelCell"><t:outputText
+									value="#{msg.projectInformationCompletationViewAdmissionAttachment}:" />
+							</td>
+							<td class="ControlCell"><a4j:htmlCommandLink id="picDocAdmLink"
+									action="#{projectInformationCompletationViewBean.getPicDocAdm}"
+									style="text-decoration: underline; float:left;"
+									immediate="true"
+									value="#{projectInformationCompletationViewBean.picDocAdmTitle}" />
+								<a4j:commandLink
+									rendered="#{!empty projectInformationCompletationViewBean.picDocAdmTitle and projectInformationCompletationViewBean.canEdit}"
+									id="doc2deletelink" immediate="true" reRender="FormPanel"
+									action="#{projectInformationCompletationViewBean.deletePicDocAdm}">
+									<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+										style="border:0; padding-left: 20px;" />
+								</a4j:commandLink> <a4j:commandLink
+									rendered="#{empty projectInformationCompletationViewBean.picDocAdmTitle and projectInformationCompletationViewBean.canEdit}"
+									id="doc2link" immediate="true"
+									oncomplete="#{rich:component('documentPanel2')}.show()">
+									<h:graphicImage alt="#{msg.delete}" value="/images/plus.png"
+										style="border:0;" />
+									<span>#{msg.uploadFile}</span>
+								</a4j:commandLink></td>
+						</tr>
+					</table>
+				</t:panelTab>
+			</t:panelTabbedPane>
+			<div class="btn_line">
+				<sec:ifAnyGranted roles="ROLE_STC_W,ROLE_AGU_W">
+					<table>
+						<tr>
+							<td><a4j:commandButton immediate="false"
+									reRender="durationError, decreaseError"
+									action="#{projectInformationCompletationViewBean.savePIC}"
+									oncomplete="if(#{Session.isActualSate}) {showBudgetEdit()} else{if (#{projectInformationCompletationViewBean.showConfirmation}) {document.getElementById('validatePanel').component.show();} else if(#{projectInformationCompletationViewBean.yearDecreased}) {document.getElementById('deletePanel').component.show();}}"
+									rendered="#{projectInformationCompletationViewBean.canEdit}"
+									styleClass="button2" value="#{msg.save}" id="save" /></td>
+							<td><a4j:commandButton value="#{msg.cancel}"
+									styleClass="button2" immediate="true"
+									action="#{projectInformationCompletationViewBean.GoBack}" /></td>
+						</tr>
+					</table>
+				</sec:ifAnyGranted>
+			</div>
+			
+
+									
+
+			
+		</a4j:outputPanel>
+		<script type="text/javascript">
+			function showBudgetEdit()
+			{
+				 if(document.getElementById('EditForm:tab2:picYearDuration').selectedIndex>1)
+				 { 
+					 document.getElementById('budgetEditPanel').component.show();
+				 }
+				
+			}
+		</script>
+	</ui:define>
+	
+
+
+	<ui:define name="document_body">
+		<rich:modalPanel id="documentPanel1" autosized="true" width="300">
+			<f:facet name="header">
+				<h:outputText value="#{msg.document}" style="padding-right:15px;" />
+			</f:facet>
+
+			<table>
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.date}:" /></td>
+					<td class="CalendarCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" disabled="false"
+							styleClass="editbox_form2" converter="dateTimeConverter"
+							value="#{projectInformationCompletationViewBean.picDocument.documentDate}"
+							datePattern="dd/MM/yyyy">
+						</rich:calendar></td>
+				</tr>
+								<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentDescription}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							style="width:216px;" maxlength="50"
+							value="#{projectInformationCompletationViewBean.picDocument.title}" /></td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.protocolNumber}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form" maxlength="50"
+							value="#{projectInformationCompletationViewBean.picDocument.protocolNumber}" /></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentPublic}:" /></td>
+					<td class="ControlCell"><t:selectBooleanCheckbox
+							value="#{projectInformationCompletationViewBean.picDocument.isPublic}"
+							enabledOnUserRole="ROLE_BP_W,ROLE_AGU_W,ROLE_STC_W">
+						</t:selectBooleanCheckbox></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentUploadRole}:" /></td>
+					<td class="ControlCell"><t:selectOneMenu
+							onmousedown="collapse(this);" onchange="expand(this);"
+							onblur="expand(this);"
+							value="#{projectInformationCompletationViewBean.role}"
+							enabledOnUserRole="ROLE_BP_W,ROLE_AGU_W,ROLE_STC_W" required="false"
+							styleClass="DropDown">
+							<f:selectItems
+								value="#{projectInformationCompletationViewBean.listSelectRoles}" />
+						</t:selectOneMenu></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentForPartner}:" /></td>
+					<td class="ControlCell"><t:selectOneMenu
+							onmousedown="collapse(this);" onchange="expand(this);"
+							onblur="expand(this);"
+							value="#{projectInformationCompletationViewBean.selectedPartner}"
+							required="false" styleClass="DropDown">
+							<f:selectItems
+								value="#{projectInformationCompletationViewBean.listPartners}" />
+						</t:selectOneMenu></td>
+				</tr>
+				<ui:remove>
+				<tr class="tempDisplay">
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentCategory}:" /></td>
+					<td class="ControlCell"><t:selectOneMenu
+							onmousedown="collapse(this);" onchange="expand(this);"
+							onblur="expand(this);"
+							value="#{projectInformationCompletationViewBean.selectedCategory}"
+							required="false" styleClass="DropDown">
+							<f:selectItems
+								value="#{projectInformationCompletationViewBean.categories}" />
+						</t:selectOneMenu></td>
+				</tr>
+				</ui:remove>
+				<ui:remove>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentNumberField}:" /></td>
+					<td class="ControlCell"><t:inputText
+							styleClass="editbox_form2" id="docNumber"
+							value="#{projectInformationCompletationViewBean.picDocument.documentNumber}"
+							onkeypress="return numbersonly(this, event)"
+							onkeyup="checknumber(this)" maxlength="10" /></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.date}:" /></td>
+					<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+							inputClass="editbox_form2" converter="dateTimeConverter"
+							value="#{projectInformationCompletationViewBean.picDocument.editableDate}"
+							datePattern="dd/MM/yyyy">
+						</rich:calendar></td>
+				</tr>
+				</ui:remove>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.uploadFile}:" /></td>
+					<td class="ControlCell"><t:inputFileUpload id="fileupload2"
+							value="#{projectInformationCompletationViewBean.picDocumentUpFile}"
+							storage="file" styleClass="fileUploadInput" maxlength="200000" /></td>
+				</tr>
+				<tr>
+					<td align="center" colspan="2">#{msg.fileSize}</td>
+				</tr>
+				
+				<ui:remove>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentNote}:" /></td>
+					<td class="ControlCell"><t:inputTextarea maxlength="255"
+							rows="6" cols="40"
+							value="#{projectInformationCompletationViewBean.picDocument.note}"
+							onkeypress="return textArea(this, 255)"
+							styleClass="editbox_form2" id="note" /></td>
+				</tr>
+				</ui:remove>
+				
+				<tr>
+					<td colspan="2" style="text-align: center;"><h:commandButton
+							value="#{msg.uploadFile}" styleClass="button3"
+							action="#{projectInformationCompletationViewBean.SavePicDocument}"
+							reRender="FormPanel"
+							onclick="#{rich:component('documentPanel1')}.hide();" /> <a4j:commandButton
+							value="#{msg.cancel}" styleClass="button" immediate="false"
+							onclick="#{rich:component('documentPanel1')}.hide();return false;" /></td>
+				</tr>
+			</table>
+		</rich:modalPanel>
+		<rich:modalPanel id="documentPanel2" autosized="true" width="300">
+			<f:facet name="header">
+				<h:outputText value="#{msg.document}" style="padding-right:15px;" />
+			</f:facet>
+
+			<table>
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.date}:" /></td>
+					<td class="CalendarCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}" disabled="false"
+							styleClass="editbox_form2" converter="dateTimeConverter"
+							value="#{projectInformationCompletationViewBean.picDocumentAdm.documentDate}"
+							datePattern="dd/MM/yyyy">
+						</rich:calendar></td>
+				</tr>
+				
+												<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentDescription}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							style="width:216px;" maxlength="50"
+							value="#{projectInformationCompletationViewBean.picDocumentAdm.title}" /></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.protocolNumber}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form" maxlength="50"
+							value="#{projectInformationCompletationViewBean.picDocumentAdm.protocolNumber}" /></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentPublic}:" /></td>
+					<td class="ControlCell"><t:selectBooleanCheckbox
+							value="#{projectInformationCompletationViewBean.picDocumentAdm.isPublic}"
+							enabledOnUserRole="ROLE_BP_W,ROLE_AGU_W,ROLE_STC_W">
+						</t:selectBooleanCheckbox></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentUploadRole}:" /></td>
+					<td class="ControlCell"><t:selectOneMenu
+							onmousedown="collapse(this);" onchange="expand(this);"
+							onblur="expand(this);"
+							value="#{projectInformationCompletationViewBean.admRole}"
+							enabledOnUserRole="ROLE_BP_W,ROLE_AGU_W,ROLE_STC_W" required="false"
+							styleClass="DropDown">
+							<f:selectItems
+								value="#{projectInformationCompletationViewBean.listSelectRoles}" />
+						</t:selectOneMenu></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentForPartner}:" /></td>
+					<td class="ControlCell"><t:selectOneMenu
+							onmousedown="collapse(this);" onchange="expand(this);"
+							onblur="expand(this);"
+							value="#{projectInformationCompletationViewBean.selectedAdmPartner}"
+							required="false" styleClass="DropDown">
+							<f:selectItems
+								value="#{projectInformationCompletationViewBean.listPartners}" />
+						</t:selectOneMenu></td>
+				</tr>
+				<ui:remove>
+				<tr class="tempDisplay">
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentCategory}:" /></td>
+					<td class="ControlCell"><t:selectOneMenu
+							onmousedown="collapse(this);" onchange="expand(this);"
+							onblur="expand(this);"
+							value="#{projectInformationCompletationViewBean.selectedAdmCategory}"
+							required="false" styleClass="DropDown">
+							<f:selectItems
+								value="#{projectInformationCompletationViewBean.categories}" />
+						</t:selectOneMenu></td>
+				</tr>
+				</ui:remove>
+				<ui:remove>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentNumberField}:" /></td>
+					<td class="ControlCell"><t:inputText
+							styleClass="editbox_form2" id="docNumber"
+							value="#{projectInformationCompletationViewBean.picDocumentAdm.documentNumber}"
+							onkeypress="return numbersonly(this, event)"
+							onkeyup="checknumber(this)" maxlength="10" /></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.date}:" /></td>
+					<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+							inputClass="editbox_form2" converter="dateTimeConverter"
+							value="#{projectInformationCompletationViewBean.picDocumentAdm.editableDate}"
+							datePattern="dd/MM/yyyy">
+						</rich:calendar></td>
+				</tr>
+				</ui:remove>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.uploadFile}:" /></td>
+					<td class="ControlCell"><t:inputFileUpload id="fileupload3"
+							value="#{projectInformationCompletationViewBean.picDocumentAdmUpFile}"
+							storage="file" styleClass="fileUploadInput" maxlength="200000" /></td>
+				</tr>
+				<tr>
+					<td align="center" colspan="2">#{msg.fileSize}</td>
+				</tr>
+				
+				<ui:remove>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentNote}:123" /></td>
+					<td class="ControlCell"><t:inputTextarea maxlength="255"
+							rows="6" cols="40"
+							value="#{projectInformationCompletationViewBean.picDocumentAdm.note}"
+							onkeypress="return textArea(this, 255)"
+							styleClass="editbox_form2" id="note" /></td>
+				</tr>
+				</ui:remove>
+				
+				<tr>
+					<td colspan="2" style="text-align: center;"><h:commandButton
+							value="#{msg.uploadFile}" styleClass="button3"
+							action="#{projectInformationCompletationViewBean.SavePicDocumentAdm}"
+							reRender="FormPanel"
+							onclick="#{rich:component('documentPanel2')}.hide();" /> <a4j:commandButton
+							value="#{msg.cancel}" styleClass="button" immediate="false"
+							onclick="#{rich:component('documentPanel2')}.hide();return false;" /></td>
+				</tr>
+			</table>
+			
+			
+		</rich:modalPanel>
+	</ui:define>
+
+	
+	
+	<ui:define name="delete_panels">
+		<rich:modalPanel id="validatePanel" autosized="true" width="300">
+			<f:facet name="header">
+				<h:outputText id="durationError"
+					value="#{projectInformationCompletationViewBean.durationError}"
+					align="center" />
+			</f:facet>	
+			
+	
+			<h:form>
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.yes}" ajaxSingle="true" styleClass="button"
+									action="#{projectInformationCompletationViewBean.SaveEntity}" />
+							</td>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.no}" styleClass="button"
+									oncomplete="#{rich:component('validatePanel')}.hide(); return false;" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</h:form>
+		</rich:modalPanel>
+		<rich:modalPanel id="deletePanel" autosized="true" width="200">
+			<f:facet name="header">
+				<h:outputText id="decreaseError"
+					value="#{projectInformationCompletationViewBean.decreaseError}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+
+			</f:facet>
+			<h:form>
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.yes}" ajaxSingle="true" styleClass="button"
+									action="#{projectInformationCompletationViewBean.SaveEntity}"
+									oncomplete="#{rich:component('deletePanel')}.hide();"
+									reRender="FormPanel" /></td>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.cancel}" styleClass="button"
+									onclick="#{rich:component('deletePanel')}.hide();return false;" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</h:form>
+		</rich:modalPanel>
+		<rich:modalPanel id="budgetEditPanel" autosized="true" width="200">
+			<f:facet name="header">
+				<h:outputText id="budgetEdit" value="#{msg.budgetEditQuestion}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+
+			</f:facet>
+			<h:form>
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.yes}" ajaxSingle="true" styleClass="button"
+									action="#{projectInformationCompletationViewBean.SaveEntityBudetEdit}"
+									oncomplete="#{rich:component('deletePanel')}.hide();"
+									reRender="FormPanel" /></td>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.no}" ajaxSingle="true" styleClass="button"
+									action="#{projectInformationCompletationViewBean.SaveEntity}"
+									oncomplete="#{rich:component('deletePanel')}.hide();"
+									reRender="FormPanel" /></td>
+						</tr>
+					</tbody>
+				</table>
+			</h:form>
+		</rich:modalPanel>
+	</ui:define>
+</ui:composition>

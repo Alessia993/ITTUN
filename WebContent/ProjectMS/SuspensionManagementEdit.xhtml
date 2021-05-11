@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/EditBase.xhtml">
+	<ui:param name="heading" value="#{msg.notRegularEditTableName}" />
+	<ui:param name="heading_top" value="#{msg.notRegularEditPageName}" />
+	<ui:param name="headWidth" value="99%" />
+
+	<ui:define name="edit_body">
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+			<table width="50%" class="forms" border="0" cellpadding="1"
+				cellspacing="1">
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.suspensionManagementEditTotAmountEliglExpRetired}:" /><span class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText maxlength="12"
+							converter="floatConverter" validator="#{validator.isFloat92}"
+							onkeypress="return decimalonly(this, event)"
+							onkeyup="checkdecimal(this)" styleClass="editbox_form"
+							required="true" id="totAmountEliglExpRetired"
+							value="#{suspensionManagementEditBean.durCostDefinition.totAmountEliglExpRetired}" />
+					</td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.suspensionManagementEditTotAmountPublExpRetired}:" /><span class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText maxlength="12"
+							converter="floatConverter" validator="#{validator.isFloat92}"
+							onkeypress="return decimalonly(this, event)"
+							onkeyup="checkdecimal(this)" styleClass="editbox_form"
+							required="true" id="totAmountPublExpRetired"
+							value="#{suspensionManagementEditBean.durCostDefinition.totAmountPublExpRetired}" />
+					</td>
+				</tr>
+				
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.suspensionManagementEditTotAmountEligExpSuspended}:" /><span class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText maxlength="12"
+							converter="floatConverter" validator="#{validator.isFloat92}"
+							onkeypress="return decimalonly(this, event)"
+							onkeyup="checkdecimal(this)" styleClass="editbox_form"
+							required="true" id="totAmountEligExpSuspended"
+							value="#{suspensionManagementEditBean.durCostDefinition.totAmountEligExpSuspended}" />
+					</td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.suspensionManagementEditTotAmountPublExpSuspended}:" /><span class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText maxlength="12"
+							converter="floatConverter" validator="#{validator.isFloat92}"
+							onkeypress="return decimalonly(this, event)"
+							onkeyup="checkdecimal(this)" styleClass="editbox_form"
+							required="true" id="totAmountPublExpSuspended"
+							value="#{suspensionManagementEditBean.durCostDefinition.totAmountPublExpSuspended}" />
+					</td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.recoveryManagementTotAmountEligExpToBeWithdrawn}:" /><span class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText maxlength="12"
+							converter="floatConverter" validator="#{validator.isFloat92}"
+							onkeypress="return decimalonly(this, event)"
+							onkeyup="checkdecimal(this)" styleClass="editbox_form"
+							required="true" id="totAmountEligExpToBeWithdrawn"
+							value="#{suspensionManagementEditBean.durCostDefinition.totAmountEligExpToBeWithdrawn}" />
+					</td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.recoveryManagementTotAmountPublExpToBeWithdrawn}:" /><span class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText maxlength="12"
+							converter="floatConverter" validator="#{validator.isFloat92}"
+							onkeypress="return decimalonly(this, event)"
+							onkeyup="checkdecimal(this)" styleClass="editbox_form"
+							required="true" id="totAmountPublExpToBeWithdrawn"
+							value="#{suspensionManagementEditBean.durCostDefinition.totAmountPublExpToBeWithdrawn}" />
+					</td>
+				</tr>
+			</table>
+
+
+			<div class="btn_line">
+				<table>
+					<tr>
+						<td><a4j:commandButton immediate="false"
+								action="#{suspensionManagementEditBean.Page_Save}" reRender="pagePanel"
+								 styleClass="button2"
+								value="#{msg.save}" id="save" /></td>
+						<td><a4j:commandButton value="#{msg.cancel}"
+								styleClass="button2" immediate="true"
+								action="#{suspensionManagementEditBean.GoBack}" /></td>
+					</tr>
+				</table>
+			</div>
+
+		</a4j:outputPanel>
+	</ui:define>
+
+
+</ui:composition>
+

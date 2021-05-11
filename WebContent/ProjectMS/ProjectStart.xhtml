@@ -1,0 +1,423 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/EditBase.xhtml">
+	<ui:param name="headWidth" value="70%" />
+	<ui:param name="heading" value="#{msg.projectEditPageName}" />
+	<ui:param name="heading_top" value="#{msg.createOrManageProjects}" />
+	<ui:define name="script_body">
+		<script type="text/javascript">
+			function checkSpecificGoal(){
+				var specificGoal = document.getElementById("EditForm:specificgoals");
+				if(specificGoal.value!=null){
+					return true;
+				}
+				
+				return false;
+			}
+		</script>
+
+	</ui:define>
+	<ui:define name="edit_body">
+
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+			<table class="forms" border="0" cellpadding="1" cellspacing="1"
+				width="90%">
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.projectCode}:" /> <span class="RequiredFieldMarker">*</span>
+					</td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="true"
+							id="code" value="#{projectStartBean.code}"
+							disabled="#{!(projectStartBean.canEdit and projectStartBean.editMode)}"
+							rendered="#{projectStartBean.canEdit}"
+							validator="#{validator.checkProjectCodeStart}" maxlength="20" />
+						<b><t:outputText rendered="#{!projectStartBean.canEdit}"
+								value="#{projectStartBean.code}">
+							</t:outputText></b></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.projectTitle}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+							disabled="#{!(projectStartBean.canEdit and projectStartBean.editMode)}"
+							rendered="#{projectStartBean.canEdit}" required="true" id="title"
+							value="#{projectStartBean.title}" maxlength="250" /> <b><t:outputText
+								rendered="#{!projectStartBean.canEdit}"
+								value="#{projectStartBean.title}">
+							</t:outputText></b></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.projectDescription}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+							disabled="#{!(projectStartBean.canEdit and projectStartBean.editMode)}"
+							rendered="#{projectStartBean.canEdit}" required="true" id="description"
+							value="#{projectStartBean.description}" maxlength="250" /> <b><t:outputText
+								rendered="#{!projectStartBean.canEdit}"
+								value="#{projectStartBean.description}">
+							</t:outputText></b></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.projectDescriptionEng}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+							disabled="#{!(projectStartBean.canEdit and projectStartBean.editMode)}"
+							rendered="#{projectStartBean.canEdit and projectStartBean.projectTypology ne '3'}" required="true" id="descriptionEng"
+							value="#{projectStartBean.descriptionEng}" maxlength="250" /> <b><t:outputText
+								rendered="#{!projectStartBean.canEdit}"
+								value="#{projectStartBean.descriptionEng}">
+							</t:outputText></b></td>
+				</tr>			
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.projectTypology}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:selectOneMenu id="types"
+							value="#{projectStartBean.projectTypology}"
+							onmousedown="collapse(this);" onblur="expand(this);"
+							disabled="#{!(projectStartBean.canEdit and projectStartBean.editMode)}"
+							rendered="#{projectStartBean.canEdit}"
+							enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="true"
+							styleClass="DropDown" validator="#{validator.checkEmpty}"
+							onchange="submit()" valueChangeListener="#{projectStartBean.typologyChange}">
+							<f:selectItems value="#{projectStartBean.listTypologies}" />
+						</t:selectOneMenu> <b><t:outputText rendered="#{!projectStartBean.canEdit}"
+								value="#{projectStartBean.currentProject.typology.value}">
+							</t:outputText></b></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.projectAsse}:" /> <span class="RequiredFieldMarker">*</span>
+					</td>
+					<td class="ControlCell"><t:selectOneMenu id="asse"
+							onmousedown="collapse(this);" onblur="expand(this);"
+							value="#{projectStartBean.asse}" required="true"
+							rendered="#{projectStartBean.canEdit}" styleClass="DropDown"
+							onchange="submit()" valueChangeListener="#{projectStartBean.asseChange}">
+							<f:selectItems value="#{projectStartBean.listAsses}" />
+						</t:selectOneMenu> <b><t:outputText rendered="#{!projectStartBean.canEdit}"
+								value="#{projectStartBean.currentProject.asse}">
+							</t:outputText></b></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.projectSpecificGoal}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell">
+						<div style="width: 252px; overflow: hidden;">
+							<t:selectOneMenu id="specificgoals" onmousedown="collapse(this);"
+								onblur="expand(this);" value="#{projectStartBean.specificGoal}"
+								disabled="#{!(projectStartBean.canEdit and projectStartBean.editMode) and projectStartBean.asse==SelectItemHelper.first.value}"
+								required="true" rendered="#{projectStartBean.canEdit}"
+								styleClass="DropDown" onchange="submit()" valueChangeListener="#{projectStartBean.specificGoalChange}"
+								enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W">
+								<f:selectItems value="#{projectStartBean.listSpecificGoals}" />
+							</t:selectOneMenu>
+						</div> <b><t:outputText rendered="#{!projectStartBean.canEdit}"
+								value="#{projectStartBean.currentProject.specificGoal.code} #{projectStartBean.currentProject.specificGoal.value}">
+							</t:outputText></b>
+					</td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.projectExpectedResults}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+							disabled="#{!(projectStartBean.canEdit and projectStartBean.editMode)}"
+							rendered="#{projectStartBean.canEdit and projectStartBean.projectTypology ne '3'}" required="true" id="expectedResults"
+							value="#{projectStartBean.expectedResults}" maxlength="250" /> <b><t:outputText
+								rendered="#{!projectStartBean.canEdit}"
+								value="#{projectStartBean.expectedResults}">
+							</t:outputText></b></td>
+				</tr>	
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.projectMacroStrategy}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:selectOneMenu
+							id="macroStrategies"
+							value="#{projectStartBean.macroStrategyCode}"
+							disabled="#{!(projectStartBean.canEdit and projectStartBean.editMode)}"
+rendered="#{projectStartBean.canEdit and projectStartBean.projectTypology ne '3'}"							
+enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="true"
+							styleClass="DropDown" validator="#{validator.checkEmpty}">
+							<f:selectItems value="#{projectStartBean.listMacroStrategy}" />
+						</t:selectOneMenu> <b> <t:outputText rendered="#{!projectStartBean.canEdit}"
+								value="#{projectStartBean.macroStrategyDescription}">
+							</t:outputText>
+					</b></td>
+				</tr>				
+							
+				
+				<ui:remove>
+				<tr style="display: #{projectStartBean.asse!='4'?'':'none'}">
+					<td class="LabelCell"><t:outputText
+							value="#{msg.projectThematicGoal}:" /> <span
+						class="RequiredFieldMarker"
+						style="display: #{projectStartBean.asse!='4'?'':'none'}">*</span></td>
+					<td class="ControlCell">
+						<div style="width: 252px; overflow: hidden;">
+							<t:selectOneMenu id="thematicgoals"
+								value="#{projectStartBean.thematicGoal}"
+								disabled="#{!(projectStartBean.canEdit and projectStartBean.editMode) and projectStartBean.specificGoal==SelectItemHelper.first.value}"
+								required="#{(projectStartBean.asse=='4' )? 'false':'true'}"
+								onblur="expand(this);" onmousedown="collapse(this);"
+								onchange="submit();"
+								valueChangeListener="#{projectStartBean.thematicGoalChange}"
+								rendered="#{projectStartBean.canEdit}"
+								enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" layout="pageDirection"
+								styleClass="DropDown">
+								<f:selectItems value="#{projectStartBean.listThematicGoals}" />
+							</t:selectOneMenu>
+						</div> <b><t:outputText rendered="#{!projectStartBean.canEdit}"
+								value="#{projectStartBean.currentProject.thematicGoal.thematic_object}">
+							</t:outputText></b>
+					</td>
+				</tr>
+				</ui:remove>
+				<ui:remove>
+				<tr style="display: #{projectStartBean.asse!='4'?'':'none'}">
+					<td class="LabelCell"><t:outputText
+							value="#{msg.projectPriorityInvestment}:" /> <span
+						class="RequiredFieldMarker"
+						style="display: #{projectStartBean.asse!='4'?'':'none'}">*</span></td>
+					<td class="ControlCell">
+						<div style="width: 252px; overflow: hidden;">
+							<t:selectOneMenu onmousedown="collapse(this);"
+								onchange="expand(this);" onblur="expand(this);"
+								id="priorityinvestment"
+								value="#{projectStartBean.priorityInvestment}"
+								disabled="#{!(projectStartBean.canEdit and projectStartBean.editMode)}"
+								rendered="#{projectStartBean.canEdit}"
+								enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W"
+								required="#{(projectStartBean.asse=='4')? 'false':'true'}"
+								layout="pageDirection" styleClass="DropDown"
+								>
+								<f:selectItems
+									value="#{projectStartBean.listPriorityInvestments}" />
+							</t:selectOneMenu>
+						</div> <b><t:outputText rendered="#{!projectStartBean.canEdit}"
+								value="#{projectStartBean.currentProject.prioritaryGoal.priority_investment}">
+							</t:outputText></b>
+					</td>
+				</tr>
+				</ui:remove>
+
+				<ui:remove>
+					<tr>
+						<td class="LabelCell"><t:outputText
+								value="#{msg.projectQSNGoal}:" /> <span
+							class="RequiredFieldMarker">*</span></td>
+						<td class="ControlCell">
+							<div style="width: 252px; overflow: hidden;">
+								<t:selectOneMenu id="qsngoals"
+									value="#{projectStartBean.qsnGoal}"
+									onmousedown="collapse(this);" onchange="expand(this);"
+									onblur="expand(this);"
+									disabled="#{!(projectStartBean.canEdit and projectStartBean.editMode)}"
+									rendered="#{projectStartBean.canEdit}"
+									enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="true"
+									layout="pageDirection" styleClass="DropDown">
+									<f:selectItems value="#{projectStartBean.listQSNGoals}" />
+								</t:selectOneMenu>
+							</div> <b><t:outputText rendered="#{!projectStartBean.canEdit}"
+									value="#{projectStartBean.currentProject.qsnGoal.codeSpecificObjective} #{projectStartBean.currentProject.qsnGoal.specificObjectiveDescription}">
+								</t:outputText></b>
+						</td>
+					</tr>
+				</ui:remove>
+				
+				<ui:remove>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.projectProirityThema}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><div
+							style="width: 252px; overflow: hidden;">
+							<t:selectOneMenu onmousedown="collapse(this);"
+								onchange="expand(this);" onblur="expand(this);"
+								id="priorreasons" value="#{projectStartBean.priorReasons}"
+								disabled="#{!(projectStartBean.canEdit and projectStartBean.editMode)}"
+								rendered="#{projectStartBean.canEdit}"
+								enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="true"
+								styleClass="DropDown">
+								<f:selectItems value="#{projectStartBean.listProritaryReasons}" />
+							</t:selectOneMenu>
+						</div> <b><t:outputText rendered="#{!projectStartBean.canEdit}"
+								value="#{projectStartBean.currentProject.prioritaryReason.code}.#{projectStartBean.currentProject.prioritaryReason.priorityIssues}">
+							</t:outputText></b></td>
+				</tr>
+				</ui:remove>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.projectActivationProcedure}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:selectOneMenu id="actprocedure"
+							value="#{projectStartBean.activationProcedure}"
+							disabled="#{!(projectStartBean.canEdit and projectStartBean.editMode)}"
+							rendered="#{projectStartBean.canEdit}"
+							enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="true"
+							styleClass="DropDown">
+							<f:selectItems
+								value="#{projectStartBean.listActivationProcedures}" />
+						</t:selectOneMenu> <b><t:outputText rendered="#{!projectStartBean.canEdit}"
+								value="#{projectStartBean.currentProject.activationProcedure.code}">
+							</t:outputText></b></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.projectCUP}:" />
+						<span class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><div
+							style="width: 252px; overflow: hidden;">
+							<t:selectOneMenu onmousedown="collapse(this);"
+								onblur="expand(this);" id="cupL1"
+								value="#{projectStartBean.cupLevel1}" onchange="submit()"
+								disabled="#{!(projectStartBean.canEdit and projectStartBean.editMode)}"
+								rendered="#{projectStartBean.canEdit}"
+								enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="true"
+								styleClass="DropDown"
+								valueChangeListener="#{projectStartBean.cupL1Changed}">
+								<f:selectItems value="#{projectStartBean.listCUPLevel1}" />
+							</t:selectOneMenu>
+						</div> <b><t:outputText rendered="#{!projectStartBean.canEdit}"
+								value="#{projectStartBean.currentProject.cup.parent.parent.value}">
+							</t:outputText></b></td>
+				</tr>
+				<tr style="display: #{projectStartBean.level2CupVisibility}">
+					<td class="LabelCell"><t:outputText
+							value="#{msg.projectCUP2}:" /> <span class="RequiredFieldMarker">*</span>
+					</td>
+					<td class="ControlCell"><div
+							style="width: 252px; overflow: hidden;">
+							<t:selectOneMenu onmousedown="collapse(this);"
+								onblur="expand(this);" id="cupL2"
+								value="#{projectStartBean.cupLevel2}" onchange="submit()"
+								disabled="#{!(projectStartBean.canEdit and projectStartBean.editMode)}"
+								rendered="#{projectStartBean.canEdit}"
+								enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="true"
+								styleClass="DropDown"
+								valueChangeListener="#{projectStartBean.cupL2Changed}">
+								<f:selectItems value="#{projectStartBean.listCUPLevel2}" />
+							</t:selectOneMenu>
+						</div> <b><t:outputText rendered="#{!projectStartBean.canEdit}"
+								value="#{projectStartBean.currentProject.cup.parent.value}">
+							</t:outputText></b></td>
+				</tr>
+				<tr style="display: #{projectStartBean.level3CupVisibility}">
+					<td class="LabelCell"><t:outputText
+							value="#{msg.projectCUP3}:" /> <span class="RequiredFieldMarker">*</span>
+					</td>
+					<td class="ControlCell"><div
+							style="width: 252px; overflow: hidden;">
+							<t:selectOneMenu onmousedown="collapse(this);"
+								onchange="expand(this);" onblur="expand(this);" id="cup"
+								value="#{projectStartBean.cup}"
+								disabled="#{!(projectStartBean.canEdit and projectStartBean.editMode)}"
+								rendered="#{projectStartBean.canEdit}"
+								enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="true"
+								styleClass="DropDown">
+								<f:selectItems value="#{projectStartBean.listCUP}" />
+							</t:selectOneMenu>
+						</div> <b><t:outputText rendered="#{!projectStartBean.canEdit}"
+								value="#{projectStartBean.currentProject.cup.value}">
+							</t:outputText></b></td>
+				</tr>
+				<ui:remove>
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.projectCPT}:" />
+						<span class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:selectOneMenu id="cpt"
+							value="#{projectStartBean.cpt}"
+							disabled="#{!(projectStartBean.canEdit and projectStartBean.editMode)}"
+							rendered="#{projectStartBean.canEdit}"
+							enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="false"
+							styleClass="DropDown">
+							<f:selectItems value="#{projectStartBean.listCPT}" />
+						</t:selectOneMenu> <b><t:outputText rendered="#{!projectStartBean.canEdit}"
+								value="#{projectStartBean.currentProject.cpt.value}">
+							</t:outputText></b></td>
+				</tr>
+				</ui:remove>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.projectOrganization}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" disabled="true"
+							rendered="#{projectStartBean.canEdit}" id="organization"
+							value="#{projectStartBean.organization}" maxlength="250" /> <b><t:outputText
+								rendered="#{!projectStartBean.canEdit}"
+								value="#{projectStartBean.organization}">
+							</t:outputText></b></td>
+				</tr>
+				<tr>
+
+					<td class="LabelCell"><t:outputText
+							value="#{msg.projectSustainDate}" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td><t:div
+							disabled="#{!(projectStartBean.canEdit and projectStartBean.editMode)}"
+							rendered="#{projectStartBean.canEdit}">
+							<rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+								id="docSustainDate" required="true" inputClass="editbox_form2"
+								converter="dateTimeConverter"
+								value="#{projectStartBean.sustainDate}" datePattern="dd/MM/yyyy">
+							</rich:calendar>
+						</t:div> <b> <t:outputText rendered="#{!projectStartBean.canEdit}"
+								value="#{projectStartBean.sustainDate}"
+								converter="dateTimeConverter" />
+					</b></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.projectImplementingTool}:" /> <span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:selectOneMenu
+							id="implementingTools"
+							value="#{projectStartBean.implementingToolCode}"
+							disabled="#{!(projectStartBean.canEdit and projectStartBean.editMode)}"
+							rendered="#{projectStartBean.canEdit}"
+							enabledOnUserRole="ROLE_STC_W,ROLE_AGU_W" required="true"
+							styleClass="DropDown" validator="#{validator.checkEmpty}">
+							<f:selectItems value="#{projectStartBean.listImplementingTool}" />
+						</t:selectOneMenu> <b> <t:outputText rendered="#{!projectStartBean.canEdit}"
+								value="#{projectStartBean.implementingToolDescription}">
+							</t:outputText>
+					</b></td>
+				</tr>
+			</table>
+
+			<div class="btn_line">
+				<table>
+					<tr>
+						<td><a4j:commandButton immediate="false"
+								action="#{projectStartBean.Page_Save}" reRender="pagePanel"
+								rendered="#{projectStartBean.hasRights and projectStartBean.canEdit and projectStartBean.editMode}"
+								styleClass="button2" value="#{msg.save}" id="save" /></td>
+						<td><a4j:commandButton value="#{msg.cancel}"
+								styleClass="button2" immediate="true"
+								action="#{projectStartBean.GoBack}" /></td>
+					</tr>
+				</table>
+			</div>
+
+		</a4j:outputPanel>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,293 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ListBase.xhtml">
+	<ui:param name="heading" value="#{msg.notRegularPageName}" />	
+
+	<ui:define name="list_body">
+	<fieldset style="margin: 10px; width: auto;">
+	<table width="100%">
+		<tr>
+			<td>
+			<table>
+				<tr>
+					<td><div style="background-color:#FFDDDD; border:1px solid #CCCCCC; display:block; height:20px; width:20px;"></div></td>
+						<td>-<h:outputText value=" #{msg.notRegularSituations}." /></td>
+				</tr>
+			</table>
+			</td>
+		</tr>
+	</table>
+	</fieldset>
+		<a4j:outputPanel ajaxRendered="false" id="FormPanel">
+			
+			<div class="table_container">
+			<t:dataTable
+				style="margin:0 auto; width: 80%;"
+				rows="#{notRegularListBean.itemsPerPage}" id="table" var="item"
+				value="#{notRegularListBean.list}" styleClass="form_table"
+				rowClasses="row_table_n,row_table_g">
+
+				<f:facet name="header">
+					<t:column>						
+						<h:outputText value="#{msg.notRegularTableName2}" />
+						<h:selectOneMenu id="itemPP" styleClass="headerPanelSelect"
+							value="#{notRegularListBean.itemsPerPage}">
+							<f:selectItems value="#{notRegularListBean.itemsPerPageList}" />
+							<a4j:support event="onchange" reRender="FormPanel" />
+						</h:selectOneMenu>
+					</t:column>
+				</f:facet>
+				<!-- Action columns -->				
+				
+				<!-- Show column -->
+					
+				<!-- <sec:ifAnyGranted roles="ROLE_AGU_R,ROLE_AGU_W">
+				<t:column id="show" style="#{item.style}" rendered="#{!empty notRegularListBean.list}"
+					styleClass="ActionColumn" headerstyleClass="ActionColumn">
+					<a4j:commandLink ajaxSingle="true" id="showlink"
+							title="#{msg.show}" action="#{notRegularListBean.showItem}">
+							<h:graphicImage alt="#{msg.show}" value="/images/ok.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{item.id}"
+								target="#{notRegularListBean.entityEditId}" />
+					</a4j:commandLink>
+				</t:column>
+				</sec:ifAnyGranted> -->
+				
+				<!-- Edit column -->
+				
+				<sec:ifAnyGranted roles="ROLE_ACU_W, ROLE_AGU_W">
+				<t:column id="select" styleClass="ActionColumn"
+					rendered="#{!empty notRegularListBean.list}">
+					<t:selectBooleanCheckbox value="#{item.selected}" disabled="#{(item.durNotRegularIsRecoverable != null)}">
+						<a4j:support event="onclick" id="addToCache"
+							action="#{notRegularListBean.addToCache}" />
+					</t:selectBooleanCheckbox>
+				</t:column>
+				<!--<t:column id="edit" rendered="#{!empty notRegularListBean.list}"
+					styleClass="ActionColumn" headerstyleClass="ActionColumn">
+					<a4j:commandLink ajaxSingle="true" id="editlink"
+							title="#{msg.edit}" action="#{notRegularListBean.editEntity}">
+							<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{item.id}"
+								target="#{notRegularListBean.entityEditId}" />
+					</a4j:commandLink>
+				</t:column>
+				-->
+				</sec:ifAnyGranted>		
+				
+				<!-- Info columns -->		
+				
+				<t:column styleClass="StringColumn" rendered="#{!empty notRegularListBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.notRegularListProject}"></t:outputText>
+					</f:facet>	
+					<t:outputText value="#{item.project.title}" />				
+				</t:column>
+				
+				<t:column styleClass="StringColumn" rendered="#{!empty notRegularListBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.notRegularListBeneficiary}"></t:outputText>
+					</f:facet>	
+					<t:outputText value="#{item.durPartnerName}" />				
+				</t:column>
+				
+				<t:column styleClass="NumberColumn" rendered="#{!empty notRegularListBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.notRegularListDDRNumber}" />
+					</f:facet>
+					<t:outputText value="#{item.durNumberTransient}" />
+				</t:column>
+				
+				<t:column styleClass="NumberColumn" rendered="#{!empty notRegularListBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.notRegularListProgressiveId}" />
+					</f:facet>
+					<t:outputText value="#{item.progressiveId}" />
+				</t:column>
+				
+				<t:column styleClass="StringColumn" rendered="#{!empty notRegularListBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.notRegularListCostItemValue}"></t:outputText>
+					</f:facet>	
+					<t:outputText value="#{item.costItem.value}" />				
+				</t:column>
+				
+				<t:column styleClass="StringColumn" rendered="#{!empty notRegularListBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.notRegularListLastCertifiedAmount}"></t:outputText>
+					</f:facet>
+					<t:outputText converter="moneyConverter" value="#{item.lastCertifiedAmount}"></t:outputText>
+				</t:column>
+				
+				<t:column styleClass="StringColumn" rendered="#{!empty notRegularListBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.notRegularListIssueNumberRecovery}"></t:outputText>
+					</f:facet>
+					<t:outputText value="#{item.durRecoveryActNumber}"></t:outputText>
+				</t:column>
+				
+				<t:column styleClass="StringColumn" rendered="#{!empty notRegularListBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.notRegularListActRecovery}"></t:outputText>
+					</f:facet>
+					<t:outputText converter="dateTimeConverter" value="#{item.durRecoveryActDate}"></t:outputText>
+				</t:column>
+				
+				<t:column styleClass="StringColumn" rendered="#{!empty notRegularListBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.notRegularListRecoveryReason}"></t:outputText>
+					</f:facet>	
+					<t:outputText value="#{item.durRecoveryReasonValue}" />				
+				</t:column>
+				
+				<t:column styleClass="StringColumn" rendered="#{!empty notRegularListBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.notRegularListRecoveryCost}"></t:outputText>
+					</f:facet>
+					<t:outputText converter="moneyConverter" value="#{item.costRecovery}"></t:outputText>
+				</t:column>
+				
+				<t:column styleClass="StringColumn" rendered="#{!empty notRegularListBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.notRegularListAmountOfPublicSupport}"></t:outputText>
+					</f:facet>
+					<t:outputText converter="moneyConverter" value="#{item.durAmountOfPublicSupport}"></t:outputText>
+				</t:column>
+				<ui:remove>
+				<t:column styleClass="StringColumn" rendered="#{!empty notRegularListBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.notRegularListTotalEligibleCost}"></t:outputText>
+					</f:facet>
+					<t:outputText converter="moneyConverter" value="#{item.durTotalEligibleCost}"></t:outputText>
+				</t:column>
+				</ui:remove>
+				<t:column styleClass="StringColumn" rendered="#{!empty notRegularListBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.notRegularListAmountPublicSupportReimbursed}"></t:outputText>
+					</f:facet>
+					<t:outputText converter="moneyConverter" value="#{item.durAmountPublicSupportReimbursed}"></t:outputText>
+				</t:column>
+				<ui:remove>
+				<t:column styleClass="StringColumn" rendered="#{!empty notRegularListBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.notRegularListTotalEligibleEmpenditurePublicSupportReimbursed}"></t:outputText>
+					</f:facet>
+					<t:outputText converter="moneyConverter" value="#{item.durTotEligibleExpensesPublicSupportReimbursed}"></t:outputText>
+				</t:column>
+				</ui:remove>
+				
+				<t:column styleClass="DateColumn" rendered="#{!empty notRegularListBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.notRegularListReimbursementDate}" />
+					</f:facet>
+					<t:outputText converter="dateTimeConverter" value="#{item.durRecoveryReimbursementDateFromBeneficiary}" />
+				</t:column>
+				
+				<t:column styleClass="StringColumn" rendered="#{!empty notRegularListBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.notRegularListSustainImport}"></t:outputText>
+					</f:facet>
+					<t:outputText converter="moneyConverter" value="#{item.durRecoverySustainImport}"></t:outputText>
+				</t:column>
+				<ui:remove>
+				<t:column styleClass="StringColumn" rendered="#{!empty notRegularListBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.notRegularListTotalEligibleExpenditureOfNonRecoverablePublicSupport}"></t:outputText>
+					</f:facet>
+					<t:outputText converter="moneyConverter" value="#{item.totEligibleExpensesPublicSupportNonRecoverable}"></t:outputText>
+				</t:column>
+				</ui:remove>
+				<!-- Info columns -->
+				<!-- 
+				<t:column styleClass="DateColumn" style="#{item.style}" rendered="#{!empty notRegularListBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.durCompilationListHeaderCompilationDate}" />
+					</f:facet>
+					<t:outputText converter="dateTimeConverter" value="#{item.compilationDate}" />
+				</t:column>
+				<t:column styleClass="NumberColumn" style="#{item.style}" rendered="#{!empty notRegularListBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.durCompilationListHeaderProtocolN}" />
+					</f:facet>
+					<t:outputText value="#{item.protocolNumber}" />
+				</t:column>
+				<t:column styleClass="NumberColumn" style="#{item.style}" rendered="#{!empty notRegularListBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.durCompilationListHeaderRowNumber}" />
+					</f:facet>
+					<t:outputText value="#{item.rowNumber}" />
+				</t:column>
+				<t:column styleClass="StringColumn" style="#{item.style}" rendered="#{!empty notRegularListBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.durCompilationListHeaderSumAmount}"></t:outputText>
+					</f:facet>
+					<t:outputText converter="moneyConverter" value="#{item.sumAmoutCertification}"></t:outputText>
+				</t:column>
+				
+				<t:column styleClass="StringColumn" rendered="#{empty notRegularListBean.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.noData}"></t:outputText>
+					</f:facet>					
+				</t:column> -->
+				
+			</t:dataTable>
+				<!-- End of info columns -->
+			</div>
+			 <a4j:outputPanel styleClass="scrollerPanel">
+				<t:dataScroller id="scroll_1" styleClass="scroller" for="table"
+					fastStep="10" pageCountVar="pageCount" pageIndexVar="pageIndex"
+					paginator="true" paginatorMaxPages="5" paginatorColumnClass="page"
+					paginatorActiveColumnClass="page_active" immediate="true"
+					rendered="#{notRegularListBean.showScroll}">
+					<f:facet name="first">
+						<t:graphicImage alt="#{msg.first}" url="../images/back_end.gif"  border="1" />
+					</f:facet>
+					<f:facet name="last">
+						<t:graphicImage alt="#{msg.last}" url="../images/forward_end.gif" border="1" />
+					</f:facet>
+					<f:facet name="previous">
+						<t:graphicImage alt="#{msg.previous}" url="../images/back.gif" border="1" />
+					</f:facet>
+					<f:facet name="next">
+						<t:graphicImage alt="#{msg.next}" url="../images/forward.gif" border="1" />
+					</f:facet>
+					<f:facet name="fastforward">
+						<t:graphicImage alt="#{msg.fastforward}" url="../images/all_forward.gif" border="1" />
+					</f:facet>
+					<f:facet name="fastrewind">
+						<t:graphicImage alt="#{msg.fastrewind}" url="../images/all_back.gif" border="1" />
+					</f:facet>
+				</t:dataScroller>
+			</a4j:outputPanel>
+		</a4j:outputPanel>
+		<table width="100%">
+				<sec:ifAnyGranted roles="ROLE_ACU_W, ROLE_AGU_W">
+					<tr>
+						<td style="text-align: center;">
+						<a4j:commandButton
+							value="#{msg.notRegularButtonTransformToRecoverable}" styleClass="button5"
+							rendered="#{!empty notRegularListBean.list}"
+							action="#{notRegularListBean.trToRecoverable}"
+							reRender="FormPanel" />
+							<a4j:commandButton
+							value="#{msg.notRegularButtonTransformToNotRecoverable}" styleClass="button5"
+							rendered="#{!empty notRegularListBean.list}"
+							action="#{notRegularListBean.trToNotRecoverable}"
+							reRender="FormPanel" />
+						</td>
+					</tr>
+				</sec:ifAnyGranted>
+			</table>
+	</ui:define>	
+
+</ui:composition>
+</html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ListBase.xhtml">
+	<ui:param name="heading" value="#{msg.projectListPageName}" />
+	<ui:define name="list_body">
+		<a4j:outputPanel ajaxRendered="false" id="FormPanel">
+			<fieldset style="margin: 10px auto; width: 80%;">
+				<table width="100%" class="forms">
+					<tr>
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.projectCode}:" /></td>
+						<td class="ControlCell" style="width: 25%;"><t:inputText
+								maxlength="255" styleClass="editbox_form" id="code"
+								value="#{searchBean.code}" /></td>
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.projectState}:" /></td>
+						<td class="ControlCell" style="width: 25%;"><t:selectOneMenu
+								id="state" value="#{searchBean.state}" styleClass="DropDown">
+								<f:selectItems value="#{searchBean.states}" />
+							</t:selectOneMenu></td>
+					</tr>
+					<tr>
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.projectTitle}:" /></td>
+						<td class="ControlCell" style="width: 25%;"><t:inputText
+								maxlength="255" styleClass="editbox_form" id="title"
+								value="#{searchBean.title}" /></td>
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.asse}:" /></td>
+						<td class="ControlCell" style="width: 25%;"><t:selectOneMenu
+								id="asse" value="#{searchBean.asse}" styleClass="DropDown">
+								<f:selectItems value="#{searchBean.asses}" />
+							</t:selectOneMenu></td>
+					</tr>
+					<tr>
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.projectInformationCompletationViewDefinitiveCUPCode}:" />
+						</td>
+						<td class="ControlCell" style="width: 25%;"><t:inputText
+								maxlength="255" styleClass="editbox_form" id="cupCode"
+								value="#{searchBean.cupCode}" /></td>
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.createFrom}:" /></td>
+						<td class="ControlCell" style="width: 25%;"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+								id="createFrom" inputClass="editbox_form2"
+								converter="dateTimeConverter" value="#{searchBean.createDateS}"
+								datePattern="dd/MM/yyyy">
+							</rich:calendar></td>
+					</tr>
+					<tr>
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.cfPartnerListTableName}:" /></td>
+						<td class="ControlCell" style="width: 25%;"><t:inputText
+								maxlength="255" styleClass="editbox_form" id="cfName"
+								value="#{searchBean.cfName}" /></td>
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.createTo}:" /></td>
+						<td class="ControlCell" style="width: 25%;"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+								id="createTo" inputClass="editbox_form2"
+								converter="dateTimeConverter" value="#{searchBean.createDateE}"
+								datePattern="dd/MM/yyyy">
+							</rich:calendar></td>
+					</tr>
+					<tr>
+						<td class="LabelCell" style="width: 25%;">#{msg.durFilter}:</td>
+						<td><t:selectOneMenu styleClass="DropDown"
+								value="#{searchBean.filterDURValue}">
+								<f:selectItems value="#{searchBean.filterDURValues}" />
+							</t:selectOneMenu></td>
+						<td class="LabelCell" style="width: 25%;">#{msg.budgetToValidate}:</td>
+						<td><t:selectBooleanCheckbox
+								value="#{searchBean.filterBudgetValidation}">
+							</t:selectBooleanCheckbox></td>
+					</tr>
+					<tr>
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.withCertifiableDurs}:"></t:outputText></td>
+						<td class="ControlCell" style="width: 25%;"><t:selectBooleanCheckbox
+								enabledOnUserRole="ROLE_ACU_W, ROLE_ACUM_W, ROLE_STC_W,ROLE_AGU_W,ROLE_AAU_W"
+								value="#{searchBean.withCertifiableDur}">
+							</t:selectBooleanCheckbox></td>
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								rendered="#{searchBean.canSearchACU}"
+								value="#{msg.acuCertifiable}:" /></td>
+						<td class="ControlCell" style="width: 25%;"><t:selectBooleanCheckbox
+								rendered="#{searchBean.canSearchACU}"
+								value="#{searchBean.filterACUCertifiable}" /></td>
+					</tr>
+					
+				<ui:remove>
+					<tr>
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								rendered="#{searchBean.canSearchDaei}"
+								value="#{msg.withCostDefValidateByDaei}:"></t:outputText></td>
+						<td class="ControlCell" style="width: 25%;"><t:selectBooleanCheckbox
+								rendered="#{searchBean.canSearchDaei}"
+								value="#{searchBean.withDaeiToCertCosts}">
+							</t:selectBooleanCheckbox></td>
+					</tr>
+				</ui:remove>
+
+					<tr>
+						<td colspan="4" class="btn_line"><a4j:commandButton
+								immediate="false" action="#{searchBean.search}"
+								reRender="FormPanel" styleClass="button2" value="#{msg.search}"
+								id="search" /> <a4j:commandButton value="#{msg.clear}"
+								styleClass="button2" immediate="false" reRender="FormPanel"
+								id="clear" action="#{searchBean.clear}" /></td>
+					</tr>
+				</table>
+			</fieldset>
+			<div class="table_container" style="width: 100%;">
+				<t:dataTable style="margin:0 auto; width: 80%;"
+					rows="#{searchBean.itemsPerPage}" id="table" var="project"
+					value="#{searchBean.list}" styleClass="form_table"
+					rowClasses="row_table_n,row_table_g">
+					<f:facet name="header">
+						<t:column>
+							<h:outputText value="#{msg.projectListTableName}" />
+							<h:selectOneMenu id="itemPP" styleClass="headerPanelSelect"
+								value="#{searchBean.itemsPerPage}">
+								<f:selectItems value="#{searchBean.itemsPerPageList}" />
+								<a4j:support event="onchange" reRender="FormPanel" />
+							</h:selectOneMenu>
+						</t:column>
+					</f:facet>
+
+					<!-- Action columns -->
+
+					<t:column id="show" styleClass="ActionColumn"
+						headerstyleClass="ActionColumn"
+						rendered="#{!empty searchBean.list}">
+						<a4j:commandLink ajaxSingle="true" id="showlink"
+							title="#{msg.show}" action="#{searchBean.selectProject}">
+							<h:graphicImage alt="#{msg.show}" value="/images/ok.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{project.id}"
+								target="#{searchBean.entityEditId}" />
+						</a4j:commandLink>
+					</t:column>
+					<sec:ifAnyGranted roles="ROLE_STC_W,ROLE_AGU_W">
+						<t:column id="edit" styleClass="ActionColumn"
+							rendered="#{!empty searchBean.list}"
+							headerstyleClass="ActionColumn">
+							<a4j:commandLink ajaxSingle="true" id="editlink"
+								rendered="#{project.editable and project.state.id!=3 and project.state.id!=4 and project.state.id!=5}"
+								title="#{msg.edit}" action="#{searchBean.editEntity}">
+								<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{project.id}"
+									target="#{searchBean.entityEditId}" />
+							</a4j:commandLink>
+						</t:column>
+						<t:column id="delete" rendered="#{!empty searchBean.list}"
+							styleClass="ActionColumn" headerstyleClass="ActionColumn">
+							<a4j:commandLink ajaxSingle="true" id="deletelink"
+								rendered="#{project.editable and project.state.id!=3 and project.state.id!=4 and project.state.id!=5}"
+								title="#{msg.delete}"
+								oncomplete="#{rich:component('deletePanel')}.show()">
+								<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{project.id}"
+									target="#{searchBean.entityDeleteId}" />
+							</a4j:commandLink>
+						</t:column>
+					</sec:ifAnyGranted>
+
+	
+					<sec:ifAnyGranted roles="ROLE_STC_W">
+						<t:column id="lock" styleClass="ActionColumn"
+							headerstyleClass="ActionColumn">
+							<a4j:commandLink ajaxSingle="true" id="locklink"
+								rendered="#{!project.locked}" title="#{msg.lock}"
+								action="#{searchBean.lockEntity}" reRender="table">
+								<h:graphicImage alt="#{msg.lock}" value="/images/lock.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{project.id}"
+									target="#{searchBean.entityEditId}" />
+							</a4j:commandLink>
+							<a4j:commandLink ajaxSingle="true" id="unlocklink"
+								rendered="#{project.locked}" title="#{msg.unlock}"
+								action="#{searchBean.unlockEntity}" reRender="table">
+								<h:graphicImage alt="#{msg.lock}" value="/images/unlock.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{project.id}"
+									target="#{searchBean.entityEditId}" />
+							</a4j:commandLink>
+						</t:column>
+					</sec:ifAnyGranted>
+			
+
+					<!-- Info columns -->
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty searchBean.list}">
+						<f:facet name="header">
+							<h:outputText value="#{msg.projectListTableAsse}" />
+						</f:facet>
+						<t:outputText value="#{project.asse}" />
+					</t:column>
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty searchBean.list}">
+						<f:facet name="header">
+							<h:outputText value="#{msg.specificGoal}" />
+						</f:facet>
+						<t:outputText value="#{project.specificGoal}" />
+					</t:column>
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty searchBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.projectDefinitiveCUPCode}">
+							</t:outputText>
+						</f:facet>
+						<t:outputText value="#{project.cupCode}" />
+					</t:column>
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty searchBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.projectListTableTitle}" />
+						</f:facet>
+						<t:outputText value="#{project.title}" />
+					</t:column>
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty searchBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.projectListTableState}" />
+						</f:facet>
+						<t:outputText value="#{project.state}" />
+					</t:column>
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty searchBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.projectListTableActProc}" />
+						</f:facet>
+						<t:outputText value="#{project.activationProcedure}" />
+					</t:column>
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty searchBean.list}">
+						<f:facet name="header">
+							<h:outputText value="#{msg.projectListTableCode}" />
+						</f:facet>
+						<t:outputText value="#{project.code}" />
+					</t:column>
+					<ui:remove>
+						<t:column styleClass="DateColumn"
+							rendered="#{!empty searchBean.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.projectListTableCreateDate}">
+								</t:outputText>
+							</f:facet>
+							<t:outputText value="#{project.createDate}">
+								<f:converter converterId="dateTimeConverter"></f:converter>
+							</t:outputText>
+						</t:column>
+					</ui:remove>
+					<t:column styleClass="StringColumn"
+						rendered="#{empty searchBean.list}">
+						<f:facet name="header">
+							<h:outputText value="#{msg.noData}" />
+						</f:facet>
+					</t:column>
+				</t:dataTable>
+				<!-- End of info columns -->
+			</div>
+			<a4j:outputPanel styleClass="scrollerPanel">
+				<t:dataScroller id="scroll_1" styleClass="scroller" for="table"
+					fastStep="10" pageCountVar="pageCount" pageIndexVar="pageIndex"
+					paginator="true" paginatorMaxPages="5" paginatorColumnClass="page"
+					paginatorActiveColumnClass="page_active" immediate="true"
+					binding="#{searchBean.scroller}"
+					rendered="#{searchBean.showScroll}">
+					<f:facet name="first">
+						<t:graphicImage alt="#{msg.first}" url="../images/back_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="last">
+						<t:graphicImage alt="#{msg.last}" url="../images/forward_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="previous">
+						<t:graphicImage alt="#{msg.previous}" url="../images/back.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="next">
+						<t:graphicImage alt="#{msg.next}" url="../images/forward.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="fastforward">
+						<t:graphicImage alt="#{msg.fastforward}"
+							url="../images/all_forward.gif" border="1" />
+					</f:facet>
+					<f:facet name="fastrewind">
+						<t:graphicImage alt="#{msg.fastrewind}"
+							url="../images/all_back.gif" border="1" />
+					</f:facet>
+				</t:dataScroller>
+			</a4j:outputPanel>
+		</a4j:outputPanel>
+	</ui:define>
+
+	<ui:define name="delete_panels">
+		<rich:modalPanel id="deletePanel" autosized="true" width="200">
+			<f:facet name="header">
+				<h:outputText value="#{msg.delete}?" style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+			</f:facet>
+			<h:form>
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.yes}" ajaxSingle="true" styleClass="button"
+									action="#{searchBean.deleteEntity}"
+									oncomplete="#{rich:component('deletePanel')}.hide();"
+									reRender="FormPanel" /></td>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.cancel}" styleClass="button"
+									onclick="#{rich:component('deletePanel')}.hide();return false;" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</h:form>
+		</rich:modalPanel>
+	</ui:define>
+
+</ui:composition>
+</html>

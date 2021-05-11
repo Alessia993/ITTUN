@@ -1,0 +1,1290 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ListBase.xhtml">
+	<ui:param name="heading" value="#{msg.validationFlow}" />
+	<ui:define name="list_body">
+		<script type="text/javascript">
+    function ajaxRequestContainsErrors() {
+        var result = document.getElementById("Common:maximumSeverity").value >= 2;
+        return result;
+    }
+
+    function highlightTextBoxes(result) {
+        var inputs = document.getElementsByTagName('input');
+        for (it = 0; it &lt; inputs.length; it++) {
+            var input = inputs[it];
+            if (input.id.indexOf('cilCheckAmountTb') != -1 ||
+                    input.id.indexOf('cilDate') != -1 || input.id.indexOf('cilCheckPublicAmount')!=-1  || input.id.indexOf('cilCheckPrivateAmount')!=-1 
+                    || input.id.indexOf('cilCheckAdditionalFinansingAmount')!=-1 || input.id.indexOf('cilCheckStateAidAmount')!=-1 
+                    || input.id.indexOf('cilCheckOutsideEligibleAreas')!=-1 || input.id.indexOf('cilCheckInkindContributions')!=-1 ) {
+                if (result) {
+                    input.style.background = '#ffe5e5';
+                    input.title = document.getElementById("Common:fieldError").value;
+                }
+                else {
+                    input.style.background = '#ffffff';
+                    input.title = "";
+                }
+            }
+        }
+    }
+
+    function showError(res) {
+        var tp = document.getElementById('FormList:outErrorTb');
+        if (tp != null) {
+            if (res) {
+                if (tp.textContent == null ||
+                        tp.textContent == "") {
+                    tp.textContent = document.getElementById("Common:defaultError").value;
+                }
+            }
+            else {
+                tp.textContent = "";
+            }
+        }
+    }
+</script>
+
+		<a4j:outputPanel styleClass="form_100" ajaxRendered="true"
+			id="FormPanel">
+			<fieldset style="margin: 10px; width: auto;">
+				<table style="margin: 10px;">
+					<ui:remove>
+					
+					<tr>
+						<td><t:selectOneRadio style="margin:5px;"
+								value="#{validationFlowViewBean.filterValueD}">
+								<f:selectItems value="#{validationFlowViewBean.filterValuesD}" />
+								<a4j:support event="onclick" id="filterValuesD"
+									reRender="FormPanel" />
+							</t:selectOneRadio></td>
+					</tr>
+					</ui:remove>
+					<tr>
+						<td><t:selectOneRadio style="margin:5px;"
+								value="#{validationFlowViewBean.filterValueCIL}">
+								<f:selectItems value="#{validationFlowViewBean.filterValuesCIL}" />
+								<a4j:support event="onclick" id="filterValuesCIL"
+									reRender="FormPanel" />
+							</t:selectOneRadio></td>
+					</tr>
+				</table>
+				<table width="100%" class="forms" style="margin-left: 5px;">
+				
+			
+					<tr>
+						<ui:remove><td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.costDefinitionValidationStatus}:" /></td>
+						<td style="width: 25%;"><t:selectOneMenu
+								styleClass="DropDown" 
+								value="#{validationFlowViewBean.filterValidationStatus}">
+								<f:selectItems
+									value="#{validationFlowViewBean.filterValidationStatusValues}" />
+							</t:selectOneMenu></td></ui:remove>
+							<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.costItem}:" /></td>
+						<td style="width: 25%;"><t:selectOneMenu
+								rendered="#{!validationFlowViewBean.asse3Mode}"
+								styleClass="DropDown"
+								value="#{validationFlowViewBean.filterCostItem}">
+								<f:selectItems
+									value="#{validationFlowViewBean.filterCostItemValues}" />
+							</t:selectOneMenu> <t:selectOneMenu rendered="#{validationFlowViewBean.asse3Mode}"
+								styleClass="DropDown"
+								value="#{validationFlowViewBean.selectedCostItemAsse3}">
+								<f:selectItems
+									value="#{validationFlowViewBean.filterCostItemAsse3}" />
+							</t:selectOneMenu></td>
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.costDefinitionPartner}:" /></td>
+						<td style="width: 25%;"><t:selectOneMenu
+								styleClass="DropDown"
+								value="#{validationFlowViewBean.filterPartner}">
+								<f:selectItems
+									value="#{validationFlowViewBean.filterPartnerValues}" />
+							</t:selectOneMenu></td>
+
+					</tr>
+					<tr>
+						
+						<ui:remove>
+							<sec:ifAnyGranted roles="ROLE_CIL_W">
+								<td class="LabelCell" style="width: 25%;"><t:outputText
+										value="#{msg.numberReport}:" /></td>
+								<td class="ControlCell" style="width: 25%;"><t:inputText
+										maxlength="8" styleClass="editbox_form" id="idCostDefReport"
+										onkeypress="return numbersonly(this, event)"
+										onkeyup="checknumber(this)"
+										value="#{validationFlowViewBean.costDefReportNumber}" /></td>
+							</sec:ifAnyGranted>
+
+							<td class="LabelCell" style="width: 25%;"><t:outputText
+									value="#{msg.costDefinitionIdPartner}:" /></td>
+							<td class="ControlCell" style="width: 25%;"><t:inputText
+									maxlength="8" styleClass="editbox_form" id="idPartner"
+									value="#{validationFlowViewBean.partnerID}" /></td>
+						</ui:remove>
+						
+							<ui:remove>				
+						 <td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.costDefinitionDURNumber}:" /></td>
+						<td class="ControlCell" style="width: 25%;"><t:inputText
+								maxlength="8" styleClass="editbox_form" id="idDurNumber"
+								value="#{validationFlowViewBean.durNumber}" /></td> </ui:remove>
+					</tr>
+
+
+					<tr>
+
+
+
+						<ui:remove>
+							<td class="LabelCell" style="width: 25%;"><t:outputText
+									value="#{msg.costDefinitionIdCostDefinition}:" /></td>
+							<td class="ControlCell" style="width: 25%;"><t:inputText
+									maxlength="8" styleClass="editbox_form" id="idCostDefID"
+									onkeypress="return numbersonly(this, event)"
+									onkeyup="checknumber(this)"
+									value="#{validationFlowViewBean.costDefID}" /></td>
+						</ui:remove>
+
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.costDefinitionPhase}:" /></td>
+						<td style="width: 25%;"><t:selectOneMenu rendered="#{!validationFlowViewBean.asse3Mode}"
+								styleClass="DropDown"
+								value="#{validationFlowViewBean.filterPhase}">
+								<f:selectItems value="#{validationFlowViewBean.filterPhases}" />
+							</t:selectOneMenu>
+							
+							<t:selectOneMenu rendered="#{validationFlowViewBean.asse3Mode}"
+								styleClass="DropDown"
+								value="#{validationFlowViewBean.selectedCostPhaseAsse3}"
+								valueChangeListener="#{validationFlowViewBean.asse3PhaseChange}" onchange="submit()">
+								<f:selectItems value="#{validationFlowViewBean.filterCostPhaseAsse3}" />
+							</t:selectOneMenu>
+							</td>
+
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.numberReport}:" /></td>
+						<td class="ControlCell" style="width: 25%;"><t:inputText
+								onkeypress="return decimalonly(this, event)"
+								onkeyup="checkdecimal(this)" onblur="checkdecimal(this)"
+								maxlength="8" styleClass="editbox_form" id="reportNumber"
+								value="#{validationFlowViewBean.reportNumber}" /></td>
+					</tr>
+
+					<tr>
+					
+					
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.location}:" /></td>
+						<td style="width: 25%;"><t:selectOneMenu
+								styleClass="DropDown"
+								value="#{validationFlowViewBean.locationId}">
+								<f:selectItems value="#{validationFlowViewBean.filterLocations}" />
+							</t:selectOneMenu></td>
+						
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.finansingFilter}:" /></td>
+						<td class="ControlCell" style="width: 25%;"> 
+						
+						
+						<t:selectBooleanCheckbox
+							value="#{validationFlowViewBean.additionalFinansing}">
+						</t:selectBooleanCheckbox>
+						
+						
+						</td>	
+
+								
+					</tr>
+					
+									<ui:remove>
+					<tr>
+						<td class="LabelCell" style="width: 25%;"><t:outputText
+								value="#{msg.costDefinitionPhase}:" /></td>
+						<td style="width: 25%;"><t:selectOneMenu
+								styleClass="DropDown"
+								value="#{validationFlowViewBean.filterPhase}">
+								<f:selectItems value="#{validationFlowViewBean.filterPhases}" />
+							</t:selectOneMenu></td>
+					</tr>
+				</ui:remove>
+
+					<tr>
+						<td colspan="4" class="btn_line"><a4j:commandButton
+								immediate="false" action="#{validationFlowViewBean.search}"
+								reRender="FormPanel" styleClass="button2" value="#{msg.search}"
+								id="search" /> <a4j:commandButton value="#{msg.clear}"
+								styleClass="button2" immediate="false" reRender="FormPanel"
+								id="clear" action="#{validationFlowViewBean.clear}" /></td>
+					</tr>
+					</table>
+			</fieldset>
+		<sec:ifAnyGranted
+						roles="ROLE_CIL_W">
+
+			<fieldset style="margin: 10px; width: auto;">
+			<table width="100%" class="forms" style="margin-left: 5px;">
+									<tr>
+								
+					<td class="LabelCell"><t:outputText
+							value="#{msg.validationFlowTotalImportPartner}:" /></td>
+					
+					
+					<td class="ControlCell"><t:outputText
+									value="#{validationFlowViewBean.totalImportPartner}"
+									converter="moneyConverter">
+					</t:outputText></td>
+					</tr>
+					<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.validationFlowTotalImportRevisore}:" /></td>
+					
+					
+					<td class="ControlCell"><t:outputText
+									value="#{validationFlowViewBean.totalImportRevisore}"
+									converter="moneyConverter">
+					</t:outputText></td>
+			
+					
+					
+					</tr>
+					
+					<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.validationFlowTotalValidateFesr}:" /></td>
+					
+					
+					<td class="ControlCell"><t:outputText
+									value="#{validationFlowViewBean.totalValidateFesr}"
+									converter="moneyConverter">
+					</t:outputText></td>
+			
+					</tr>
+					
+					<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.validationFlowTotalValidateCpn}:" /></td>
+					
+					
+					<td class="ControlCell"><t:outputText
+									value="#{validationFlowViewBean.totalValidateCpn}"
+									converter="moneyConverter">
+					</t:outputText></td>
+			
+					</tr>
+					
+					<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.validationFlowTotalValidateAddFin}:" /></td>
+					
+					
+					<td class="ControlCell"><t:outputText
+									value="#{validationFlowViewBean.totalValidateAddFin}"
+									converter="moneyConverter">
+					</t:outputText></td>
+			
+					</tr>
+					
+					<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.validationFlowTotalNumberOfCostDefinitions}:" /></td>
+					
+					
+					<td class="ControlCell"><t:outputText
+									value="#{validationFlowViewBean.totalNumberOfCostDefinitions}">
+					</t:outputText></td>
+			
+					</tr>
+				
+				</table>
+			
+			</fieldset>
+			</sec:ifAnyGranted>
+			<div class="table_container">
+				<t:dataTable width="99%" style="margin:0 auto;"
+					rows="#{validationFlowViewBean.itemsPerPage}" id="table" var="data"
+					value="#{validationFlowViewBean.list}" styleClass="form_table"
+					rowClasses="row_table_n,row_table_g">
+					<f:facet name="header">
+						<t:column>
+							<h:outputText style="text-align: center"
+								value="#{msg.costDefinition}" />
+							<h:selectOneMenu id="itemPP" styleClass="headerPanelSelect"
+								value="#{validationFlowViewBean.itemsPerPage}">
+								<f:selectItems
+									value="#{validationFlowViewBean.itemsPerPageList}" />
+								<a4j:support event="onchange" reRender="FormPanel" />
+							</h:selectOneMenu>
+						</t:column>
+					</f:facet>
+
+
+					<f:facet name="footer">
+						<a4j:htmlCommandLink action="#{validationFlowViewBean.export}"
+							styleClass="footerPanelExport">
+							<h:graphicImage alt="#{msg.exportXls}" value="/images/xls.png" />
+						</a4j:htmlCommandLink>
+					</f:facet>
+
+
+					<sec:ifAnyGranted
+						roles="ROLE_AGU_W,ROLE_DAEC_W,ROLE_CIL_W,ROLE_B_W,ROLE_BP_W,ROLE_SUPER_ADMIN_W">
+
+						<t:column id="select" styleClass="ActionColumn"
+							rendered="#{!empty validationFlowViewBean.list and !Session.projectLock}">
+							<f:facet name="header">
+								<h:selectBooleanCheckbox
+									value="#{validationFlowViewBean.selectAll}">
+									<a4j:support event="onclick" id="doSelectAll"
+										onclick="Richfaces.showModalPanel('waitPopup')"
+										oncomplete="Richfaces.hideModalPanel('waitPopup')"
+										action="#{validationFlowViewBean.doSelectAll}" />
+								</h:selectBooleanCheckbox>
+							</f:facet>
+							<t:selectBooleanCheckbox value="#{data.selected}"
+								rendered="#{((data.costStateId == '3' and Session.CIL)
+						or Session.AGU or Session.superAdmin
+						or (
+							(Session.DAEC and validationFlowViewBean.filterValueD == 'all' and data.costStateId == '4') 
+							or (Session.DAEC and validationFlowViewBean.filterValueD == '4' and data.costStateId == '4') 
+							or (Session.DAEC and validationFlowViewBean.filterValueD == '2' and data.costStateId == '2')) 
+						or Session.partner 
+						or Session.CF) and !data.dismiss and ((!data.locked and !Session.superAdmin) or (Session.superAdmin and data.locked))}">
+								<a4j:support event="onclick" id="addToCache"
+									onclick="Richfaces.showModalPanel('waitPopup')"
+									oncomplete="Richfaces.hideModalPanel('waitPopup')"
+									action="#{validationFlowViewBean.addToCache}" />
+							</t:selectBooleanCheckbox>
+						</t:column>
+						<sec:ifAnyGranted roles="ROLE_SUPER_ADMIN_W">
+							<t:column id="sendBack" styleClass="ActionColumn"
+								rendered="#{!empty validationFlowViewBean.list and !Session.projectLock and Session.superAdmin}">
+								<a4j:commandLink ajaxSingle="true" id="sendBacklink"
+									rendered="#{data.locked}"
+									title="#{msg.movePrevStep}" reRender="table"
+									oncomplete="#{rich:component('movingMotivationDialog')}.show()">
+									<h:graphicImage alt="#{msg.movePrevStep}"
+										value="/images/sendBack.png" style="border:0" />
+									<f:setPropertyActionListener value="#{data.id}"
+										target="#{validationFlowViewBean.entitySendId}" />
+								</a4j:commandLink>
+							</t:column>
+						</sec:ifAnyGranted>
+						<t:column id="view" styleClass="ActionColumn"
+							rendered="#{!empty validationFlowViewBean.list}">
+							<a4j:commandLink ajaxSingle="true" id="viewlink"
+								title="#{msg.show}"
+								action="#{validationFlowViewBean.viewEntity}">
+								<h:graphicImage alt="#{msg.edit}" value="/images/ok.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{data.id}"
+									target="#{validationFlowViewBean.entityEditId}" />
+							</a4j:commandLink>
+						</t:column>
+						<t:column id="deny" styleClass="ActionColumn"
+							style="#{data.dismiss?'background: #fadacf':''}"
+							rendered="#{!empty validationFlowViewBean.list and Session.partner and !Session.projectLock}">
+							<a4j:commandLink id="denylink" title="#{msg.deny}"
+								rendered="#{data.costStateId=='9' and data.wasRefusedByCil and ((!data.locked and !Session.superAdmin) or (Session.superAdmin and data.locked))}"
+								oncomplete="#{rich:component('denyPanel')}.show()">
+								<h:graphicImage alt="#{msg.deny}" value="/images/status-off.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{data.id}"
+									target="#{validationFlowViewBean.entityDeleteId}" />
+							</a4j:commandLink>
+						</t:column>
+						<t:column id="edit" styleClass="ActionColumn"
+							rendered="#{!empty validationFlowViewBean.list and Session.superAdmin and !Session.projectLock}">
+							<a4j:commandLink ajaxSingle="true" id="editlink"
+								rendered="#{data.locked and Session.superAdmin}"
+								title="#{msg.edit}"
+								action="#{validationFlowViewBean.editEntity}">
+								<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{data.id}"
+									target="#{validationFlowViewBean.entityEditId}" />
+							</a4j:commandLink>
+						</t:column>
+
+						<t:column id="lock" styleClass="ActionColumn"
+							headerstyleClass="ActionColumn"
+							rendered="#{!empty validationFlowViewBean.list and Session.superAdmin and !Session.projectLock}">
+							<a4j:commandLink ajaxSingle="true" id="locklink"
+								rendered="#{!data.locked and data.costStateId!='8'}"
+								title="#{msg.lock}"
+								action="#{validationFlowViewBean.lockEntity}" reRender="table">
+								<h:graphicImage alt="#{msg.lock}" value="/images/lock.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{data.id}"
+									target="#{validationFlowViewBean.entityEditId}" />
+							</a4j:commandLink>
+							<a4j:commandLink ajaxSingle="true" id="unlocklink"
+								rendered="#{data.locked and data.costStateId!='8'}"
+								title="#{msg.unlock}"
+								action="#{validationFlowViewBean.unlockEntity}" reRender="table">
+								<h:graphicImage alt="#{msg.lock}" value="/images/unlock.png"
+									style="border:0" />
+								<f:setPropertyActionListener value="#{data.id}"
+									target="#{validationFlowViewBean.entityEditId}" />
+							</a4j:commandLink>
+						</t:column>
+					</sec:ifAnyGranted>
+
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty validationFlowViewBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.costDefinition}" />
+						</f:facet>
+						<table>
+							<tr>
+								<td><t:outputText value="#{msg.costId}:" /></td>
+								<td><b><t:outputText value="#{data.progressiveId}" /></b></td>
+							</tr>
+							<tr>
+								<td><t:outputText value="#{msg.number}:" /></td>
+								<td><b><t:outputText value="#{data.documentNumber}" /></b></td>
+							</tr>
+							<tr>
+								<td><t:outputText value="#{msg.date}:" /></td>
+								<td><b><t:outputText value="#{data.documentDate}"
+											converter="dateTimeConverter" /></b></td>
+							</tr>
+							<tr>
+								<td><t:outputText value="#{msg.picf}:" /></td>
+								<td><b><t:outputText value="#{data.cfPivaVta}" /></b></td>
+							</tr>
+							<tr>
+								<td><t:outputText value="#{msg.amount}:" /></td>
+								<td><b><t:outputText converter="moneyConverter"
+											value="#{data.documentAmount}" /></b></td>
+							</tr>
+							<tr>
+								<td><t:outputText value="#{msg.costCostItem}:" /></td>
+								<td><b><t:outputText value="#{data.costItem.value}" rendered="#{!validationFlowViewBean.asse3Mode}" />
+								<t:outputText value="#{data.costItemPhaseAsse3}" rendered="#{validationFlowViewBean.asse3Mode}" />
+								</b></td>
+							</tr>
+						</table>
+					</t:column>
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty validationFlowViewBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.paymentDocument}" />
+						</f:facet>
+						<table>
+							<tr>
+								<td><t:outputText value="#{msg.number}:" /></td>
+								<td><b><t:outputText value="#{data.paymentNumber}" /></b></td>
+							</tr>
+							<tr>
+								<td><t:outputText value="#{msg.date}:" /></td>
+								<td><b><t:outputText value="#{data.paymentDate}"
+											converter="dateTimeConverter" /></b></td>
+							</tr>
+							<tr>
+								<td><t:outputText value="#{msg.amount}:" /></td>
+								<td><b><t:outputText converter="moneyConverter"
+											value="#{data.paymentAmount}" /></b></td>
+							</tr>
+						</table>
+					</t:column>
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty validationFlowViewBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.report}" />
+						</f:facet>
+						<table>
+							<tr>
+								<td><t:outputText value="#{msg.amount}:" /></td>
+								<td><b><t:outputText converter="moneyConverter"
+											value="#{data.amountReport}" /></b></td>
+							</tr>
+							<tr>
+								<td><t:outputText value="#{msg.numberReport}:" /></td>
+								<td><b><t:outputText 
+											value="#{data.reportNumber}" /> </b></td>
+							
+							</tr>
+							<tr>
+								<td><t:outputText value="#{msg.additionalFinansing}:" /></td>
+								<td><b><t:outputText rendered="#{data.additionalFinansing}"
+											value="#{msg.yes}" /> 
+											<t:outputText rendered="#{!data.additionalFinansing}"
+											value="#{msg.no}" /> </b></td>
+							
+							</tr>
+						</table>
+					</t:column>
+					
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty validationFlowViewBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.check}" />
+						</f:facet>
+						<table>
+							<tr>
+								<td><t:outputText value="#{msg.certifiedAmount}:"
+										rendered="#{data.costStateId=='3'}" /> <t:outputText value="*"
+										styleClass="RequiredFieldMarker"
+										rendered="#{data.costStateId=='3'}" /> <t:outputText
+										value="#{msg.certifiedAmount}:"
+										rendered="#{data.costStateId!='3'}" /></td>
+								<td><sec:ifNotGranted roles="ROLE_CIL_W, ROLE_SUPER_ADMIN_W">
+										<b><t:outputText value="#{data.cilCheck}"
+												converter="moneyConverter" /></b>
+									</sec:ifNotGranted> <sec:ifAnyGranted roles="ROLE_CIL_W, ROLE_SUPER_ADMIN_W">
+										<t:inputText value="#{data.cilCheck}" maxlength="12"
+											id="cilCheckAmountTb"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											rendered="#{data.costStateId=='3' and ((!data.locked and !Session.superAdmin) or (Session.superAdmin and data.locked))}"
+											converter="floatConverter" validator="#{validator.isFloat92}"
+											styleClass="editbox_form2" />
+										<b><t:outputText value="#{data.cilCheck}"
+												converter="moneyConverter"
+												rendered="#{data.costStateId!='3' or !data.locked and Session.superAdmin or data.locked and !Session.superAdmin}" /></b>
+									</sec:ifAnyGranted></td>
+							</tr>
+							<tr>
+								<td><t:outputText value="#{msg.date}:"
+										rendered="#{data.costStateId=='3'}" /> <t:outputText value="*"
+										styleClass="RequiredFieldMarker"
+										rendered="#{data.costStateId=='3'}" /> <t:outputText
+										value="#{msg.date}:" rendered="#{data.costStateId!='3'}" /></td>
+								<td class="CalendarCell"><sec:ifNotGranted
+										roles="ROLE_CIL_W, ROLE_SUPER_ADMIN_W">
+										<b><t:outputText value="#{data.cilDate}"
+												converter="dateTimeConverter" /></b>
+									</sec:ifNotGranted> <sec:ifAnyGranted roles="ROLE_CIL_W, ROLE_SUPER_ADMIN_W">
+										<t:div
+											rendered="#{data.costStateId=='3' and ((!data.locked and !Session.superAdmin) or (Session.superAdmin and data.locked))}">
+											<t:inputHidden validator="#{validator.requiredPage}"
+												value="hidden" />
+											<rich:calendar locale="#{LocalizeBean.currentLocaleValue}" id="cilDate" styleClass="editbox_form2"
+												converter="dateTimeConverter" value="#{data.cilDate}"
+												datePattern="dd/MM/yyyy">
+											</rich:calendar>
+										</t:div>
+										<b><t:outputText value="#{data.cilDate}"
+												rendered="#{data.costStateId!='3' or !data.locked and Session.superAdmin or data.locked and !Session.superAdmin}"
+												converter="dateTimeConverter" /></b>
+									</sec:ifAnyGranted></td>
+							</tr>
+							
+							<tr>
+								<td><t:outputText value="#{msg.REVPublicAmount}:"
+										rendered="#{data.costStateId=='3'}" /> <t:outputText value="*"
+										styleClass="RequiredFieldMarker"
+										rendered="#{data.costStateId=='3'}" /> <t:outputText
+										value="#{msg.REVPublicAmount}:"
+										rendered="#{data.costStateId!='3'}" /></td>
+								<td><sec:ifNotGranted roles="ROLE_CIL_W, ROLE_SUPER_ADMIN_W">
+										<b><t:outputText value="#{data.cilCheckPublicAmount}"
+												converter="moneyConverter" /></b>
+									</sec:ifNotGranted> <sec:ifAnyGranted roles="ROLE_CIL_W, ROLE_SUPER_ADMIN_W">
+										<t:inputText value="#{data.cilCheckPublicAmount}" maxlength="12"
+											id="cilCheckPublicAmount"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											rendered="#{data.costStateId=='3' and ((!data.locked and !Session.superAdmin) or (Session.superAdmin and data.locked))}"
+											converter="floatConverter" validator="#{validator.isFloat92}"
+											styleClass="editbox_form2" />
+										<b><t:outputText value="#{data.cilCheckPublicAmount}"
+												converter="moneyConverter"
+												rendered="#{data.costStateId!='3' or !data.locked and Session.superAdmin or data.locked and !Session.superAdmin}" /></b>
+									</sec:ifAnyGranted></td>
+							</tr>
+							<tr>
+							
+								<ui:remove>
+								<td><t:outputText value="#{msg.REVPrivateAmount}:"
+										rendered="#{data.costStateId=='3'}" /> <t:outputText value="*"
+										styleClass="RequiredFieldMarker"
+										rendered="#{data.costStateId=='3'}" /> <t:outputText
+										value="#{msg.REVPrivateAmount}:"
+										rendered="#{data.costStateId!='3'}" /></td>
+								</ui:remove>
+								
+								<td><sec:ifNotGranted roles="ROLE_CIL_W, ROLE_SUPER_ADMIN_W">
+										<b><t:outputText value="#{data.cilCheckPrivateAmount}"
+												converter="moneyConverter" /></b>
+									</sec:ifNotGranted> <sec:ifAnyGranted roles="ROLE_CIL_W, ROLE_SUPER_ADMIN_W">
+										<t:inputText value="#{data.cilCheckPrivateAmount}" maxlength="12"
+											id="cilCheckPrivateAmount"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											rendered="#{data.costStateId=='3' and ((!data.locked and !Session.superAdmin) or (Session.superAdmin and data.locked))}"
+											converter="floatConverter" validator="#{validator.isFloat92}"
+											styleClass="editbox_form2" />
+										<b><t:outputText value="#{data.cilCheckPrivateAmount}"
+												converter="moneyConverter"
+												rendered="#{data.costStateId!='3' or !data.locked and Session.superAdmin or data.locked and !Session.superAdmin}" /></b>
+									</sec:ifAnyGranted></td>
+							</tr>
+							<tr>
+								<td><t:outputText value="#{msg.REVAdditionaFinansingAmount}:"
+										rendered="#{data.costStateId=='3'}" /> <t:outputText value="*"
+										styleClass="RequiredFieldMarker"
+										rendered="#{data.costStateId=='3'}" /> <t:outputText
+										value="#{msg.REVAdditionaFinansingAmount}:"
+										rendered="#{data.costStateId!='3'}" /></td>
+								<td><sec:ifNotGranted roles="ROLE_CIL_W, ROLE_SUPER_ADMIN_W">
+										<b><t:outputText value="#{data.cilCheckAdditionalFinansingAmount}"
+												converter="moneyConverter" /></b>
+									</sec:ifNotGranted> <sec:ifAnyGranted roles="ROLE_CIL_W, ROLE_SUPER_ADMIN_W">
+										<t:inputText value="#{data.cilCheckAdditionalFinansingAmount}" maxlength="12"
+											id="cilCheckAdditionalFinansingAmount"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											rendered="#{data.costStateId=='3' and ((!data.locked and !Session.superAdmin) or (Session.superAdmin and data.locked))}"
+											converter="floatConverter" validator="#{validator.isFloat92}"
+											styleClass="editbox_form2" />
+										<b><t:outputText value="#{data.cilCheckAdditionalFinansingAmount}"
+												converter="moneyConverter"
+												rendered="#{data.costStateId!='3' or !data.locked and Session.superAdmin or data.locked and !Session.superAdmin}" /></b>
+									</sec:ifAnyGranted></td>
+							</tr>
+							
+							<tr>
+								<td><t:outputText value="#{msg.REVStateAidAmount}:"
+										rendered="#{data.costStateId=='3'}" /> <t:outputText value="*"
+										styleClass="RequiredFieldMarker"
+										rendered="#{data.costStateId=='3'}" /> <t:outputText
+										value="#{msg.REVStateAidAmount}:"
+										rendered="#{data.costStateId!='3'}" /></td>
+								<td><sec:ifNotGranted roles="ROLE_CIL_W, ROLE_SUPER_ADMIN_W">
+										<b><t:outputText value="#{data.cilCheckStateAidAmount}"
+												converter="moneyConverter" /></b>
+									</sec:ifNotGranted>
+									 <sec:ifAnyGranted roles="ROLE_CIL_W, ROLE_SUPER_ADMIN_W">
+										<t:inputText value="#{data.cilCheckStateAidAmount}" maxlength="12"
+											id="cilCheckStateAidAmount"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											rendered="#{data.costStateId=='3' and ((!data.locked and !Session.superAdmin) or (Session.superAdmin and data.locked))}"
+											converter="floatConverter" validator="#{validator.isFloat92}"
+											styleClass="editbox_form2" />
+										<b><t:outputText value="#{data.cilCheckStateAidAmount}"
+												converter="moneyConverter"
+												rendered="#{data.costStateId!='3' or !data.locked and Session.superAdmin or data.locked and !Session.superAdmin}" /></b>
+									</sec:ifAnyGranted></td>
+							</tr>
+							<tr>
+								<td><t:outputText value="#{msg.REVAmountOutsideEligibleAreas}:"
+										rendered="#{data.costStateId=='3'}" /> <t:outputText value="*"
+										styleClass="RequiredFieldMarker"
+										rendered="#{data.costStateId=='3'}" /> <t:outputText
+										value="#{msg.REVAmountOutsideEligibleAreas}:"
+										rendered="#{data.costStateId!='3'}" /></td>
+								<td><sec:ifNotGranted roles="ROLE_CIL_W, ROLE_SUPER_ADMIN_W">
+										<b><t:outputText value="#{data.cilCheckOutsideEligibleAreas}"
+												converter="moneyConverter" /></b>
+									</sec:ifNotGranted> <sec:ifAnyGranted roles="ROLE_CIL_W, ROLE_SUPER_ADMIN_W">
+										<t:inputText value="#{data.cilCheckOutsideEligibleAreas}" maxlength="12"
+											id="cilCheckOutsideEligibleAreas"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											rendered="#{data.costStateId=='3' and ((!data.locked and !Session.superAdmin) or (Session.superAdmin and data.locked))}"
+											converter="floatConverter" validator="#{validator.isFloat92}"
+											styleClass="editbox_form2" />
+										<b><t:outputText value="#{data.cilCheckOutsideEligibleAreas}"
+												converter="moneyConverter"
+												rendered="#{data.costStateId!='3' or !data.locked and Session.superAdmin or data.locked and !Session.superAdmin}" /></b>
+									</sec:ifAnyGranted></td>
+							</tr>
+							
+							<ui:remove>
+							<tr>
+								<td><t:outputText value="#{msg.REVInkindContributions}:"
+										rendered="#{data.costStateId=='3'}" /> <t:outputText value="*"
+										styleClass="RequiredFieldMarker"
+										rendered="#{data.costStateId=='3'}" /> <t:outputText
+										value="#{msg.REVAmountOutsideEligibleAreas}:"
+										rendered="#{data.costStateId!='3'}" /></td>
+								<td><sec:ifNotGranted roles="ROLE_CIL_W, ROLE_SUPER_ADMIN_W">
+										<b><t:outputText value="#{data.cilCheckInkindContributions}"
+												converter="moneyConverter" /></b>
+									</sec:ifNotGranted> <sec:ifAnyGranted roles="ROLE_CIL_W, ROLE_SUPER_ADMIN_W">
+										<t:inputText value="#{data.cilCheckInkindContributions}" maxlength="12"
+											id="cilCheckInkindContributions"
+											onkeypress="return decimalonly(this, event)"
+											onkeyup="checkdecimal(this)"
+											rendered="#{data.costStateId=='3' and ((!data.locked and !Session.superAdmin) or (Session.superAdmin and data.locked))}"
+											converter="floatConverter" validator="#{validator.isFloat92}"
+											styleClass="editbox_form2" />
+										<b><t:outputText value="#{data.cilCheckInkindContributions}"
+												converter="moneyConverter"
+												rendered="#{data.costStateId!='3' or !data.locked and Session.superAdmin or data.locked and !Session.superAdmin}" /></b>
+									</sec:ifAnyGranted></td>
+							</tr>
+							</ui:remove>
+							
+						</table>
+					</t:column>
+					<sec:ifAnyGranted
+						roles="ROLE_CIL_W,ROLE_DAEC_W, ROLE_SUPER_ADMIN_W, ROLE_BP_W">
+						<t:column styleClass="StringColumn"
+							rendered="#{(validationFlowViewBean.displayDeny or Session.superAdmin) and !empty validationFlowViewBean.list}">
+							<f:facet name="header">
+								<t:outputText value="#{msg.notes}" />
+							</f:facet>
+							<t:inputTextarea rows="6" cols="30" styleClass="editbox_form2"
+								value="#{data.customNoteWeb}"
+								rendered="#{data.costStateId=='3' or data.costStateId=='1' and ((!data.locked and !Session.superAdmin) or (Session.superAdmin and data.locked))}"
+								onkeypress="return textArea(this, 255, event )" />
+							<b><t:outputText value="#{data.customNote}"
+									rendered="#{data.costStateId!='3' or !data.locked and Session.superAdmin or data.locked and !Session.superAdmin}" /></b>
+						</t:column>
+					</sec:ifAnyGranted>
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty validationFlowViewBean.list}">
+						<f:facet name="header">
+							<t:outputText
+								value="#{msg.durCompilationEditCostTableHeaderAssign}" />
+						</f:facet>
+						<b><t:outputText value="#{data.costState.value}" /></b>
+					</t:column>
+					<t:column styleClass="StringColumn"
+						rendered="#{!empty validationFlowViewBean.list}">
+						<f:facet name="header">
+							<t:outputText value="#{msg.costDefinitionInsertedBy}" />
+						</f:facet>
+						<b><t:outputText value="#{data.userInsertedName}" /></b>
+					</t:column>
+					<t:column styleClass="StringColumn"
+						rendered="#{empty validationFlowViewBean.list}">
+						<f:facet name="header">
+							<h:outputText value="#{msg.noData}" />
+						</f:facet>
+					</t:column>
+								</t:dataTable>
+			</div>
+			<a4j:outputPanel styleClass="scrollerPanel">
+				<t:dataScroller id="scroll" styleClass="scroller" for="table"
+					rendered="#{validationFlowViewBean.showScroll}" paginator="true"
+					paginatorMaxPages="5" fastStep="5" paginatorColumnClass="page"
+					paginatorActiveColumnClass="page_active" immediate="true"
+					binding="#{validationFlowViewBean.scroller}">
+					<f:facet name="first">
+						<t:graphicImage alt="#{msg.first}" url="../images/back_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="last">
+						<t:graphicImage alt="#{msg.last}" url="../images/forward_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="previous">
+						<t:graphicImage alt="#{msg.previous}" url="../images/back.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="next">
+						<t:graphicImage alt="#{msg.next}" url="../images/forward.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="fastforward">
+						<t:graphicImage alt="#{msg.fastforward}"
+							url="../images/all_forward.gif" border="1" />
+					</f:facet>
+					<f:facet name="fastrewind">
+						<t:graphicImage alt="#{msg.fastrewind}"
+							url="../images/all_back.gif" border="1" />
+					</f:facet>
+				</t:dataScroller>
+			</a4j:outputPanel>
+		</a4j:outputPanel>
+		<a4j:outputPanel ajaxRendered="true" id="controlePanel">
+			<table width="100%">
+				<tr>
+					<td align="center"><t:outputText
+							rendered="#{facesContext.maximumSeverity.ordinal >= 2}"
+							styleClass="RequiredFieldMarker" id="outErrorTb"
+							value="#{validationFlowViewBean.error}" /></td>
+				</tr>
+				<tr>
+					<td colspan="2" class="btn_line"><sec:ifAnyGranted
+							roles="ROLE_CIL_W">
+							<a4j:commandButton
+								rendered="#{false and !empty validationFlowViewBean.list and validationFlowViewBean.filterValuePA==3}"
+								immediate="false" action="#{validationFlowViewBean.Page_Save}"
+								styleClass="button2" value="#{msg.save}" id="save" />
+						</sec:ifAnyGranted></td>
+				</tr>
+				<tr>
+					<td colspan="2" class="btn_line"><sec:ifAnyGranted
+							roles="ROLE_CIL_W">
+							<t:div
+								rendered="#{validationFlowViewBean.displayDeny and !empty validationFlowViewBean.list and !Session.projectLock}"
+								style="margin:auto; padding-bottom:5px; width:250px; text-align:left;">
+								<a4j:htmlCommandLink id="newDocLink"
+									action="#{validationFlowViewBean.getNewDoc}"
+									rendered="#{!empty validationFlowViewBean.newDocTitle}"
+									style="text-decoration: underline;" immediate="true"
+									value="#{validationFlowViewBean.newDocTitle}" />
+								<a4j:commandLink
+									rendered="#{!empty validationFlowViewBean.newDocTitle}"
+									id="doc1deletelink" immediate="true" reRender="FormPanel"
+									action="#{validationFlowViewBean.deleteNewDoc}">
+									<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+										style="border:0; float:right;" />
+								</a4j:commandLink>
+								<a4j:commandLink
+									required="true"
+									rendered="#{empty validationFlowViewBean.newDocTitle}"
+									id="doc1link" value="#{msg.uploadFile}"
+									oncomplete="#{rich:component('documentPanel3')}.show()">
+									<h:graphicImage alt="#{msg.delete}" value="/images/plus.png"
+										style="border:0; float:left;" />
+								</a4j:commandLink>
+								
+								<br/>
+								<t:outputText 
+							styleClass="RequiredFieldMarker"
+							value="#{validationFlowViewBean.attachmentIsRequredError}" />
+				
+							</t:div>
+						</sec:ifAnyGranted></td>
+						
+						</tr>
+						
+							<tr>
+					<td colspan="2" class="btn_line"><sec:ifAnyGranted
+							roles="ROLE_BP_W, ROLE_B_W">
+							<t:div
+								rendered="#{!empty validationFlowViewBean.list and !Session.projectLock}"
+								style="margin:auto; padding-bottom:5px; width:250px; text-align:left;">
+								<a4j:htmlCommandLink id="newDocLinkCF"
+									action="#{validationFlowViewBean.getNewDocCF}"
+									rendered="#{!empty validationFlowViewBean.newDocTitleCF}"
+									style="text-decoration: underline;" immediate="true"
+									value="#{validationFlowViewBean.newDocTitleCF}" />
+								<a4j:commandLink
+									rendered="#{!empty validationFlowViewBean.newDocTitleCF}"
+									id="doc4deletelink" immediate="true" reRender="FormPanel"
+									action="#{validationFlowViewBean.deleteNewDocCF}">
+									<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+										style="border:0; float:right;" />
+								</a4j:commandLink>
+								<a4j:commandLink
+									required="true"
+									rendered="#{empty validationFlowViewBean.newDocTitleCF}"
+									id="doc4link" value="#{msg.validationFlowDocNameForPartners}"
+									oncomplete="#{rich:component('documentPanel4')}.show()">
+									<h:graphicImage alt="#{msg.delete}" value="/images/plus.png"
+										style="border:0; float:left;" />
+								</a4j:commandLink>
+								
+								<br/>
+								<t:outputText 
+							styleClass="RequiredFieldMarker"
+							value="#{validationFlowViewBean.attachmentIsRequredError}" />
+				
+							</t:div>
+						</sec:ifAnyGranted></td>
+						
+						</tr>
+				<sec:ifAnyGranted
+					roles="ROLE_DAEC_W, ROLE_AGU_W, ROLE_B_W, ROLE_CIL_W, ROLE_BP_W,ROLE_SUPER_ADMIN_W">
+					<tr>
+						<td style="text-align: center;">
+						<h:messages infoStyle="color:red;list-style: none outside none;" />
+						<h:panelGroup
+								rendered="#{!Session.projectLock}">
+								<a4j:commandButton value="#{msg.sendNextStep}"
+									styleClass="button5"
+									rendered="#{validationFlowViewBean.displayNext and !empty validationFlowViewBean.list and !Session.isAguRead}"
+									action="#{validationFlowViewBean.sendToNextStep}"
+									oncomplete="fillDate()"
+									reRender="FormPanel" />
+								<a4j:commandButton value="#{msg.saveIntermediateStep}"
+									styleClass="button3"
+									onclick="#{rich:component('updateMotivationDialog')}.show();"
+									rendered="#{!empty validationFlowViewBean.list and Session.superAdmin}"
+									reRender="FormPanel" />
+								<a4j:commandButton value="#{msg.saveIntermediateStep}"
+									oncomplete="#{rich:component('savePanel')}.show(); fillDate()"
+									rendered="#{validationFlowViewBean.displayApprove and !empty validationFlowViewBean.list and Session.CIL}"
+									styleClass="button3"
+									action="#{validationFlowViewBean.saveIntermediateStep}"
+									reRender="FormPanel" />
+								<a4j:commandButton value="#{msg.approve}"
+									rendered="#{validationFlowViewBean.displayApprove and !empty validationFlowViewBean.list and !Session.isAguRead }"
+									styleClass="button" action="#{validationFlowViewBean.approve}"
+									reRender="FormPanel"
+									oncomplete="
+										var res = ajaxRequestContainsErrors();
+										highlightTextBoxes(res);
+										showError(res);fillDate()" />
+								<a4j:commandButton value="#{msg.deny}"
+									rendered="#{validationFlowViewBean.displayDeny and !empty validationFlowViewBean.list and !Session.isAguRead }"
+									styleClass="button" action="#{validationFlowViewBean.deny}"
+									reRender="FormPanel"
+									oncomplete="
+										var res = ajaxRequestContainsErrors();
+										highlightTextBoxes(res);
+										showError(res); fillDate()" />
+
+							</h:panelGroup></td>
+					</tr>
+				</sec:ifAnyGranted>
+			</table>
+		</a4j:outputPanel>
+
+
+	</ui:define>
+
+	<ui:define name="common">
+		<a4j:outputPanel ajaxRendered="true">
+			<h:form style="display:none" prependId="false">
+				<h:inputHidden id="maximumSeverity"
+					value="#{facesContext.maximumSeverity.ordinal}" />
+				<h:inputHidden id="defaultError"
+					value="#{validationFlowViewBean.defaultError}" />
+				<h:inputHidden id="fieldError"
+					value="#{validationFlowViewBean.fieldError}" />
+			</h:form>
+		</a4j:outputPanel>
+	</ui:define>
+
+	<ui:define name="delete_panels">
+		<rich:modalPanel id="savePanel" autosized="true" width="200">
+			<h:form>
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td colspan="2">#{msg.saveIntermediateStepMessage}</td>
+						</tr>
+						<tr>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.back}" styleClass="button"
+									onclick="#{rich:component('savePanel')}.hide();return false;" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</h:form>
+		</rich:modalPanel>
+
+		<rich:modalPanel id="denyPanel" autosized="true" width="200">
+			<f:facet name="header">
+				<h:outputText value="#{msg.deny}?" style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+
+			</f:facet>
+			<h:form>
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.yes}" ajaxSingle="true" styleClass="button"
+									action="#{validationFlowViewBean.closeItem}"
+									oncomplete="#{rich:component('denyPanel')}.hide();"
+									reRender="FormPanel" /></td>
+							<td align="center" width="50%"><a4j:commandButton
+									value="#{msg.cancel}" styleClass="button"
+									onclick="#{rich:component('denyPanel')}.hide();return false;" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</h:form>
+		</rich:modalPanel>
+		<rich:modalPanel id="movingMotivationDialog" autosized="true"
+			width="300" resizeable="false">
+			<f:facet name="header">
+				<h:outputText value="#{msg.validationFlowViewEnterMotivation}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<h:form id="movingForm">
+				<h:panelGrid columns="1">
+					<ui:fragment>
+						<h:outputText value="#{msg.motivation}" />
+						<h:panelGroup style="color:red;">*</h:panelGroup>
+					</ui:fragment>
+					<t:inputTextarea value="#{validationFlowViewBean.actionMotivation}"
+						id="movingMotivation"
+						onkeypress="return textArea(this, 255, event)"
+						style="width: 350px; height: 130px; resize: none;" />
+				</h:panelGrid>
+				<center>
+					<h:commandButton value="#{msg.yes}"
+						action="#{validationFlowViewBean.movePrevStep}"
+						onclick="return validateMovingMotivation();" />
+					<a4j:commandButton value="#{msg.no}"
+						actionListener="#{validationFlowViewBean.clearMotivation}"
+						oncomplete="#{rich:component('movingMotivationDialog')}.hide();"
+						reRender="movingMotivationDialog" />
+				</center>
+				<script language="JavaScript" type="text/javascript">
+                function validateMovingMotivation() {
+                    var textArea = document.getElementById('movingForm:movingMotivation');
+                    if (textArea != null) {
+                        if (textArea.value.trim().length > 0) {
+                            return true;
+                        } else {
+                            textArea.style.borderColor = 'red';
+                            return false;
+                        }
+                    }
+                    return false;
+                }
+                
+                function fillDate(){
+        			var list = document.getElementsByClassName("rich-calendar-input");
+        			for (index = 0; index &lt; list.length; ++index) {
+        			 //   list[index].value=getCurrentDate();
+        			}
+        		} 
+        		
+        		function getCurrentDate() 
+        		{
+        			var today = new Date();
+        			var dd = today.getDate();
+        			var mm = today.getMonth()+1; 
+        			var yyyy = today.getFullYear();
+
+        			if(dd &lt; 10) {
+        			    dd='0'+dd;
+        			} 
+        			if(mm &lt; 10) {
+        			    mm='0'+mm;
+        			} 
+        			return dd+'/'+ mm +'/'+yyyy;
+        		}
+        		window.onchange = fillDate();
+        		
+            </script>
+			</h:form>
+		</rich:modalPanel>
+		<rich:modalPanel id="updateMotivationDialog" autosized="true"
+			width="300" resizeable="false">
+			<f:facet name="header">
+				<h:outputText value="#{msg.validationFlowViewEnterMotivation}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<h:form id="updateForm">
+				<h:panelGrid columns="1">
+					<ui:fragment>
+						<h:outputText value="#{msg.motivation}" />
+						<h:panelGroup style="color:red;">*</h:panelGroup>
+					</ui:fragment>
+					<t:inputTextarea value="#{validationFlowViewBean.actionMotivation}"
+						id="updateMotivation"
+						onkeypress="return textArea(this, 255, event)"
+						style="width: 350px; height: 130px; resize: none;" />
+				</h:panelGrid>
+				<center>
+					<h:commandButton value="#{msg.yes}"
+						action="#{validationFlowViewBean.updateSuperAdminStep}"
+						onclick="return validateUpdateMotivation();" />
+					<a4j:commandButton value="#{msg.no}"
+						actionListener="#{validationFlowViewBean.clearMotivation}"
+						oncomplete="#{rich:component('updateMotivationDialog')}.hide();"
+						reRender="updateMotivation" />
+				</center>
+				<script language="JavaScript" type="text/javascript">
+                function validateUpdateMotivation() {
+                    var textArea = document.getElementById('updateForm:updateMotivation');
+                    if (textArea != null) {
+                        if (textArea.value.trim().length > 0) {
+                            return true;
+                        } else {
+                            textArea.style.borderColor = 'red';
+                            return false;
+                        }
+                    }
+                    return false;
+                }
+            </script>
+			</h:form>
+		</rich:modalPanel>
+		<rich:modalPanel id="documentPanel4" autosized="true" width="300">
+			<f:facet name="header">
+				<h:outputText value="#{msg.document}" style="padding-right:15px;" />
+			</f:facet>
+			<h:form id="documetnCFForm" enctype="multipart/form-data">
+			<table>
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.date}:" /></td>
+					<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+							inputClass="editbox_form2" converter="dateTimeConverter"
+							value="#{validationFlowViewBean.newDocumentCF.documentDate}"
+							datePattern="dd/MM/yyyy">
+						</rich:calendar></td>
+				</tr>
+				
+								<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentDescription}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							style="width:216px;" maxlength="50"
+							value="#{validationFlowViewBean.newDocumentCF.description}" /></td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.protocolNumber}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							maxlength="50" style="width:216px;"
+							value="#{validationFlowViewBean.newDocumentCF.protocolNumber}" /></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentPublic}:" /></td>
+					<td class="ControlCell"><t:selectBooleanCheckbox
+							value="#{validationFlowViewBean.newDocumentCF.isPublic}">
+						</t:selectBooleanCheckbox></td>
+				</tr>
+				<tr
+					style="display: #{(Session.CIL and!empty validationFlowViewBean.listPartners )?'':'none'}">
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentForPartner}:" /></td>
+					<td class="ControlCell"><t:selectOneMenu
+							onmousedown="collapse(this);" onchange="expand(this);"
+							onblur="expand(this);"
+							value="#{validationFlowViewBean.selectedPartnerCF}"
+							required="false" styleClass="DropDown">
+							<f:selectItems value="#{validationFlowViewBean.listPartners}" />
+						</t:selectOneMenu></td>
+				</tr>
+				<ui:remove>
+				<tr class="tempDisplay">
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentCategory}:" /></td>
+					<td class="ControlCell"><t:selectOneMenu
+							onmousedown="collapse(this);" onchange="expand(this);"
+							onblur="expand(this);"
+							value="#{validationFlowViewBean.selectedCategoryCF}"
+							required="false"
+							styleClass="DropDown">
+							<f:selectItems value="#{validationFlowViewBean.categories}" />
+						</t:selectOneMenu></td>
+				</tr>
+				</ui:remove>
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.uploadFile}:" /></td>
+					<td class="ControlCell"><t:inputFileUpload id="fileupload4"
+							value="#{validationFlowViewBean.newDocumentUpFileCF}"
+							storage="file" styleClass="fileUploadInput" maxlength="200000" /></td>
+				</tr>
+				<tr>
+					<td align="center" colspan="2">#{msg.fileSize}</td>
+				</tr>
+				<tr>
+					<td colspan="2" style="text-align: center;"><h:commandButton
+							value="#{msg.uploadFile}" styleClass="button3"
+							action="#{validationFlowViewBean.SaveNewDocumentCF}"
+							onclick="#{rich:component('documentPanel4')}.hide();" /> <a4j:commandButton
+							value="#{msg.cancel}" styleClass="button" immediate="false"
+							onclick="#{rich:component('documentPanel4')}.hide();return false;" /></td>
+				</tr>
+			</table>
+			</h:form>
+		</rich:modalPanel>
+	</ui:define>
+
+	<ui:define name="document_body">
+				<rich:modalPanel id="documentPanel3" autosized="true" width="300">
+			<f:facet name="header">
+				<h:outputText value="#{msg.document}" style="padding-right:15px;" />
+			</f:facet>
+
+			<table>
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.date}:" /></td>
+					<td class="ControlCell"><rich:calendar locale="#{LocalizeBean.currentLocaleValue}"
+							inputClass="editbox_form2" converter="dateTimeConverter"
+							value="#{validationFlowViewBean.newDocument.documentDate}"
+							datePattern="dd/MM/yyyy">
+						</rich:calendar></td>
+				</tr>
+				
+								<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentDescription}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							style="width:216px;" maxlength="50"
+							value="#{validationFlowViewBean.newDocument.description}" /></td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.protocolNumber}:" /></td>
+					<td class="ControlCell"><t:inputText styleClass="editbox_form"
+							maxlength="50" style="width:216px;"
+							value="#{validationFlowViewBean.newDocument.protocolNumber}" /></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentPublic}:" /></td>
+					<td class="ControlCell"><t:selectBooleanCheckbox
+							value="#{validationFlowViewBean.newDocument.isPublic}">
+						</t:selectBooleanCheckbox></td>
+				</tr>
+				<tr
+					style="display: #{(Session.CIL and!empty validationFlowViewBean.listPartners )?'':'none'}">
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentForPartner}:" /></td>
+					<td class="ControlCell"><t:selectOneMenu
+							onmousedown="collapse(this);" onchange="expand(this);"
+							onblur="expand(this);"
+							value="#{validationFlowViewBean.selectedPartner}"
+							required="false" styleClass="DropDown">
+							<f:selectItems value="#{validationFlowViewBean.listPartners}" />
+						</t:selectOneMenu></td>
+				</tr>
+				<ui:remove>
+				<tr class="tempDisplay">
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentCategory}:" /></td>
+					<td class="ControlCell"><t:selectOneMenu
+							onmousedown="collapse(this);" onchange="expand(this);"
+							onblur="expand(this);"
+							value="#{validationFlowViewBean.selectedCategory}"
+							required="false"
+							styleClass="DropDown">
+							<f:selectItems value="#{validationFlowViewBean.categories}" />
+						</t:selectOneMenu></td>
+				</tr>
+				</ui:remove>
+				<tr>
+					<td class="LabelCell"><t:outputText value="#{msg.uploadFile}:" /></td>
+					<td class="ControlCell"><t:inputFileUpload id="fileupload3"
+							value="#{validationFlowViewBean.newDocumentUpFile}"
+							storage="file" styleClass="fileUploadInput" maxlength="200000" /></td>
+				</tr>
+				<tr>
+					<td align="center" colspan="2">#{msg.fileSize}</td>
+				</tr>
+				<tr>
+					<td colspan="2" style="text-align: center;"><h:commandButton
+							value="#{msg.uploadFile}" styleClass="button3"
+							action="#{validationFlowViewBean.SaveNewDocument}"
+							onclick="#{rich:component('documentPanel3')}.hide();" /> <a4j:commandButton
+							value="#{msg.cancel}" styleClass="button" immediate="false"
+							onclick="#{rich:component('documentPanel3')}.hide();return false;" /></td>
+				</tr>
+			</table>
+		</rich:modalPanel>
+		
+		
+		
+		<rich:modalPanel id="waitPopup" autosized="true" width="300"
+			resizeable="false">
+			<center>#{msg.suspensionManagementWaiting}</center>
+
+		</rich:modalPanel>
+			
+	</ui:define>
+</ui:composition>
+</html>

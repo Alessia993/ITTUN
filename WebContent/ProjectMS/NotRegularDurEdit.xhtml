@@ -1,0 +1,254 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/Templates/EditBase.xhtml">
+	<ui:param name="heading" value="#{msg.notRegularEditTableName}" />
+	<ui:param name="heading_top" value="#{msg.notRegularEditPageName}" />
+	<ui:param name="headWidth" value="99%" />
+
+	<ui:define name="edit_body">
+		<a4j:outputPanel ajaxRendered="true" id="pagePanel">
+			<table width="50%" class="forms" border="0" cellpadding="1"
+				cellspacing="1">
+								
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.notRegularActType}:" /> <t:outputText
+							styleClass="RequiredFieldMarker" value="*" /></td>
+					<td style="width: 25%;"><t:selectOneMenu
+							styleClass="DropDown" id="durNotRegularRecoveryActType"
+							value="#{notRegularEditBean.durCostDefinition.selectedNotRegularDurRecoveryActType}">
+							<f:selectItems
+								value="#{notRegularEditBean.allNotRegularDurRecoveryActTypes}" />
+						</t:selectOneMenu></td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.notRegularActNumber}:" /> <t:outputText
+							styleClass="RequiredFieldMarker" value="*" /></td>
+					<td class="ControlCell"><t:inputText
+							value="#{notRegularEditBean.durCostDefinition.durNotRegularActNumber}"
+							id="notRegularActNumber" /></td>
+				</tr>
+				
+				<!--  new acagnoni 2019/03/18 -->
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentationContentiousRecovery}:" /> <t:outputText
+							styleClass="RequiredFieldMarker" value="*" /></td>
+					<td class="ControlCell"><t:inputText
+							value="#{notRegularEditBean.durCostDefinition.documentationContentiousRecovery}"
+							id="documentationContentiousRecovery" /></td>
+				</tr>
+				
+				<!--  new acagnoni 2019/03/18 -->
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.documentationUnsuccessfulRecovery}:" /> <t:outputText
+							styleClass="RequiredFieldMarker" value="*" /></td>
+					<td class="ControlCell"><t:inputText
+							value="#{notRegularEditBean.durCostDefinition.documentationUnsuccessfulRecovery}"
+							id="documentationUnsuccessfulRecovery" /></td>
+				</tr>
+				
+				<!--  new acagnoni 2019/03/18 -->
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.dateOfPaymentProgrammeOrBody}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><rich:calendar
+							locale="#{LocalizeBean.currentLocaleValue}" id="dateOfPaymentProgrammeOrBody"
+							 inputClass="editbox_form2"
+							disabled="#{!notRegularEditBean.editMode}"
+							converter="dateTimeConverter"
+							value="#{notRegularEditBean.durCostDefinition.dateOfPaymentProgrammeOrBody}"
+							datePattern="dd/MM/yyyy">
+						</rich:calendar></td>
+				</tr>
+				
+				<!--  new acagnoni 2019/03/18 -->
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.supportingDocumentsWaivingDecision}:" /> <t:outputText
+							styleClass="RequiredFieldMarker" value="*" /></td>
+					<td class="ControlCell"><t:inputText
+							value="#{notRegularEditBean.durCostDefinition.supportingDocumentsWaivingDecision}"
+							id="supportingDocumentsWaivingDecision" /></td>
+				</tr>
+				
+				<!--  new acagnoni 2019/03/18 -->
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.amountOfRecoveryWaived}:" /> <t:outputText
+							styleClass="RequiredFieldMarker" value="*" /></td>
+					<td class="ControlCell"><t:inputText
+							value="#{notRegularEditBean.durCostDefinition.amountOfRecoveryWaived}"
+							id="amountOfRecoveryWaived" /></td>
+				</tr>
+				
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.notRegularActDate}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><rich:calendar
+							locale="#{LocalizeBean.currentLocaleValue}" id="notRegularActDate"
+							 inputClass="editbox_form2"
+							disabled="#{!notRegularEditBean.editMode}"
+							converter="dateTimeConverter"
+							value="#{notRegularEditBean.durCostDefinition.durNotRegularActDate}"
+							datePattern="dd/MM/yyyy">
+						</rich:calendar></td>
+				</tr>
+								
+				
+				<tr style="display:#{(notRegularEditBean.editMode and notRegularEditBean.notRecoveredMode)?'':'none'}">
+					<td class="LabelCell"><t:outputText
+							value="#{msg.notRegularListSustainImport}:" /><span class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText maxlength="12"
+							converter="floatConverter" validator="#{validator.isFloat92}"
+							onkeypress="return decimalonly(this, event)"
+							rendered="#{notRegularEditBean.editMode and notRegularEditBean.notRecoveredMode}"
+							onkeyup="checkdecimal(this)" styleClass="editbox_form"
+							 id="notRegularSustainImport"
+							value="#{notRegularEditBean.durCostDefinition.durRecoverySustainImport}" />
+					</td>
+				</tr>
+				<ui:remove>
+				<tr style="display:#{(notRegularEditBean.editMode and notRegularEditBean.notRecoveredMode)?'':'none'}">
+					<td class="LabelCell"><t:outputText
+							value="#{msg.notRegularListTotalEligibleExpenditureOfNonRecoverablePublicSupport}:" /><span class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText maxlength="12"
+								converter="floatConverter" validator="#{validator.isFloat92}"
+								onkeypress="return decimalonly(this, event)"
+								rendered="#{notRegularEditBean.editMode and notRegularEditBean.notRecoveredMode}"
+								onkeyup="checkdecimal(this)" styleClass="editbox_form"
+								id="notRegulartotEligibleExpensesPublicSupportNonRecoverable"
+								value="#{notRegularEditBean.durCostDefinition.totEligibleExpensesPublicSupportNonRecoverable}" />
+						</td>
+				</tr>
+				</ui:remove>
+
+				<tr style="display:#{(notRegularEditBean.editMode and notRegularEditBean.recoveredMode)?'':'none'}">
+					<td class="LabelCell"><t:outputText
+							value="#{msg.notRegularListAmountPublicSupportReimbursed}:" /><span class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText maxlength="12"
+							converter="floatConverter" validator="#{validator.isFloat92}"
+							onkeypress="return decimalonly(this, event)"
+							rendered="#{notRegularEditBean.editMode and notRegularEditBean.recoveredMode}"
+							onkeyup="checkdecimal(this)" styleClass="editbox_form"
+							id="notRegularAmountPublicSupportReimbursed"
+							value="#{notRegularEditBean.durCostDefinition.durAmountPublicSupportReimbursed}" />
+					</td>
+				</tr>
+				
+				<ui:remove>
+				<tr style="display:#{(notRegularEditBean.editMode and notRegularEditBean.recoveredMode)?'':'none'}">
+					<td class="LabelCell"><t:outputText
+							value="#{msg.notRegularListTotalEligibleEmpenditurePublicSupportReimbursed}:" /><span class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><t:inputText maxlength="12"
+							converter="floatConverter" validator="#{validator.isFloat92}"
+							onkeypress="return decimalonly(this, event)"
+							rendered="#{notRegularEditBean.editMode and notRegularEditBean.recoveredMode}"
+							onkeyup="checkdecimal(this)" styleClass="editbox_form"
+							id="notRegularTotEligibleExpensesPublicSupportReimbursed"
+							value="#{notRegularEditBean.durCostDefinition.durTotEligibleExpensesPublicSupportReimbursed}" />
+					</td>
+				</tr>
+				</ui:remove>
+				<tr style="display:#{(notRegularEditBean.editMode and notRegularEditBean.recoveredMode)?'':'none'}">
+					<td class="LabelCell"><t:outputText
+							value="#{msg.notRegularListReimbursementDate}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><rich:calendar
+							locale="#{LocalizeBean.currentLocaleValue}" id="notRegularReimbursementDateFromBeneficiary"
+							 inputClass="editbox_form2"
+							disabled="#{!notRegularEditBean.editMode and notRegularEditBean.recoveredMode}"
+							converter="dateTimeConverter"
+							value="#{notRegularEditBean.durCostDefinition.durRecoveryReimbursementDateFromBeneficiary}"
+							datePattern="dd/MM/yyyy">
+						</rich:calendar></td>
+				</tr>
+				
+				<tr style="display:#{(notRegularEditBean.editMode and notRegularEditBean.recoveredMode)?'':'none'}">
+					<td class="LabelCell"><t:outputText
+							value="#{msg.notRegularListCEDate}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><rich:calendar
+							locale="#{LocalizeBean.currentLocaleValue}" id="notRegularReimbursementDateFromCE"
+							 inputClass="editbox_form2"
+							disabled="#{!notRegularEditBean.editMode and notRegularEditBean.recoveredMode}"
+							converter="dateTimeConverter"
+							value="#{notRegularEditBean.durCostDefinition.durRecoveryReimbursementDateFromCE}"
+							datePattern="dd/MM/yyyy">
+						</rich:calendar></td>
+				</tr>
+				
+				<tr style="display:#{(notRegularEditBean.editMode and notRegularEditBean.recoveredMode)?'':'none'}">
+					<td class="LabelCell"><t:outputText
+							value="#{msg.notRegularListCMSDate}:" /><span
+						class="RequiredFieldMarker">*</span></td>
+					<td class="ControlCell"><rich:calendar
+							locale="#{LocalizeBean.currentLocaleValue}" id="notRegularReimbursementDateFromCMS"
+							 inputClass="editbox_form2"
+							disabled="#{!notRegularEditBean.editMode and notRegularEditBean.recoveredMode}"
+							converter="dateTimeConverter"
+							value="#{notRegularEditBean.durCostDefinition.durRecoveryReimbursementDateFromCMS}"
+							datePattern="dd/MM/yyyy">
+						</rich:calendar></td>
+				</tr>
+				<tr>
+					<td class="LabelCell"><t:outputText
+							value="#{msg.paymentApplicationAttachment}:" />
+					</td>
+					<ui:remove>
+					<td class="ControlCell"><a4j:htmlCommandLink id="picDocLink"
+							action="#{paymentApplicationEditBean.getPicDoc}"
+							style="text-decoration: underline; float:left;"
+							immediate="true"
+							value="#{paymentApplicationEditBean.picDocTitle}" />
+						<a4j:commandLink
+							rendered="#{!empty paymentApplicationEditBean.picDocTitle}"
+							id="doc1deletelink" immediate="true" reRender="FormPanel"
+							action="#{paymentApplicationEditBean.deletePicDoc}">
+							<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+								style="border:0; padding-left: 20px;" />
+						</a4j:commandLink> <a4j:commandLink
+							rendered="#{empty paymentApplicationEditBean.picDocTitle}"
+							id="doc1link" immediate="true"
+							oncomplete="#{rich:component('documentPanel1')}.show()">
+							<h:graphicImage alt="#{msg.delete}" value="/images/plus.png"
+								style="border:0;" />
+							<span>#{msg.uploadFile}</span>
+						</a4j:commandLink></td>
+						</ui:remove>
+				</tr>
+			</table>
+
+
+			<div class="btn_line">
+				<table>
+					<tr>
+						<td><a4j:commandButton immediate="false"
+								action="#{notRegularEditBean.Page_Save}" reRender="pagePanel"
+								rendered="#{notRegularEditBean.editMode}" styleClass="button2"
+								value="#{msg.save}" id="save" /></td>
+						<td><a4j:commandButton value="#{msg.cancel}"
+								styleClass="button2" immediate="true"
+								action="#{notRegularEditBean.GoBack}" /></td>
+					</tr>
+				</table>
+			</div>
+
+		</a4j:outputPanel>
+	</ui:define>
+
+
+</ui:composition>
+

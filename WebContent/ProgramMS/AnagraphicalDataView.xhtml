@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ViewBase.xhtml">
+	<ui:param name="heading" value="#{msg.anagraphicalData}" />
+	<ui:define name="view_body">
+		<!--<div class="table_container">
+		 <t:dataTable width="900"
+			style="margin:0 auto;" id="table" var="data"
+			value="#{anagraphicalDataViewController.list}"
+			styleClass="form_table" rowClasses="row_table_n,row_table_g">
+			<f:facet name="header">
+				<h:outputText style="text-align: center"
+					value="#{msg.anagraphicalData}" />
+			</f:facet>
+			<t:column styleClass="StringColumn"
+				rendered="#{!empty anagraphicalDataViewController.list}">
+				<f:facet name="header">
+					<t:outputText value="#{msg.description}" />
+				</f:facet>
+				<t:outputText value="#{data.description}" />
+			</t:column>
+			<t:column styleClass="StringColumn"
+				rendered="#{!empty anagraphicalDataViewController.list}">
+				<f:facet name="header">
+					<t:outputText value="#{msg.importFESR}" />
+				</f:facet>
+				<t:outputText value="#{data.importFESR}" />
+			</t:column>
+			<t:column styleClass="StringColumn"
+				rendered="#{!empty anagraphicalDataViewController.list}">
+				<f:facet name="header">
+					<t:outputText value="#{msg.importCN}" />
+				</f:facet>
+				<t:outputText value="#{data.importCN}" />
+			</t:column>
+			<t:column styleClass="StringColumn"
+				rendered="#{!empty anagraphicalDataViewController.list}">
+				<f:facet name="header">
+					<t:outputText value="#{msg.importPrivate}" />
+				</f:facet>
+				<t:outputText value="#{data.importPrivate}" />
+			</t:column>
+			<t:column styleClass="StringColumn"
+				rendered="#{!empty anagraphicalDataViewController.list}">
+				<f:facet name="header">
+					<t:outputText value="#{msg.specificGoal}" />
+				</f:facet>
+				<t:dataList var="goal" value="#{data.specificGoals}" layout="simple">
+					<h:outputText value="•" />
+					<h:outputText value="#{goal.value}" />
+					<br />
+				</t:dataList>
+			</t:column>
+			<t:column styleClass="StringColumn"
+				rendered="#{empty anagraphicalDataViewController.list}">
+				<f:facet name="header">
+					<h:outputText value="#{msg.noData}" />
+				</f:facet>
+			</t:column>
+
+		</t:dataTable></div> -->
+		<!-- <a4j:outputPanel ajaxRendered="true">
+		<t:tree id="tree"
+		styleClass="tree"
+		iconChildFirst="../images/document.png"
+		iconChildMiddle="../images/document.png"
+		iconChildLast="../images/document.png"
+		iconClass="treeIcon"
+		rowClasses="row_table_n,row_table_g"
+		selectedNodeClass="selectedNode"
+		nodeClass="treeNode"
+		iconNodeClose="../images/blue-folder-closed.png"
+		iconNodeCloseFirst="../images/blue-folder-closed.png"
+		iconNodeCloseLast="../images/blue-folder-closed.png"
+		iconNodeCloseMiddle="../images/blue-folder-closed.png"
+		iconNodeOpen ="../images/blue-folder-open.gif"
+		iconNodeOpenFirst ="../images/blue-folder-open.gif"
+		iconNodeOpenLast ="../images/blue-folder-open.gif"
+		iconNodeOpenMiddle ="../images/blue-folder-open.gif"
+		value="#{anagraphicalDataViewController.treeModel}"
+            expandRoot="true">
+        </t:tree>
+		</a4j:outputPanel> -->
+		<table width="80%" style="margin: 10px auto;">
+			<tr>
+				<td><t:tree2 showRootNode="node" id="clientTree" 
+					value="#{anagraphicalDataViewController.treeData}" var="node"
+					varNodeToggler="t">
+					<f:facet name="person">
+						<h:panelGroup>
+							<f:facet name="expand">
+								<h:graphicImage value="../images/blue-folder-open.gif"
+									rendered="#{t.nodeExpanded}" border="0" />
+							</f:facet>
+							<f:facet name="collapse">
+								<h:graphicImage value="../images/blue-folder-closed.gif"
+									 rendered="#{!t.nodeExpanded}" border="0" />
+							</f:facet>
+							<h:outputText value="#{node.description}" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="document">
+						<h:panelGroup>
+							<t:graphicImage value="../images/document.png" border="0" />
+							<h:outputText value="#{node.description}" />
+						</h:panelGroup>
+					</f:facet>
+				</t:tree2></td>
+			</tr>
+		</table>
+	</ui:define>
+</ui:composition>
+</html>

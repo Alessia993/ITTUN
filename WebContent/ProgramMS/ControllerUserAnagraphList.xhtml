@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<ui:composition template="/Templates/ListBase.xhtml">
+	<ui:param name="heading" value="#{msg.controllerUserAnagraphList}" />
+	<ui:define name="list_body">
+		<a4j:outputPanel ajaxRendered="false" id="FormPanel">
+			<div class="table_container"><t:dataTable width="80%"
+				style="margin:0 auto;"
+				rows="#{controllerUserAnagraphListController.itemsPerPage}"
+				id="table" var="item"
+				value="#{controllerUserAnagraphListController.list}"
+				styleClass="form_table" rowClasses="row_table_n,row_table_g">
+				<f:facet name="header">
+					<t:column>
+						<sec:ifAnyGranted roles="ROLE_AGU_W, ROLE_ANCM_W">
+							<a4j:commandLink styleClass="headerPanelLink"
+								action="#{controllerUserAnagraphListController.addItem}">#{msg.addcontrollerUser}</a4j:commandLink>
+						</sec:ifAnyGranted>
+						<h:outputText style="text-align: center"
+							value="#{msg.controllerUsers}" />
+						<h:selectOneMenu id="itemPP" styleClass="headerPanelSelect"
+								value="#{controllerUserAnagraphListController.itemsPerPage}">
+								<f:selectItems value="#{controllerUserAnagraphListController.itemsPerPageList}" />
+								<a4j:support event="onchange" reRender="FormPanel" />
+							</h:selectOneMenu>
+					</t:column>
+				</f:facet>
+				<sec:ifAnyGranted roles="ROLE_AGU_W, ROLE_ANCM_W">
+					<t:column id="edit" styleClass="ActionColumn"
+						rendered="#{!empty controllerUserAnagraphListController.list}">
+						<a4j:commandLink ajaxSingle="true" id="editlink"
+							rendered="#{!user.admin}" title="#{msg.edit}"
+							action="#{controllerUserAnagraphListController.editItem}">
+							<h:graphicImage alt="#{msg.edit}" value="/images/edit.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{item.id}"
+								target="#{controllerUserAnagraphListController.entityEditId}" />
+						</a4j:commandLink>
+					</t:column>
+					<t:column id="delete" styleClass="ActionColumn"
+						rendered="#{!empty controllerUserAnagraphListController.list}">
+						<a4j:commandLink id="deletelink" title="#{msg.delete}"
+							rendered="#{!user.admin}"
+							oncomplete="#{rich:component('deletePanel')}.show()">
+							<h:graphicImage alt="#{msg.delete}" value="/images/delete.png"
+								style="border:0" />
+							<f:setPropertyActionListener value="#{item.id}"
+								target="#{controllerUserAnagraphListController.entityDeleteId}" />
+						</a4j:commandLink>
+					</t:column>
+				</sec:ifAnyGranted>
+				<t:column styleClass="StringColumn"
+					rendered="#{!empty controllerUserAnagraphListController.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.role}" />
+					</f:facet>
+					<t:outputText value="#{item.role}" />
+				</t:column>
+				<t:column styleClass="StringColumn"
+					rendered="#{!empty controllerUserAnagraphListController.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.controllerType}" />
+					</f:facet>
+					<t:outputText value="#{item.controllerType}" />
+				</t:column>
+				<t:column styleClass="StringColumn"
+					rendered="#{!empty controllerUserAnagraphListController.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.country}" />
+					</f:facet>
+					<t:outputText value="#{item.country}" />
+				</t:column>
+				<t:column styleClass="StringColumn"
+					rendered="#{!empty controllerUserAnagraphListController.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.fiscalCode}" />
+					</f:facet>
+					<t:outputText value="#{item.code}" />
+				</t:column>
+				<t:column styleClass="StringColumn"
+					rendered="#{!empty controllerUserAnagraphListController.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.name}" />
+					</f:facet>
+					<t:outputText value="#{item.userName}" />
+				</t:column>
+				<t:column styleClass="StringColumn"
+					rendered="#{!empty controllerUserAnagraphListController.list}">
+					<f:facet name="header">
+						<t:outputText value="#{msg.email}" />
+					</f:facet>
+					<t:outputText value="#{item.userEmail}" />
+				</t:column>
+				<t:column styleClass="StringColumn"
+					rendered="#{empty controllerUserAnagraphListController.list}">
+					<f:facet name="header">
+						<h:outputText value="#{msg.noData}" />
+					</f:facet>
+				</t:column>
+			</t:dataTable></div>
+		
+		<a4j:outputPanel styleClass="scrollerPanel">
+				<t:dataScroller id="scroll_1" styleClass="scroller" for="table"
+					fastStep="10" pageCountVar="pageCount" pageIndexVar="pageIndex"
+					paginator="true" paginatorMaxPages="5" paginatorColumnClass="page"
+					paginatorActiveColumnClass="page_active" immediate="true"
+					rendered="#{controllerUserAnagraphListController.showScroll}">
+					<f:facet name="first">
+						<t:graphicImage alt="#{msg.first}" url="../images/back_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="last">
+						<t:graphicImage alt="#{msg.last}" url="../images/forward_end.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="previous">
+						<t:graphicImage alt="#{msg.previous}" url="../images/back.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="next">
+						<t:graphicImage alt="#{msg.next}" url="../images/forward.gif"
+							border="1" />
+					</f:facet>
+					<f:facet name="fastforward">
+						<t:graphicImage alt="#{msg.fastforward}"
+							url="../images/all_forward.gif" border="1" />
+					</f:facet>
+					<f:facet name="fastrewind">
+						<t:graphicImage alt="#{msg.fastrewind}"
+							url="../images/all_back.gif" border="1" />
+					</f:facet>
+				</t:dataScroller>
+			</a4j:outputPanel>
+			</a4j:outputPanel>
+	</ui:define>
+	<ui:define name="delete_panels">
+		<rich:modalPanel id="deletePanel" autosized="true" width="200">
+			<f:facet name="header">
+				<h:outputText value="#{msg.delete}?" style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+			</f:facet>
+			<h:form>
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td align="center" width="50%"><a4j:commandButton
+								value="#{msg.yes}" ajaxSingle="true" styleClass="button"
+								action="#{controllerUserAnagraphListController.deleteItem}"
+								oncomplete="#{rich:component('deletePanel')}.hide();"
+								reRender="FormPanel" /></td>
+							<td align="center" width="50%"><a4j:commandButton
+								value="#{msg.cancel}" styleClass="button"
+								onclick="#{rich:component('deletePanel')}.hide();return false;" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</h:form>
+		</rich:modalPanel>
+	</ui:define>
+</ui:composition>
+
+
+</html>
