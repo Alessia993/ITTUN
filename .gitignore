@@ -8,6 +8,7 @@ ITTUN.war
 #directory
 .externalToolBuilders/*
 .settings/*
+build
 
 WebContent/WEB-INF/build/**/*
 WebContent/WEB-INF/build/*
